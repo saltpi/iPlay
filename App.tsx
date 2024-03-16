@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -24,6 +24,9 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { Album } from '@view/Album';
+import { Api, Emby } from '@api/emby';
+import { config } from '@api/config';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -57,11 +60,32 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
+  const [serverName, setServerName] = useState("")
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
+  useEffect(() => {
+    const emby = new Emby({
+      AccessToken: "FFF",
+      ServerId: "FFF",
+      User: {
+          Name: "guest",
+          Id: "FFF",
+          ServerId: "FFF"
+      }
+    })
+    Api.emby = emby
+    config.emby = {
+      host: "emby.endemy.me",
+      port: 443,
+      protocol: "https",
+      path: "/"
+    }
+    Api.emby.getPublicInfo()
+    .then(data => {
+      setServerName(data.ServerName)
+    })
+  }, [])
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -71,25 +95,14 @@ function App(): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        {/* <Header /> */}
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
+          <Section title={serverName}>
+            <Album />
           </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
         </View>
       </ScrollView>
     </SafeAreaView>
