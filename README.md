@@ -2,12 +2,12 @@
 
 <table>
 <tr>
-   <td><img src="./doc/image/Screen-20240316@2x2.png" /></td>
-   <td><img src="./doc/image/Screen-20240316@2x3.png" /></td>
+   <td><img src="./doc/image/Screen-20240316@2x4.png" /></td>
+   <td><img src="./doc/image/Screen-20240316@2x5.png" /></td>
 </tr>
 </table>
 
-使用React Native开发
+使用React Native开发, 支持安卓和iOS
 
 ### 加入Q群一起讨论
 
