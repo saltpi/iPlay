@@ -3,6 +3,7 @@ import { Api } from "@api/emby";
 import { PropsWithNavigation } from "@global";
 import { MediaDetail } from "@model/MediaDetail";
 import { ActorCard } from "@view/ActorCard";
+import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -15,6 +16,9 @@ const style = StyleSheet.create({
         marginTop: 5,
         fontWeight: "600",
         fontSize: 20,
+    },
+    tags: {
+        flexDirection: "row"
     }
 })
 
@@ -42,6 +46,9 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView>
             <Image style={{width: "100%", aspectRatio: 1.5}} source={{ uri: imageUrl(movie.Id, movie.BackdropImageTags[0], "Backdrop/0")}} />
+            <View style={style.tags}>
+                {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
+            </View>
             <Text style={style.overview}>{detail?.Overview}</Text>
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} />
             <Text style={style.actorSection}>演职人员</Text>
