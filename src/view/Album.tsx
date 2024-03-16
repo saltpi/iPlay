@@ -108,7 +108,7 @@ export function Album() {
             .then(res => {
                 setAlbums(res.Items)
             })
-    }, [])
+    }, [Api.emby])
 
     useEffect(() => {
         const getMedia = async () => {

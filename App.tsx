@@ -42,10 +42,10 @@ function App(): React.JSX.Element {
   }, [])
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="home">
         <Stack.Screen name="home" component={HomePage} options={{title: '主页'}} />
-        <Stack.Screen name="album" component={AlbumPage} options={defaultOptions} />
-        <Stack.Screen name="movie" component={MoviePage} options={defaultOptions} />
+        <Stack.Screen name="album" component={AlbumPage as any} options={defaultOptions} />
+        <Stack.Screen name="movie" component={MoviePage as any} options={defaultOptions} />
       </Stack.Navigator>
     </NavigationContainer>
   );
