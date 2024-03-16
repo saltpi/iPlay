@@ -22,13 +22,16 @@ jobs:
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
           echo Using default scheme: $default
-          pod install
+
+      - name: 🧱 Install Dependencies
+        run: |
+          npm install
+          cd ios && pod install
 
       - name: 🧬 Build
         env:
           scheme: ${{ 'default' }}
         run: |
-          npm install
           make all
 
       - name: ⬆️ Upload Build Artifact To OneDrive
