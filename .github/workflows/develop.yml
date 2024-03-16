@@ -28,7 +28,7 @@ jobs:
         with:
             java-version: '17'
             distribution: 'zulu'
-            cache: android/gradle
+            cache: gradle
 
       - name: 🧱 Install Dependencies
         run: |
