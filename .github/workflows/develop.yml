@@ -1,0 +1,47 @@
+name: 🌸 Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: 🌸 Build
+    runs-on: macos-latest
+
+    steps:
+      - name: 👀 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Set Default Scheme
+        run: |
+          scheme_list=$(xcodebuild -list -json | tr -d "\n")
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
+          echo $default | cat >default
+          echo Using default scheme: $default
+
+      - name: 🧬 Build
+        env:
+          scheme: ${{ 'default' }}
+        run: |
+          npm install
+          cd ios && pod install
+          make all
+
+      - name: ⬆️ Upload Build Artifact To OneDrive
+        env:
+          scheme: ${{ 'default' }}
+        run: |
+          buildtime=$(date '+%Y%m%d.%H%M')
+          curl --location "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
+            --data-binary "@$PWD/Build/iPlay.ipa" \
+            --header "Authorization: ${{ secrets.CLIENT_ID }}"\
+            --header "Content-Type: application/zip" \
+            --progress-bar | tee /dev/null
+          curl --location "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.apk" \
+            --data-binary "@$PWD/Build/iPlay.apk" \
+            --header "Authorization: ${{ secrets.CLIENT_ID }}"\
+            --header "Content-Type: application/zip" \
+            --progress-bar | tee /dev/null
