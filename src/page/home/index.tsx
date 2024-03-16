@@ -1,16 +1,24 @@
 import {Api} from '@api/emby';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import {Album} from '@view/Album';
+import {AlbumWidget} from '@view/AlbumList';
 import React, {PropsWithChildren, useEffect, useState} from 'react';
 import {
     SafeAreaView,
     ScrollView,
     StatusBar,
+    StyleSheet,
     Text,
     View,
     useColorScheme,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+
+const style = StyleSheet.create({
+    sectionTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+    }
+});
 
 export function Page() {
     const isDarkMode = useColorScheme() === 'dark';
@@ -40,8 +48,8 @@ export function Page() {
                             : Colors.white,
                     }}>
                     <View>
-                        <Text>{serverName}</Text>
-                        <Album />
+                        <Text style={style.sectionTitle}>{serverName}</Text>
+                        <AlbumWidget />
                     </View>
                 </View>
             </ScrollView>
