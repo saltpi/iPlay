@@ -27,7 +27,8 @@ const style = StyleSheet.create({
     icon: {
         height: 25,
         aspectRatio: 1,
-        tintColor: "gray"
+        // tintColor: "rgba(128, 128, 128, 0.3)",
+        opacity: 0.25
     },
     activeIcon: {
         height: 25,
