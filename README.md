@@ -13,6 +13,6 @@
 
 * QQ群: `657169758`
 
-<div style="text-align: center;margin-top:1rem">
-<img style="max-width: 10rem;border-radius: 5px" src="./doc/image/IMG_0264.png">
+<div style="text-align: center;margin-top:1rem;width:10rem;height:10rem">
+<img style="max-width: 10rem;border-radius: 5px;object-fit:fill" src="./doc/image/IMG_0264.png">
 </div>
