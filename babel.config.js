@@ -12,6 +12,7 @@ module.exports = {
           '@helper': './src/helper',
           '@model': './src/model',
           '@view': './src/view',
+          '@page': './src/page',
         },
       },
     ],
