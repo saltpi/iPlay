@@ -6,6 +6,13 @@ const searchIcon = require("@view/menu/Search.png");
 const starIcon = require("@view/menu/Star.png");
 const settingsIcon = require("@view/menu/Setting.png");
 
+export enum MenuType {
+    Home = 0,
+    Search = 1,
+    Star = 2,
+    Settings = 3
+}
+
 const style = StyleSheet.create({
     menuBar: {
         flexDirection: "row",

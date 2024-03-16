@@ -13,6 +13,7 @@ module.exports = {
           '@model': './src/model',
           '@view': './src/view',
           '@page': './src/page',
+          '@store': './src/store',
         },
       },
     ],

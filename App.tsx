@@ -15,11 +15,18 @@ import { Page as MoviePage } from '@page/movie/index.tsx';
 import { Page as LoginPage } from '@page/login/index.tsx';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Store } from '@helper/store';
+import { MenuType } from '@view/menu/MenuBar';
+import { Provider } from 'react-redux';
+import { store } from '@store/store';
 
-const Stack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
+const SettingsStack = createNativeStackNavigator();
+const SearchStack = createNativeStackNavigator();
+const StarStack = createNativeStackNavigator();
 
 function App() {
   const [inited, setInited] = useState(false)
+  const [menu, setMenu] = useState(MenuType.Home)
   const defaultOptions = (options: any) => {
     return {
       title: (options.route.params as any)?.title ?? ""
@@ -43,12 +50,31 @@ function App() {
   if (inited) {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="home">
-          <Stack.Screen name="login" component={LoginPage} options={{title: '登录'}} />
-          <Stack.Screen name="home" component={HomePage as any} options={{title: '主页'}} />
-          <Stack.Screen name="album" component={AlbumPage as any} options={defaultOptions} />
-          <Stack.Screen name="movie" component={MoviePage as any} options={defaultOptions} />
-        </Stack.Navigator>
+        <Provider store={store}>
+        {menu === MenuType.Home ?
+        <HomeStack.Navigator initialRouteName="home">
+          <HomeStack.Screen name="login" component={LoginPage} options={{title: '登录'}} />
+          <HomeStack.Screen name="home" component={HomePage as any} options={{title: '主页'}} />
+          <HomeStack.Screen name="album" component={AlbumPage as any} options={defaultOptions} />
+          <HomeStack.Screen name="movie" component={MoviePage as any} options={defaultOptions} />
+        </HomeStack.Navigator>
+        : null}
+        {menu === MenuType.Settings ?
+        <SettingsStack.Navigator initialRouteName="settings">
+          <SettingsStack.Screen name="settings" component={LoginPage} options={{title: '设置'}} />
+        </SettingsStack.Navigator>
+        : null}
+        {menu === MenuType.Search ?
+        <SearchStack.Navigator initialRouteName="search">
+          <SearchStack.Screen name="search" component={LoginPage} options={{title: '搜索'}} />
+        </SearchStack.Navigator>
+        : null}
+        {menu === MenuType.Star ?
+        <StarStack.Navigator initialRouteName="star">
+          <StarStack.Screen name="star" component={LoginPage} options={{title: '收藏'}} />
+        </StarStack.Navigator>
+        : null}
+        </Provider>
       </NavigationContainer>
     );
   } else {
