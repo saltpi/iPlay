@@ -23,7 +23,7 @@ export function Page() {
             console.log(data.ServerName);
             setServerName(data.ServerName);
         });
-    }, []);
+    }, [Api.emby]);
     return (
         <SafeAreaView style={backgroundStyle}>
             <StatusBar

@@ -3,7 +3,7 @@ import { PropsWithNavigation } from "@global";
 import { EmbyResponse } from "@model/EmbyResponse";
 import { Media } from "@model/Media";
 import { MediaCard } from "@view/Album";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const style = StyleSheet.create({
