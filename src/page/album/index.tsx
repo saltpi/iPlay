@@ -2,7 +2,7 @@ import { Api } from "@api/emby";
 import { PropsWithNavigation } from "@global";
 import { EmbyResponse } from "@model/EmbyResponse";
 import { Media } from "@model/Media";
-import { MediaCard } from "@view/Album";
+import { MediaCard } from '@view/MediaCard';
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
