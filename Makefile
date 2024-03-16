@@ -14,11 +14,17 @@ apk:
 
 ipa:
 	@echo "📦 ipa"
-	mkdir -p $(BUILD_DIR)/Release
-	cd $(IOS_DIR) && xcodebuild -workspace iPlayClient.xcworkspace -scheme iPlayClient -configuration Release -archivePath $(BUILD_DIR)/iPlay.xcarchive -allowProvisioningUpdates CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO archive | xcpretty
+	cd $(IOS_DIR) && xcodebuild archive \
+		-archivePath $(BUILD_DIR)/iPlay \
+		-configuration Release \
+		-scheme iPlayClient \
+		-workspace iPlayClient.xcworkspace \
+		-allowProvisioningUpdates \
+		CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty
+	mkdir -p $(BUILD_DIR)/Release/Payload
 	cp -r $(BUILD_DIR)/iPlay.xcarchive/Products/Applications/iPlayClient.app $(BUILD_DIR)/Release/Payload
-	cd $(BUILD_DIR)/Release && zip -r iPlay.ipa Payload
-	mv $(BUILD_DIR)/Release/iPlay.ipa $(BUILD_DIR)/$(APP_NAME).ipa
+	cd $(BUILD_DIR)/Release && zip -r $(APP_NAME).ipa Payload
+	mv $(BUILD_DIR)/Release/$(APP_NAME).ipa $(BUILD_DIR)/$(APP_NAME).ipa
 
 clean:
 	@echo "🧹 clean"
