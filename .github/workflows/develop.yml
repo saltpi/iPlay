@@ -17,6 +17,7 @@ jobs:
 
       - name: 📱 Set Default Scheme
         run: |
+          cd ios
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
