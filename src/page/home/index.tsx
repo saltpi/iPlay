@@ -1,6 +1,7 @@
 import {Api} from '@api/emby';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import {AlbumWidget} from '@view/AlbumList';
+import { MenuBar } from '@view/menu/MenuBar';
 import React, {PropsWithChildren, useEffect, useState} from 'react';
 import {
     SafeAreaView,
@@ -14,6 +15,9 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const style = StyleSheet.create({
+    page: {
+        flex: 1,
+    },
     sectionTitle: {
         fontSize: 24,
         fontWeight: '600',
@@ -33,26 +37,18 @@ export function Page() {
         });
     }, [Api.emby]);
     return (
-        <SafeAreaView style={backgroundStyle}>
-            <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                backgroundColor={backgroundStyle.backgroundColor}
-            />
+        <SafeAreaView style={{...backgroundStyle, ...style.page}}>
+            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
-                style={backgroundStyle}>
-                <View
-                    style={{
-                        backgroundColor: isDarkMode
-                            ? Colors.black
-                            : Colors.white,
-                    }}>
-                    <View>
-                        <Text style={style.sectionTitle}>{serverName}</Text>
-                        <AlbumWidget />
-                    </View>
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                style={{...backgroundStyle, flex: 1}}>
+                <View style={backgroundStyle}>
+                    <AlbumWidget />
                 </View>
             </ScrollView>
+            <MenuBar />
         </SafeAreaView>
     );
 }
