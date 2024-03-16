@@ -1,20 +1,16 @@
 import { config } from '@api/config';
 import {Api} from '@api/emby';
 import { PropsWithNavigation } from '@global';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import {AlbumWidget} from '@view/AlbumList';
 import { MenuBar } from '@view/menu/MenuBar';
-import React, {PropsWithChildren, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
     SafeAreaView,
     ScrollView,
     StatusBar,
     StyleSheet,
-    Text,
     View,
-    useColorScheme,
 } from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const style = StyleSheet.create({
     page: {
@@ -27,11 +23,6 @@ const style = StyleSheet.create({
 });
 
 export function Page({navigation}: PropsWithNavigation<'home'>) {
-    const isDarkMode = useColorScheme() === 'dark';
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };
-
     useEffect(() => {
         if (!Api.emby) {
             navigation.navigate("login")
@@ -43,14 +34,14 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     }, [Api.emby]);
 
     return (
-        <SafeAreaView style={{...backgroundStyle, ...style.page}}>
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <SafeAreaView style={style.page}>
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                style={{...backgroundStyle, flex: 1}}>
-                <View style={backgroundStyle}>
+                style={{flex: 1}}>
+                <View>
                     <AlbumWidget key={config?.emby?.host ?? "nil"} />
                 </View>
             </ScrollView>

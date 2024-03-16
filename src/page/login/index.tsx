@@ -86,7 +86,6 @@ export function Page() {
                     style={style.input}
                     onChangeText={onChangePassword}
                     value={password}
-                    keyboardType="numeric"
                 />
             </View>
             <View style={style.loginButton}>
