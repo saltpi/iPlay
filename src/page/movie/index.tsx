@@ -18,7 +18,10 @@ const style = StyleSheet.create({
         fontSize: 20,
     },
     tags: {
-        flexDirection: "row"
+        flexDirection: "row",
+        marginTop: 5,
+        paddingLeft: 2.5,
+        paddingRight: 2.5,
     }
 })
 
