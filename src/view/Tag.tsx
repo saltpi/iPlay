@@ -70,7 +70,7 @@ const style = StyleSheet.create({
         display: 'flex',
         padding: 2.5,
         width: 'auto',
-        marginTop: 3,
+        marginTop: 2.5,
         marginLeft: 2.5,
         marginRight: 2.5,
         marginBottom: 2,
@@ -95,7 +95,7 @@ export function Tag(props: TagProps) {
     }
     return (
         <View style={{...COLOR[color!], ...style.root}}>
-            <Text style={style.text}>
+            <Text style={{...style.text, color: COLOR[color!].color}}>
                 {props.children}
             </Text>
         </View>
