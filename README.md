@@ -2,8 +2,8 @@
 
 <table>
 <tr>
-   <td><img src="./doc/image/Screen-20240316@2x.png" /></td>
-   <td><img src="./doc/image/Screen-20240316@2x1.png" /></td>
+   <td><img src="./doc/image/Screen-20240316@2x2.png" /></td>
+   <td><img src="./doc/image/Screen-20240316@2x3.png" /></td>
 </tr>
 </table>
 
