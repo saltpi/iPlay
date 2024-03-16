@@ -46,7 +46,8 @@ export function AlbumCard({media, title}: {media?: Media[]; title: string}) {
     return (
         <View style={style.albumItem}>
             <Text>{title}</Text>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true}
+                showsHorizontalScrollIndicator={false}>
                 {media?.map(m => (
                     <MediaCard key={m.Id} media={m} />
                 ))}

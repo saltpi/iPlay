@@ -32,7 +32,7 @@ export function Page({route, navigation}: PropsWithNavigation<"album">) {
         })
     }, [route.params.albumId])
     return (
-        <ScrollView>
+        <ScrollView showsHorizontalScrollIndicator={false}>
             <View style={style.root}>
                 {data?.Items.map(media => <MediaCard key={media.Id} media={media} />)}
             </View>
