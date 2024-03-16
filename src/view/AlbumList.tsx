@@ -40,6 +40,12 @@ export const style = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
+    albumImage: {
+        width: 160, 
+        aspectRatio: 16/9,
+        borderRadius: 5,
+        marginBottom: 2.5
+    }
 });
 
 export function AlbumCard({media, title}: {media?: Media[]; title: string}) {
@@ -66,12 +72,13 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
         });
     };
     return (
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={style.albumList}>
             {albums.map(album => {
                 return (
                     <TouchableWithoutFeedback key={album.Id} onPress={() => onPress(album)}>
                     <View key={album.Id} style={style.album}>
-                        <Image style={{width: 160, aspectRatio: 16/9}}
+                        <Image style={style.albumImage}
                             source={{uri: imageUrl(album.Id, album.Etag)}}
                         />
                         <Text>{album.Name}</Text>
@@ -80,6 +87,7 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
                 );
             })}
         </View>
+        </ScrollView>
     );
 }
 

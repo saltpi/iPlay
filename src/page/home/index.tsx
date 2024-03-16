@@ -1,4 +1,6 @@
+import { config } from '@api/config';
 import {Api} from '@api/emby';
+import { PropsWithNavigation } from '@global';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import {AlbumWidget} from '@view/AlbumList';
 import { MenuBar } from '@view/menu/MenuBar';
@@ -24,18 +26,22 @@ const style = StyleSheet.create({
     }
 });
 
-export function Page() {
+export function Page({navigation}: PropsWithNavigation<'home'>) {
     const isDarkMode = useColorScheme() === 'dark';
     const backgroundStyle = {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
-    const [serverName, setServerName] = useState('');
+
     useEffect(() => {
+        if (!Api.emby) {
+            navigation.navigate("login")
+            return
+        } 
         Api.emby?.getPublicInfo().then(data => {
             console.log(data.ServerName);
-            setServerName(data.ServerName);
         });
     }, [Api.emby]);
+
     return (
         <SafeAreaView style={{...backgroundStyle, ...style.page}}>
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -45,7 +51,7 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{...backgroundStyle, flex: 1}}>
                 <View style={backgroundStyle}>
-                    <AlbumWidget />
+                    <AlbumWidget key={config?.emby?.host ?? "nil"} />
                 </View>
             </ScrollView>
             <MenuBar />

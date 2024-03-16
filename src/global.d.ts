@@ -12,7 +12,8 @@ type RootStackParamList = {
     title: string, 
     type: string,
     movie: Media
-  }
+  },
+  login: undefined
 };
 
 type Navigation = NavigationProp<RootStackParamList>;
