@@ -1,4 +1,4 @@
-import {imageUrl} from '@api/config';
+import { Api } from '@api/emby';
 import {Season} from '@model/Season';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 
@@ -42,7 +42,7 @@ export function SeasonCard({season}: {season: Season}) {
             <Image
                 style={style.cover}
                 source={{
-                    uri: imageUrl(
+                    uri: Api.emby?.imageUrl?.(
                         season.Id,
                         season.ImageTags.Primary,
                         'Primary/0',

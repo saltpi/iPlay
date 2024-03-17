@@ -1,10 +1,9 @@
-import { imageUrl } from "@api/config";
 import { Api } from "@api/emby";
 import { PropsWithNavigation } from "@global";
 import { MediaDetail } from "@model/MediaDetail";
 import { Season } from "@model/Season";
 import { ActorCard } from "@view/ActorCard";
-import { SeasonCard, SeasonCardList } from "@view/SeasonCard";
+import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useEffect, useState } from "react";
@@ -51,7 +50,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }
     return (
         <ScrollView>
-            <Image style={{width: "100%", aspectRatio: 1.5}} source={{ uri: imageUrl(movie.Id, movie.BackdropImageTags[0], "Backdrop/0")}} />
+            <Image style={{width: "100%", aspectRatio: 1.5}} source={{ uri: Api.emby?.imageUrl?.(movie.Id, movie.BackdropImageTags[0], "Backdrop/0")}} />
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>

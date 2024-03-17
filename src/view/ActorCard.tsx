@@ -1,4 +1,4 @@
-import { imageUrl } from "@api/config";
+import { Api } from "@api/emby";
 import { People } from "@model/MediaDetail";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -24,7 +24,7 @@ const style = StyleSheet.create({
 export function ActorCard({actor}: {actor: People}) {
     return (
         <View style={style.root}>
-            <Image style={style.image} source={{uri: imageUrl(actor.Id, actor.PrimaryImageTag, "Primary")}} />
+            <Image style={style.image} source={{uri: Api.emby?.imageUrl?.(actor.Id, actor.PrimaryImageTag, "Primary")}} />
             <Text style={style.name}>{actor.Name}</Text>
             <Text style={style.role}
                 numberOfLines={1} 

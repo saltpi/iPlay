@@ -1,4 +1,3 @@
-import {imageUrl} from '@api/config';
 import {Api} from '@api/emby';
 import {ViewDetail} from '@model/View';
 import {useEffect, useState} from 'react';
@@ -14,6 +13,7 @@ import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
 import {Navigation} from '@global';
 import { MediaCard } from './MediaCard';
+import { useAppSelector } from '@hook/store';
 
 export const style = StyleSheet.create({
     root: {
@@ -80,7 +80,7 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
                     <TouchableWithoutFeedback key={album.Id} onPress={() => onPress(album)}>
                     <View key={album.Id} style={style.album}>
                         <Image style={style.albumImage}
-                            source={{uri: imageUrl(album.Id, album.Etag)}}
+                            source={{uri: Api.emby?.imageUrl?.(album.Id, album.Etag)}}
                         />
                         <Text>{album.Name}</Text>
                     </View>
@@ -95,11 +95,12 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
 export function AlbumWidget() {
     const [albums, setAlbums] = useState<ViewDetail[]>([]);
     const [medias, setMedias] = useState<(Media[] | undefined)[]>([]);
+    const site = useAppSelector(state => state.emby?.site);
     useEffect(() => {
         Api.emby?.getView?.().then(res => {
             setAlbums(res.Items);
         });
-    }, [Api.emby]);
+    }, [site]);
 
     useEffect(() => {
         const getMedia = async () => {

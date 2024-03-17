@@ -1,3 +1,4 @@
+import { EmbySite } from "@model/EmbySite";
 import { ENV, EmbyConfig } from "../helper/env";
 import { Map } from "../model/Map";
 
@@ -12,7 +13,8 @@ export const config = {
     }
 }
 
-export function makeUrl(params: Map<string, any>|null, path: string, emby: EmbyConfig = config.emby) {
+export function makeEmbyUrl(params: Map<string, any>|null, path: string, emby: EmbyConfig) {
+    console.log(`makeEmbyUrl`, emby)
     const url = new URL(`${emby.protocol ?? "https"}://${emby.host}:${emby.port ?? 443}${emby.path}${path}`)
     params && Object.entries(params).forEach(([key, value]) => {
         if (typeof value === "string") {
@@ -31,7 +33,7 @@ export interface ImageProps {
     quality: number
 }
 
-export function imageUrl(id: string|number, options: string|Partial<ImageProps>|null, type: "Primary"|string = "Primary") {
+export function imageUrl(site: EmbySite, id: string|number, options: string|Partial<ImageProps>|null, type: "Primary"|string = "Primary") {
     if (typeof options === "string") {
         return `${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}emby/Items/${id}/Images/${type}?maxHeight=338&maxWidth=600&tag=${options}&quality=90`
     } else {

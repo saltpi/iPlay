@@ -1,4 +1,3 @@
-import { imageUrl } from '@api/config';
 import {
     Image, StyleSheet, Text,
     TouchableOpacity, TouchableWithoutFeedback, TouchableWithoutFeedbackBase, View
@@ -6,6 +5,7 @@ import {
 import { Media } from '@model/Media';
 import { useNavigation } from '@react-navigation/native';
 import { Navigation } from '@global';
+import { Api } from '@api/emby';
 
 export const style = StyleSheet.create({
     mediaCard: {
@@ -30,7 +30,7 @@ export function MediaCard({ media }: { media: Media; }) {
                 <TouchableWithoutFeedback onPress={() => onPress(media)}>
                 <Image
                     style={{ width: 90, aspectRatio: 4.6/7, borderRadius: 5 }}
-                    source={{ uri: imageUrl(media.Id, null) }} />
+                    source={{ uri: Api.emby?.imageUrl?.(media.Id, null) }} />
                 </TouchableWithoutFeedback>
                 <Text style={{ maxWidth: 90, overflow: 'hidden' }}>
                     {media.Name}

@@ -1,51 +1,55 @@
-import { User } from "@model/User";
 import { getPlaybackInfo } from "./play";
 import { getCollection, getEpisodes, getLatestMedia, getMedia, getRecommendations, getResume, getSeasons, getView, lookupItem, searchRecommend } from "./view";
 import { getPublicInfo } from "./info";
 import { login } from "./login";
+import { EmbySite } from "@model/EmbySite";
+import { imageUrl } from "./config";
 
 export class Emby {
-    private _user?: User;
-    get user() {
-        if (!this._user) throw Error("user can't be null")
-        return this._user;
+    private _site?: EmbySite;
+    get site() {
+        if (!this._site) throw Error("site can't be null")
+        return this._site;
     }
-    set user(user: User) {
-        this._user = user
+    set site(site: EmbySite) {
+        this._site = site
         this.bind()
     }
 
-    constructor(user?: User) {
-        this._user = user
+    constructor(site?: EmbySite) {
+        this._site = site
         this.bind()
     }
 
     bind() {
-        this.getMedia = getMedia.bind(this, this.user)
-        this.getPlaybackInfo = getPlaybackInfo?.bind(this, this.user)
-        this.getView = getView.bind(this, this.user)
-        this.getLatestMedia = getLatestMedia.bind(this, this.user)
-        this.getCollection = getCollection.bind(this, this.user)
-        this.getResume = getResume.bind(this, this.user)
-        this.getRecommendations = getRecommendations.bind(this, this.user)
-        this.getEpisodes = getEpisodes.bind(this, this.user)
-        this.getSeasons = getSeasons.bind(this, this.user)
-        this.getItemWithName = lookupItem.bind(this, this.user)
-        this.searchRecommend = searchRecommend.bind(this, this.user)
+        this.getMedia = getMedia.bind(this, this.site)
+        this.getPlaybackInfo = getPlaybackInfo?.bind(this, this.site)
+        this.getView = getView.bind(this, this.site)
+        this.getLatestMedia = getLatestMedia.bind(this, this.site)
+        this.getCollection = getCollection.bind(this, this.site)
+        this.getResume = getResume.bind(this, this.site)
+        this.getRecommendations = getRecommendations.bind(this, this.site)
+        this.getEpisodes = getEpisodes.bind(this, this.site)
+        this.getSeasons = getSeasons.bind(this, this.site)
+        this.getItemWithName = lookupItem.bind(this, this.site)
+        this.searchRecommend = searchRecommend.bind(this, this.site)
+        this.getPublicInfo = getPublicInfo.bind(this, this.site)
+        this.imageUrl = imageUrl.bind(this, this.site)
     }
 
-    public getPlaybackInfo = this._user ? getPlaybackInfo.bind(this, this.user) : null
-    public getMedia = this._user ? getMedia.bind(this, this.user) : null
-    public getView = this._user ? getView.bind(this, this.user) : null
-    public getLatestMedia = this._user ? getLatestMedia.bind(this, this.user) : null
-    public getPublicInfo = getPublicInfo
-    public getCollection = this._user ? getCollection.bind(this, this.user) : null
-    public getResume = this._user ? getResume.bind(this, this.user) : null
-    public getRecommendations = this._user ? getRecommendations.bind(this, this.user) : null
-    public getEpisodes = this._user ? getEpisodes.bind(this, this.user) : null
-    public getSeasons = this._user ? getSeasons.bind(this, this.user) : null
-    public getItemWithName = this._user ? lookupItem.bind(this, this.user) : null
-    public searchRecommend = this._user ? searchRecommend.bind(this, this.user) : null
+    public getPlaybackInfo = this._site ? getPlaybackInfo.bind(this, this.site) : null
+    public getMedia = this._site ? getMedia.bind(this, this.site) : null
+    public getView = this._site ? getView.bind(this, this.site) : null
+    public getLatestMedia = this._site ? getLatestMedia.bind(this, this.site) : null
+    public getPublicInfo = this._site ? getPublicInfo.bind(this, this.site) : null
+    public getCollection = this._site ? getCollection.bind(this, this.site) : null
+    public getResume = this._site ? getResume.bind(this, this.site) : null
+    public getRecommendations = this._site ? getRecommendations.bind(this, this.site) : null
+    public getEpisodes = this._site ? getEpisodes.bind(this, this.site) : null
+    public getSeasons = this._site ? getSeasons.bind(this, this.site) : null
+    public getItemWithName = this._site ? lookupItem.bind(this, this.site) : null
+    public searchRecommend = this._site ? searchRecommend.bind(this, this.site) : null
+    public imageUrl = this._site ? imageUrl.bind(this, this.site) : null
 }
 
 export const Api = {

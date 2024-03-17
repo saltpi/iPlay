@@ -1,4 +1,3 @@
-import { config } from '@api/config';
 import {Api, Emby} from '@api/emby';
 import { PropsWithNavigation } from '@global';
 import { useAppSelector } from '@hook/store';
@@ -11,9 +10,9 @@ import {
     ScrollView,
     StatusBar,
     StyleSheet,
+    Text,
     View,
 } from 'react-native';
-import { useSelector } from 'react-redux';
 
 const style = StyleSheet.create({
     page: {
@@ -29,14 +28,15 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     
     useEffect(() => {
-        if (!site?.user) {
+        if (!site?.server || !site?.user) {
             return
         }
-        Api.emby = new Emby(site?.user)
-        Api.emby?.getPublicInfo().then(data => {
+        console.log(`home site update`, site)
+        Api.emby = new Emby(site)
+        Api.emby?.getPublicInfo?.().then(data => {
             console.log(data.ServerName);
         });
-    }, [site?.user])
+    }, [site])
 
     return (
         <SafeAreaView style={style.page}>
@@ -47,7 +47,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                {site ? <AlbumWidget /> : <Button title="添加站点" onPress={() => navigation.navigate("login")} />}
+                {site?.server && site?.user ? <AlbumWidget /> : <Button title="添加站点" onPress={() => navigation.navigate("login")} />}
                 </View>
             </ScrollView>
             <MenuBar />

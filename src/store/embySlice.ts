@@ -1,17 +1,10 @@
-import { EmbyConfig } from '@api/config';
-import { User } from '@model/User';
-import { createAsyncThunk, createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listenerMiddleware } from './middleware/Listener';
 import { RootState } from '.';
 import { createAppAsyncThunk } from './type';
-import { Emby } from '@api/emby';
 import { StorageHelper } from '@helper/store';
-
-interface EmbySite {
-    server: EmbyConfig;
-    user: User;
-    status: 'idle' | 'loading' | 'failed';
-}
+import { EmbySite } from '@model/EmbySite';
+import { EmbyConfig } from '@helper/env';
 
 interface EmbyState {
     site: EmbySite|null;
@@ -22,6 +15,7 @@ const initialState: EmbyState = {
 };
 
 type Authentication = {
+    endpoint?: EmbyConfig,
     username: string,
     password: string,
     callback?: {
@@ -31,21 +25,13 @@ type Authentication = {
 }
 
 export const restoreSiteAsync = createAppAsyncThunk<EmbySite|null, void>("emby/restore", async (_, config) => {
-    const user = await StorageHelper.get('@user');
-    const server = await StorageHelper.get('@server');
-    if (!user || !server) {
+    const $site = await StorageHelper.get('@site');
+    if (!$site) {
         console.log("no user or server")
         return null
     }
     try {
-        const emby = new Emby(JSON.parse(user));
-        const endpoint = JSON.parse(server);
-        config.extra.emby = emby
-        const site = {
-            server: endpoint,
-            user: emby.user,
-            status: 'idle'
-        }
+        const site = JSON.parse($site);
         return site
     } catch (e) {
         console.log(e);
@@ -53,18 +39,19 @@ export const restoreSiteAsync = createAppAsyncThunk<EmbySite|null, void>("emby/r
     return null
 });
 
-export const loginToSiteAsync = createAppAsyncThunk<User, Authentication>("emby/site", async (user, config) => {
+export const loginToSiteAsync = createAppAsyncThunk<EmbySite|null, Authentication>("emby/site", async (user, config) => {
     const api = config.extra
-    const state = config.getState()
-    const data = await api.login(user.username, user.password, state.emby.site?.server)
+    const data = await api.login(user.username, user.password, user.endpoint!)
     if (data) {
-        await StorageHelper.set("@user", JSON.stringify(data))
-        api.emby = new Emby(data)
-        if (state.emby.site) {
-            state.emby.site.user = data
+        const site: EmbySite = {
+            user: data, 
+            server: user.endpoint!, 
+            status: 'idle'
         }
+        await StorageHelper.set("@site", JSON.stringify(site))
+        return site
     }
-    return data
+    return null
 })
 
 export const helloAsync = createAsyncThunk<string, string, any>("emby/site", async (content, _config) => {
@@ -85,9 +72,9 @@ export const EmbySlice = createSlice({
             if (state.site) state.site.status = 'loading';
         })
         .addCase(loginToSiteAsync.fulfilled, (state, action) => {
-            if (!state.site) return
-            state.site.status = 'idle';
-            state.site.user = action.payload;
+            const site = action.payload
+            if (!site) return
+            state.site = site;
         })
         .addCase(restoreSiteAsync.fulfilled, (state, action) => {
             console.log(`update site`, action.payload)

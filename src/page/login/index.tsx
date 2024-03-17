@@ -50,14 +50,12 @@ export function Page() {
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
-        const embyConfig: EmbyConfig = {
+        const endpoint: EmbyConfig = {
             host: groups?.host ?? "",
             port: groups?.port ? parseInt(groups.port) : 443,
             protocol: groups?.protocol ?? "https" as any,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
-        await StorageHelper.set("@server", JSON.stringify(embyConfig))
-        config.emby = embyConfig
 
         const callback = {
             resolve: () => {
@@ -73,7 +71,12 @@ export function Page() {
             }
         }
         setLoading(true)
-        dispatch(loginToSiteAsync({username, password, callback}))
+        dispatch(loginToSiteAsync({
+            endpoint,
+            username, 
+            password, 
+            callback
+        }))
     }
     return (
         <SafeAreaView>

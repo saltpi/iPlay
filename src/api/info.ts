@@ -1,8 +1,10 @@
-import { Info } from "../model/Info"
-import { makeUrl } from "./config"
+import { EmbySite } from "@model/EmbySite"
+import { Info } from "@model/Info"
+import { makeEmbyUrl } from "./config"
 
-export async function getPublicInfo() {
-    const url = makeUrl(null, `emby/system/info/public`)
+export async function getPublicInfo(site: EmbySite) {
+    console.log(`get public info`, site)
+    const url = makeEmbyUrl(null, `emby/system/info/public`, site.server)
     const response = await fetch(url)
     const info = await response.json() as Info
     return info
