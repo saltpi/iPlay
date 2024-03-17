@@ -15,6 +15,10 @@ type RootStackParamList = {
     movie: Media
   },
   login: undefined,
+  season: {
+    title: string,
+    season: Season
+  },
   default: undefined,
 };
 

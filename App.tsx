@@ -9,6 +9,7 @@ import {Page as LoginPage} from '@page/login/index.tsx';
 import {Page as SettingsPage} from '@page/settings/index.tsx';
 import {Page as SearchPage} from '@page/search/index.tsx';
 import {Page as StarPage} from '@page/star/index.tsx';
+import {Page as SeasonPage} from '@page/season/index.tsx';
 import {Page as MessagePage} from '@page/message/index.tsx';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {StorageHelper} from '@helper/store';
@@ -55,6 +56,11 @@ const HomeRouter = () => (
         <HomeStack.Screen
             name="movie"
             component={MoviePage as any}
+            options={defaultOptions}
+        />
+        <HomeStack.Screen
+            name="season"
+            component={SeasonPage as any}
             options={defaultOptions}
         />
     </HomeStack.Navigator>
