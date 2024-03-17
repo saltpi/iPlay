@@ -9,6 +9,7 @@ import {Page as LoginPage} from '@page/login/index.tsx';
 import {Page as SettingsPage} from '@page/settings/index.tsx';
 import {Page as SearchPage} from '@page/search/index.tsx';
 import {Page as StarPage} from '@page/star/index.tsx';
+import {Page as MessagePage} from '@page/message/index.tsx';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {StorageHelper} from '@helper/store';
 import {MenuType} from '@view/menu/MenuBar';
@@ -24,6 +25,7 @@ const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
 const StarStack = createNativeStackNavigator();
+const MessageStack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
@@ -83,6 +85,16 @@ const SearchRouter = () => (
     </SearchStack.Navigator>
 );
 
+const MessageRouter = () => (
+    <SearchStack.Navigator initialRouteName="search">
+        <SearchStack.Screen
+            name="search"
+            component={MessagePage}
+            options={{title: '消息'}}
+        />
+    </SearchStack.Navigator>
+);
+
 const StarRouter = () => (
     <StarStack.Navigator initialRouteName="star">
         <StarStack.Screen
@@ -108,6 +120,7 @@ function Router() {
                 />
                 <Tab.Screen name={MenuType.Search} component={SearchRouter} />
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
+                <Tab.Screen name={MenuType.Message} component={MessageRouter} />
             </Tab.Navigator>
         </NavigationContainer>
     );
