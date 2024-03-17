@@ -18,6 +18,7 @@ import {getActiveMenu} from '@store/menuSlice';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { Toast, toastConfig } from '@helper/toast';
 import { useAppSelector } from '@hook/store';
+import { updateCurrentEmbySite } from '@store/embySlice';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -119,11 +120,18 @@ function App() {
         const server = await StorageHelper.get('@server');
         if (!user || !server) {
             Api.emby = null;
+            console.log("no user or server")
             return;
         }
         const emby = new Emby(JSON.parse(user));
         config.emby = JSON.parse(server);
         Api.emby = emby;
+        store.dispatch(updateCurrentEmbySite({
+            server: config.emby,
+            user: emby.user,
+            status: 'idle',
+        }))
+        console.log("init, user and server exist")
     };
     useEffect(() => {
         init().then(() => setInited(true));

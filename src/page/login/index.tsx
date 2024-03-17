@@ -65,9 +65,11 @@ export function Page() {
                 setTimeout(() => {
                     navigation.navigate("home")
                 }, 1000)
+                console.log("login success")
             },
             reject: () => {
                 setLoading(false)
+                console.log("login failed")
             }
         }
         setLoading(true)

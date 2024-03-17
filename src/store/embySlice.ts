@@ -35,8 +35,11 @@ export const loginToSiteAsync = createAppAsyncThunk<User, Authentication>("emby/
     const state = config.getState()
     const data = await api.login(user.username, user.password, state.emby.site?.server)
     if (data) {
-        await StorageHelper.set("@user", JSON.stringify(user))
+        await StorageHelper.set("@user", JSON.stringify(data))
         api.emby = new Emby(data)
+        if (state.emby.site) {
+            state.emby.site.user = data
+        }
     }
     return data
 })
@@ -58,7 +61,7 @@ export const EmbySlice = createSlice({
         builder.addCase(loginToSiteAsync.pending, state => {
             if (state.site) state.site.status = 'loading';
         })
-        builder.addCase(loginToSiteAsync.fulfilled, (state, action) => {
+        .addCase(loginToSiteAsync.fulfilled, (state, action) => {
             if (!state.site) return
             state.site.status = 'idle';
             state.site.user = action.payload;

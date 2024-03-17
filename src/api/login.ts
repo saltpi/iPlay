@@ -9,7 +9,7 @@ export async function login(username: string, password: string, server: EmbyConf
     "X-Emby-Client-Version": "4.7.13.0",
     "X-Emby-Language": "zh-cn"
   }
-  const url = makeUrl(server, params, `emby/Users/authenticatebyname`)
+  const url = makeUrl(params, `emby/Users/authenticatebyname`, server)
   const response = await fetch(url, {
     "headers": {
       "accept": "application/json",

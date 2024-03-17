@@ -1,16 +1,19 @@
 import { config } from '@api/config';
-import {Api} from '@api/emby';
+import {Api, Emby} from '@api/emby';
 import { PropsWithNavigation } from '@global';
+import { useAppSelector } from '@hook/store';
 import {AlbumWidget} from '@view/AlbumList';
 import { MenuBar } from '@view/menu/MenuBar';
 import React, {useEffect} from 'react';
 import {
+    Button,
     SafeAreaView,
     ScrollView,
     StatusBar,
     StyleSheet,
     View,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const style = StyleSheet.create({
     page: {
@@ -23,15 +26,17 @@ const style = StyleSheet.create({
 });
 
 export function Page({navigation}: PropsWithNavigation<'home'>) {
+    const site = useAppSelector(state => state.emby?.site)
+    
     useEffect(() => {
-        if (!Api.emby) {
-            navigation.navigate("login")
+        if (!site?.user) {
             return
-        } 
+        }
+        Api.emby = new Emby(site?.user)
         Api.emby?.getPublicInfo().then(data => {
             console.log(data.ServerName);
         });
-    }, [Api.emby]);
+    }, [site?.user])
 
     return (
         <SafeAreaView style={style.page}>
@@ -42,7 +47,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <AlbumWidget key={config?.emby?.host ?? "nil"} />
+                {site ? <AlbumWidget /> : <Button title="添加站点" onPress={() => navigation.navigate("login")} />}
                 </View>
             </ScrollView>
             <MenuBar />
