@@ -1,7 +1,9 @@
 import { Api } from '@api/emby';
+import { Navigation } from '@global';
 import { useAppSelector } from '@hook/store';
 import {Season} from '@model/Season';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import {Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 
 const style = StyleSheet.create({
     root: {
@@ -36,10 +38,16 @@ const style = StyleSheet.create({
     },
 });
 
-export function SeasonCard({season}: {season: Season}) {
+export interface SeasonCardProps {
+    season: Season;
+    onPress?: (season: Season) => void;
+}
+
+export function SeasonCard({ season, onPress }: SeasonCardProps) {
     const emby = useAppSelector(state => state.emby?.emby);
     return (
         <View style={style.root}>
+            <TouchableWithoutFeedback onPress={() => onPress?.(season)}>
             <Image
                 style={style.cover}
                 source={{
@@ -50,6 +58,7 @@ export function SeasonCard({season}: {season: Season}) {
                     ),
                 }}
             />
+            </TouchableWithoutFeedback>
             <Text style={style.number}>{season.UserData.UnplayedItemCount}</Text>
             <Text style={style.title}>{season.Name}</Text>
         </View>
@@ -65,11 +74,14 @@ const listStyle = StyleSheet.create({
 });
 
 export function SeasonCardList({seasons}: {seasons: Season[]}) {
+    const navigation: Navigation = useNavigation()
     return (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={listStyle.root}>
                 {seasons.map(season => (
-                    <SeasonCard key={season.Id} season={season} />
+                    <SeasonCard key={season.Id} 
+                        onPress={season => navigation.navigate('season', {title: season.Name, season})}
+                        season={season} />
                 ))}
             </View>
         </ScrollView>
