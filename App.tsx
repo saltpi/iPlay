@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {Api, Emby} from '@api/emby';
@@ -23,7 +16,7 @@ import {Provider} from 'react-redux';
 import {store} from '@store/store';
 import {useAppSelector} from '@store';
 import {getActiveMenu} from '@store/menuSlice';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -33,78 +26,81 @@ const StarStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const defaultOptions = (options: any) => {
-  return {
-      title: (options.route.params as any)?.title ?? '',
-  };
+    return {
+        title: (options.route.params as any)?.title ?? '',
+    };
 };
 
 const HomeRouter = () => (
-  <HomeStack.Navigator initialRouteName="home">
-  <HomeStack.Screen
-      name="login"
-      component={LoginPage}
-      options={{title: '登录'}}
-  />
-  <HomeStack.Screen
-      name="home"
-      component={HomePage as any}
-      options={{title: '主页'}}
-  />
-  <HomeStack.Screen
-      name="album"
-      component={AlbumPage as any}
-      options={defaultOptions}
-  />
-  <HomeStack.Screen
-      name="movie"
-      component={MoviePage as any}
-      options={defaultOptions}
-  />
-</HomeStack.Navigator>
-)
+    <HomeStack.Navigator initialRouteName="home">
+        <HomeStack.Screen
+            name="login"
+            component={LoginPage}
+            options={{title: '登录'}}
+        />
+        <HomeStack.Screen
+            name="home"
+            component={HomePage as any}
+            options={{title: '主页'}}
+        />
+        <HomeStack.Screen
+            name="album"
+            component={AlbumPage as any}
+            options={defaultOptions}
+        />
+        <HomeStack.Screen
+            name="movie"
+            component={MoviePage as any}
+            options={defaultOptions}
+        />
+    </HomeStack.Navigator>
+);
 
 const SettingsRouter = () => (
-  <SettingsStack.Navigator initialRouteName="settings">
-  <SettingsStack.Screen
-      name="settings"
-      component={SettingsPage}
-      options={{title: '设置'}}
-  />
-</SettingsStack.Navigator>
-)
+    <SettingsStack.Navigator initialRouteName="settings">
+        <SettingsStack.Screen
+            name="settings"
+            component={SettingsPage}
+            options={{title: '设置'}}
+        />
+    </SettingsStack.Navigator>
+);
 
 const SearchRouter = () => (
-  <SearchStack.Navigator initialRouteName="search">
-  <SearchStack.Screen
-      name="search"
-      component={SearchPage}
-      options={{title: '搜索'}}
-  />
-</SearchStack.Navigator>
-)
+    <SearchStack.Navigator initialRouteName="search">
+        <SearchStack.Screen
+            name="search"
+            component={SearchPage}
+            options={{title: '搜索'}}
+        />
+    </SearchStack.Navigator>
+);
 
 const StarRouter = () => (
-  <StarStack.Navigator initialRouteName="star">
-  <StarStack.Screen
-      name="star"
-      component={StarPage}
-      options={{title: '收藏'}}
-  />
-</StarStack.Navigator>
-)
+    <StarStack.Navigator initialRouteName="star">
+        <StarStack.Screen
+            name="star"
+            component={StarPage}
+            options={{title: '收藏'}}
+        />
+    </StarStack.Navigator>
+);
 
 function Router() {
-
     const menu = useAppSelector(getActiveMenu);
     return (
         <NavigationContainer>
-            <Tab.Navigator initialRouteName="home"
+            <Tab.Navigator
+                initialRouteName="home"
                 tabBar={() => null}
-                screenOptions={{ headerShown: false }}>
-                <Tab.Screen name={MenuType.Home.toString()} component={HomeRouter} />
-                <Tab.Screen name={MenuType.Settings.toString()} component={SettingsRouter} />
-                <Tab.Screen name={MenuType.Search.toString()} component={SearchRouter} />
-                <Tab.Screen name={MenuType.Star.toString()} component={StarRouter} />
+                screenOptions={{headerShown: false}}>
+                <Tab.Screen name={MenuType.Home} component={HomeRouter} />
+                <Tab.Screen
+                    name={MenuType.Settings}
+                    component={SettingsRouter}
+                />
+                <Tab.Screen name={MenuType.Search} component={SearchRouter} />
+                <Tab.Screen name={MenuType.Star} component={StarRouter} />
             </Tab.Navigator>
         </NavigationContainer>
     );

@@ -5,12 +5,12 @@ import { MenuType } from '@view/menu/MenuBar';
 type RootStackParamList = {
   home: undefined;
   album: {
-    title: string, 
-    albumId: string; 
+    title: string,
+    albumId: string;
     albumName: string
   },
   movie: {
-    title: string, 
+    title: string,
     type: string,
     movie: Media
   },
@@ -18,16 +18,16 @@ type RootStackParamList = {
 };
 
 type TabStackParamList = {
-  home: undefined;
-  search: undefined;
-  star: undefined;
-  settings: undefined;
+  [MenuType.Home]: undefined;
+  [MenuType.Search]: undefined;
+  [MenuType.Star]: undefined;
+  [MenuType.Settings]: undefined;
 };
 
 type Navigation = NavigationProp<RootStackParamList>;
 type TabNavigation = NavigationProp<TabStackParamList>;
 
 type PropsWithNavigation<K extends keyof RootStackParamList> = {
-    navigation: Navigation;
-    route: RouteProp<RootStackParamList, K>;
+  navigation: Navigation;
+  route: RouteProp<RootStackParamList, K>;
 }

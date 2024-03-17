@@ -49,6 +49,7 @@ export const style = StyleSheet.create({
 });
 
 export function AlbumCard({media, title}: {media?: Media[]; title: string}) {
+    if (!media || !media.length) return null;
     return (
         <View style={style.albumItem}>
             <Text>{title}</Text>
