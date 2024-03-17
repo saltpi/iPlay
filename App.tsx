@@ -16,9 +16,9 @@ import {Provider} from 'react-redux';
 import {store} from '@store';
 import {getActiveMenu} from '@store/menuSlice';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { Toast, toastConfig } from '@helper/toast';
-import { useAppSelector } from '@hook/store';
-import { updateCurrentEmbySite } from '@store/embySlice';
+import {Toast, toastConfig} from '@helper/toast';
+import {useAppSelector} from '@hook/store';
+import {restoreSiteAsync, updateCurrentEmbySite} from '@store/embySlice';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -116,22 +116,11 @@ function Router() {
 function App() {
     const [inited, setInited] = useState(false);
     const init = async () => {
-        const user = await StorageHelper.get('@user');
-        const server = await StorageHelper.get('@server');
-        if (!user || !server) {
-            Api.emby = null;
-            console.log("no user or server")
-            return;
+        try {
+            store.dispatch(restoreSiteAsync());
+        } catch (e) {
+            console.log(e);
         }
-        const emby = new Emby(JSON.parse(user));
-        config.emby = JSON.parse(server);
-        Api.emby = emby;
-        store.dispatch(updateCurrentEmbySite({
-            server: config.emby,
-            user: emby.user,
-            status: 'idle',
-        }))
-        console.log("init, user and server exist")
     };
     useEffect(() => {
         init().then(() => setInited(true));

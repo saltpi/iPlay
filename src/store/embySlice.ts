@@ -30,6 +30,29 @@ type Authentication = {
     }
 }
 
+export const restoreSiteAsync = createAppAsyncThunk<EmbySite|null, void>("emby/restore", async (_, config) => {
+    const user = await StorageHelper.get('@user');
+    const server = await StorageHelper.get('@server');
+    if (!user || !server) {
+        console.log("no user or server")
+        return null
+    }
+    try {
+        const emby = new Emby(JSON.parse(user));
+        const endpoint = JSON.parse(server);
+        config.extra.emby = emby
+        const site = {
+            server: endpoint,
+            user: emby.user,
+            status: 'idle'
+        }
+        return site
+    } catch (e) {
+        console.log(e);
+    }
+    return null
+});
+
 export const loginToSiteAsync = createAppAsyncThunk<User, Authentication>("emby/site", async (user, config) => {
     const api = config.extra
     const state = config.getState()
@@ -65,7 +88,11 @@ export const EmbySlice = createSlice({
             if (!state.site) return
             state.site.status = 'idle';
             state.site.user = action.payload;
-        });
+        })
+        .addCase(restoreSiteAsync.fulfilled, (state, action) => {
+            console.log(`update site`, action.payload)
+            state.site = action.payload;
+        })
     },
 });
 
