@@ -13,11 +13,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Store} from '@helper/store';
 import {MenuType} from '@view/menu/MenuBar';
 import {Provider} from 'react-redux';
-import {store} from '@store/store';
-import {useAppSelector} from '@store';
+import {store} from '@store';
 import {getActiveMenu} from '@store/menuSlice';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { Toast, toastConfig } from '@helper/toast';
+import { useAppSelector } from '@hook/store';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();

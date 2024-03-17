@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@store/store';
+import { RootState } from '@store';
 import { MenuType } from '@view/menu/MenuBar';
 
 interface MenuState {

@@ -2,10 +2,10 @@ import { EmbyConfig, config } from '@api/config';
 import { Api, Emby } from '@api/emby';
 import { login } from '@api/login';
 import { Navigation } from '@global';
-import { Store, get } from '@helper/store';
+import { Store } from '@helper/store';
+import { useAppDispatch } from '@hook/store';
 import { useNavigation } from '@react-navigation/native';
-import { useAppDispatch } from '@store';
-import { getSiteInfo, loginToSiteAsync } from '@store/embySlice';
+import { loginToSiteAsync } from '@store/embySlice';
 import {useState} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 
@@ -75,8 +75,7 @@ export function Page() {
             }
         }
         setLoading(true)
-        const action = loginToSiteAsync({username, password, callback})
-        dispatch(getSiteInfo(0))
+        dispatch(loginToSiteAsync({username, password, callback}))
     }
     return (
         <SafeAreaView>

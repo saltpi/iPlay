@@ -1,6 +1,6 @@
 import {TabNavigation} from '@global';
+import { useAppDispatch, useAppSelector } from '@hook/store';
 import {useNavigation} from '@react-navigation/native';
-import {useAppDispatch, useAppSelector} from '@store';
 import {getActiveMenu, switchToMenu} from '@store/menuSlice';
 import {Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 const homeIcon = require('@view/menu/Home.png');

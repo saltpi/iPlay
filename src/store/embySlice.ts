@@ -1,10 +1,10 @@
 import { EmbyConfig } from '@api/config';
-import { Emby } from '@api/emby';
 import { User } from '@model/User';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@store/store';
-import { createAppAsyncThunk } from './type';
+import { createAsyncThunk, createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { listenerMiddleware } from './middleware/Listener';
+import { RootState } from '.';
+import { createAppAsyncThunk } from './type';
+import { Emby } from '@api/emby';
 
 interface EmbySite {
     server: EmbyConfig;
@@ -29,13 +29,7 @@ type Authentication = {
     }
 }
 
-export const getSiteInfo = createAppAsyncThunk("site/info", async (id: number, api) => {
-    const response = await fetch("/manifest.json")
-    const data = await response.json()
-    return data
-})
-
-export const loginToSiteAsync = createAppAsyncThunk("emby/site", async (user: Authentication, config) => {
+export const loginToSiteAsync = createAppAsyncThunk<User, Authentication>("emby/site", async (user, config) => {
     const api = config.extra
     const state = config.getState()
     const data = await api.login(user.username, user.password, state.emby.site?.server)
@@ -43,6 +37,10 @@ export const loginToSiteAsync = createAppAsyncThunk("emby/site", async (user: Au
         api.emby = new Emby(data)
     }
     return data
+})
+
+export const helloAsync = createAsyncThunk<string, string, any>("emby/site", async (content, _config) => {
+    return content
 })
 
 export const EmbySlice = createSlice({
@@ -72,14 +70,14 @@ export const getActiveEmbySite = (state: RootState) => state.emby;
 
 listenerMiddleware.startListening({
     actionCreator: loginToSiteAsync.fulfilled,
-    effect: async (data, api) => {
+    effect: async (data, _api) => {
         data.meta.arg.callback?.resolve?.()
     }
 })
 
 listenerMiddleware.startListening({
     actionCreator: loginToSiteAsync.rejected,
-    effect: async (data, api) => {
+    effect: async (data, _api) => {
         data.meta.arg.callback?.reject?.()
     }
 })
