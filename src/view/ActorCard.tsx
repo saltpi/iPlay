@@ -14,6 +14,8 @@ const style = StyleSheet.create({
     },
     name: {
         textAlign: "center",
+        overflow: "hidden",
+        width: 120,
     },
     role: {
         textAlign: "center",
@@ -27,7 +29,11 @@ export function ActorCard({actor}: {actor: People}) {
     return (
         <View style={style.root}>
             <Image style={style.image} source={{uri: emby?.imageUrl?.(actor.Id, actor.PrimaryImageTag, "Primary")}} />
-            <Text style={style.name}>{actor.Name}</Text>
+            <Text style={style.name}
+                 numberOfLines={1} 
+                 ellipsizeMode="tail">
+                {actor.Name}
+            </Text>
             <Text style={style.role}
                 numberOfLines={1} 
                 ellipsizeMode="tail">
