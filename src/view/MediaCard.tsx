@@ -20,6 +20,10 @@ export const style = StyleSheet.create({
         maxWidth: '33%',
         alignItems: 'center',
     },
+    title: {
+        maxWidth: 90, 
+        overflow: 'hidden'
+    }
 });
 
 export function MediaCard({media}: {media: Media}) {
@@ -40,7 +44,11 @@ export function MediaCard({media}: {media: Media}) {
                     source={{uri: emby?.imageUrl?.(media.Id, null)}}
                 />
             </TouchableWithoutFeedback>
-            <Text style={{maxWidth: 90, overflow: 'hidden'}}>{media.Name}</Text>
+            <Text style={style.title}
+                numberOfLines={1} 
+                ellipsizeMode="tail">
+                {media.Name}
+            </Text>
             <Text>{media.ProductionYear}</Text>
         </View>
     );
