@@ -1,5 +1,6 @@
 import { Api } from "@api/emby";
 import { PropsWithNavigation } from "@global";
+import { useAppSelector } from "@hook/store";
 import { MediaDetail } from "@model/MediaDetail";
 import { Season } from "@model/Season";
 import { ActorCard } from "@view/ActorCard";
@@ -27,14 +28,15 @@ const style = StyleSheet.create({
 })
 
 export function Page({route}: PropsWithNavigation<"movie">) {
+    const emby = useAppSelector(state => state.emby?.emby)
     const {title, type, movie} = route.params
     const [detail, setDetail] = useState<MediaDetail>();
     const [seasons, setSeasons] = useState<Season[]>();
     useEffect(() => {
-        Api.emby?.getMedia?.(Number(movie.Id)).then(setDetail)
+        emby?.getMedia?.(Number(movie.Id)).then(setDetail)
         if (type !== "Series") return
-        Api.emby?.getSeasons?.(Number(movie.Id)).then(setSeasons)
-    }, [movie.Id])
+        emby?.getSeasons?.(Number(movie.Id)).then(setSeasons)
+    }, [emby, movie.Id])
 
     const getPlayUrl = (detail?: MediaDetail) => {
         const sources = detail?.MediaSources ?? []
@@ -50,7 +52,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }
     return (
         <ScrollView>
-            <Image style={{width: "100%", aspectRatio: 1.5}} source={{ uri: Api.emby?.imageUrl?.(movie.Id, movie.BackdropImageTags[0], "Backdrop/0")}} />
+            <Image style={{width: "100%", aspectRatio: 1.5}} source={{ uri: emby?.imageUrl?.(movie.Id, movie.BackdropImageTags[0], "Backdrop/0")}} />
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>

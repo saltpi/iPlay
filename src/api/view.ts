@@ -23,6 +23,7 @@ export async function getView(site: EmbySite) {
         }
     });
     const data = await response.json() as View
+    console.log(`get view`, data, site)
     return data
 }
 

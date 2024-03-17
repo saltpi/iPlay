@@ -1,5 +1,5 @@
 import { User } from "../model/User";
-import { EmbyConfig, config, makeEmbyUrl } from "./config";
+import { EmbyConfig, makeEmbyUrl } from "./config";
 
 export async function login(username: string, password: string, endpoint: EmbyConfig) {
   const params = {

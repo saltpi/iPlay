@@ -1,4 +1,5 @@
 import { Api } from '@api/emby';
+import { useAppSelector } from '@hook/store';
 import {Season} from '@model/Season';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 
@@ -36,13 +37,13 @@ const style = StyleSheet.create({
 });
 
 export function SeasonCard({season}: {season: Season}) {
-    console.log(season)
+    const emby = useAppSelector(state => state.emby?.emby);
     return (
         <View style={style.root}>
             <Image
                 style={style.cover}
                 source={{
-                    uri: Api.emby?.imageUrl?.(
+                    uri: emby?.imageUrl?.(
                         season.Id,
                         season.ImageTags.Primary,
                         'Primary/0',

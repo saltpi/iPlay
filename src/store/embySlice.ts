@@ -5,13 +5,17 @@ import { createAppAsyncThunk } from './type';
 import { StorageHelper } from '@helper/store';
 import { EmbySite } from '@model/EmbySite';
 import { EmbyConfig } from '@helper/env';
+import { Emby } from '@api/emby';
+import { View } from '@model/View';
 
 interface EmbyState {
     site: EmbySite|null;
+    emby: Emby|null;
 }
 
 const initialState: EmbyState = {
-    site: null
+    site: null,
+    emby: null
 };
 
 type Authentication = {
@@ -54,6 +58,12 @@ export const loginToSiteAsync = createAppAsyncThunk<EmbySite|null, Authenticatio
     return null
 })
 
+export const fetchEmbyAlbumAsync = createAppAsyncThunk<View|undefined, void>("emby/view", async (_, config) => {
+    const emby = await config.getState().emby.emby
+    const data = emby?.getView?.()
+    return data
+})
+
 export const helloAsync = createAsyncThunk<string, string, any>("emby/site", async (content, _config) => {
     return content
 })
@@ -75,10 +85,11 @@ export const EmbySlice = createSlice({
             const site = action.payload
             if (!site) return
             state.site = site;
+            state.emby = new Emby(site)
         })
         .addCase(restoreSiteAsync.fulfilled, (state, action) => {
-            console.log(`update site`, action.payload)
             state.site = action.payload;
+            state.emby = action.payload ? new Emby(action.payload) : null
         })
     },
 });

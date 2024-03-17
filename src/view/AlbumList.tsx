@@ -1,4 +1,4 @@
-import {Api} from '@api/emby';
+import {Api, Emby} from '@api/emby';
 import {ViewDetail} from '@model/View';
 import {useEffect, useState} from 'react';
 import {
@@ -13,7 +13,9 @@ import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
 import {Navigation} from '@global';
 import { MediaCard } from './MediaCard';
-import { useAppSelector } from '@hook/store';
+import { useAppDispatch, useAppSelector } from '@hook/store';
+import { EmbySite } from '@model/EmbySite';
+import { fetchEmbyAlbumAsync } from '@store/embySlice';
 
 export const style = StyleSheet.create({
     root: {
@@ -65,6 +67,7 @@ export function AlbumCard({media, title}: {media?: Media[]; title: string}) {
 
 export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
     const navigation: Navigation = useNavigation();
+    const emby = useAppSelector(state => state.emby.emby)
     const onPress = (album: ViewDetail) => {
         navigation.navigate('album', {
             title: album.Name,
@@ -80,7 +83,7 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
                     <TouchableWithoutFeedback key={album.Id} onPress={() => onPress(album)}>
                     <View key={album.Id} style={style.album}>
                         <Image style={style.albumImage}
-                            source={{uri: Api.emby?.imageUrl?.(album.Id, album.Etag)}}
+                            source={{uri: emby?.imageUrl?.(album.Id, album.Etag)}}
                         />
                         <Text>{album.Name}</Text>
                     </View>
@@ -92,27 +95,38 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
     );
 }
 
-export function AlbumWidget() {
+export interface SiteResourceProps {
+    site: EmbySite;
+}
+
+export function SiteResource({site}: SiteResourceProps) {
     const [albums, setAlbums] = useState<ViewDetail[]>([]);
     const [medias, setMedias] = useState<(Media[] | undefined)[]>([]);
-    const site = useAppSelector(state => state.emby?.site);
+    const dispatch = useAppDispatch()
+    const emby = useAppSelector(state => state.emby.emby)
+
+    const getMediaContent = async (emby: Emby) => {
+        dispatch(fetchEmbyAlbumAsync()).then(data => {
+            if (typeof data.payload === "string") return
+            setAlbums(data.payload?.Items || [])
+        })
+    }
     useEffect(() => {
-        Api.emby?.getView?.().then(res => {
-            setAlbums(res.Items);
-        });
-    }, [site]);
+        if (!emby) return
+        getMediaContent(emby)
+    }, [emby]);
 
     useEffect(() => {
         const getMedia = async () => {
             const medias = await Promise.all(
                 albums.map(async album => {
-                    return await Api.emby?.getLatestMedia?.(Number(album.Id));
+                    return await emby?.getLatestMedia?.(Number(album.Id));
                 }),
             );
             setMedias(medias);
         };
         getMedia();
-    }, [albums]);
+    }, [albums, emby]);
 
     return (
         <View style={style.root}>

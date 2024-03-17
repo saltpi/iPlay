@@ -13,9 +13,8 @@ export const config = {
     }
 }
 
-export function makeEmbyUrl(params: Map<string, any>|null, path: string, emby: EmbyConfig) {
-    console.log(`makeEmbyUrl`, emby)
-    const url = new URL(`${emby.protocol ?? "https"}://${emby.host}:${emby.port ?? 443}${emby.path}${path}`)
+export function makeEmbyUrl(params: Map<string, any>|null, path: string, endpoint: EmbyConfig) {
+    const url = new URL(`${endpoint.protocol ?? "https"}://${endpoint.host}:${endpoint.port ?? 443}${endpoint.path}${path}`)
     params && Object.entries(params).forEach(([key, value]) => {
         if (typeof value === "string") {
             url.searchParams.append(key, value)
@@ -34,10 +33,11 @@ export interface ImageProps {
 }
 
 export function imageUrl(site: EmbySite, id: string|number, options: string|Partial<ImageProps>|null, type: "Primary"|string = "Primary") {
+    const endpoint = site.server!
     if (typeof options === "string") {
-        return `${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}emby/Items/${id}/Images/${type}?maxHeight=338&maxWidth=600&tag=${options}&quality=90`
+        return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Items/${id}/Images/${type}?maxHeight=338&maxWidth=600&tag=${options}&quality=90`
     } else {
-        const url = new URL(`${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}emby/Items/${id}/Images/${type}`)
+        const url = new URL(`${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Items/${id}/Images/${type}`)
         options && Object.entries(options).forEach(([key, value]) => {
             url.searchParams.set(key, String(value))
         })

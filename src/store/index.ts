@@ -13,6 +13,7 @@ export const store = configureStore({
     emby: embyReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
     thunk: {
       extraArgument: Api
     },
