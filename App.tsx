@@ -17,6 +17,7 @@ import {store} from '@store/store';
 import {useAppSelector} from '@store';
 import {getActiveMenu} from '@store/menuSlice';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Toast, toastConfig } from '@helper/toast';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -60,8 +61,13 @@ const SettingsRouter = () => (
     <SettingsStack.Navigator initialRouteName="settings">
         <SettingsStack.Screen
             name="settings"
-            component={SettingsPage}
+            component={SettingsPage as any}
             options={{title: '设置'}}
+        />
+        <SettingsStack.Screen
+            name="login"
+            component={LoginPage}
+            options={{title: '登录'}}
         />
     </SettingsStack.Navigator>
 );
@@ -127,6 +133,7 @@ function App() {
         return (
             <Provider store={store}>
                 <Router />
+                <Toast config={toastConfig} />
             </Provider>
         );
     } else {

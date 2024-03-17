@@ -14,7 +14,8 @@ type RootStackParamList = {
     type: string,
     movie: Media
   },
-  login: undefined
+  login: undefined,
+  default: undefined,
 };
 
 type TabStackParamList = {

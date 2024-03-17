@@ -2,8 +2,10 @@ import { EmbyConfig, config } from '@api/config';
 import { Api, Emby } from '@api/emby';
 import { login } from '@api/login';
 import { Navigation } from '@global';
-import { Store } from '@helper/store';
+import { Store, get } from '@helper/store';
 import { useNavigation } from '@react-navigation/native';
+import { useAppDispatch } from '@store';
+import { getSiteInfo, loginToSiteAsync } from '@store/embySlice';
 import {useState} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 
@@ -43,6 +45,8 @@ export function Page() {
     const [server, onChangeServer] = useState('');
     const [username, onChangeUsername] = useState('');
     const [password, onChangePassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const dispatch = useAppDispatch()
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
@@ -58,6 +62,21 @@ export function Page() {
         await Store.set("@user", JSON.stringify(user))
         Api.emby = new Emby(user)
         navigation.navigate("home")
+
+        const callback = {
+            resolve: () => {
+                setLoading(false)
+                setTimeout(() => {
+
+                }, 1000)
+            },
+            reject: () => {
+                setLoading(false)
+            }
+        }
+        setLoading(true)
+        const action = loginToSiteAsync({username, password, callback})
+        dispatch(getSiteInfo(0))
     }
     return (
         <SafeAreaView>

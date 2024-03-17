@@ -19,6 +19,7 @@
     "react-native": "0.73.6",
     "react-native-safe-area-context": "^4.9.0",
     "react-native-screens": "^3.29.0",
+    "react-native-toast-message": "^2.2.0",
     "react-redux": "^9.1.0"
   },
   "devDependencies": {

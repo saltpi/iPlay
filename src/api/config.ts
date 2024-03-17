@@ -12,8 +12,8 @@ export const config = {
     }
 }
 
-export function makeUrl(params: Map<string, any>|null, path: string) {
-    const url = new URL(`${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}${path}`)
+export function makeUrl(emby: EmbyConfig, params: Map<string, any>|null, path: string) {
+    const url = new URL(`${emby.protocol}://${emby.host}:${emby.port}${emby.path}${path}`)
     params && Object.entries(params).forEach(([key, value]) => {
         if (typeof value === "string") {
             url.searchParams.append(key, value)
