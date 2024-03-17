@@ -2,7 +2,7 @@ import { EmbyConfig, config } from '@api/config';
 import { Api, Emby } from '@api/emby';
 import { login } from '@api/login';
 import { Navigation } from '@global';
-import { Store } from '@helper/store';
+import { StorageHelper } from '@helper/store';
 import { useAppDispatch } from '@hook/store';
 import { useNavigation } from '@react-navigation/native';
 import { loginToSiteAsync } from '@store/embySlice';
@@ -56,18 +56,14 @@ export function Page() {
             protocol: groups?.protocol ?? "https" as any,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
-        await Store.set("@server", JSON.stringify(embyConfig))
+        await StorageHelper.set("@server", JSON.stringify(embyConfig))
         config.emby = embyConfig
-        const user = await login(username, password)
-        await Store.set("@user", JSON.stringify(user))
-        Api.emby = new Emby(user)
-        navigation.navigate("home")
 
         const callback = {
             resolve: () => {
                 setLoading(false)
                 setTimeout(() => {
-
+                    navigation.navigate("home")
                 }, 1000)
             },
             reject: () => {

@@ -10,7 +10,7 @@ import {Page as SettingsPage} from '@page/settings/index.tsx';
 import {Page as SearchPage} from '@page/search/index.tsx';
 import {Page as StarPage} from '@page/star/index.tsx';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Store} from '@helper/store';
+import {StorageHelper} from '@helper/store';
 import {MenuType} from '@view/menu/MenuBar';
 import {Provider} from 'react-redux';
 import {store} from '@store';
@@ -115,8 +115,8 @@ function Router() {
 function App() {
     const [inited, setInited] = useState(false);
     const init = async () => {
-        const user = await Store.get('@user');
-        const server = await Store.get('@server');
+        const user = await StorageHelper.get('@user');
+        const server = await StorageHelper.get('@server');
         if (!user || !server) {
             Api.emby = null;
             return;

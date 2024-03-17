@@ -8,7 +8,7 @@ export async function get(key: string) {
     return await AsyncStorage.getItem(key)
 }
 
-export const Store = {
+export const StorageHelper = {
     set,
     get
 }

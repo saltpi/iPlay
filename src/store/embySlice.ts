@@ -5,6 +5,7 @@ import { listenerMiddleware } from './middleware/Listener';
 import { RootState } from '.';
 import { createAppAsyncThunk } from './type';
 import { Emby } from '@api/emby';
+import { StorageHelper } from '@helper/store';
 
 interface EmbySite {
     server: EmbyConfig;
@@ -34,6 +35,7 @@ export const loginToSiteAsync = createAppAsyncThunk<User, Authentication>("emby/
     const state = config.getState()
     const data = await api.login(user.username, user.password, state.emby.site?.server)
     if (data) {
+        await StorageHelper.set("@user", JSON.stringify(user))
         api.emby = new Emby(data)
     }
     return data
