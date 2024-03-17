@@ -2,7 +2,9 @@ import { imageUrl } from "@api/config";
 import { Api } from "@api/emby";
 import { PropsWithNavigation } from "@global";
 import { MediaDetail } from "@model/MediaDetail";
+import { Season } from "@model/Season";
 import { ActorCard } from "@view/ActorCard";
+import { SeasonCard, SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useEffect, useState } from "react";
@@ -28,12 +30,13 @@ const style = StyleSheet.create({
 export function Page({route}: PropsWithNavigation<"movie">) {
     const {title, type, movie} = route.params
     const [detail, setDetail] = useState<MediaDetail>();
+    const [seasons, setSeasons] = useState<Season[]>();
     useEffect(() => {
-        Api.emby?.getMedia?.(Number(movie.Id)).then(data => {
-            setDetail(data)
-            data.People
-        })
+        Api.emby?.getMedia?.(Number(movie.Id)).then(setDetail)
+        if (type !== "Series") return
+        Api.emby?.getSeasons?.(Number(movie.Id)).then(setSeasons)
     }, [movie.Id])
+
     const getPlayUrl = (detail?: MediaDetail) => {
         const sources = detail?.MediaSources ?? []
         if (sources.length > 0) {
@@ -54,6 +57,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             </View>
             <Text style={style.overview}>{detail?.Overview}</Text>
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} />
+            {seasons ? <SeasonCardList seasons={seasons} /> : null}
             <Text style={style.actorSection}>演职人员</Text>
             <ScrollView horizontal>
             {detail?.People.map((actor, index) => <ActorCard key={index} actor={actor} />)}

@@ -25,7 +25,6 @@ async function getAlbum(id: number, page: number = 1) {
 export function Page({route, navigation}: PropsWithNavigation<"album">) {
     const [data, setData] = useState<EmbyResponse<Media>>()
     useEffect(() => {
-        console.log(route.params.albumId)
         getAlbum(Number(route.params.albumId))
         .then(res => {
             setData(res.data)

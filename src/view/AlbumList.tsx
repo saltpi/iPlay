@@ -108,7 +108,6 @@ export function AlbumWidget() {
                     return await Api.emby?.getLatestMedia?.(Number(album.Id));
                 }),
             );
-            console.log(medias.length);
             setMedias(medias);
         };
         getMedia();
