@@ -1,6 +1,8 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { TabNavigation } from "@global";
+import { useNavigation } from "@react-navigation/native";
+import { useAppDispatch, useAppSelector } from "@store";
+import { getActiveMenu, switchToMenu } from "@store/menuSlice";
+import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 const homeIcon = require("@view/menu/Home.png");
 const searchIcon = require("@view/menu/Search.png");
 const starIcon = require("@view/menu/Star.png");
@@ -52,7 +54,13 @@ const menu = [
 ]
 
 export function MenuBar() {
-    const [active, setActive] = useState<Number>(0);
+    const active = useAppSelector(getActiveMenu)
+    const dispatch = useAppDispatch()
+    const navigation: TabNavigation = useNavigation();
+    const setActive = (i: number) => {
+        dispatch(switchToMenu(i))
+        navigation.navigate(i.toString() as any)
+    }
     return (
         <View style={style.menuBar}>
             {menu.map((item, i) =>

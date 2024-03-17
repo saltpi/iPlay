@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.22.3",
+    "@react-navigation/bottom-tabs": "^6.5.19",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.25",
     "@reduxjs/toolkit": "^2.2.1",
