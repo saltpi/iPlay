@@ -7,12 +7,14 @@ const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
 const settingsIcon = require('@view/menu/Setting.png');
+const messageIcon = require('@view/settings/message.png');
 
 export enum MenuType {
     Home = 'HomeTab',
     Search = 'SearchTab',
     Star = 'StarTab',
     Settings = 'SettingsTab',
+    Message = 'MessageTab',
 }
 
 const style = StyleSheet.create({
@@ -47,9 +49,10 @@ const style = StyleSheet.create({
 });
 
 const menu = [
-    {icon: homeIcon, name: 'Home', type: MenuType.Home},
     {icon: searchIcon, name: 'Search', type: MenuType.Search},
     {icon: starIcon, name: 'Star', type: MenuType.Star},
+    {icon: homeIcon, name: 'Home', type: MenuType.Home},
+    {icon: messageIcon, name: 'Message', type: MenuType.Message},
     {icon: settingsIcon, name: 'Settings', type: MenuType.Settings},
 ];
 
