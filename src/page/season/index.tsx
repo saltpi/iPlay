@@ -9,6 +9,10 @@ import { EpisodeCard } from "@view/EpisodeCard";
 const style = StyleSheet.create({
     page: {
         flex: 1,
+    },
+    cover: {
+        width: "100%",
+        aspectRatio: 1.5
     }
 });
 
@@ -30,8 +34,7 @@ export function Page({route}: SeasonPageProps) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <Image source={{uri: emby?.imageUrl?.(season.ImageTags.Primary, null)}} />
-                    <Text>{season.Name}</Text>
+                    <Image style={{...style.cover, aspectRatio: season.PrimaryImageAspectRatio}} source={{uri: emby?.imageUrl?.(season.Id, season.BackdropImageTags[0])}} />
                 </View>
                 {episodes?.map(episode => 
                     <EpisodeCard key={episode.Id} emby={emby} episode={episode} />
