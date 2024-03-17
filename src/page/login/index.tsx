@@ -2,8 +2,10 @@ import { EmbyConfig, config } from '@api/config';
 import { Api, Emby } from '@api/emby';
 import { login } from '@api/login';
 import { Navigation } from '@global';
-import { Store } from '@helper/store';
+import { StorageHelper } from '@helper/store';
+import { useAppDispatch } from '@hook/store';
 import { useNavigation } from '@react-navigation/native';
+import { loginToSiteAsync } from '@store/embySlice';
 import {useState} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 
@@ -43,21 +45,38 @@ export function Page() {
     const [server, onChangeServer] = useState('');
     const [username, onChangeUsername] = useState('');
     const [password, onChangePassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const dispatch = useAppDispatch()
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
-        const embyConfig: EmbyConfig = {
+        const endpoint: EmbyConfig = {
             host: groups?.host ?? "",
             port: groups?.port ? parseInt(groups.port) : 443,
             protocol: groups?.protocol ?? "https" as any,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
-        await Store.set("@server", JSON.stringify(embyConfig))
-        config.emby = embyConfig
-        const user = await login(username, password)
-        await Store.set("@user", JSON.stringify(user))
-        Api.emby = new Emby(user)
-        navigation.navigate("home")
+
+        const callback = {
+            resolve: () => {
+                setLoading(false)
+                setTimeout(() => {
+                    navigation.navigate("home")
+                }, 1000)
+                console.log("login success")
+            },
+            reject: () => {
+                setLoading(false)
+                console.log("login failed")
+            }
+        }
+        setLoading(true)
+        dispatch(loginToSiteAsync({
+            endpoint,
+            username, 
+            password, 
+            callback
+        }))
     }
     return (
         <SafeAreaView>

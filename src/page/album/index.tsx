@@ -1,5 +1,6 @@
-import { Api } from "@api/emby";
+import { Api, Emby } from "@api/emby";
 import { PropsWithNavigation } from "@global";
+import { useAppSelector } from "@hook/store";
 import { EmbyResponse } from "@model/EmbyResponse";
 import { Media } from "@model/Media";
 import { MediaCard } from '@view/MediaCard';
@@ -15,22 +16,23 @@ const style = StyleSheet.create({
     }
 })
 
-async function getAlbum(id: number, page: number = 1) {
-    const album = await Api.emby?.getMedia?.(id)
+async function getAlbum(emby: Emby, id: number, page: number = 1) {
+    const album = await emby?.getMedia?.(id)
     const type = album?.CollectionType === "tvshows" ? "Series" : "Movie"
-    const data = await Api.emby?.getCollection?.(id, type, page)
+    const data = await emby?.getCollection?.(id, type, page)
     return {album, data}
 }
 
 export function Page({route, navigation}: PropsWithNavigation<"album">) {
+    const emby = useAppSelector(state => state.emby?.emby)
     const [data, setData] = useState<EmbyResponse<Media>>()
     useEffect(() => {
-        console.log(route.params.albumId)
-        getAlbum(Number(route.params.albumId))
+        if (!emby) return
+        getAlbum(emby, Number(route.params.albumId))
         .then(res => {
             setData(res.data)
         })
-    }, [route.params.albumId])
+    }, [route.params.albumId, emby])
     return (
         <ScrollView showsHorizontalScrollIndicator={false}>
             <View style={style.root}>

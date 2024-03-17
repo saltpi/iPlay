@@ -1,11 +1,17 @@
-import { imageUrl } from '@api/config';
 import {
-    Image, StyleSheet, Text,
-    TouchableOpacity, TouchableWithoutFeedback, TouchableWithoutFeedbackBase, View
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    TouchableWithoutFeedbackBase,
+    View,
 } from 'react-native';
-import { Media } from '@model/Media';
-import { useNavigation } from '@react-navigation/native';
-import { Navigation } from '@global';
+import {Media} from '@model/Media';
+import {useNavigation} from '@react-navigation/native';
+import {Navigation} from '@global';
+import {Api} from '@api/emby';
+import {useAppSelector} from '@hook/store';
 
 export const style = StyleSheet.create({
     mediaCard: {
@@ -13,10 +19,11 @@ export const style = StyleSheet.create({
         overflow: 'hidden',
         maxWidth: '33%',
         alignItems: 'center',
-    }
+    },
 });
 
-export function MediaCard({ media }: { media: Media; }) {
+export function MediaCard({media}: {media: Media}) {
+    const emby = useAppSelector(state => state.emby?.emby);
     const navigation: Navigation = useNavigation();
     const onPress = (media: Media) => {
         navigation.navigate('movie', {
@@ -26,16 +33,15 @@ export function MediaCard({ media }: { media: Media; }) {
         });
     };
     return (
-            <View style={style.mediaCard} key={media.Id}>
-                <TouchableWithoutFeedback onPress={() => onPress(media)}>
+        <View style={style.mediaCard} key={media.Id}>
+            <TouchableWithoutFeedback onPress={() => onPress(media)}>
                 <Image
-                    style={{ width: 90, aspectRatio: 4.6/7, borderRadius: 5 }}
-                    source={{ uri: imageUrl(media.Id, null) }} />
-                </TouchableWithoutFeedback>
-                <Text style={{ maxWidth: 90, overflow: 'hidden' }}>
-                    {media.Name}
-                </Text>
-                <Text>{media.ProductionYear}</Text>
-            </View>
+                    style={{width: 90, aspectRatio: 4.6 / 7, borderRadius: 5}}
+                    source={{uri: emby?.imageUrl?.(media.Id, null)}}
+                />
+            </TouchableWithoutFeedback>
+            <Text style={{maxWidth: 90, overflow: 'hidden'}}>{media.Name}</Text>
+            <Text>{media.ProductionYear}</Text>
+        </View>
     );
 }

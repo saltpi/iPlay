@@ -1,14 +1,16 @@
-import { config } from '@api/config';
-import {Api} from '@api/emby';
+import {Api, Emby} from '@api/emby';
 import { PropsWithNavigation } from '@global';
-import {AlbumWidget} from '@view/AlbumList';
+import { useAppSelector } from '@hook/store';
+import {SiteResource} from '@view/AlbumList';
 import { MenuBar } from '@view/menu/MenuBar';
 import React, {useEffect} from 'react';
 import {
+    Button,
     SafeAreaView,
     ScrollView,
     StatusBar,
     StyleSheet,
+    Text,
     View,
 } from 'react-native';
 
@@ -23,15 +25,20 @@ const style = StyleSheet.create({
 });
 
 export function Page({navigation}: PropsWithNavigation<'home'>) {
+    const site = useAppSelector(state => state.emby?.site)
+    const emby = useAppSelector(state => state.emby?.emby)
     useEffect(() => {
-        if (!Api.emby) {
-            navigation.navigate("login")
+        if (!site?.server || !site?.user) {
             return
-        } 
-        Api.emby?.getPublicInfo().then(data => {
+        }
+        emby?.getPublicInfo?.().then(data => {
             console.log(data.ServerName);
         });
-    }, [Api.emby]);
+    }, [site])
+
+    const goToLogin = () => {
+        navigation.navigate("login")
+    }
 
     return (
         <SafeAreaView style={style.page}>
@@ -42,7 +49,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <AlbumWidget key={config?.emby?.host ?? "nil"} />
+                {site?.server && site?.user ? <SiteResource site={site} /> : <Button title="添加站点" onPress={goToLogin} />}
                 </View>
             </ScrollView>
             <MenuBar />

@@ -1,7 +1,7 @@
 import { User } from "../model/User";
-import { makeUrl } from "./config";
+import { EmbyConfig, makeEmbyUrl } from "./config";
 
-export async function login(username: string, password: string) {
+export async function login(username: string, password: string, endpoint: EmbyConfig) {
   const params = {
     "X-Emby-Client": "Emby Web",
     "X-Emby-Device-Name": "Microsoft Edge macOS",
@@ -9,7 +9,7 @@ export async function login(username: string, password: string) {
     "X-Emby-Client-Version": "4.7.13.0",
     "X-Emby-Language": "zh-cn"
   }
-  const url = makeUrl(params, `emby/Users/authenticatebyname`)
+  const url = makeEmbyUrl(params, `emby/Users/authenticatebyname`, endpoint)
   const response = await fetch(url, {
     "headers": {
       "accept": "application/json",
