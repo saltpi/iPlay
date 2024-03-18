@@ -56,7 +56,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
     }
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar />
+            <StatusBar barStyle={"dark-content"} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

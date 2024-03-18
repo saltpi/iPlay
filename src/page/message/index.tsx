@@ -10,7 +10,7 @@ const style = StyleSheet.create({
 export function Page() {
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar />
+            <StatusBar barStyle={"dark-content"} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
