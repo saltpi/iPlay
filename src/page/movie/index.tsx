@@ -13,6 +13,8 @@ import { Image } from '@view/Image';
 import Video, { VideoRef } from "react-native-video";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { set } from "@helper/store";
+const playIcon = require("@asset/button.play.png")
 
 const style = StyleSheet.create({
     overview: {
@@ -34,23 +36,23 @@ const style = StyleSheet.create({
         aspectRatio: 16/9,
     },
     playButton: {
+        position: "absolute",
+        width: 50,
+        height: 50,
+        aspectRatio: 1,
+        overflow: "hidden",
+        top: "50%",
+        left: "50%",
+        transform: [{translateX: -25}, {translateY: -25}],
         alignItems: "center",
         justifyContent: "center",
     },
     play: {
-        borderWidth: 1,
-        borderColor: "black",
-        color: "white",
-        overflow: "hidden",
-        backgroundColor: "black",
-        borderRadius: 9,
         flexGrow: 0,
         flexShrink: 0,
-        fontSize: 18,
-        padding: 8,
-        width: "auto",
-        marginTop: 5,
-        marginBottom: 5,
+        width: 50,
+        height: 50,
+        aspectRatio: 1,
     }
 })
 
@@ -58,11 +60,16 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const emby = useAppSelector(state => state.emby?.emby)
     const {title, type, movie} = route.params
     const [url, setUrl] = useState<string>()
+    const [isPlaying, setIsPlaying] = useState(false)
     const [detail, setDetail] = useState<MediaDetail>();
     const [seasons, setSeasons] = useState<Season[]>();
     const [videoRef, setVideoRef] = useState<VideoRef>()
-    const poster = emby?.imageUrl?.(movie.Id, movie.BackdropImageTags[0], "Backdrop/0")
+    const poster = type==="Episode" ?
+        emby?.imageUrl?.(movie.Id, null) :
+        emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
+    console.log(poster)
     const insets = useSafeAreaInsets()
+    console.log(type, movie)
     useEffect(() => {
         emby?.getMedia?.(Number(movie.Id)).then(setDetail)
         if (type !== "Series") return
@@ -90,11 +97,13 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }
     const playVideo = () => {
         const url = getPlayUrl(detail)
-        console.log(`playVideo: `, url)
         setUrl(url)
+        setIsPlaying(true)
     }
+    const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     return (
         <ScrollView>
+            <View>
             {url ? <Video
                 source={{uri: url}}
                 controls={true}
@@ -105,16 +114,17 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 onError={onError}
                 style={style.player}
             /> : null}
-            {url ? null : <Image style={{width: "100%", aspectRatio: 1.5}} source={{ uri: poster}} />}
+            {url ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
+            {isPlayable ?
+            <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
+            {isPlaying ? null : <Image style={style.play} source={playIcon} />}
+            </TouchableOpacity> : null}
+            </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>
             <Text style={style.overview}>{detail?.Overview}</Text>
-            {movie.Type === "Movie" ?
-            <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
-            <Text style={style.play}>立即播放</Text>
-            </TouchableOpacity> : null}
-            {movie.Type === "Movie" ?
+            {isPlayable ?
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} /> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             <Text style={style.actorSection}>演职人员</Text>

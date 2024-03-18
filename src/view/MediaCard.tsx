@@ -15,7 +15,7 @@ export const style = StyleSheet.create({
     mediaCard: {
         margin: 10,
         overflow: 'hidden',
-        maxWidth: '33%',
+        maxWidth: '45%',
         alignItems: 'center',
     },
     title: {
@@ -34,11 +34,16 @@ export function MediaCard({media}: {media: Media}) {
             movie: media,
         });
     };
+    const postStyle = {
+        width: media.Type==="Episode" ? 160 : 90, 
+        aspectRatio: media.PrimaryImageAspectRatio, 
+        borderRadius: media.Type==="Episode" ? 7 : 5
+    }
     return (
         <View style={style.mediaCard} key={media.Id}>
             <TouchableOpacity activeOpacity={1.0} onPress={() => onPress(media)}>
                 <Image
-                    style={{width: 90, aspectRatio: 4.6 / 7, borderRadius: 5}}
+                    style={postStyle}
                     source={{uri: emby?.imageUrl?.(media.Id, null)}}
                 />
             </TouchableOpacity>
