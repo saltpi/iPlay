@@ -1,4 +1,5 @@
 import { Media } from '@model/Media';
+import { PlaybackInfo } from '@model/PlaybackInfo';
 import { NavigationProp, ParamListBase, RouteProp, Router } from '@react-navigation/native';
 import { MenuType } from '@view/menu/MenuBar';
 
@@ -18,6 +19,11 @@ type RootStackParamList = {
   season: {
     title: string,
     season: Season
+  },
+  player: {
+    title: string,
+    poster?: string
+    media: PlaybackInfo,
   },
   default: undefined,
 };

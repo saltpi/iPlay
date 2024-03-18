@@ -2052,6 +2052,14 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.11.tgz"
   integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
 
+"@types/react-native-video@^5.0.20":
+  version "5.0.20"
+  resolved "https://registry.npmjs.org/@types/react-native-video/-/react-native-video-5.0.20.tgz"
+  integrity sha512-CdD4T43uEKzTNJ/RylTDViNuGuyOPWQUEuA1Y9GY8T+HiE9cwYw1zQNqk8a7zz9GHamlPfJQ+bYoEE9OWjZ/6g==
+  dependencies:
+    "@types/react" "*"
+    react-native "*"
+
 "@types/react-test-renderer@^18.0.0":
   version "18.0.7"
   resolved "https://registry.npmjs.org/@types/react-test-renderer/-/react-test-renderer-18.0.7.tgz"

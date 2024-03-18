@@ -1,6 +1,6 @@
 import { Emby } from "@api/emby";
 import { Episode } from "@model/Episode";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 const style = StyleSheet.create({
     root: {
@@ -41,6 +41,7 @@ export interface EpisodeCardProps {
 
 export function EpisodeCard({emby, episode, onPress}: EpisodeCardProps) {
     return (
+        <TouchableWithoutFeedback onPress={() => onPress?.(episode)}>
         <View style={style.basic}>
             <Image style={{...style.cover, aspectRatio: episode.PrimaryImageAspectRatio}}
                 source={{uri: emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary)}} />
@@ -54,5 +55,6 @@ export function EpisodeCard({emby, episode, onPress}: EpisodeCardProps) {
                 </Text>
             </View>
         </View>
+        </TouchableWithoutFeedback>
     )
 }

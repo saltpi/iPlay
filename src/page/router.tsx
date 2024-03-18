@@ -8,6 +8,7 @@ import { Page as SearchPage } from "@page/search/index.tsx";
 import { Page as SeasonPage } from "@page/season/index.tsx";
 import { Page as SettingsPage } from "@page/settings/index.tsx";
 import { Page as StarPage } from "@page/star/index.tsx";
+import { Page as PlayerPage } from "@page/player/index.tsx";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -23,6 +24,11 @@ const StarStack = createNativeStackNavigator();
 const MessageStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const defaultOptions = (options: any) => {
+    return {
+        title: (options.route.params as any)?.title ?? '',
+    };
+};
+const fullscreenOptions = (options: any) => {
     return {
         title: (options.route.params as any)?.title ?? '',
     };
@@ -49,6 +55,10 @@ const HomeRouter = () => (
             name="season"
             component={SeasonPage as any}
             options={defaultOptions} />
+        <HomeStack.Screen
+            name="player"
+            component={PlayerPage as any}
+            options={fullscreenOptions} />
     </HomeStack.Navigator>
 );
 const SettingsRouter = () => (
