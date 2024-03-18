@@ -25,16 +25,20 @@ const style = StyleSheet.create({
         flex: 1,
         height: 40,
         margin: 12,
+        fontSize: 16,
         borderWidth: 1,
-        borderRadius: 2.5,
+        borderRadius: 5,
         padding: 2.5,
+        backgroundColor: "#f0f0f0",
+        borderColor: "#e0e0e0",
     },
     loginButton: {
         marginTop: 12,
         marginBottom: 12,
         marginLeft: "auto",
         marginRight: "auto",
-        backgroundColor: "#f194ff",
+        backgroundColor: "black",
+        color: "white",
         borderRadius: 5,
         width: "75%"
     }
