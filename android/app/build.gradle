@@ -74,9 +74,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.iplayclient"
+    namespace "top.ourfor.app.iPlayClient"
     defaultConfig {
-        applicationId "com.iplayclient"
+        applicationId "top.ourfor.app.iPlayClient"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

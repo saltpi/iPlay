@@ -1,4 +1,4 @@
-package com.iplayclient
+package top.ourfor.app.iPlayClient
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

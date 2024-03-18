@@ -1,4 +1,4 @@
-package com.iplayclient
+package top.ourfor.app.iPlayClient
 
 import android.app.Application
 import com.facebook.react.PackageList
