@@ -28,6 +28,10 @@ end
 target 'iPlayClient' do
   config = use_native_modules!
 
+  # enable Video caching
+  $RNVideoUseVideoCaching=true
+  $RNVideoUseGoogleIMA=true
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.
@@ -42,6 +46,7 @@ target 'iPlayClient' do
   target 'iPlayClientTests' do
     inherit! :complete
     # Pods for testing
+    
   end
 
   post_install do |installer|

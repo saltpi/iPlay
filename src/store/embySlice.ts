@@ -38,7 +38,7 @@ export const restoreSiteAsync = createAppAsyncThunk<EmbySite|null, void>("emby/r
         const site = JSON.parse($site);
         return site
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
     return null
 });

@@ -3,7 +3,7 @@ import { getCollection, getEpisodes, getLatestMedia, getMedia, getRecommendation
 import { getPublicInfo } from "./info";
 import { login } from "./login";
 import { EmbySite } from "@model/EmbySite";
-import { imageUrl } from "./config";
+import { imageUrl, playUrl } from "./config";
 
 export class Emby {
     private _site?: EmbySite;
@@ -35,6 +35,7 @@ export class Emby {
         this.searchRecommend = searchRecommend.bind(this, this.site)
         this.getPublicInfo = getPublicInfo.bind(this, this.site)
         this.imageUrl = imageUrl.bind(this, this.site)
+        this.videoUrl = playUrl.bind(this, this.site)
     }
 
     public getPlaybackInfo = this._site ? getPlaybackInfo.bind(this, this.site) : null
@@ -50,6 +51,7 @@ export class Emby {
     public getItemWithName = this._site ? lookupItem.bind(this, this.site) : null
     public searchRecommend = this._site ? searchRecommend.bind(this, this.site) : null
     public imageUrl = this._site ? imageUrl.bind(this, this.site) : null
+    public videoUrl = this._site ? playUrl.bind(this, this.site) : null
 }
 
 export const Api = {

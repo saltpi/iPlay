@@ -49,7 +49,8 @@ export function avatorUrl(id: string, options: string|Partial<ImageProps>, type:
     return `${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}emby/Users/${id}/Images/${type}?height=152&tag=${options}&quality=90`
 }
 
-export function playUrl(path: string) {
+export function playUrl(site: EmbySite, path: string) {
+    const endpoint = site.server!
     if (path?.startsWith("http")) return path
-    return `${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}emby${path}`
+    return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby${path}`
 }
