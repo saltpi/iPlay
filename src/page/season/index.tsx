@@ -35,7 +35,7 @@ export function Page({route, navigation}: SeasonPageProps) {
     }
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar />
+            <StatusBar barStyle={"dark-content"} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

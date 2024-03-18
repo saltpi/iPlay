@@ -64,7 +64,7 @@ export function Page() {
     }, [searchKeyword, emby])
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar />
+            <StatusBar barStyle={"dark-content"} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
