@@ -46,8 +46,8 @@ const style = StyleSheet.create({
         borderRadius: 9,
         flexGrow: 0,
         flexShrink: 0,
-        fontSize: 20,
-        padding: 10,
+        fontSize: 18,
+        padding: 8,
         width: "auto",
         marginTop: 5,
         marginBottom: 5,
@@ -110,10 +110,12 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>
             <Text style={style.overview}>{detail?.Overview}</Text>
+            {movie.Type === "Movie" ?
             <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
             <Text style={style.play}>立即播放</Text>
-            </TouchableOpacity>
-            <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} />
+            </TouchableOpacity> : null}
+            {movie.Type === "Movie" ?
+            <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} /> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             <Text style={style.actorSection}>演职人员</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
