@@ -32,7 +32,7 @@ const style = StyleSheet.create({
         flexWrap: "wrap",
         padding: 10,
         alignContent: "center",
-        justifyContent: "flex-start",
+        justifyContent: "center",
     }
 });
 
