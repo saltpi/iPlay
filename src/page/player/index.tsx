@@ -72,7 +72,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     }, [])
     return (
         <View style={style.root}>
-        <Video
+        {url ? <Video
             source={{uri: url}}
             controls={true}
             poster={poster}
@@ -81,7 +81,7 @@ export function Page({navigation, route}: PlayerPageProps) {
             ref={videoRef}
             onError={onError}
             style={style.player}
-        />
+        /> : null}
         <ScrollView>
         {episodes.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
