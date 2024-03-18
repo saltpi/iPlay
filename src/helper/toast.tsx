@@ -1,4 +1,5 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View} from 'react-native';
+import { Image } from '@view/Image';
 import Toast, {
     BaseToast,
     ErrorToast,

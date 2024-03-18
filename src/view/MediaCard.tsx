@@ -1,12 +1,10 @@
 import {
-    Image,
     StyleSheet,
     Text,
     TouchableOpacity,
-    TouchableWithoutFeedback,
-    TouchableWithoutFeedbackBase,
     View,
 } from 'react-native';
+import { Image } from '@view/Image';
 import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
 import {Navigation} from '@global';
@@ -38,12 +36,12 @@ export function MediaCard({media}: {media: Media}) {
     };
     return (
         <View style={style.mediaCard} key={media.Id}>
-            <TouchableWithoutFeedback onPress={() => onPress(media)}>
+            <TouchableOpacity activeOpacity={1.0} onPress={() => onPress(media)}>
                 <Image
                     style={{width: 90, aspectRatio: 4.6 / 7, borderRadius: 5}}
                     source={{uri: emby?.imageUrl?.(media.Id, null)}}
                 />
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
             <Text style={style.title}
                 numberOfLines={1} 
                 ellipsizeMode="tail">

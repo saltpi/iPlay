@@ -4,7 +4,7 @@ import { useAppSelector } from '@hook/store';
 import { Episode } from '@model/Episode';
 import { EpisodeCard } from '@view/EpisodeCard';
 import {useEffect, useRef, useState} from 'react';
-import {Button, ScrollView, StyleSheet, Text, Touchable, TouchableWithoutFeedback, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Video from 'react-native-video';
 

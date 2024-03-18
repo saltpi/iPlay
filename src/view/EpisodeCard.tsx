@@ -1,6 +1,7 @@
 import { Emby } from "@api/emby";
 import { Episode } from "@model/Episode";
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View, ViewProps, ViewStyle } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ViewProps, ViewStyle } from "react-native";
+import { Image } from '@view/Image';
 
 const style = StyleSheet.create({
     root: {
@@ -42,7 +43,7 @@ export interface EpisodeCardProps {
 
 export function EpisodeCard({style: extraStyle, emby, episode, onPress}: EpisodeCardProps) {
     return (
-        <TouchableWithoutFeedback onPress={() => onPress?.(episode)}>
+        <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(episode)}>
         <View style={{...style.basic, ...extraStyle}}>
             <Image style={{...style.cover, aspectRatio: episode.PrimaryImageAspectRatio}}
                 source={{uri: emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary)}} />
@@ -56,6 +57,6 @@ export function EpisodeCard({style: extraStyle, emby, episode, onPress}: Episode
                 </Text>
             </View>
         </View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
     )
 }

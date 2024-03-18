@@ -1,4 +1,5 @@
-import { Image, StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { Image } from '@view/Image';
 
 const style = StyleSheet.create({
     root: {

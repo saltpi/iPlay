@@ -3,7 +3,8 @@ import { Navigation } from '@global';
 import { useAppSelector } from '@hook/store';
 import {Season} from '@model/Season';
 import { useNavigation } from '@react-navigation/native';
-import {Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image } from '@view/Image';
 
 const style = StyleSheet.create({
     root: {
@@ -47,7 +48,7 @@ export function SeasonCard({ season, onPress }: SeasonCardProps) {
     const emby = useAppSelector(state => state.emby?.emby);
     return (
         <View style={style.root}>
-            <TouchableWithoutFeedback onPress={() => onPress?.(season)}>
+            <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(season)}>
             <Image
                 style={style.cover}
                 source={{
@@ -58,7 +59,7 @@ export function SeasonCard({ season, onPress }: SeasonCardProps) {
                     ),
                 }}
             />
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
             <Text style={style.number}>{season.UserData.UnplayedItemCount}</Text>
             <Text style={style.title}>{season.Name}</Text>
         </View>
