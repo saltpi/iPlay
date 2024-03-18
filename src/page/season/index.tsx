@@ -1,10 +1,11 @@
 import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
 import { useEffect, useState } from "react";
-import { Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { Season } from "@model/Season";
 import { Episode } from "@model/Episode";
 import { EpisodeCard } from "@view/EpisodeCard";
+import { Image } from '@view/Image';
 
 const style = StyleSheet.create({
     page: {

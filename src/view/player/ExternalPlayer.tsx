@@ -1,4 +1,5 @@
-import { Image, Linking, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image } from '@view/Image';
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -96,9 +97,9 @@ export function ExternalPlayer({
     return (
         <View style={style.playerList}>
             {Object.values(players).map(player => (
-                <TouchableWithoutFeedback key={player.title} onPress={() => player.action(src, title)}>
+                <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title)}>
                     <Image key={player.title} style={style.icon} source={player.icon} />
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
             ))}
         </View>
     );

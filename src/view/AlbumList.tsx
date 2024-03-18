@@ -2,13 +2,13 @@ import {Api, Emby} from '@api/emby';
 import {ViewDetail} from '@model/View';
 import {useEffect, useState} from 'react';
 import {
-    Image,
     ScrollView,
     StyleSheet,
     Text,
-    TouchableWithoutFeedback,
+    TouchableOpacity,
     View,
 } from 'react-native';
+import { Image } from '@view/Image';
 import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
 import {Navigation} from '@global';
@@ -80,14 +80,14 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
         <View style={style.albumList}>
             {albums.map(album => {
                 return (
-                    <TouchableWithoutFeedback key={album.Id} onPress={() => onPress(album)}>
+                    <TouchableOpacity activeOpacity={1.0} key={album.Id} onPress={() => onPress(album)}>
                     <View key={album.Id} style={style.album}>
                         <Image style={style.albumImage}
                             source={{uri: emby?.imageUrl?.(album.Id, album.Etag)}}
                         />
                         <Text>{album.Name}</Text>
                     </View>
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                 );
             })}
         </View>

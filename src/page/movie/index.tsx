@@ -8,7 +8,8 @@ import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image } from '@view/Image';
 
 const style = StyleSheet.create({
     overview: {

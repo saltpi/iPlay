@@ -2,7 +2,9 @@ import {TabNavigation} from '@global';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import {useNavigation} from '@react-navigation/native';
 import {getActiveMenu, switchToMenu} from '@store/menuSlice';
-import {Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import { StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Image } from '@view/Image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
@@ -65,12 +67,13 @@ export function MenuBar() {
         navigation.navigate(menu);
     };
     return (
-        <View style={style.menuBar}>
+        <View style={{...style.menuBar}}>
             {menu.map((item, i) => (
-                <TouchableWithoutFeedback
+                <TouchableOpacity activeOpacity={1.0}
                     key={i}
+                    style={style.menuItem}
                     onPress={() => setActive(item.type)}>
-                    <View style={style.menuItem}>
+                    <View>
                         <Image
                             style={
                                 active === item.type
@@ -80,7 +83,7 @@ export function MenuBar() {
                             source={item.icon}
                         />
                     </View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
             ))}
         </View>
     );

@@ -32,6 +32,8 @@ target 'iPlayClient' do
   $RNVideoUseVideoCaching=true
   $RNVideoUseGoogleIMA=true
   
+  pod "SPTPersistentCache", :modular_headers => true
+  pod "DVAssetLoaderDelegate", :modular_headers => true
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.

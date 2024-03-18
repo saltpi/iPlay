@@ -34,6 +34,7 @@ type TabStackParamList = {
   [MenuType.Search]: undefined;
   [MenuType.Star]: undefined;
   [MenuType.Settings]: undefined;
+  [MenuType.Message]: undefined;
 };
 
 type Navigation = NavigationProp<RootStackParamList>;
