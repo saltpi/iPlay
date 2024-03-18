@@ -83,7 +83,7 @@ export function Page({navigation, route}: PlayerPageProps) {
             style={style.player}
         /> : null}
         <ScrollView>
-        {episodes.map((e, idx) => <EpisodeCard key={idx} 
+        {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
             style={e === episode ? style.playing : {}}
             onPress={playEpisode}
