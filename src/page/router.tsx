@@ -79,6 +79,18 @@ const SearchRouter = () => (
             name="search"
             component={SearchPage}
             options={{ title: '搜索' }} />
+                <HomeStack.Screen
+            name="movie"
+            component={MoviePage as any}
+            options={defaultOptions} />
+        <SearchStack.Screen
+            name="season"
+            component={SeasonPage as any}
+            options={defaultOptions} />
+        <SearchStack.Screen
+            name="player"
+            component={PlayerPage as any}
+            options={fullscreenOptions} />
     </SearchStack.Navigator>
 );
 const MessageRouter = () => (

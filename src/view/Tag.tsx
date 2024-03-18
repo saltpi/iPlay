@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Touchable, TouchableOpacity, GestureResponderEvent } from "react-native";
 
 const COLOR = {
     blue: {
@@ -84,6 +84,7 @@ const style = StyleSheet.create({
 
 export type TagProps = PropsWithChildren<{
     color?: keyof typeof COLOR;
+    onPress?: (event: GestureResponderEvent) => void
 }>
 
 export function Tag(props: TagProps) {
@@ -94,10 +95,12 @@ export function Tag(props: TagProps) {
         color = key as keyof typeof COLOR
     }
     return (
+        <TouchableOpacity onPress={props.onPress} activeOpacity={1.0}>
         <View style={{...COLOR[color!], ...style.root}}>
             <Text style={{...style.text, color: COLOR[color!].color}}>
                 {props.children}
             </Text>
         </View>
+        </TouchableOpacity>
     )
 }
