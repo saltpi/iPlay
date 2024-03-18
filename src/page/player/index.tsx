@@ -6,7 +6,7 @@ import { EpisodeCard } from '@view/EpisodeCard';
 import {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Video from 'react-native-video';
+import Video, { VideoRef } from 'react-native-video';
 
 // Later on in your styles..
 const style = StyleSheet.create({
@@ -46,7 +46,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [url, setUrl] = useState<string>()
     const [poster, setPoster] = useState<string>()
     const [episode, setEpisode] = useState(route.params.episode)
-    const videoRef = useRef<Video>(null);
+    const videoRef = useRef<VideoRef>(null);
     const onError = (e: any) => {
         console.log(`player: `, url, e);
         Toast.show({
