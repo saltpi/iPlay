@@ -28,6 +28,6 @@ export interface Media {
     ServerId: string
     Status: string
     SupportsSync: boolean
-    Type: "Series"|"Movie"
+    Type: "Series"|"Movie"|"Episode"
     UserData: UserData
 }

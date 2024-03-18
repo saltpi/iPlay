@@ -15,6 +15,7 @@ module.exports = {
           '@page': './src/page',
           '@store': './src/store',
           '@hook': './src/hook',
+          '@asset': './src/asset',
         },
       },
     ],
