@@ -116,7 +116,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} />
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             <Text style={style.actorSection}>演职人员</Text>
-            <ScrollView horizontal>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {detail?.People.map((actor, index) => <ActorCard key={index} actor={actor} />)}
             </ScrollView>
         </ScrollView>
