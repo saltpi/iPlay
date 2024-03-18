@@ -26,12 +26,10 @@ export function Page({route, navigation}: SeasonPageProps) {
         .then(setEpisodes);
     }, [emby, season])
     const onPress = async (episode: Episode) => {
-        const media = await emby?.getPlaybackInfo?.(Number(episode.Id))
-        if (!media) return
         navigation.navigate('player', {
             title: episode.Name,
-            media,
-            poster: emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary)
+            episode,
+            episodes,
         });
     }
     return (

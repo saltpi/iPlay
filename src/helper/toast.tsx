@@ -4,7 +4,6 @@ import Toast, {
     ErrorToast,
     ToastConfig,
 } from 'react-native-toast-message';
-export {Toast};
 
 const style = StyleSheet.create({
     success: {
@@ -19,7 +18,7 @@ const style = StyleSheet.create({
     },
 });
 
-export const toastConfig: ToastConfig = {
+const toastConfig: ToastConfig = {
     /*
       Overwrite 'success' type,
       by modifying the existing `BaseToast` component
@@ -48,11 +47,17 @@ export const toastConfig: ToastConfig = {
     error: props => (
         <ErrorToast
             {...props}
+            style={style.success}
+            contentContainerStyle={{paddingHorizontal: 15}}
+            renderLeadingIcon={() => (
+                <Image
+                    style={style.icon}
+                    source={require('@view/settings/message.png')}
+                />
+            )}
             text1Style={{
-                fontSize: 17,
-            }}
-            text2Style={{
                 fontSize: 15,
+                fontWeight: '400',
             }}
         />
     ),
@@ -70,3 +75,9 @@ export const toastConfig: ToastConfig = {
         </View>
     ),
 };
+
+
+export {
+    Toast,
+    toastConfig,
+}

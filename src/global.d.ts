@@ -1,3 +1,4 @@
+import { Episode } from '@model/Episode';
 import { Media } from '@model/Media';
 import { PlaybackInfo } from '@model/PlaybackInfo';
 import { NavigationProp, ParamListBase, RouteProp, Router } from '@react-navigation/native';
@@ -22,8 +23,8 @@ type RootStackParamList = {
   },
   player: {
     title: string,
-    poster?: string
-    media: PlaybackInfo,
+    episode: Episode,
+    episodes: Episode[],
   },
   default: undefined,
 };
