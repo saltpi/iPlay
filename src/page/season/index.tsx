@@ -17,7 +17,7 @@ const style = StyleSheet.create({
 });
 
 export type SeasonPageProps = PropsWithNavigation<'season'>;
-export function Page({route}: SeasonPageProps) {
+export function Page({route, navigation}: SeasonPageProps) {
     const season: Season = route.params.season
     const emby = useAppSelector(state => state.emby?.emby)
     const [episodes, setEpisodes] = useState<Episode[]>([])
@@ -25,6 +25,15 @@ export function Page({route}: SeasonPageProps) {
         emby?.getEpisodes?.(Number(season.SeriesId), Number(season.Id))
         .then(setEpisodes);
     }, [emby, season])
+    const onPress = async (episode: Episode) => {
+        const media = await emby?.getPlaybackInfo?.(Number(episode.Id))
+        if (!media) return
+        navigation.navigate('player', {
+            title: episode.Name,
+            media,
+            poster: emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary)
+        });
+    }
     return (
         <SafeAreaView style={style.page}>
             <StatusBar />
@@ -37,7 +46,9 @@ export function Page({route}: SeasonPageProps) {
                     <Image style={{...style.cover, aspectRatio: season.PrimaryImageAspectRatio}} source={{uri: emby?.imageUrl?.(season.Id, season.BackdropImageTags[0])}} />
                 </View>
                 {episodes?.map(episode => 
-                    <EpisodeCard key={episode.Id} emby={emby} episode={episode} />
+                    <EpisodeCard key={episode.Id} emby={emby}
+                        onPress={onPress}
+                        episode={episode} />
                 )}
             </ScrollView>
         </SafeAreaView>

@@ -20,6 +20,7 @@
     "react-native-safe-area-context": "^4.9.0",
     "react-native-screens": "^3.29.0",
     "react-native-toast-message": "^2.2.0",
+    "react-native-video": "^5.2.1",
     "react-redux": "^9.1.0",
     "redux-thunk": "^3.1.0"
   },
@@ -32,6 +33,7 @@
     "@react-native/metro-config": "0.73.5",
     "@react-native/typescript-config": "0.73.1",
     "@types/react": "^18.2.6",
+    "@types/react-native-video": "^5.0.20",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.6.3",
     "babel-plugin-module-resolver": "^5.0.0",
