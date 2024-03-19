@@ -3,6 +3,9 @@ import { SafeAreaView, ScrollView, StatusBar, StyleSheet, View } from "react-nat
 const style = StyleSheet.create({
     page: {
         flex: 1,
+    },
+    loading: {
+
     }
 });
 
@@ -15,8 +18,6 @@ export function Page() {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
-                <View>
-                </View>
             </ScrollView>
         </SafeAreaView>
     )

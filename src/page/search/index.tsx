@@ -1,6 +1,7 @@
 import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
 import { MediaCard } from "@view/MediaCard";
+import { Spin } from "@view/Spin";
 import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
 import { useEffect, useState } from "react";
@@ -45,14 +46,17 @@ export const colors = [
 export function Page() {
     const emby = useAppSelector(state => state.emby.emby)
     const [medias, setMedias] = useState<Media[]>([])
+    const [loading, setLoading] = useState(false)
     const [result, setResult] = useState<Media[]>([])
     const [searchKeyword, setSearchKeyword] = useState("")
     useEffect(() => {
+        setLoading(true)
         emby?.searchRecommend?.()
             .then((data) => {
                 console.log(data)
                 setMedias(data.Items)
             })
+            .finally(() => setLoading(false))
     }, [])
     useEffect(() => {
         emby?.getItemWithName?.(searchKeyword)
@@ -60,7 +64,6 @@ export function Page() {
                 console.log(data)
                 setResult(data.Items)
             })
-
     }, [searchKeyword, emby])
     return (
         <SafeAreaView style={style.page}>
@@ -86,6 +89,7 @@ export function Page() {
                 {result.map(media => <MediaCard key={media.Id} media={media} />)}
                 </View>
             </ScrollView>
+            {loading ? <Spin /> : null}
         </SafeAreaView>
     )
 }
