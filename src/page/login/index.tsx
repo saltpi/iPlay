@@ -52,15 +52,16 @@ export function Page() {
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const onLoginPress = async () => {
-        const regex = /(?<protocol>http|https):\/\/(?<host>[^\/]+):?(?<port>\d+)?(?<path>\/?.*)/
+        const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
+        console.log(groups)
         const endpoint: EmbyConfig = {
             host: groups?.host ?? "",
             port: groups?.port ? parseInt(groups.port) : 443,
             protocol: groups?.protocol ?? "https" as any,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
-
+        console.log(endpoint)
         const callback = {
             resolve: () => {
                 setLoading(false)
