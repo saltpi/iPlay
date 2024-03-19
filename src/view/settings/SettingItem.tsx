@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Image } from '@view/Image';
+import { Navigation } from "@global";
 
 const style = StyleSheet.create({
     root: {
@@ -44,13 +45,13 @@ export type IconType = keyof typeof Icon;
 export interface SettingItemProps {
     icon: IconType;
     label: string;
-    onPress: () => void;
+    onPress?: (setting?: SettingItemProps, navigation?: Navigation) => void;
 }
 
 export function SettingItem(props: SettingItemProps) {
     const icon = Icon[props.icon];
     return (
-        <TouchableHighlight onPress={props.onPress} underlayColor={"lightgray"}>
+        <TouchableHighlight onPress={() => props.onPress?.()} underlayColor={"lightgray"}>
         <View style={style.root}>
             {icon ? <Image style={style.icon} source={icon} /> : null}
             <Text style={style.label}>{props.label}</Text>
