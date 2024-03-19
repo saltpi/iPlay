@@ -1,14 +1,13 @@
-import {Api, Emby} from '@api/emby';
 import { PropsWithNavigation } from '@global';
 import { useAppSelector } from '@hook/store';
 import {SiteResource} from '@view/AlbumList';
+import { StatusBar } from '@view/StatusBar';
 import { MenuBar } from '@view/menu/MenuBar';
 import React, {useEffect} from 'react';
 import {
     Button,
     SafeAreaView,
     ScrollView,
-    StatusBar,
     StyleSheet,
     Text,
     View,
@@ -42,7 +41,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
 
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={"dark-content"} />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

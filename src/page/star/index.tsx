@@ -1,5 +1,6 @@
+import { StatusBar } from "@view/StatusBar";
 import { MenuBar } from "@view/menu/MenuBar";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -10,7 +11,7 @@ const style = StyleSheet.create({
 export function Page() {
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={"dark-content"} />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

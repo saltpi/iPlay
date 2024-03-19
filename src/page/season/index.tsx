@@ -1,11 +1,12 @@
 import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Season } from "@model/Season";
 import { Episode } from "@model/Episode";
 import { EpisodeCard } from "@view/EpisodeCard";
 import { Image } from '@view/Image';
+import { StatusBar } from "@view/StatusBar";
 
 const style = StyleSheet.create({
     page: {
@@ -35,7 +36,7 @@ export function Page({route, navigation}: SeasonPageProps) {
     }
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={"dark-content"} />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

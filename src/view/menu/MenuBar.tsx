@@ -5,6 +5,8 @@ import {getActiveMenu, switchToMenu} from '@store/menuSlice';
 import { StyleSheet, TouchableOpacity, View} from 'react-native';
 import { Image } from '@view/Image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { OSType, isOS } from '@helper/device';
+import { useMemo } from 'react';
 const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
@@ -66,8 +68,19 @@ export function MenuBar() {
         dispatch(switchToMenu(menu));
         navigation.navigate(menu);
     };
+    
+    const menuBarStyle = useMemo(() => {
+        if (isOS(OSType.Android)) {
+            return {
+                ...style.menuBar,
+                paddingBottom: 15
+            }
+        }
+        return style.menuBar;
+    }, []);
+
     return (
-        <View style={{...style.menuBar}}>
+        <View style={menuBarStyle}>
             {menu.map((item, i) => (
                 <TouchableOpacity activeOpacity={1.0}
                     key={i}

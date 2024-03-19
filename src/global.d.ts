@@ -3,6 +3,7 @@ import { Media } from '@model/Media';
 import { PlaybackInfo } from '@model/PlaybackInfo';
 import { NavigationProp, ParamListBase, RouteProp, Router } from '@react-navigation/native';
 import { MenuType } from '@view/menu/MenuBar';
+import React from 'react';
 
 type RootStackParamList = {
   home: undefined;
