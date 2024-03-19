@@ -1,8 +1,6 @@
-import { EmbyConfig, config } from '@api/config';
-import { Api, Emby } from '@api/emby';
-import { login } from '@api/login';
+import { EmbyConfig } from '@api/config';
 import { Navigation } from '@global';
-import { StorageHelper } from '@helper/store';
+import { Toast } from '@helper/toast';
 import { useAppDispatch } from '@hook/store';
 import { useNavigation } from '@react-navigation/native';
 import { loginToSiteAsync } from '@store/embySlice';
@@ -65,13 +63,26 @@ export function Page() {
             resolve: () => {
                 setLoading(false)
                 setTimeout(() => {
-                    navigation.navigate("home")
+                    navigation.goBack()
                 }, 1000)
                 console.log("login success")
+                Toast.show({
+                    type: 'success',
+                    text1: '登录成功',
+                    position: 'top',
+                });
             },
             reject: () => {
-                setLoading(false)
+                setTimeout(() => {
+                    setLoading(false)
+                }, 1000)
                 console.log("login failed")
+                Toast.show({
+                    type: 'error',
+                    text1: '登录失败',
+                    text2: '请检查服务器地址、用户名和密码',
+                    position: 'top',
+                });
             }
         }
         setLoading(true)
@@ -112,7 +123,7 @@ export function Page() {
                 />
             </View>
             <View style={style.loginButton}>
-                <Button title="登录" color="white" onPress={onLoginPress} />
+                <Button title={loading ? "登录中..." : "登录"} color="black" onPress={onLoginPress} />
             </View>
         </SafeAreaView>
     );

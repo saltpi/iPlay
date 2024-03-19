@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View} from 'react-native';
 import { Image } from '@view/Image';
-import Toast, {
+import ToastOrigin, {
     BaseToast,
     ErrorToast,
     ToastConfig,
@@ -77,6 +77,7 @@ const toastConfig: ToastConfig = {
     ),
 };
 
+const Toast = ToastOrigin;
 
 export {
     Toast,
