@@ -20,3 +20,8 @@
 ### 开发进度
 
 业余时间开发
+
+### 安装包
+
+- [安卓](https://drive.endemy.me/od_bot/build/iPlay/20240319.1217/iPlay.apk)
+- [iOS](https://drive.endemy.me/od_bot/build/iPlay/20240319.1217/iPlay.ipa)
