@@ -3,11 +3,11 @@ import {useAppDispatch, useAppSelector} from '@hook/store';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getActiveMenu, switchToMenu} from '@store/menuSlice';
 import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Image} from '@view/Image';
 import {OSType, isOS} from '@helper/device';
 import {useEffect, useMemo, useRef} from 'react';
 import {switchRoute} from '@store/themeSlice';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { BaseImage } from '@view/Image';
 const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
@@ -119,7 +119,7 @@ export function MenuBar() {
                     style={style.menuItem}
                     onPress={() => setActive(item.type)}>
                     <View>
-                        <Image
+                        <BaseImage
                             style={
                                 active === item.type
                                     ? style.activeIcon
