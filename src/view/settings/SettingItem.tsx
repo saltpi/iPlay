@@ -38,6 +38,7 @@ export const Icon = {
     Message: require("@view/settings/message.png"),
     Indicator: require("@view/settings/right-arrows.png"),
     Mobile: require("@view/settings/mobile.png"),
+    Theme: require("@asset/paint.png"),
 }
 
 export type IconType = keyof typeof Icon;

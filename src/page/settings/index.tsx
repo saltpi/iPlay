@@ -13,7 +13,7 @@ const style = StyleSheet.create({
 
 const settings: SettingItemProps[] = [
     {
-        icon: "Video",
+        icon: "Theme",
         label: "主题配置",
         onPress: (setting, navigation) => {
             navigation?.navigate("theme")
@@ -35,12 +35,12 @@ const settings: SettingItemProps[] = [
         label: "最近消息",
     },
     {
-        icon: "Mobile",
-        label: "关于",
-    },
-    {
         icon: "Trash",
         label: "应用缓存",
+    },
+    {
+        icon: "Mobile",
+        label: "关于",
     },
 ];
 
