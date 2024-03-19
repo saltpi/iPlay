@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './counterSlice';
 import menuReducer from './menuSlice';
 import embyReducer from './embySlice';
+import themeReducer from './themeSlice';
 import { listener } from "./middleware/Listener";
 import { thunk } from 'redux-thunk';
 import { Api } from '@api/emby';
@@ -11,6 +12,7 @@ export const store = configureStore({
     counter: counterReducer,
     menu: menuReducer,
     emby: embyReducer,
+    theme: themeReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

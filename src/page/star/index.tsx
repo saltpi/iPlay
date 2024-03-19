@@ -1,6 +1,5 @@
 import { StatusBar } from "@view/StatusBar";
-import { MenuBar } from "@view/menu/MenuBar";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -20,7 +19,6 @@ export function Page() {
                 <View>
                 </View>
             </ScrollView>
-            <MenuBar />
         </SafeAreaView>
     )
 }

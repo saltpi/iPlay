@@ -1,4 +1,3 @@
-import { useAppSelector } from "@hook/store";
 import { Page as AlbumPage } from "@page/album/index.tsx";
 import { Page as HomePage } from "@page/home/index.tsx";
 import { Page as LoginPage } from "@page/login/index.tsx";
@@ -10,11 +9,12 @@ import { Page as SettingsPage } from "@page/settings/index.tsx";
 import { Page as StarPage } from "@page/star/index.tsx";
 import { Page as PlayerPage } from "@page/player/index.tsx";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationState } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { getActiveMenu } from "@store/menuSlice";
-import { MenuType } from "@view/menu/MenuBar";
+import { MenuBar, MenuType } from "@view/menu/MenuBar";
 import React from "react";
+import { useAppDispatch } from "@hook/store";
+import { switchRoute } from "@store/themeSlice";
 
 
 const HomeStack = createNativeStackNavigator();
@@ -109,10 +109,19 @@ const StarRouter = () => (
             options={{ title: '收藏' }} />
     </StarStack.Navigator>
 );
+
+function getActiveRouteName(state: NavigationState) {
+    const route = state.routes[state.index];
+    if (route.state) {
+      return getActiveRouteName(route.state as any);
+    }
+    return route.name;
+}
+
 export function Router() {
-    const menu = useAppSelector(getActiveMenu);
+    const dispatch = useAppDispatch();
     return (
-        <NavigationContainer>
+        <NavigationContainer onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
             <Tab.Navigator
                 initialRouteName="home"
                 tabBar={() => null}
@@ -125,6 +134,7 @@ export function Router() {
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
                 <Tab.Screen name={MenuType.Message} component={MessageRouter} />
             </Tab.Navigator>
+            <MenuBar />
         </NavigationContainer>
     );
 }
