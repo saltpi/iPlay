@@ -9,10 +9,13 @@
 
 使用React Native开发, 支持安卓和iOS
 
-### 加入Q群一起讨论
+### 功能特性
 
-* QQ群: `657169758`
+- [x] 支持Emby
+- [x] 支持播放视频
+- [ ] 支持订阅视频更新
+- [ ] 完善用户界面
 
-<div style="text-align: center;margin-top:1rem;width:10rem;height:10rem">
-<img style="max-width: 10rem;border-radius: 5px;object-fit:fill" src="./doc/image/IMG_0264.png">
-</div>
+### 开发进度
+
+业余时间开发
