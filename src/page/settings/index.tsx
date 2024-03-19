@@ -1,6 +1,6 @@
 import { SettingItem, SettingItemProps } from "@view/settings/SettingItem";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { PropsWithNavigation } from "@global";
+import { Navigation, PropsWithNavigation } from "@global";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "@view/StatusBar";
@@ -13,37 +13,42 @@ const style = StyleSheet.create({
 
 const settings: SettingItemProps[] = [
     {
+        icon: "Theme",
+        label: "主题配置",
+        onPress: (setting, navigation) => {
+            navigation?.navigate("theme")
+        }
+    },
+    {
         icon: "Video",
         label: "视频设置",
-        onPress: () => {}
+        onPress: (setting, navigation) => {
+            navigation?.navigate("login")
+        }
     },
     {
         icon: "Audio",
         label: "音频设置",
-        onPress: () => {}
     },
     {
         icon: "Message",
         label: "最近消息",
-        onPress: () => {}
-    },
-    {
-        icon: "Mobile",
-        label: "关于",
-        onPress: () => {}
     },
     {
         icon: "Trash",
         label: "应用缓存",
-        onPress: () => {}
+    },
+    {
+        icon: "Mobile",
+        label: "关于",
     },
 ];
 
 export function Page({navigation}: PropsWithNavigation<"default">) {
     const insets = useSafeAreaInsets()
     const onPress = (setting: SettingItemProps) => {
-        if (setting.icon === "Video") {
-            navigation.navigate("login");
+        if (setting.onPress) {
+            setting.onPress.bind(null, setting, navigation)()
         } else {
             Toast.show({
                 type: 'success',

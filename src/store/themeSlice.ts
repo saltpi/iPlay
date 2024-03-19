@@ -4,11 +4,14 @@ import { RootState } from '@store';
 interface ThemeState {
     routeName: string;
     showMenuBar: boolean;
+    // menu bar padding bottom offset
+    menuBarPaddingOffset: number;
 }
 
 const initialState: ThemeState = {
     routeName: 'home',
     showMenuBar: true,
+    menuBarPaddingOffset: 0,
 };
 
 export const themeSlice = createSlice({
@@ -24,9 +27,12 @@ export const themeSlice = createSlice({
                 state.showMenuBar = false;
             }
         },
+        updateMenuBarPaddingOffset: (state, action: PayloadAction<number>) => {
+            state.menuBarPaddingOffset = action.payload;
+        }
     },
 });
 
-export const { switchRoute } = themeSlice.actions;
+export const { switchRoute, updateMenuBarPaddingOffset } = themeSlice.actions;
 
 export default themeSlice.reducer;

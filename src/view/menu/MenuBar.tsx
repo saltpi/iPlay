@@ -79,6 +79,7 @@ export function MenuBar() {
     const dispatch = useAppDispatch();
     const navigation: TabNavigation = useNavigation();
     const showMenuBar = useAppSelector(state => state.theme.showMenuBar);
+    const menuBarPaddingOffset = useAppSelector(state => state.theme.menuBarPaddingOffset);
     const insets = useSafeAreaInsets();
     const position = useRef(new Animated.Value(showMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
 
@@ -99,14 +100,14 @@ export function MenuBar() {
         if (isOS(OSType.Android)) {
             return {
                 ...style.menuBar,
-                paddingBottom: 15,
+                paddingBottom: menuBarPaddingOffset,
             };
         }
         return {
             ...style.menuBar,
-            paddingBottom: insets.bottom,
+            paddingBottom: insets.bottom + menuBarPaddingOffset,
         };
-    }, [showMenuBar]);
+    }, [showMenuBar, menuBarPaddingOffset]);
 
     return (
         <Animated.View

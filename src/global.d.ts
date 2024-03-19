@@ -27,6 +27,7 @@ type RootStackParamList = {
     episode: Episode,
     episodes: Episode[],
   },
+  theme: undefined,
   default: undefined,
 };
 

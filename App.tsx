@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Provider} from 'react-redux';
-import {store} from '@store';
+import {persistor, store} from '@store';
 import {Toast, toastConfig} from '@helper/toast';
 import {restoreSiteAsync} from '@store/embySlice';
 import { Router } from '@page/router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
     const [inited, setInited] = useState(false);
@@ -22,10 +23,12 @@ function App() {
     if (inited) {
         return (
             <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
                 <SafeAreaProvider>
                 <Router />
                 </SafeAreaProvider>
                 <Toast config={toastConfig} />
+                </PersistGate>
             </Provider>
         );
     } else {
