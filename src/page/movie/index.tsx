@@ -1,4 +1,3 @@
-import { Api } from "@api/emby";
 import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
 import { MediaDetail } from "@model/MediaDetail";
@@ -8,12 +7,11 @@ import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from '@view/Image';
 import Video, { VideoRef } from "react-native-video";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { set } from "@helper/store";
 const playIcon = require("@asset/button.play.png")
 
 const style = StyleSheet.create({

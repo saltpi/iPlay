@@ -1,9 +1,8 @@
-import { IconType, SettingItem, SettingItemProps } from "@view/settings/SettingItem";
-import { MenuBar } from "@view/menu/MenuBar";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SettingItem, SettingItemProps } from "@view/settings/SettingItem";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { PropsWithNavigation } from "@global";
 import { Toast } from "@helper/toast";
-import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "@view/StatusBar";
 
 const style = StyleSheet.create({
@@ -68,7 +67,6 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                         <SettingItem key={idx} {...setting} onPress={() => onPress(setting)} />)}
                 </View>
             </ScrollView>
-            <MenuBar />
         </SafeAreaView>
     )
 }

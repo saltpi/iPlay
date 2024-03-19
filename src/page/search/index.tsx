@@ -3,9 +3,8 @@ import { Media } from "@model/Media";
 import { MediaCard } from "@view/MediaCard";
 import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
-import { MenuBar } from "@view/menu/MenuBar";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -87,7 +86,6 @@ export function Page() {
                 {result.map(media => <MediaCard key={media.Id} media={media} />)}
                 </View>
             </ScrollView>
-            <MenuBar />
         </SafeAreaView>
     )
 }

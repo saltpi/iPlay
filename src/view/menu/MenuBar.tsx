@@ -1,12 +1,13 @@
 import {TabNavigation} from '@global';
 import { useAppDispatch, useAppSelector } from '@hook/store';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {getActiveMenu, switchToMenu} from '@store/menuSlice';
-import { StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 import { Image } from '@view/Image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { OSType, isOS } from '@helper/device';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { switchRoute } from '@store/themeSlice';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
@@ -23,8 +24,12 @@ export enum MenuType {
 
 const style = StyleSheet.create({
     menuBar: {
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        backgroundColor: 'white',
         borderTopColor: 'gray',
         borderTopWidth: 0.25,
         paddingTop: 8,
@@ -60,15 +65,16 @@ const menu = [
     {icon: settingsIcon, name: 'Settings', type: MenuType.Settings},
 ];
 
-export function MenuBar() {
+export function MenuBarOld() {
     const active = useAppSelector(getActiveMenu);
     const dispatch = useAppDispatch();
+    const insets = useSafeAreaInsets();
     const navigation: TabNavigation = useNavigation();
     const setActive = (menu: MenuType) => {
         dispatch(switchToMenu(menu));
         navigation.navigate(menu);
     };
-    
+    const showMenuBar = useAppSelector(state => state.theme.showMenuBar)
     const menuBarStyle = useMemo(() => {
         if (isOS(OSType.Android)) {
             return {
@@ -76,8 +82,11 @@ export function MenuBar() {
                 paddingBottom: 15
             }
         }
-        return style.menuBar;
-    }, []);
+        return {
+            ...style.menuBar,
+            bottom: insets.bottom
+        }
+    }, [showMenuBar]);
 
     return (
         <View style={menuBarStyle}>
@@ -100,4 +109,69 @@ export function MenuBar() {
             ))}
         </View>
     );
+}
+
+export function RouteMenuBar() {
+    const route = useRoute()
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        dispatch(switchRoute(route.name))
+    }, [route.name])
+    return null
+}
+
+export function MenuBar() {
+  const active = useAppSelector(getActiveMenu);
+  const dispatch = useAppDispatch();
+  const navigation: TabNavigation = useNavigation();
+  const showMenuBar = useAppSelector(state => state.theme.showMenuBar)
+
+  const position = useRef(new Animated.Value(showMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
+
+  useEffect(() => {
+    Animated.timing(position, {
+      toValue: showMenuBar ? 0 : 100,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [showMenuBar]);
+
+  const setActive = (menu: MenuType) => {
+    dispatch(switchToMenu(menu));
+    navigation.navigate(menu);
+  };
+
+  const menuBarStyle = useMemo(() => {
+    if (isOS(OSType.Android)) {
+      return {
+        ...style.menuBar,
+        paddingBottom: 15
+      }
+    }
+    return {
+      ...style.menuBar
+    }
+  }, [showMenuBar]);
+
+  return (
+    <Animated.View style={{...menuBarStyle, transform: [{ translateY: position }],}}>
+      {menu.map((item, i) => (
+        <TouchableOpacity activeOpacity={1.0}
+          key={i}
+          style={style.menuItem}
+          onPress={() => setActive(item.type)}>
+          <View>
+            <Image
+              style={
+                active === item.type
+                  ? style.activeIcon
+                  : style.icon
+              }
+              source={item.icon}
+            />
+          </View>
+        </TouchableOpacity>
+      ))}
+    </Animated.View>
+  );
 }

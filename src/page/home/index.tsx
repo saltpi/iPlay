@@ -2,14 +2,12 @@ import { PropsWithNavigation } from '@global';
 import { useAppSelector } from '@hook/store';
 import {SiteResource} from '@view/AlbumList';
 import { StatusBar } from '@view/StatusBar';
-import { MenuBar } from '@view/menu/MenuBar';
 import React, {useEffect} from 'react';
 import {
     Button,
     SafeAreaView,
     ScrollView,
     StyleSheet,
-    Text,
     View,
 } from 'react-native';
 
@@ -51,7 +49,6 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
                 {site?.server && site?.user ? <SiteResource site={site} /> : <Button title="添加站点" onPress={goToLogin} />}
                 </View>
             </ScrollView>
-            <MenuBar />
         </SafeAreaView>
     );
 }
