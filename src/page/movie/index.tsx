@@ -12,6 +12,7 @@ import { Image } from '@view/Image';
 import Video, { VideoRef } from "react-native-video";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Spin } from "@view/Spin";
 const playIcon = require("@asset/button.play.png")
 
 const style = StyleSheet.create({
@@ -62,6 +63,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const [detail, setDetail] = useState<MediaDetail>();
     const [seasons, setSeasons] = useState<Season[]>();
     const [videoRef, setVideoRef] = useState<VideoRef>()
+    const [loading, setLoading] = useState(false)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
@@ -75,6 +77,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }, [emby, movie.Id])
     const onError = (e: any) => {
         console.log(`player: `, url, e);
+        setLoading(false)
         Toast.show({
             topOffset: insets.top,
             type: 'error',
@@ -97,11 +100,13 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         const url = getPlayUrl(detail)
         setUrl(url)
         setIsPlaying(true)
+        setLoading(true)
     }
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     return (
         <ScrollView>
             <View>
+            <Spin />
             {url ? <Video
                 source={{uri: url}}
                 controls={true}
@@ -109,6 +114,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 fullscreenAutorotate={true}
                 fullscreenOrientation="landscape"
                 ref={videoRef}
+                onLoad={() => setLoading(false)}
                 onError={onError}
                 style={style.player}
             /> : null}
