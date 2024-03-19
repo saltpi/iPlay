@@ -1,10 +1,11 @@
 import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
 import { MediaCard } from "@view/MediaCard";
+import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
 import { MenuBar } from "@view/menu/MenuBar";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -64,7 +65,7 @@ export function Page() {
     }, [searchKeyword, emby])
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={"dark-content"} />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

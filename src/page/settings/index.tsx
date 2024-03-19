@@ -1,9 +1,10 @@
 import { IconType, SettingItem, SettingItemProps } from "@view/settings/SettingItem";
 import { MenuBar } from "@view/menu/MenuBar";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { PropsWithNavigation } from "@global";
 import { Toast } from "@helper/toast";
 import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context";
+import { StatusBar } from "@view/StatusBar";
 
 const style = StyleSheet.create({
     page: {
@@ -56,7 +57,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
     }
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={"dark-content"} />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

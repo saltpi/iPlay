@@ -1,5 +1,6 @@
 import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Image } from '@view/Image';
+import { BaseImage as Image } from '@view/Image';
+import { useMemo } from "react";
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -9,7 +10,7 @@ const kmplayerIcon = require("@view/player/kmplayer.png");
 const mxplayerIcon = require("@view/player/mxplayer.png");
 const mxplayerProIcon = require("@view/player/mxplayerpro.png");
 
-const players = {
+const Players = {
     iina: {
         title: "iina",
         icon: iinaIcon,
@@ -79,28 +80,34 @@ const style = StyleSheet.create({
     },
     icon: {
         width: 42,
+        aspectRatio: 1,
+        height: 42,
         margin: 2.5,
         overflow: "hidden",
-        aspectRatio: 1,
     }
 })
 
 export interface ExternalPlayerProps {
     title?: string;
     src: string;
+    players?: (keyof typeof Players)[]
 }
 
 export function ExternalPlayer({
     title,
     src,
+    players = Object.keys(Players) as any
 }: ExternalPlayerProps) {
+    const playerList = useMemo(() => 
+        players?.map(type => Players[type]).map(player => (
+            <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title)}>
+                <Image key={player.title} style={style.icon} source={player.icon} />
+            </TouchableOpacity>
+        ))
+    , [players])
     return (
         <View style={style.playerList}>
-            {Object.values(players).map(player => (
-                <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title)}>
-                    <Image key={player.title} style={style.icon} source={player.icon} />
-                </TouchableOpacity>
-            ))}
+            {playerList}
         </View>
     );
 }
