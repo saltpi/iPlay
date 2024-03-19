@@ -16,6 +16,7 @@ import { MediaCard } from './MediaCard';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { EmbySite } from '@model/EmbySite';
 import { fetchEmbyAlbumAsync } from '@store/embySlice';
+import { Spin } from './Spin';
 
 export const style = StyleSheet.create({
     root: {
@@ -102,6 +103,7 @@ export interface SiteResourceProps {
 export function SiteResource({site}: SiteResourceProps) {
     const [albums, setAlbums] = useState<ViewDetail[]>([]);
     const [medias, setMedias] = useState<(Media[] | undefined)[]>([]);
+    const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const emby = useAppSelector(state => state.emby.emby)
 
@@ -118,24 +120,27 @@ export function SiteResource({site}: SiteResourceProps) {
 
     useEffect(() => {
         const getMedia = async () => {
+            setLoading(true);
             const medias = await Promise.all(
                 albums.map(async album => {
                     return await emby?.getLatestMedia?.(Number(album.Id));
                 }),
             );
             setMedias(medias);
+            setLoading(false);
         };
         getMedia();
     }, [albums, emby]);
 
     return (
         <View style={style.root}>
+            {loading ?  <Spin /> : null}
             <AlbumCardList albums={albums} />
             {medias.map((media, i) => (
                 <AlbumCard
-                    key={albums[i].Id}
+                    key={albums[i]?.Id}
                     media={media}
-                    title={albums[i].Name}
+                    title={albums[i]?.Name}
                 />
             ))}
         </View>
