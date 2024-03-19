@@ -27,6 +27,10 @@ const persistConfig = {
 const reducer = combineReducers({
   theme: persistReducer({
       key: [Env.storeKey, "theme"].join("/"),
+      blacklist: [
+        "routeName",
+        "showMenuBar"
+      ],
       storage
   }, themeReducer),
   menu: persistReducer({
@@ -48,7 +52,11 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: {
-      ignoredPaths: ["emby.emby"],
+      ignoredPaths: [
+        "emby.emby",
+        "theme.routeName",
+        "theme.showMenuBar",
+      ],
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
     thunk: {

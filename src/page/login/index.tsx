@@ -1,7 +1,8 @@
 import { EmbyConfig } from '@api/config';
 import { Navigation } from '@global';
 import { Toast } from '@helper/toast';
-import { useAppDispatch } from '@hook/store';
+import { useAppDispatch, useAppSelector } from '@hook/store';
+import { embyUrl } from '@model/EmbySite';
 import { useNavigation } from '@react-navigation/native';
 import { loginToSiteAsync } from '@store/embySlice';
 import {useState} from 'react';
@@ -44,8 +45,9 @@ const style = StyleSheet.create({
 
 export function Page() {
     const navigation: Navigation = useNavigation()
-    const [server, onChangeServer] = useState('');
-    const [username, onChangeUsername] = useState('');
+    const emby = useAppSelector(state => state.emby.site)
+    const [server, onChangeServer] = useState(embyUrl(emby) ?? '');
+    const [username, onChangeUsername] = useState(emby?.user.User.Name ?? '');
     const [password, onChangePassword] = useState('');
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()

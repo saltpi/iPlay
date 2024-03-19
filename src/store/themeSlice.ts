@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ThemeState {
     routeName: string;
