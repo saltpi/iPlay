@@ -7,6 +7,7 @@ import { Image } from '@view/Image';
 import { OSType, isOS } from '@helper/device';
 import { useEffect, useMemo, useRef } from 'react';
 import { switchRoute } from '@store/themeSlice';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
@@ -23,8 +24,12 @@ export enum MenuType {
 
 const style = StyleSheet.create({
     menuBar: {
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        backgroundColor: 'white',
         borderTopColor: 'gray',
         borderTopWidth: 0.25,
         paddingTop: 8,
@@ -63,14 +68,13 @@ const menu = [
 export function MenuBarOld() {
     const active = useAppSelector(getActiveMenu);
     const dispatch = useAppDispatch();
+    const insets = useSafeAreaInsets();
     const navigation: TabNavigation = useNavigation();
     const setActive = (menu: MenuType) => {
         dispatch(switchToMenu(menu));
         navigation.navigate(menu);
     };
-
     const showMenuBar = useAppSelector(state => state.theme.showMenuBar)
-    
     const menuBarStyle = useMemo(() => {
         if (isOS(OSType.Android)) {
             return {
@@ -79,8 +83,8 @@ export function MenuBarOld() {
             }
         }
         return {
-            ...style.menuBar
-            
+            ...style.menuBar,
+            bottom: insets.bottom
         }
     }, [showMenuBar]);
 
