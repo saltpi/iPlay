@@ -1,13 +1,13 @@
 import {TabNavigation} from '@global';
-import { useAppDispatch, useAppSelector } from '@hook/store';
+import {useAppDispatch, useAppSelector} from '@hook/store';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getActiveMenu, switchToMenu} from '@store/menuSlice';
-import { Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
-import { Image } from '@view/Image';
-import { OSType, isOS } from '@helper/device';
-import { useEffect, useMemo, useRef } from 'react';
-import { switchRoute } from '@store/themeSlice';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image} from '@view/Image';
+import {OSType, isOS} from '@helper/device';
+import {useEffect, useMemo, useRef} from 'react';
+import {switchRoute} from '@store/themeSlice';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 const homeIcon = require('@view/menu/Home.png');
 const searchIcon = require('@view/menu/Search.png');
 const starIcon = require('@view/menu/Star.png');
@@ -65,33 +65,55 @@ const menu = [
     {icon: settingsIcon, name: 'Settings', type: MenuType.Settings},
 ];
 
-export function MenuBarOld() {
+export function RouteMenuBar() {
+    const route = useRoute();
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        dispatch(switchRoute(route.name));
+    }, [route.name]);
+    return null;
+}
+
+export function MenuBar() {
     const active = useAppSelector(getActiveMenu);
     const dispatch = useAppDispatch();
-    const insets = useSafeAreaInsets();
     const navigation: TabNavigation = useNavigation();
+    const showMenuBar = useAppSelector(state => state.theme.showMenuBar);
+    const insets = useSafeAreaInsets();
+    const position = useRef(new Animated.Value(showMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
+
+    useEffect(() => {
+        Animated.timing(position, {
+            toValue: showMenuBar ? 0 : 100,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }, [showMenuBar]);
+
     const setActive = (menu: MenuType) => {
         dispatch(switchToMenu(menu));
         navigation.navigate(menu);
     };
-    const showMenuBar = useAppSelector(state => state.theme.showMenuBar)
+
     const menuBarStyle = useMemo(() => {
         if (isOS(OSType.Android)) {
             return {
                 ...style.menuBar,
-                paddingBottom: 15
-            }
+                paddingBottom: 15,
+            };
         }
         return {
             ...style.menuBar,
-            bottom: insets.bottom
-        }
+            paddingBottom: insets.bottom,
+        };
     }, [showMenuBar]);
 
     return (
-        <View style={menuBarStyle}>
+        <Animated.View
+            style={{...menuBarStyle, transform: [{translateY: position}]}}>
             {menu.map((item, i) => (
-                <TouchableOpacity activeOpacity={1.0}
+                <TouchableOpacity
+                    activeOpacity={1.0}
                     key={i}
                     style={style.menuItem}
                     onPress={() => setActive(item.type)}>
@@ -107,71 +129,6 @@ export function MenuBarOld() {
                     </View>
                 </TouchableOpacity>
             ))}
-        </View>
+        </Animated.View>
     );
-}
-
-export function RouteMenuBar() {
-    const route = useRoute()
-    const dispatch = useAppDispatch()
-    useEffect(() => {
-        dispatch(switchRoute(route.name))
-    }, [route.name])
-    return null
-}
-
-export function MenuBar() {
-  const active = useAppSelector(getActiveMenu);
-  const dispatch = useAppDispatch();
-  const navigation: TabNavigation = useNavigation();
-  const showMenuBar = useAppSelector(state => state.theme.showMenuBar)
-
-  const position = useRef(new Animated.Value(showMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
-
-  useEffect(() => {
-    Animated.timing(position, {
-      toValue: showMenuBar ? 0 : 100,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [showMenuBar]);
-
-  const setActive = (menu: MenuType) => {
-    dispatch(switchToMenu(menu));
-    navigation.navigate(menu);
-  };
-
-  const menuBarStyle = useMemo(() => {
-    if (isOS(OSType.Android)) {
-      return {
-        ...style.menuBar,
-        paddingBottom: 15
-      }
-    }
-    return {
-      ...style.menuBar
-    }
-  }, [showMenuBar]);
-
-  return (
-    <Animated.View style={{...menuBarStyle, transform: [{ translateY: position }],}}>
-      {menu.map((item, i) => (
-        <TouchableOpacity activeOpacity={1.0}
-          key={i}
-          style={style.menuItem}
-          onPress={() => setActive(item.type)}>
-          <View>
-            <Image
-              style={
-                active === item.type
-                  ? style.activeIcon
-                  : style.icon
-              }
-              source={item.icon}
-            />
-          </View>
-        </TouchableOpacity>
-      ))}
-    </Animated.View>
-  );
 }
