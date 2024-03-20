@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<VLCMediaPlayerDelegate> delegate;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *controlView;
+@property (nonatomic, strong) UIView *eventsView;
 
 @property (nonatomic, copy) RCTDirectEventBlock onPlayStateChange;
 @end

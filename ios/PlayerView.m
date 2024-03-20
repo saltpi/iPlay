@@ -6,6 +6,7 @@
 //
 
 #import "PlayerView.h"
+#import "PlayerEventView.h"
 
 @interface PlayerView ()
 @property (nonatomic, strong) UIImageView *playButton;
@@ -16,6 +17,8 @@
 @property (nonatomic, strong) UILabel *watchedLabel;
 @property (nonatomic, strong) UILabel *remainingLabel;
 @property (nonatomic, assign) CGRect initialBounds;
+@property (nonatomic, weak) NSTimer *timer;
+@property (nonatomic, assign) BOOL isControlsVisible;
 @end
 
 @implementation PlayerView
@@ -24,6 +27,7 @@
     self = [super init];
 
     if (self) {
+        self.isControlsVisible = YES;
         [self setupUI];
         [self layout];
         [self bind];
@@ -43,6 +47,7 @@
     [self.controlView addSubview:self.sliderBar];
     [self.controlView addSubview:self.watchedLabel];
     [self.controlView addSubview:self.remainingLabel];
+    [self addSubview:self.eventsView];
 }
 
 - (void)layout {
@@ -54,6 +59,11 @@
   }];
   
   [self.controlView remakeConstraints:^(MASConstraintMaker *make) {
+    @strongify(self);
+    make.edges.equalTo(self);
+  }];
+  
+  [self.eventsView remakeConstraints:^(MASConstraintMaker *make) {
     @strongify(self);
     make.edges.equalTo(self);
   }];
@@ -119,6 +129,31 @@
   
     self.progressBar.observedProgress = self.progress;
     [self.sliderBar addTarget:self action:@selector(_seekToPlay:) forControlEvents:UIControlEventValueChanged];
+  
+    self.eventsView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showControls)];
+    [self.eventsView addGestureRecognizer:tapRecognizer];
+  
+    if (self.isControlsVisible) {
+      self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+    }
+  
+}
+
+- (void)showControls {
+  [UIView animateWithDuration:0.5 animations:^{
+    self.controlView.alpha = 1.0;
+  }];
+  self.isControlsVisible = YES;
+  [self.timer invalidate];
+  self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
+}
+
+- (void)hideControls {
+  [UIView animateWithDuration:0.5 animations:^{
+    self.controlView.alpha = 0.0;
+  }];
+  self.isControlsVisible = NO;
 }
 
 - (void)onPlayTap:(id)sender {
@@ -151,6 +186,7 @@
   NSString *imageName = self.player.isPlaying ?  @"play" : @"pause";
   self.playButton.image = [UIImage systemImageNamed:imageName];
 }
+
 
 #pragma mark - VLCMediaPlayerDelegate
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
@@ -262,6 +298,18 @@
   BeginLazyPropInit(controlView)
   controlView = [UIView new];
   EndLazyPropInit(controlView)
+}
+
+- (UIView *)eventsView {
+  BeginLazyPropInit(eventsView)
+  PlayerEventView* view = [PlayerEventView new];
+  view.ignoreViews = @[
+    self.playButton,
+    self.fullscreenButton,
+    self.sliderBar
+  ];
+  eventsView = view;
+  EndLazyPropInit(eventsView)
 }
 
 @end

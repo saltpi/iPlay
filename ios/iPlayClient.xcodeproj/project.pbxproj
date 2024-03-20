@@ -16,6 +16,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AD4B982BAA9CF40065E8D9 /* PlayerManager.m */; };
 		88DC7F5A2BAAE9D500728201 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F592BAAE9D000728201 /* PlayerView.m */; };
+		88DC7F5D2BAB238500728201 /* PlayerEventView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F5C2BAB238500728201 /* PlayerEventView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,8 @@
 		88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
 		88DC7F582BAAE9D000728201 /* PlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerView.h; sourceTree = "<group>"; };
 		88DC7F592BAAE9D000728201 /* PlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
+		88DC7F5B2BAB238500728201 /* PlayerEventView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerEventView.h; sourceTree = "<group>"; };
+		88DC7F5C2BAB238500728201 /* PlayerEventView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerEventView.m; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -155,6 +158,8 @@
 				88AD4B9A2BAA9F6F0065E8D9 /* iPlayClient-Bridging-Header.h */,
 				88DC7F582BAAE9D000728201 /* PlayerView.h */,
 				88DC7F592BAAE9D000728201 /* PlayerView.m */,
+				88DC7F5B2BAB238500728201 /* PlayerEventView.h */,
+				88DC7F5C2BAB238500728201 /* PlayerEventView.m */,
 			);
 			name = Player;
 			sourceTree = "<group>";
@@ -417,6 +422,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				88DC7F5D2BAB238500728201 /* PlayerEventView.m in Sources */,
 				88DC7F5A2BAAE9D500728201 /* PlayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -622,10 +628,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -693,10 +696,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
