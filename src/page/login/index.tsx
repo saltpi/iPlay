@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { loginToSiteAsync } from '@store/embySlice';
 import {useState} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const style = StyleSheet.create({
     inputLine: {
@@ -46,6 +47,7 @@ const style = StyleSheet.create({
 
 export function Page() {
     const navigation: Navigation = useNavigation()
+    const insets = useSafeAreaInsets()
     const emby = useAppSelector(state => state.emby.site)
     const [server, onChangeServer] = useState(embyUrl(emby) ?? '');
     const [username, onChangeUsername] = useState(emby?.user.User.Name ?? '');
@@ -75,6 +77,7 @@ export function Page() {
                     type: 'success',
                     text1: '登录成功',
                     position: 'top',
+                    topOffset: insets.top, 
                 });
             },
             reject: () => {
@@ -87,6 +90,7 @@ export function Page() {
                     text1: '登录失败',
                     text2: '请检查服务器地址、用户名和密码',
                     position: 'top',
+                    topOffset: insets.top, 
                 });
             }
         }

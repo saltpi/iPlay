@@ -70,9 +70,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
-    console.log(poster)
     const insets = useSafeAreaInsets()
-    console.log(type, movie)
     useEffect(() => {
         emby?.getMedia?.(Number(movie.Id)).then(setDetail)
         if (type !== "Series") return
@@ -90,7 +88,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
 
     const playVideo = async () => {
         let url = getPlayUrl(detail)
-        console.log("playVideo", url)
         if (!url || url?.length === 0) {
             const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
             if (playbackInfo) {
@@ -131,7 +128,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
             {isPlaying ? null : <PlayIcon width={50} height={50} style={style.play} />}
             </TouchableOpacity> : null}
-            {loading ? <Spin size="large" /> : null}
+            {loading ? <Spin size="small" /> : null}
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
