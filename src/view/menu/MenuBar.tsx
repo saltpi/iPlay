@@ -7,12 +7,11 @@ import {OSType, isOS} from '@helper/device';
 import {useEffect, useMemo, useRef} from 'react';
 import {switchRoute} from '@store/themeSlice';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import { BaseImage } from '@view/Image';
-const homeIcon = require('@view/menu/Home.png');
-const searchIcon = require('@view/menu/Search.png');
-const starIcon = require('@view/menu/Star.png');
-const settingsIcon = require('@view/menu/Setting.png');
-const messageIcon = require('@view/settings/message.png');
+import HomeIcon from '@asset/home.svg';
+import SearchIcon from '@asset/search.svg';
+import StarIcon from '@asset/star.svg';
+import SettingsIcon from '@asset/setting.svg';
+import MessageIcon from '@asset/message.svg';
 
 export enum MenuType {
     Home = 'HomeTab',
@@ -58,11 +57,11 @@ const style = StyleSheet.create({
 });
 
 const menu = [
-    {icon: searchIcon, name: 'Search', type: MenuType.Search},
-    {icon: starIcon, name: 'Star', type: MenuType.Star},
-    {icon: homeIcon, name: 'Home', type: MenuType.Home},
-    {icon: messageIcon, name: 'Message', type: MenuType.Message},
-    {icon: settingsIcon, name: 'Settings', type: MenuType.Settings},
+    {icon: SearchIcon, name: 'Search', type: MenuType.Search},
+    {icon: StarIcon, name: 'Star', type: MenuType.Star},
+    {icon: HomeIcon, name: 'Home', type: MenuType.Home},
+    {icon: MessageIcon, name: 'Message', type: MenuType.Message},
+    {icon: SettingsIcon, name: 'Settings', type: MenuType.Settings},
 ];
 
 export function RouteMenuBar() {
@@ -73,6 +72,13 @@ export function RouteMenuBar() {
     }, [route.name]);
     return null;
 }
+
+const kIconSize = {
+    width: 25,
+    height: 25,
+}
+
+const kInactiveOpacity = 0.25;
 
 export function MenuBar() {
     const active = useAppSelector(getActiveMenu);
@@ -119,14 +125,7 @@ export function MenuBar() {
                     style={style.menuItem}
                     onPress={() => setActive(item.type)}>
                     <View>
-                        <BaseImage
-                            style={
-                                active === item.type
-                                    ? style.activeIcon
-                                    : style.icon
-                            }
-                            source={item.icon}
-                        />
+                        {<item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />}
                     </View>
                 </TouchableOpacity>
             ))}
