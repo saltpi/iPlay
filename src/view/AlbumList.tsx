@@ -127,7 +127,9 @@ export function SiteResource({site}: SiteResourceProps) {
                 }),
             );
             setMedias(medias);
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
         };
         getMedia();
     }, [albums, emby]);

@@ -1,5 +1,6 @@
 import { EmbyConfig } from '@api/config';
 import { Navigation } from '@global';
+import { OSType, isOS } from '@helper/device';
 import { Toast } from '@helper/toast';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { embyUrl } from '@model/EmbySite';
@@ -91,8 +92,8 @@ export function Page() {
         setLoading(true)
         dispatch(loginToSiteAsync({
             endpoint,
-            username, 
-            password, 
+            username: username?.trim(), 
+            password: password?.trim(), 
             callback
         }))
     }
@@ -126,7 +127,9 @@ export function Page() {
                 />
             </View>
             <View style={style.loginButton}>
-                <Button title={loading ? "登录中..." : "登录"} color="black" onPress={onLoginPress} />
+                <Button title={loading ? "登录中..." : "登录"} 
+                    color={isOS(OSType.Android) ? "black" : "white"}
+                    onPress={onLoginPress} />
             </View>
         </SafeAreaView>
     );
