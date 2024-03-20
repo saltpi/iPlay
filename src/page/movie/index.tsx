@@ -6,7 +6,7 @@ import { ActorCard } from "@view/ActorCard";
 import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BaseImage, Image } from '@view/Image';
 import Video, { VideoRef } from "react-native-video";
@@ -14,6 +14,7 @@ import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Spin } from "@view/Spin";
 import PlayIcon from "../../asset/play.svg"
+import { getPlayUrl } from "@api/play";
 
 const style = StyleSheet.create({
     overview: {
@@ -64,7 +65,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const [isPlaying, setIsPlaying] = useState(false)
     const [detail, setDetail] = useState<MediaDetail>();
     const [seasons, setSeasons] = useState<Season[]>();
-    const [videoRef, setVideoRef] = useState<VideoRef>()
+    const videoRef = useRef<VideoRef>()
     const [loading, setLoading] = useState(false)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
@@ -86,20 +87,25 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             text2: JSON.stringify(e)
         })
     }
-    const getPlayUrl = (detail?: MediaDetail) => {
-        const sources = detail?.MediaSources ?? []
-        if (sources.length > 0) {
-            const source = sources[0]
-            if (source.Container === "strm") {
-                return source.Path
-            } else {
-                return source.DirectStreamUrl
+
+    const playVideo = async () => {
+        let url = getPlayUrl(detail)
+        console.log("playVideo", url)
+        if (!url || url?.length === 0) {
+            const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
+            if (playbackInfo) {
+                url = emby?.videoUrl?.(playbackInfo) ?? ""
             }
+            console.log("playbackInfo", url)
         }
-        return ""
-    }
-    const playVideo = () => {
-        const url = getPlayUrl(detail)
+        if (!url || url?.length === 0) {
+            Toast.show({
+                type: "error",
+                text1: "无法播放",
+                text2: "没有找到可播放的资源"
+            })
+            return
+        }
         setUrl(url)
         setIsPlaying(true)
         setLoading(true)
@@ -134,7 +140,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             {isPlayable ?
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} /> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
-            <Text style={style.actorSection}>演职人员</Text>
+            {detail?.People.length ? <Text style={style.actorSection}>演职人员</Text> : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {detail?.People.map((actor, index) => <ActorCard key={index} actor={actor} />)}
             </ScrollView>

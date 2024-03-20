@@ -1,8 +1,11 @@
+import { getPlayUrl } from '@api/play';
 import {PropsWithNavigation} from '@global';
+import { set } from '@helper/store';
 import { Toast } from '@helper/toast';
 import { useAppSelector } from '@hook/store';
 import { Episode } from '@model/Episode';
 import { EpisodeCard } from '@view/EpisodeCard';
+import { Spin } from '@view/Spin';
 import {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,8 +22,17 @@ const style = StyleSheet.create({
     },
     playing: {
         borderColor: "red",
-        borderWidth: 0.5,
-        borderRadius: 5
+        borderWidth: 2,
+        borderRadius: 5,
+        marginLeft: 2.5,
+        marginRight: 2.5,
+    },
+    inactive: {
+        borderColor: "transparent",
+        borderWidth: 2,
+        borderRadius: 5,
+        marginLeft: 2.5,
+        marginRight: 2.5,
     },
     goback: {
         position: 'absolute',
@@ -30,6 +42,10 @@ const style = StyleSheet.create({
         zIndex: 10,
         flexGrow: 0,
         flexShrink: 0,
+    },
+    playerContainer: {
+        width: "100%",
+        aspectRatio: 16/9,
     },
     player: {
         width: "100%",
@@ -46,6 +62,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [url, setUrl] = useState<string>()
     const [poster, setPoster] = useState<string>()
     const [episode, setEpisode] = useState(route.params.episode)
+    const [loading, setLoading] = useState(true)
     const videoRef = useRef<VideoRef>(null);
     const onError = (e: any) => {
         console.log(`player: `, url, e);
@@ -56,12 +73,14 @@ export function Page({navigation, route}: PlayerPageProps) {
         })
         navigation.goBack()
     };
+
     const playEpisode = (episode: Episode) => {
+        setLoading(true)
         setEpisode(episode)
         setPoster(emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary))
         emby?.getPlaybackInfo?.(Number(episode.Id))
             .then(res => {
-                setUrl(emby?.videoUrl?.(res.MediaSources[0].Path))
+                setUrl(emby?.videoUrl?.(res))
                 navigation.setOptions({
                     title: episode.Name
                 })
@@ -72,20 +91,24 @@ export function Page({navigation, route}: PlayerPageProps) {
     }, [])
     return (
         <View style={style.root}>
-        {url ? <Video
-            source={{uri: url}}
-            controls={true}
-            poster={poster}
-            fullscreenAutorotate={true}
-            fullscreenOrientation="landscape"
-            ref={videoRef}
-            onError={onError}
-            style={style.player}
-        /> : null}
+        <View style={style.playerContainer}>
+            {url ? <Video
+                source={{uri: url}}
+                controls={true}
+                poster={poster}
+                fullscreenAutorotate={true}
+                fullscreenOrientation="landscape"
+                ref={videoRef}
+                onProgress={() => setLoading(false)}
+                onError={onError}
+                style={style.player}
+            /> : null}
+            {loading ? <Spin /> : null}
+        </View>
         <ScrollView>
         {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
-            style={e === episode ? style.playing : {}}
+            style={e === episode ? style.playing : style.inactive}
             onPress={playEpisode}
             episode={e} />)}
         </ScrollView>

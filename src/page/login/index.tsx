@@ -56,10 +56,11 @@ export function Page() {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
         console.log(groups)
+        const protocol = groups?.protocol === "https" ? "https" : "http"
         const endpoint: EmbyConfig = {
             host: groups?.host ?? "",
-            port: groups?.port ? parseInt(groups.port) : 443,
-            protocol: groups?.protocol ?? "https" as any,
+            port: groups?.port ? parseInt(groups.port) : (protocol === "https" ? 443 : 80),
+            protocol,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
         console.log(endpoint)
