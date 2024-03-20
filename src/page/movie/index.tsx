@@ -13,7 +13,7 @@ import Video, { VideoRef } from "react-native-video";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Spin } from "@view/Spin";
-const playIcon = require("@asset/button.play.png")
+import PlayIcon from "../../asset/play.svg"
 
 const style = StyleSheet.create({
     overview: {
@@ -49,8 +49,8 @@ const style = StyleSheet.create({
     play: {
         flexGrow: 0,
         flexShrink: 0,
-        width: 36,
-        height: 36,
+        width: 50,
+        height: 50,
         aspectRatio: 1,
         tintColor: "white",
         color: "white",
@@ -123,9 +123,9 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             {url ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
             {isPlayable ?
             <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
-            {isPlaying ? null : <BaseImage style={style.play} source={playIcon} />}
+            {isPlaying ? null : <PlayIcon width={50} height={50} style={style.play} />}
             </TouchableOpacity> : null}
-            {loading ? <Spin /> : null}
+            {loading ? <Spin size="large" /> : null}
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
