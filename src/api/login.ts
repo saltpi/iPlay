@@ -24,7 +24,7 @@ export async function login(username: string, password: string, endpoint: EmbyCo
     const data = await response.json() as User
     return data
   } catch (e) {
-    console.error(e)
-    throw e
+    console.error(`login response`, e)
+    return Promise.reject(new Error(`username or password is incorrect`))
   }
 }
