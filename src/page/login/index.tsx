@@ -65,7 +65,7 @@ export function Page() {
             protocol,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
-        console.log(endpoint)
+        console.log(`endpoint: `, endpoint)
         const callback = {
             resolve: () => {
                 setLoading(false)

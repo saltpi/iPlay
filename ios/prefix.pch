@@ -21,4 +21,22 @@ colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
+//define this constant if you want to use Masonry without the 'mas_' prefix
+#define MAS_SHORTHAND 1
+
+//define this constant if you want to enable auto-boxing for default syntax
+#define MAS_SHORTHAND_GLOBALS 1
+
+#import "Masonry.h"
+#import <ReactiveObjC/ReactiveObjC.h>
+
+
+#define BeginPropInit(property) typeof(_##property) property = nil;
+#define EndPropInit(property) _##property = property;
+#define BeginLazyPropInit(property) if (! _##property) {\
+    BeginPropInit(property)
+#define EndLazyPropInit(property) EndPropInit(property) \
+}\
+    return _##property;
+
 #endif /* prefix_pch */

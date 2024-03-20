@@ -1,9 +1,9 @@
 import React from 'react';
 import {requireNativeComponent} from 'react-native';
 import PropTypes from 'prop-types';
-const Player = requireNativeComponent('Player');
+const Player = requireNativeComponent('PlayerView');
 
-class PlayerView extends React.Component {
+export class PlayerView extends React.Component {
     static propTypes: {
         /**
          * A Boolean value that determines whether the user may use pinch
@@ -11,6 +11,7 @@ class PlayerView extends React.Component {
          */
         bgcolor: any;
         url: any;
+        onPlayStateChange: any;
     };
     render() {
         return <Player {...this.props} />;
@@ -24,7 +25,7 @@ PlayerView.propTypes = {
      */
     bgcolor: PropTypes.string,
     url: PropTypes.string,
+    onPlayStateChange: PropTypes.func,
 };
 
 // requireNativeComponent automatically resolves 'RNTMap' to 'RNTMapManager'
-module.exports = PlayerView;

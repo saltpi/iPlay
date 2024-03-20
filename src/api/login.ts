@@ -25,6 +25,6 @@ export async function login(username: string, password: string, endpoint: EmbyCo
     return data
   } catch (e) {
     console.error(e)
-    return null
+    throw e
   }
 }

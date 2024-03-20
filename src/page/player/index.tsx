@@ -6,10 +6,11 @@ import { useAppSelector } from '@hook/store';
 import { Episode } from '@model/Episode';
 import { EpisodeCard } from '@view/EpisodeCard';
 import { Spin } from '@view/Spin';
+import { Video } from '@view/Video';
 import {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Video, { VideoRef } from 'react-native-video';
+import { VideoRef } from 'react-native-video';
 
 // Later on in your styles..
 const style = StyleSheet.create({
