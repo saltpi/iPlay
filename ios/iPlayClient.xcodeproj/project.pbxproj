@@ -97,7 +97,7 @@
 		13B07FAE1A68108700A75B9A /* iPlayClient */ = {
 			isa = PBXGroup;
 			children = (
-				88AD4B962BAA9C940065E8D9 /* Player */,
+				88DC7F5E2BAB2E9600728201 /* Player */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -150,7 +150,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		88AD4B962BAA9C940065E8D9 /* Player */ = {
+		88DC7F5E2BAB2E9600728201 /* Player */ = {
 			isa = PBXGroup;
 			children = (
 				88AD4B972BAA9CF40065E8D9 /* PlayerManager.h */,
@@ -161,7 +161,7 @@
 				88DC7F5B2BAB238500728201 /* PlayerEventView.h */,
 				88DC7F5C2BAB238500728201 /* PlayerEventView.m */,
 			);
-			name = Player;
+			path = Player;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
