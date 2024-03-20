@@ -8,7 +8,7 @@ import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Image } from '@view/Image';
+import { BaseImage, Image } from '@view/Image';
 import Video, { VideoRef } from "react-native-video";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -36,8 +36,8 @@ const style = StyleSheet.create({
     },
     playButton: {
         position: "absolute",
-        width: 50,
-        height: 50,
+        width: 36,
+        height: 36,
         aspectRatio: 1,
         overflow: "hidden",
         top: "50%",
@@ -49,9 +49,11 @@ const style = StyleSheet.create({
     play: {
         flexGrow: 0,
         flexShrink: 0,
-        width: 50,
-        height: 50,
+        width: 36,
+        height: 36,
         aspectRatio: 1,
+        tintColor: "white",
+        color: "white",
     }
 })
 
@@ -106,7 +108,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView>
             <View>
-            <Spin />
             {url ? <Video
                 source={{uri: url}}
                 controls={true}
@@ -114,15 +115,17 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 fullscreenAutorotate={true}
                 fullscreenOrientation="landscape"
                 ref={videoRef}
-                onLoad={() => setLoading(false)}
+                onPlaybackStateChanged={state => setLoading(false)}
+                onProgress={progress => console.log("progress", progress)}
                 onError={onError}
                 style={style.player}
             /> : null}
             {url ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
             {isPlayable ?
             <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
-            {isPlaying ? null : <Image style={style.play} source={playIcon} />}
+            {isPlaying ? null : <BaseImage style={style.play} source={playIcon} />}
             </TouchableOpacity> : null}
+            {loading ? <Spin /> : null}
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
