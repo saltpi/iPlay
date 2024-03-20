@@ -1,3 +1,4 @@
+import { getPlayUrl } from '@api/play';
 import {PropsWithNavigation} from '@global';
 import { set } from '@helper/store';
 import { Toast } from '@helper/toast';
@@ -72,13 +73,14 @@ export function Page({navigation, route}: PlayerPageProps) {
         })
         navigation.goBack()
     };
+
     const playEpisode = (episode: Episode) => {
         setLoading(true)
         setEpisode(episode)
         setPoster(emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary))
         emby?.getPlaybackInfo?.(Number(episode.Id))
             .then(res => {
-                setUrl(emby?.videoUrl?.(res.MediaSources[0].Path))
+                setUrl(emby?.videoUrl?.(res))
                 navigation.setOptions({
                     title: episode.Name
                 })

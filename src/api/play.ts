@@ -1,8 +1,8 @@
-import { User } from "../model/User";
 import { makeEmbyUrl } from "./config";
 import { PlaybackInfo } from "../model/PlaybackInfo";
 import device from "./device.json"
 import { EmbySite } from "@model/EmbySite";
+import { MediaDetail } from "@model/MediaDetail";
 
 export async function getPlaybackInfo(site: EmbySite, id: number) {
     const params = {
@@ -24,4 +24,17 @@ export async function getPlaybackInfo(site: EmbySite, id: number) {
         "content-type": "text/plain"
     }})
     return await response.json() as PlaybackInfo
+}
+
+export const getPlayUrl = (detail?: MediaDetail) => {
+    const sources = detail?.MediaSources ?? []
+    if (sources.length > 0) {
+        const source = sources[0]
+        if (source.Container === "strm") {
+            return source.Path
+        } else {
+            return source.DirectStreamUrl
+        }
+    }
+    return ""
 }

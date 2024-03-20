@@ -1,6 +1,7 @@
 import { EmbySite } from "@model/EmbySite";
 import { ENV, EmbyConfig } from "../helper/env";
 import { Map } from "../model/Map";
+import { PlaybackInfo } from "@model/PlaybackInfo";
 
 export type { EmbyConfig } from "../helper/env"
 
@@ -49,8 +50,24 @@ export function avatorUrl(id: string, options: string|Partial<ImageProps>, type:
     return `${config.emby.protocol}://${config.emby.host}:${config.emby.port}${config.emby.path}emby/Users/${id}/Images/${type}?height=152&tag=${options}&quality=90`
 }
 
-export function playUrl(site: EmbySite, path: string) {
+export function playUrl(site: EmbySite, path: string|PlaybackInfo) {
     const endpoint = site.server!
-    if (path?.startsWith("http")) return path
-    return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby${path}`
+    if (typeof path === "string") {
+        if (path?.startsWith("http")) return path
+        return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby${path}`
+    } else {
+        const sources = path?.MediaSources ?? []
+        if (sources.length > 0) {
+            const source = sources[0]
+            if (source.Container === "strm") {
+                return source.Path
+            } else {
+                const streamPath = source.DirectStreamUrl
+                if (streamPath?.startsWith("http")) return streamPath
+                else {
+                    return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby${streamPath}`
+                }
+            }
+        }
+    }
 }
