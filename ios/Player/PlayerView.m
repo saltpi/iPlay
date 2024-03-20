@@ -229,6 +229,7 @@
         }    
         case VLCMediaPlayerStateOpening: {
             NSLog(@"opening");
+            [self.indicator startAnimating];
             break;
         }    
         case VLCMediaPlayerStateBuffering: {
@@ -245,6 +246,7 @@
         }    
         case VLCMediaPlayerStatePlaying: {
             NSLog(@"playing");
+            [self.indicator stopAnimating];
             break;
         }    
         case VLCMediaPlayerStatePaused: {
