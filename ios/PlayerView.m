@@ -11,6 +11,8 @@
 @interface PlayerView ()
 @property (nonatomic, strong) UIImageView *playButton;
 @property (nonatomic, strong) UIImageView *fullscreenButton;
+@property (nonatomic, strong) UIImageView *gobackButton;
+@property (nonatomic, strong) UIImageView *settingButton;
 @property (nonatomic, strong) UIProgressView *progressBar;
 @property (nonatomic, strong) NSProgress *progress;
 @property (nonatomic, strong) UISlider *sliderBar;
@@ -43,6 +45,8 @@
     [self addSubview:self.controlView];
     [self.controlView addSubview:self.playButton];
     [self.controlView addSubview:self.fullscreenButton];
+    [self.controlView addSubview:self.gobackButton];
+    [self.controlView addSubview:self.settingButton];
     [self.controlView addSubview:self.progressBar];
     [self.controlView addSubview:self.sliderBar];
     [self.controlView addSubview:self.watchedLabel];
@@ -104,6 +108,22 @@
     make.centerY.equalTo(self.sliderBar);
     make.size.equalTo(@32);
     make.left.equalTo(superview).with.offset(15);
+  }];
+  
+  [self.gobackButton remakeConstraints:^(MASConstraintMaker *make) {
+    @strongify(self);
+    @strongify(superview);
+    make.centerX.equalTo(self.playButton);
+    make.top.equalTo(superview).with.offset(15);
+    make.size.equalTo(@32);
+  }];
+  
+  [self.settingButton remakeConstraints:^(MASConstraintMaker *make) {
+    @strongify(self);
+    @strongify(superview);
+    make.centerX.equalTo(self.fullscreenButton);
+    make.centerY.equalTo(self.gobackButton);
+    make.size.equalTo(@32);
   }];
   
   [self.fullscreenButton remakeConstraints:^(MASConstraintMaker *make) {
@@ -251,6 +271,26 @@
   EndLazyPropInit(fullscreenButton)
 }
 
+- (UIImageView *)gobackButton {
+  BeginLazyPropInit(gobackButton)
+  UIImage *icon = [UIImage systemImageNamed:@"chevron.backward"];
+  icon = [icon imageWithTintColor:UIColor.blueColor];
+  UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
+  imageView.contentMode = UIViewContentModeScaleAspectFit;
+  gobackButton = imageView;
+  EndLazyPropInit(gobackButton)
+}
+
+- (UIImageView *)settingButton {
+  BeginLazyPropInit(settingButton)
+  UIImage *icon = [UIImage systemImageNamed:@"gear"];
+  icon = [icon imageWithTintColor:UIColor.blueColor];
+  UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
+  imageView.contentMode = UIViewContentModeScaleAspectFit;
+  settingButton = imageView;
+  EndLazyPropInit(settingButton)
+}
+
 - (UIProgressView *)progressBar {
     BeginLazyPropInit(progressBar)
     progressBar = [[UIProgressView alloc] init];
@@ -306,6 +346,8 @@
   view.ignoreViews = @[
     self.playButton,
     self.fullscreenButton,
+    self.gobackButton,
+    self.settingButton,
     self.sliderBar
   ];
   eventsView = view;
