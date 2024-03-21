@@ -288,8 +288,9 @@ static NSUInteger const kIconSize = 28;
             }
         }
     } else if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {
-        [self showControls];
+        // TODO
     }
+    [self showControls];
 }
 
 - (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {

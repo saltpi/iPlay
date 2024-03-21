@@ -7,6 +7,10 @@
 
 #import "PlayerEventView.h"
 
+@interface PlayerEventView () <UIGestureRecognizerDelegate>
+
+@end
+
 @implementation PlayerEventView
 
 - (instancetype)init {
@@ -19,26 +23,17 @@
     return self;
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    for (UIView *view in self.ignoreViews) {
-        CGPoint pointInView = [self convertPoint:point toView:view];
-
-        if ([view pointInside:pointInView withEvent:event]) {
-            return view;
-        }
-    }
-
-    return [super hitTest:point withEvent:event];
-}
 
 - (void)_setupEvent {
     self.userInteractionEnabled = YES;
     UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
     swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    swipeLeft.delegate = self;
     [self addGestureRecognizer:swipeLeft];
 
     UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
     swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    swipeRight.delegate = self;
     [self addGestureRecognizer:swipeRight];
 
     UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
@@ -66,6 +61,30 @@
         CGPoint location = [gesture locationInView:self];
         [self.eventDelegate playerGestureEvent:gesture location:location];
     }
+}
+
+#pragma mark - UIView
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    for (UIView *view in self.ignoreViews) {
+        CGPoint pointInView = [self convertPoint:point toView:view];
+
+        if ([view pointInside:pointInView withEvent:event]) {
+            return view;
+        }
+    }
+
+    return [super hitTest:point withEvent:event];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    for (UIView *view in self.ignoreViews) {
+        CGPoint point = [touch locationInView:view];
+        if (CGRectContainsPoint(view.frame, point)) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 @end
