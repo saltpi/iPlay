@@ -219,6 +219,7 @@ static NSUInteger const kIconSize = 28;
             make.edges.equalTo(self.superview);
         }];
         [currentController dismissViewControllerAnimated:YES completion:^{
+            [self layout];
             self.isFullscreen = NO;
         }];
     } else {
@@ -231,6 +232,7 @@ static NSUInteger const kIconSize = 28;
             make.edges.equalTo(self.superview);
         }];
         [currentController presentViewController:controller animated:YES completion:^{
+            [self layout];
             self.isFullscreen = YES;
         }];
     }
