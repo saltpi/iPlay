@@ -9,6 +9,7 @@ import { Page as SettingsPage } from "@page/settings/index.tsx";
 import { Page as StarPage } from "@page/star/index.tsx";
 import { Page as PlayerPage } from "@page/player/index.tsx";
 import { Page as ThemePage } from "@page/theme/index.tsx";
+import { Page as TestPage } from "@page/test/index.tsx";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, NavigationState } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -112,6 +113,10 @@ const StarRouter = () => (
             name="star"
             component={StarPage}
             options={{ title: '收藏' }} />
+        <StarStack.Screen
+            name="test"
+            component={TestPage}
+            options={{ title: '测试' }} />
     </StarStack.Navigator>
 );
 

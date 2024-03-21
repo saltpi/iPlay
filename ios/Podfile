@@ -34,6 +34,10 @@ target 'iPlayClient' do
   
   pod "SPTPersistentCache", :modular_headers => true
   pod "DVAssetLoaderDelegate", :modular_headers => true
+  pod 'MobileVLCKit'
+  pod 'Masonry'
+  pod 'ReactiveObjC'
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.
