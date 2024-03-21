@@ -306,7 +306,6 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)adjustVolumeWithDirection:(UISwipeGestureRecognizerDirection)direction {
-    float volume = [[AVAudioSession sharedInstance] outputVolume];
     if (direction == UISwipeGestureRecognizerDirectionUp) {
       [self.player.audio volumeUp];
     } else {
@@ -504,14 +503,19 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (UIView *)_makeControlView:(NSString *)iconName {
-    UIImage *icon = [UIImage systemImageNamed:iconName];
+    UIImage *icon = nil;
+    if (@available(iOS 15.0, *)) {
+        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithHierarchicalColor:UIColor.whiteColor];
+        icon = [UIImage systemImageNamed:iconName withConfiguration:config];
+    } else {
+        icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
+    }
     icon = [icon imageWithTintColor:UIColor.whiteColor];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
 
     UIView *view = [UIView new];
-    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
-    view.opaque = 0.25;
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25];
     view.layer.borderWidth = 0.5;
     view.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2].CGColor;
     view.layer.cornerRadius = kIconSize / 2;
@@ -533,6 +537,13 @@ static NSUInteger const kIconSize = 48;
     if (![imageView isKindOfClass:UIImageView.class]) {
         return;
     }
-    imageView.image = [UIImage systemImageNamed:iconName];
+    UIImage *icon = nil;
+    if (@available(iOS 15.0, *)) {
+        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithHierarchicalColor:UIColor.whiteColor];
+        icon = [UIImage systemImageNamed:iconName withConfiguration:config];
+    } else {
+        icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
+    }
+    imageView.image = icon;
 }
 @end
