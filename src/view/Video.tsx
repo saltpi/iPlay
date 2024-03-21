@@ -64,6 +64,7 @@ export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
         return (
             <PlayerView
                 style={style.player as any}
+                iconSize={25}
                 ref={nativeRef}
                 title={title}
                 onPlayStateChange={onPlayStateChange}

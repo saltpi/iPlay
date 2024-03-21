@@ -136,9 +136,9 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 style={style.player}
             /> : null}
             {url ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
-            {isPlayable ?
+            {isPlayable && !isPlaying ?
             <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
-            {isPlaying ? null : <PlayIcon width={50} height={50} style={style.play} />}
+                <PlayIcon width={50} height={50} style={style.play} />
             </TouchableOpacity> : null}
             {/* {loading ? <Spin size="small" /> : null} */}
             </View>
