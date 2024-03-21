@@ -20,6 +20,7 @@ const persistConfig = {
   storage,
   blacklist: [
       "menu",
+      "theme"
   ]
 }
 
@@ -29,7 +30,7 @@ const reducer = combineReducers({
       key: [Env.storeKey, "theme"].join("/"),
       blacklist: [
         "routeName",
-        "showMenuBar"
+        "hideMenuBar"
       ],
       storage
   }, themeReducer),
@@ -55,7 +56,7 @@ export const store = configureStore({
       ignoredPaths: [
         "emby.emby",
         "theme.routeName",
-        "theme.showMenuBar",
+        "theme.hideMenuBar",
       ],
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },

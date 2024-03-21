@@ -20,7 +20,6 @@ export function Page(props: PropsWithNavigation<"default">) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <Button title="测试页面" onPress={() => navigation.navigate("test")} />
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -67,6 +67,7 @@ export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
             <PlayerView
                 style={style.player as any}
                 ref={nativeRef}
+                bgcolor="000000"
                 onPlayStateChange={onPlayStateChange}
                 url={uri}
             />
