@@ -16,6 +16,7 @@ import { Spin } from "@view/Spin";
 import PlayIcon from "../../asset/play.svg"
 import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
+import { preferedSize, windowWidth } from "@helper/device";
 
 const style = StyleSheet.create({
     overview: {
@@ -120,6 +121,13 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         setLoading(true)
     }
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
+    const iconSize = preferedSize(24, 36, windowWidth/10)
+    const playButtonStyle = {
+        ...style.playButton,
+        width: iconSize,
+        height: iconSize,
+        transform: [{translateX: -iconSize/2}, {translateY: -iconSize/2}]
+    }
     return (
         <ScrollView>
             <View>
@@ -137,8 +145,8 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             /> : null}
             {url ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
-            <TouchableOpacity style={style.playButton} onPress={playVideo} activeOpacity={1.0}>
-                <PlayIcon width={50} height={50} style={style.play} />
+            <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
+                <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
             </TouchableOpacity> : null}
             {/* {loading ? <Spin size="small" /> : null} */}
             </View>

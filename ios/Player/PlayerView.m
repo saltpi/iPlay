@@ -545,6 +545,11 @@ static NSUInteger const kIconSize = 48;
     imageView.image = icon;
 }
 
+#pragma mark - NSObject
+- (void)dealloc {
+    [self.player stop];
+}
+
 #pragma mark - Setter
 
 - (void)setIconSize:(NSUInteger)iconSize {
