@@ -80,7 +80,7 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     for (UIView *view in self.ignoreViews) {
         CGPoint point = [touch locationInView:view];
-        if (CGRectContainsPoint(view.frame, point)) {
+        if ([view pointInside:point withEvent:nil]) {
             return NO;
         }
     }

@@ -294,7 +294,11 @@ static NSUInteger const kIconSize = 28;
 }
 
 - (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {
-    
+    if (direction == UISwipeGestureRecognizerDirectionLeft) {
+        [self.player shortJumpBackward];
+    } else {
+        [self.player shortJumpForward];
+    }
 }
 
 - (void)adjustVolumeWithDirection:(UISwipeGestureRecognizerDirection)direction {
