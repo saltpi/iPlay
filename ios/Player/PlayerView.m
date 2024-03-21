@@ -322,40 +322,31 @@ static NSUInteger const kIconSize = 48;
 
 #pragma mark - VLCMediaPlayerDelegate
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
-    NSLog(@"%ld %d", (long)self.player.state, self.player.isPlaying);
     switch (self.player.state) {
         case VLCMediaPlayerStateStopped: {
-            NSLog(@"stopped");
             break;
         }    
         case VLCMediaPlayerStateOpening: {
-            NSLog(@"opening");
             [self.indicator startAnimating];
             break;
         }    
         case VLCMediaPlayerStateBuffering: {
-            NSLog(@"buffering");
             break;
         }  
         case VLCMediaPlayerStateEnded: {
-            NSLog(@"ended");
             break;
         }    
         case VLCMediaPlayerStateError: {
-            NSLog(@"error");
             break;
         }    
         case VLCMediaPlayerStatePlaying: {
-            NSLog(@"playing");
             [self.indicator stopAnimating];
             break;
         }    
         case VLCMediaPlayerStatePaused: {
-            NSLog(@"paused");
             break;
         }
         case VLCMediaPlayerStateESAdded: {
-            NSLog(@"esadded");
             break;
         }
     }
