@@ -84,18 +84,19 @@ export function MenuBar() {
     const active = useAppSelector(getActiveMenu);
     const dispatch = useAppDispatch();
     const navigation: TabNavigation = useNavigation();
-    const showMenuBar = useAppSelector(state => state.theme.showMenuBar);
+    const hideMenuBar = useAppSelector(state => state.theme.hideMenuBar);
     const menuBarPaddingOffset = useAppSelector(state => state.theme.menuBarPaddingOffset);
     const insets = useSafeAreaInsets();
-    const position = useRef(new Animated.Value(showMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
+    const position = useRef(new Animated.Value(!hideMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
 
     useEffect(() => {
+        console.log(`hideMenuBar: ${hideMenuBar}`)
         Animated.timing(position, {
-            toValue: showMenuBar ? 0 : 100,
+            toValue: !hideMenuBar ? 0 : 100,
             duration: 200,
             useNativeDriver: true,
         }).start();
-    }, [showMenuBar]);
+    }, [hideMenuBar]);
 
     const setActive = (menu: MenuType) => {
         dispatch(switchToMenu(menu));
@@ -113,7 +114,7 @@ export function MenuBar() {
             ...style.menuBar,
             paddingBottom: insets.bottom + menuBarPaddingOffset,
         };
-    }, [showMenuBar, menuBarPaddingOffset]);
+    }, [hideMenuBar, menuBarPaddingOffset]);
 
     return (
         <Animated.View

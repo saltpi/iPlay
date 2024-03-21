@@ -21,6 +21,8 @@
 RCT_EXPORT_MODULE(PlayerView)
 
 RCT_EXPORT_VIEW_PROPERTY(onPlayStateChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(iconSize, NSUInteger)
+
 
 - (UIView *)view {
     PlayerView *view = [PlayerView new];
@@ -41,6 +43,12 @@ RCT_CUSTOM_VIEW_PROPERTY(url, NSString, UIView) {
 
     instance.player.media = [VLCMedia mediaWithURL:[NSURL URLWithString:url]];
     [instance.player play];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(title, NSString, UIView) {
+    NSString *title = json;
+    PlayerView *instance = (PlayerView *)view;
+    instance.title = title;
 }
 
 RCT_EXPORT_METHOD(stop:(nonnull NSNumber*)reactTag) {

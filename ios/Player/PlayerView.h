@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PlayerView : UIView<VLCMediaPlayerDelegate>
 @property (nonatomic, strong) VLCMediaPlayer *player;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, assign) NSUInteger iconSize;
 @property (nonatomic, weak) id<VLCMediaPlayerDelegate> delegate;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *controlView;

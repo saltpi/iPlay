@@ -1,4 +1,4 @@
-import {OSType, isOS} from '@helper/device';
+import {OSType, isOS, preferedSize, windowWidth} from '@helper/device';
 import {
     ComponentProps,
     forwardRef,
@@ -36,7 +36,7 @@ export type VideoProps = ComponentProps<typeof NativeVideo>;
 export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
     (props, ref) => {
         const nativeRef = useRef(null);
-        const {uri} = props.source as any;
+        const {uri, title} = props.source as any;
         const onPlayStateChange = (s: any) => {
             const event = s.nativeEvent;
             if (event.state === 5) {
@@ -61,12 +61,12 @@ export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
             [stop],
         );
 
-        console.log(`ref`, nativeRef.current);
-
         return (
             <PlayerView
                 style={style.player as any}
+                iconSize={preferedSize(25, 48, windowWidth/10)}
                 ref={nativeRef}
+                title={title}
                 onPlayStateChange={onPlayStateChange}
                 url={uri}
             />
