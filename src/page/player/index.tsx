@@ -96,7 +96,7 @@ export function Page({navigation, route}: PlayerPageProps) {
         <View style={style.root}>
         <View style={style.playerContainer}>
             {url ? <Video
-                source={{uri: url}}
+                source={{uri: url, title: episode.Name}}
                 controls={true}
                 poster={poster}
                 fullscreenAutorotate={true}

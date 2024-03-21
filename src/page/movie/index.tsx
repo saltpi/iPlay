@@ -123,7 +123,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <View>
             {url ? <Video
                 ref={videoRef}
-                source={{uri: url}}
+                source={{uri: url, title: detail?.Name}}
                 controls={true}
                 poster={poster}
                 fullscreenAutorotate={true}
