@@ -6,7 +6,7 @@ import { ActorCard } from "@view/ActorCard";
 import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BaseImage, Image } from '@view/Image';
 import { VideoRef } from "react-native-video";
@@ -66,17 +66,26 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const [isPlaying, setIsPlaying] = useState(false)
     const [detail, setDetail] = useState<MediaDetail>();
     const [seasons, setSeasons] = useState<Season[]>();
-    const videoRef = useRef<VideoRef>()
+    const videoRef = useRef<any>()
     const [loading, setLoading] = useState(false)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
     const insets = useSafeAreaInsets()
+
+    useEffect(() => {
+        return () => {
+            console.log(`unmount`, videoRef)
+            videoRef.current?.stop?.()
+        }
+    }, [])
+
     useEffect(() => {
         emby?.getMedia?.(Number(movie.Id)).then(setDetail)
         if (type !== "Series") return
         emby?.getSeasons?.(Number(movie.Id)).then(setSeasons)
     }, [emby, movie.Id])
+    
     const onError = (e: any) => {
         console.log(`player: `, url, e);
         setLoading(false)
@@ -113,12 +122,12 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         <ScrollView>
             <View>
             {url ? <Video
+                ref={videoRef}
                 source={{uri: url}}
                 controls={true}
                 poster={poster}
                 fullscreenAutorotate={true}
                 fullscreenOrientation="landscape"
-                // ref={videoRef}
                 onPlaybackStateChanged={state => setLoading(false)}
                 onProgress={progress => console.log("progress", progress)}
                 onError={onError}

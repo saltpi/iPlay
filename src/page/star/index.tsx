@@ -1,6 +1,7 @@
+import { Navigation, PropsWithNavigation } from "@global";
+import { NavigationProp } from "@react-navigation/native";
 import { StatusBar } from "@view/StatusBar";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import PlayerView from "@view/Player"
+import { Button, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -8,7 +9,8 @@ const style = StyleSheet.create({
     }
 });
 
-export function Page() {
+export function Page(props: PropsWithNavigation<"default">) {
+    const { navigation } = props
     return (
         <SafeAreaView style={style.page}>
             <StatusBar />
@@ -18,6 +20,7 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
+                    <Button title="测试页面" onPress={() => navigation.navigate("test")} />
                 </View>
             </ScrollView>
         </SafeAreaView>
