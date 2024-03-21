@@ -10,11 +10,13 @@
 @implementation PlayerEventView
 
 - (instancetype)init {
-  self = [super init];
-  if (self) {
-    [self _setupEvent];
-  }
-  return self;
+    self = [super init];
+
+    if (self) {
+        [self _setupEvent];
+    }
+
+    return self;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -30,40 +32,39 @@
 }
 
 - (void)_setupEvent {
-  UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-  swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-  [self addGestureRecognizer:swipeLeft];
+    self.userInteractionEnabled = YES;
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
+    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self addGestureRecognizer:swipeLeft];
 
-  UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-  swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-  [self addGestureRecognizer:swipeRight];
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self addGestureRecognizer:swipeRight];
 
-  UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-  swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
-  [self addGestureRecognizer:swipeUp];
+    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
+    swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
+    [self addGestureRecognizer:swipeUp];
 
-  UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-  swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
-  [self addGestureRecognizer:swipeDown];
+    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
+    swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
+    [self addGestureRecognizer:swipeDown];
 
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
+    [self addGestureRecognizer:tapRecognizer];
 }
 
+- (void)_handleTap:(UITapGestureRecognizer *)gesture {
+    // ignore areas
+    if (self.eventDelegate) {
+        CGPoint location = [gesture locationInView:self];
+        [self.eventDelegate playerGestureEvent:gesture location:location];
+    }
+}
 
 - (void)_handleSwipe:(UISwipeGestureRecognizer *)gesture {
-    CGPoint location = [gesture locationInView:self];
-    if (location.x < self.bounds.size.width / 2) {
-        NSLog(@"Left side swipe up detected");
-    } else {
-        NSLog(@"Right side swipe up detected");
-    }
-    if (gesture.direction == UISwipeGestureRecognizerDirectionLeft) {
-        NSLog(@"Left swipe detected");
-    } else if (gesture.direction == UISwipeGestureRecognizerDirectionRight) {
-        NSLog(@"Right swipe detected");
-    } else if (gesture.direction == UISwipeGestureRecognizerDirectionUp) {
-        NSLog(@"Up swipe detected");
-    } else if (gesture.direction == UISwipeGestureRecognizerDirectionDown) {
-        NSLog(@"Down swipe detected");
+    if (self.eventDelegate) {
+        CGPoint location = [gesture locationInView:self];
+        [self.eventDelegate playerGestureEvent:gesture location:location];
     }
 }
 

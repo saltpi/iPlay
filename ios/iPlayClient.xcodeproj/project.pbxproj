@@ -17,6 +17,8 @@
 		88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AD4B982BAA9CF40065E8D9 /* PlayerManager.m */; };
 		88DC7F5A2BAAE9D500728201 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F592BAAE9D000728201 /* PlayerView.m */; };
 		88DC7F5D2BAB238500728201 /* PlayerEventView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F5C2BAB238500728201 /* PlayerEventView.m */; };
+		88DC7F612BABA32400728201 /* UIView+FindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F602BABA32400728201 /* UIView+FindViewController.m */; };
+		88DC7F642BABA4B700728201 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F632BABA4B700728201 /* PlayerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,10 @@
 		88DC7F592BAAE9D000728201 /* PlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
 		88DC7F5B2BAB238500728201 /* PlayerEventView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerEventView.h; sourceTree = "<group>"; };
 		88DC7F5C2BAB238500728201 /* PlayerEventView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerEventView.m; sourceTree = "<group>"; };
+		88DC7F5F2BABA32400728201 /* UIView+FindViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+FindViewController.h"; sourceTree = "<group>"; };
+		88DC7F602BABA32400728201 /* UIView+FindViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+FindViewController.m"; sourceTree = "<group>"; };
+		88DC7F622BABA4B700728201 /* PlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
+		88DC7F632BABA4B700728201 /* PlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -160,6 +166,10 @@
 				88DC7F592BAAE9D000728201 /* PlayerView.m */,
 				88DC7F5B2BAB238500728201 /* PlayerEventView.h */,
 				88DC7F5C2BAB238500728201 /* PlayerEventView.m */,
+				88DC7F5F2BABA32400728201 /* UIView+FindViewController.h */,
+				88DC7F602BABA32400728201 /* UIView+FindViewController.m */,
+				88DC7F622BABA4B700728201 /* PlayerViewController.h */,
+				88DC7F632BABA4B700728201 /* PlayerViewController.m */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -419,6 +429,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88DC7F642BABA4B700728201 /* PlayerViewController.m in Sources */,
+				88DC7F612BABA32400728201 /* UIView+FindViewController.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,

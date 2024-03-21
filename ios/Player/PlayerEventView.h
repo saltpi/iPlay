@@ -9,8 +9,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol PlayerEventDelegate
+- (void)playerGestureEvent:(UIGestureRecognizer *)gesture
+                  location:(CGPoint)location;
+@end
+
 @interface PlayerEventView : UIView
 @property (nonatomic, copy) NSArray<UIView *> *ignoreViews;
+@property (nonatomic, weak) id<PlayerEventDelegate> eventDelegate;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <MobileVLCKit/MobileVLCKit.h>
 #import <React/RCTViewManager.h>
+#import "PlayerEventView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<VLCMediaPlayerDelegate> delegate;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *controlView;
-@property (nonatomic, strong) UIView *eventsView;
+@property (nonatomic, strong) PlayerEventView *eventsView;
+@property (nonatomic, weak) UIView *parentView;
 
 @property (nonatomic, copy) RCTDirectEventBlock onPlayStateChange;
 @end

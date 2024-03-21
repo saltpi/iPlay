@@ -7,8 +7,13 @@
 
 #import "PlayerEventView.h"
 #import "PlayerView.h"
+#import "PlayerViewController.h"
+#import "UIView+FindViewController.h"
+#import <AVFoundation/AVAudioSession.h>
 
-@interface PlayerView ()
+static NSUInteger const kIconSize = 28;
+
+@interface PlayerView () <PlayerEventDelegate>
 @property (nonatomic, strong) UIImageView *playButton;
 @property (nonatomic, strong) UIImageView *fullscreenButton;
 @property (nonatomic, strong) UIImageView *gobackButton;
@@ -21,6 +26,7 @@
 @property (nonatomic, assign) CGRect initialBounds;
 @property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, assign) BOOL isControlsVisible;
+@property (nonatomic, assign) BOOL isFullscreen;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 @end
 
@@ -80,7 +86,7 @@
         make.bottom.equalTo(superview).offset(-50);
         make.height.equalTo(4);
         make.centerX.equalTo(superview);
-        make.width.equalTo(superview).with.multipliedBy(0.8);
+        make.width.equalTo(superview).with.multipliedBy(0.75);
     }];
 
     [self.sliderBar remakeConstraints:^(MASConstraintMaker *make) {
@@ -88,7 +94,7 @@
         make.bottom.equalTo(superview).offset(-50);
         make.height.equalTo(4);
         make.centerX.equalTo(superview);
-        make.width.equalTo(superview).with.multipliedBy(0.8);
+        make.width.equalTo(superview).with.multipliedBy(0.75);
     }];
 
     [self.watchedLabel remakeConstraints:^(MASConstraintMaker *make) {
@@ -107,16 +113,17 @@
         @strongify(self);
         @strongify(superview);
         make.centerY.equalTo(self.sliderBar);
-        make.size.equalTo(@32);
-        make.left.equalTo(superview).with.offset(15);
+        make.size.equalTo(@(kIconSize));
+        make.left.equalTo(superview).with.offset(10);
+        make.right.lessThanOrEqualTo(self.watchedLabel.left);
     }];
 
     [self.gobackButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         @strongify(superview);
         make.centerX.equalTo(self.playButton);
-        make.top.equalTo(superview).with.offset(15);
-        make.size.equalTo(@32);
+        make.top.equalTo(superview).with.offset(10);
+        make.size.equalTo(@(kIconSize));
     }];
 
     [self.settingButton remakeConstraints:^(MASConstraintMaker *make) {
@@ -124,15 +131,16 @@
         @strongify(superview);
         make.centerX.equalTo(self.fullscreenButton);
         make.centerY.equalTo(self.gobackButton);
-        make.size.equalTo(@32);
+        make.size.equalTo(@(kIconSize));
     }];
 
     [self.fullscreenButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         @strongify(superview);
         make.centerY.equalTo(self.sliderBar);
-        make.size.equalTo(@32);
-        make.right.equalTo(superview).with.offset(-15);
+        make.size.equalTo(@(kIconSize));
+        make.left.greaterThanOrEqualTo(self.remainingLabel.right);
+        make.right.equalTo(superview).with.offset(-10);
     }];
 
     [self.indicator remakeConstraints:^(MASConstraintMaker *make) {
@@ -144,6 +152,7 @@
 - (void)bind {
     self.player.drawable = self.contentView;
     self.player.delegate = self;
+    self.eventsView.eventDelegate = self;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPlayTap:)];
     self.playButton.userInteractionEnabled = YES;
     [self.playButton addGestureRecognizer:tap];
@@ -151,17 +160,26 @@
     UITapGestureRecognizer *fullscreenTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onFullscreenTap:)];
     self.fullscreenButton.userInteractionEnabled = YES;
     [self.fullscreenButton addGestureRecognizer:fullscreenTap];
+  
+    UITapGestureRecognizer *gobackTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onFullscreenTap:)];
+    self.gobackButton.userInteractionEnabled = YES;
+    [self.gobackButton addGestureRecognizer:gobackTap];
 
     self.progressBar.observedProgress = self.progress;
     [self.sliderBar addTarget:self action:@selector(_seekToPlay:) forControlEvents:UIControlEventValueChanged];
 
-    self.eventsView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showControls)];
-    [self.eventsView addGestureRecognizer:tapRecognizer];
-
     if (self.isControlsVisible) {
         self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
     }
+  
+    @weakify(self);
+    [RACObserve(self, isFullscreen) subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        self.fullscreenButton.tintColor = self.isFullscreen ? UIColor.grayColor : UIColor.blueColor;
+        self.fullscreenButton.userInteractionEnabled = !self.isFullscreen;
+        self.gobackButton.userInteractionEnabled = self.isFullscreen;
+        self.gobackButton.tintColor = !self.isFullscreen ? UIColor.grayColor : UIColor.blueColor;
+    }];
 }
 
 - (void)showControls {
@@ -193,6 +211,29 @@
 }
 
 - (void)onFullscreenTap:(id)sender {
+    UIViewController *currentController = [self.superview firstAvailableUIViewController];
+    if (self.isFullscreen) {
+        [self removeFromSuperview];
+        [self.parentView addSubview:self];
+        [self remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.superview);
+        }];
+        [currentController dismissViewControllerAnimated:YES completion:^{
+            self.isFullscreen = NO;
+        }];
+    } else {
+        self.parentView = self.superview;
+        PlayerViewController *controller = [PlayerViewController new];
+        controller.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self removeFromSuperview];
+        [controller.view addSubview:self];
+        [self remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.superview);
+        }];
+        [currentController presentViewController:controller animated:YES completion:^{
+            self.isFullscreen = YES;
+        }];
+    }
 }
 
 - (void)_seekToPlay:(id)sender {
@@ -217,6 +258,60 @@
     NSString *imageName = self.player.isPlaying ? @"play" : @"pause";
 
     self.playButton.image = [UIImage systemImageNamed:imageName];
+}
+
+#pragma mark - Volume and Brightness
+- (void)playerGestureEvent:(UIGestureRecognizer *)gesture location:(CGPoint)location {
+    if ([gesture isKindOfClass:UISwipeGestureRecognizer.class]) {
+        UISwipeGestureRecognizer *swipe = (UISwipeGestureRecognizer *)gesture;
+        UISwipeGestureRecognizerDirection direction = swipe.direction;
+        BOOL isLeftSide = location.x < self.bounds.size.width / 2;
+        if (isLeftSide) {
+              NSLog(@"Left side swipe up detected");
+        } else {
+              NSLog(@"Right side swipe up detected");
+        }
+        if (direction == UISwipeGestureRecognizerDirectionLeft ||
+            direction == UISwipeGestureRecognizerDirectionRight) {
+            [self adjustPorgressWithDirection:direction];
+        } else if (direction == UISwipeGestureRecognizerDirectionUp) {
+            if (isLeftSide) {
+              [self adjustBrightnessWithDirection:direction];
+            } else {
+              [self adjustVolumeWithDirection:direction];
+            }
+        } else if (direction == UISwipeGestureRecognizerDirectionDown) {
+            if (isLeftSide) {
+              [self adjustBrightnessWithDirection:direction];
+            } else {
+              [self adjustVolumeWithDirection:direction];
+            }
+        }
+    } else if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {
+        [self showControls];
+    }
+}
+
+- (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {
+    
+}
+
+- (void)adjustVolumeWithDirection:(UISwipeGestureRecognizerDirection)direction {
+    float volume = [[AVAudioSession sharedInstance] outputVolume];
+    if (direction == UISwipeGestureRecognizerDirectionUp) {
+      [self.player.audio volumeUp];
+    } else {
+      [self.player.audio volumeDown];
+    }
+}
+
+- (void)adjustBrightnessWithDirection:(UISwipeGestureRecognizerDirection)direction {
+    CGFloat delta = 0.05;
+    if (direction == UISwipeGestureRecognizerDirectionUp) {
+        [UIScreen mainScreen].brightness += delta;
+    } else {
+        [UIScreen mainScreen].brightness -= delta;
+    }
 }
 
 #pragma mark - VLCMediaPlayerDelegate
@@ -333,7 +428,7 @@
 - (UIImageView *)settingButton {
     BeginLazyPropInit(settingButton)
     UIImage *icon = [UIImage systemImageNamed:@"gear"];
-    icon = [icon imageWithTintColor:UIColor.blueColor];
+    icon = [icon imageWithTintColor:UIColor.grayColor];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     settingButton = imageView;
@@ -389,7 +484,7 @@
     EndLazyPropInit(controlView)
 }
 
-- (UIView *)eventsView {
+- (PlayerEventView *)eventsView {
     BeginLazyPropInit(eventsView)
     PlayerEventView *view = [PlayerEventView new];
     view.ignoreViews = @[
