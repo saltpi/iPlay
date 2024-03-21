@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ThemeState {
     routeName: string;
-    showMenuBar: boolean;
+    hideMenuBar: boolean;
     // menu bar padding bottom offset
     menuBarPaddingOffset: number;
 }
 
 const initialState: ThemeState = {
     routeName: 'home',
-    showMenuBar: true,
+    hideMenuBar: false,
     menuBarPaddingOffset: 0,
 };
 
@@ -21,10 +21,11 @@ export const themeSlice = createSlice({
             const routeName = action.payload;
             const whitelist = ['home', 'settings', 'search', 'star', 'message'];
             if (whitelist.includes(routeName)) {
-                state.showMenuBar = true;
+                state.hideMenuBar = false;
             } else {
-                state.showMenuBar = false;
+                state.hideMenuBar = true;
             }
+            console.log(`switchRoute: ${routeName} ${state.hideMenuBar}`)
         },
         updateMenuBarPaddingOffset: (state, action: PayloadAction<number>) => {
             state.menuBarPaddingOffset = action.payload;

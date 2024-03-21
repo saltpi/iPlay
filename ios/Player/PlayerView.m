@@ -11,18 +11,18 @@
 #import "UIView+FindViewController.h"
 #import <AVFoundation/AVAudioSession.h>
 
-static NSUInteger const kIconSize = 28;
+static NSUInteger const kIconSize = 48;
 
 @interface PlayerView () <PlayerEventDelegate>
-@property (nonatomic, strong) UIImageView *playButton;
-@property (nonatomic, strong) UIImageView *fullscreenButton;
-@property (nonatomic, strong) UIImageView *gobackButton;
-@property (nonatomic, strong) UIImageView *settingButton;
+@property (nonatomic, strong) UIView *playButton;
+@property (nonatomic, strong) UIView *fullscreenButton;
+@property (nonatomic, strong) UIView *gobackButton;
+@property (nonatomic, strong) UIView *settingButton;
 @property (nonatomic, strong) UIProgressView *progressBar;
 @property (nonatomic, strong) NSProgress *progress;
 @property (nonatomic, strong) UISlider *sliderBar;
-@property (nonatomic, strong) UILabel *watchedLabel;
-@property (nonatomic, strong) UILabel *remainingLabel;
+@property (nonatomic, strong) UILabel *durationLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, assign) CGRect initialBounds;
 @property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, assign) BOOL isControlsVisible;
@@ -56,13 +56,14 @@ static NSUInteger const kIconSize = 28;
     [self.controlView addSubview:self.settingButton];
     [self.controlView addSubview:self.progressBar];
     [self.controlView addSubview:self.sliderBar];
-    [self.controlView addSubview:self.watchedLabel];
-    [self.controlView addSubview:self.remainingLabel];
+    [self.controlView addSubview:self.durationLabel];
+    [self.controlView addSubview:self.titleLabel];
     [self addSubview:self.eventsView];
     [self addSubview:self.indicator];
 }
 
 - (void)layout {
+    UIEdgeInsets insets = [self safeAreaInsets];
     @weakify(self);
     [self.contentView remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
@@ -86,61 +87,55 @@ static NSUInteger const kIconSize = 28;
         make.bottom.equalTo(superview).offset(-50);
         make.height.equalTo(4);
         make.centerX.equalTo(superview);
-        make.width.equalTo(superview).with.multipliedBy(0.75);
+        make.width.equalTo(superview).with.multipliedBy(0.90);
     }];
 
     [self.sliderBar remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(superview);
-        make.bottom.equalTo(superview).offset(-50);
+        @strongify(self);
+        make.width.equalTo(self.progressBar);
         make.height.equalTo(4);
-        make.centerX.equalTo(superview);
-        make.width.equalTo(superview).with.multipliedBy(0.75);
+        make.center.equalTo(self.progressBar);
     }];
-
-    [self.watchedLabel remakeConstraints:^(MASConstraintMaker *make) {
+  
+    [self.durationLabel remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.centerY.equalTo(self.sliderBar);
-        make.right.equalTo(self.sliderBar.left).with.offset(-5);
+        make.bottom.equalTo(self.sliderBar.top).with.offset(-12);
+        make.right.equalTo(self.sliderBar.right).with.offset(-2);
     }];
-
-    [self.remainingLabel remakeConstraints:^(MASConstraintMaker *make) {
+    
+    [self.titleLabel remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.centerY.equalTo(self.sliderBar);
-        make.left.equalTo(self.sliderBar.right).with.offset(5);
+        make.left.equalTo(self.progressBar);
+        make.bottom.equalTo(self.durationLabel);
     }];
 
     [self.playButton remakeConstraints:^(MASConstraintMaker *make) {
-        @strongify(self);
         @strongify(superview);
-        make.centerY.equalTo(self.sliderBar);
-        make.size.equalTo(@(kIconSize));
-        make.left.equalTo(superview).with.offset(10);
-        make.right.lessThanOrEqualTo(self.watchedLabel.left);
-    }];
-
-    [self.gobackButton remakeConstraints:^(MASConstraintMaker *make) {
-        @strongify(self);
-        @strongify(superview);
-        make.centerX.equalTo(self.playButton);
-        make.top.equalTo(superview).with.offset(10);
+        make.center.equalTo(superview);
         make.size.equalTo(@(kIconSize));
     }];
 
     [self.settingButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         @strongify(superview);
-        make.centerX.equalTo(self.fullscreenButton);
-        make.centerY.equalTo(self.gobackButton);
         make.size.equalTo(@(kIconSize));
+        make.top.equalTo(superview).with.offset(insets.top ?: 24);
+        make.right.equalTo(self.progressBar);
     }];
-
+    
     [self.fullscreenButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        @strongify(superview);
-        make.centerY.equalTo(self.sliderBar);
         make.size.equalTo(@(kIconSize));
-        make.left.greaterThanOrEqualTo(self.remainingLabel.right);
-        make.right.equalTo(superview).with.offset(-10);
+        make.centerY.equalTo(self.settingButton);
+        make.right.equalTo(self.settingButton.left).with.offset(-10);
+    }];
+  
+    [self.gobackButton remakeConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        make.size.equalTo(@(kIconSize));
+        make.centerY.equalTo(self.fullscreenButton);
+        make.right.equalTo(self.fullscreenButton.left).with.offset(-10);
     }];
 
     [self.indicator remakeConstraints:^(MASConstraintMaker *make) {
@@ -175,10 +170,10 @@ static NSUInteger const kIconSize = 28;
     @weakify(self);
     [RACObserve(self, isFullscreen) subscribeNext:^(id  _Nullable x) {
         @strongify(self);
-        self.fullscreenButton.tintColor = self.isFullscreen ? UIColor.grayColor : UIColor.blueColor;
+        self.fullscreenButton.tintColor = self.isFullscreen ? UIColor.grayColor : UIColor.whiteColor;
         self.fullscreenButton.userInteractionEnabled = !self.isFullscreen;
         self.gobackButton.userInteractionEnabled = self.isFullscreen;
-        self.gobackButton.tintColor = !self.isFullscreen ? UIColor.grayColor : UIColor.blueColor;
+        self.gobackButton.tintColor = !self.isFullscreen ? UIColor.grayColor : UIColor.whiteColor;
     }];
 }
 
@@ -258,8 +253,7 @@ static NSUInteger const kIconSize = 28;
 
 - (void)_changePlayButtonIcon {
     NSString *imageName = self.player.isPlaying ? @"play" : @"pause";
-
-    self.playButton.image = [UIImage systemImageNamed:imageName];
+    [self _updateIcon:self.playButton icon:imageName];
 }
 
 #pragma mark - Volume and Brightness
@@ -372,7 +366,6 @@ static NSUInteger const kIconSize = 28;
 
 - (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
     NSUInteger duration = self.player.media.length.intValue;
-    NSUInteger remaining = self.player.remainingTime.intValue;
     NSUInteger current = self.player.time.value.intValue;
 
     [self.progress setTotalUnitCount:duration / 1000];
@@ -383,8 +376,10 @@ static NSUInteger const kIconSize = 28;
         [self.sliderBar setValue:current / 1000 animated:YES];
     }
 
-    self.watchedLabel.text = self.player.time.stringValue;
-    self.remainingLabel.text = self.player.remainingTime.stringValue;
+    NSString *durationText = [NSString stringWithFormat:@"%@ / %@",
+                              self.player.time.stringValue,
+                              self.player.media.length.stringValue];
+    self.durationLabel.text = durationText;
 }
 
 #pragma mark - Getter
@@ -402,43 +397,30 @@ static NSUInteger const kIconSize = 28;
     EndLazyPropInit(contentView)
 }
 
-- (UIImageView *)playButton {
+- (UIView *)playButton {
     BeginLazyPropInit(playButton)
-    UIImage *icon = [UIImage systemImageNamed:@"pause"];
-    icon = [icon imageWithTintColor:UIColor.blueColor];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    playButton = imageView;
+    UIView *view = [self _makeControlView:@"pause"];
+    playButton = view;
     EndLazyPropInit(playButton)
 }
 
-- (UIImageView *)fullscreenButton {
+- (UIView *)fullscreenButton {
     BeginLazyPropInit(fullscreenButton)
-    UIImage *icon = [UIImage systemImageNamed:@"viewfinder.rectangular"];
-    icon = [icon imageWithTintColor:UIColor.blueColor];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    fullscreenButton = imageView;
+    UIView *view = [self _makeControlView:@"viewfinder.rectangular"];
+    fullscreenButton = view;
     EndLazyPropInit(fullscreenButton)
 }
 
-- (UIImageView *)gobackButton {
+- (UIView *)gobackButton {
     BeginLazyPropInit(gobackButton)
-    UIImage *icon = [UIImage systemImageNamed:@"chevron.backward"];
-    icon = [icon imageWithTintColor:UIColor.blueColor];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    gobackButton = imageView;
+    UIView *view = [self _makeControlView:@"chevron.backward"];
+    gobackButton = view;
     EndLazyPropInit(gobackButton)
 }
 
-- (UIImageView *)settingButton {
+- (UIView *)settingButton {
     BeginLazyPropInit(settingButton)
-    UIImage *icon = [UIImage systemImageNamed:@"gear"];
-    icon = [icon imageWithTintColor:UIColor.grayColor];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    settingButton = imageView;
+    settingButton = [self _makeControlView:@"gear"];
     EndLazyPropInit(settingButton)
 }
 
@@ -463,26 +445,28 @@ static NSUInteger const kIconSize = 28;
 - (UISlider *)sliderBar {
     BeginLazyPropInit(sliderBar)
     sliderBar = [[UISlider alloc] init];
+    sliderBar.tintColor = UIColor.whiteColor;
     sliderBar.continuous = NO;
     EndLazyPropInit(sliderBar)
 }
 
-- (UILabel *)watchedLabel {
-    BeginLazyPropInit(watchedLabel)
-    watchedLabel = [UILabel new];
-    watchedLabel.font = [UIFont systemFontOfSize:13];
-    watchedLabel.text = @"0:00";
-    watchedLabel.textColor = UIColor.blueColor;
-    EndLazyPropInit(watchedLabel)
+
+- (UILabel *)durationLabel {
+    BeginLazyPropInit(durationLabel)
+    durationLabel = [UILabel new];
+    durationLabel.font = [UIFont systemFontOfSize:13];
+    durationLabel.text = @"0:00";
+    durationLabel.textColor = UIColor.whiteColor;
+    EndLazyPropInit(durationLabel)
 }
 
-- (UILabel *)remainingLabel {
-    BeginLazyPropInit(remainingLabel)
-    remainingLabel = [UILabel new];
-    remainingLabel.font = [UIFont systemFontOfSize:13];
-    remainingLabel.text = @"0:00";
-    remainingLabel.textColor = UIColor.blueColor;
-    EndLazyPropInit(remainingLabel)
+- (UILabel *)titleLabel {
+    BeginLazyPropInit(titleLabel)
+    titleLabel = [UILabel new];
+    titleLabel.font = [UIFont systemFontOfSize:16];
+    titleLabel.textColor = UIColor.whiteColor;
+    titleLabel.text = @"视频标题";
+    EndLazyPropInit(titleLabel)
 }
 
 - (UIView *)controlView {
@@ -511,4 +495,35 @@ static NSUInteger const kIconSize = 28;
     EndLazyPropInit(indicator)
 }
 
+- (UIView *)_makeControlView:(NSString *)iconName {
+    UIImage *icon = [UIImage systemImageNamed:iconName];
+    icon = [icon imageWithTintColor:UIColor.whiteColor];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+
+    UIView *view = [UIView new];
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
+    view.opaque = 0.25;
+    view.layer.borderWidth = 0.5;
+    view.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2].CGColor;
+    view.layer.cornerRadius = kIconSize / 2;
+    view.clipsToBounds = YES;
+    view.layer.masksToBounds = YES;
+    [view addSubview:imageView];
+    @weakify(view);
+    [imageView remakeConstraints:^(MASConstraintMaker *make) {
+        @strongify(view);
+        make.center.equalTo(view);
+        make.size.equalTo(@(kIconSize/2));
+    }];
+    return view;
+}
+
+- (void)_updateIcon:(UIView *)view icon:(NSString *)iconName {
+    UIImageView *imageView = ( UIImageView *)view.subviews.firstObject;
+    if (![imageView isKindOfClass:UIImageView.class]) {
+        return;
+    }
+    imageView.image = [UIImage systemImageNamed:iconName];
+}
 @end
