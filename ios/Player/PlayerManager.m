@@ -21,6 +21,8 @@
 RCT_EXPORT_MODULE(PlayerView)
 
 RCT_EXPORT_VIEW_PROPERTY(onPlayStateChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(iconSize, NSUInteger)
+
 
 - (UIView *)view {
     PlayerView *view = [PlayerView new];

@@ -6,6 +6,7 @@ export interface PlayerViewProps extends ViewProps {
     title?: string
     onPlayStateChange?: (state: number) => void
     url: string
+    iconSize?: number
 }
 
 export const PlayerView = forwardRef<any, PlayerViewProps>((props, ref) => {

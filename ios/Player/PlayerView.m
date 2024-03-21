@@ -16,7 +16,7 @@ static NSUInteger const kIconSize = 48;
 @interface PlayerView () <PlayerEventDelegate>
 @property (nonatomic, strong) UIView *playButton;
 @property (nonatomic, strong) UIView *fullscreenButton;
-@property (nonatomic, strong) UIView *gobackButton;
+@property (nonatomic, strong) UIView *captionButton;
 @property (nonatomic, strong) UIView *settingButton;
 @property (nonatomic, strong) UIProgressView *progressBar;
 @property (nonatomic, strong) NSProgress *progress;
@@ -36,23 +36,24 @@ static NSUInteger const kIconSize = 48;
     self = [super init];
 
     if (self) {
-        self.isControlsVisible = YES;
-        [self setupUI];
-        [self layout];
-        [self bind];
+        _isControlsVisible = YES;
+        _iconSize = kIconSize;
+        [self _setupUI];
+        [self _layout];
+        [self _bind];
     }
 
     return self;
 }
 
 #pragma mark - Layout
-- (void)setupUI {
+- (void)_setupUI {
     self.initialBounds = CGRectZero;
     [self addSubview:self.contentView];
     [self addSubview:self.controlView];
     [self.controlView addSubview:self.playButton];
     [self.controlView addSubview:self.fullscreenButton];
-    [self.controlView addSubview:self.gobackButton];
+    [self.controlView addSubview:self.captionButton];
     [self.controlView addSubview:self.settingButton];
     [self.controlView addSubview:self.progressBar];
     [self.controlView addSubview:self.sliderBar];
@@ -62,7 +63,7 @@ static NSUInteger const kIconSize = 48;
     [self addSubview:self.indicator];
 }
 
-- (void)layout {
+- (void)_layout {
     UIEdgeInsets insets = [self safeAreaInsets];
     @weakify(self);
     [self.contentView remakeConstraints:^(MASConstraintMaker *make) {
@@ -80,15 +81,14 @@ static NSUInteger const kIconSize = 48;
         make.left.equalTo(self);
         make.right.equalTo(self);
         make.top.equalTo(self.settingButton.bottom).with.offset(5);
-        make.bottom.lessThanOrEqualTo(self.titleLabel.top).with.offset(-5);
-        make.bottom.lessThanOrEqualTo(self.durationLabel.top).with.offset(-5);
+        make.bottom.equalTo(self.titleLabel.top).with.offset(-5);
     }];
 
     UIView *superview = self.controlView;
     @weakify(superview);
     [self.progressBar remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(superview);
-        make.bottom.equalTo(superview).offset(-50);
+        make.bottom.equalTo(superview).multipliedBy(0.85);
         make.height.equalTo(4);
         make.centerX.equalTo(superview);
         make.width.equalTo(superview).with.multipliedBy(0.90);
@@ -116,27 +116,27 @@ static NSUInteger const kIconSize = 48;
     [self.playButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(superview);
         make.center.equalTo(superview);
-        make.size.equalTo(@(kIconSize));
+        make.size.equalTo(@(self.iconSize));
     }];
 
     [self.settingButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         @strongify(superview);
-        make.size.equalTo(@(kIconSize));
+        make.size.equalTo(@(self.iconSize));
         make.top.equalTo(superview).with.offset(insets.top ?: 24);
         make.right.equalTo(self.progressBar);
     }];
     
     [self.fullscreenButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.size.equalTo(@(kIconSize));
+        make.size.equalTo(@(self.iconSize));
         make.centerY.equalTo(self.settingButton);
         make.right.equalTo(self.settingButton.left).with.offset(-10);
     }];
   
-    [self.gobackButton remakeConstraints:^(MASConstraintMaker *make) {
+    [self.captionButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.size.equalTo(@(kIconSize));
+        make.size.equalTo(@(self.iconSize));
         make.centerY.equalTo(self.fullscreenButton);
         make.right.equalTo(self.fullscreenButton.left).with.offset(-10);
     }];
@@ -147,7 +147,7 @@ static NSUInteger const kIconSize = 48;
     }];
 }
 
-- (void)bind {
+- (void)_bind {
     self.player.drawable = self.contentView;
     self.player.delegate = self;
     self.eventsView.eventDelegate = self;
@@ -159,9 +159,9 @@ static NSUInteger const kIconSize = 48;
     self.fullscreenButton.userInteractionEnabled = YES;
     [self.fullscreenButton addGestureRecognizer:fullscreenTap];
   
-    UITapGestureRecognizer *gobackTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onFullscreenTap:)];
-    self.gobackButton.userInteractionEnabled = YES;
-    [self.gobackButton addGestureRecognizer:gobackTap];
+//    UITapGestureRecognizer *gobackTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onFullscreenTap:)];
+//    self.captionButton.userInteractionEnabled = YES;
+//    [self.captionButton addGestureRecognizer:gobackTap];
 
     self.progressBar.observedProgress = self.progress;
     [self.sliderBar addTarget:self action:@selector(_seekToPlay:) forControlEvents:UIControlEventValueChanged];
@@ -173,10 +173,8 @@ static NSUInteger const kIconSize = 48;
     @weakify(self);
     [RACObserve(self, isFullscreen) subscribeNext:^(id  _Nullable x) {
         @strongify(self);
-        self.fullscreenButton.tintColor = self.isFullscreen ? UIColor.grayColor : UIColor.whiteColor;
-        self.fullscreenButton.userInteractionEnabled = !self.isFullscreen;
-        self.gobackButton.userInteractionEnabled = self.isFullscreen;
-        self.gobackButton.tintColor = !self.isFullscreen ? UIColor.grayColor : UIColor.whiteColor;
+        NSString *iconName = self.isFullscreen ? @"arrow.up.right.and.arrow.down.left" : @"viewfinder";
+        [self _updateIcon:self.fullscreenButton icon:iconName];
     }];
     
     [RACObserve(self, title) subscribeNext:^(id  _Nullable x) {
@@ -222,7 +220,7 @@ static NSUInteger const kIconSize = 48;
             make.edges.equalTo(self.superview);
         }];
         [currentController dismissViewControllerAnimated:YES completion:^{
-            [self layout];
+            [self _layout];
             self.isFullscreen = NO;
         }];
     } else {
@@ -235,7 +233,7 @@ static NSUInteger const kIconSize = 48;
             make.edges.equalTo(self.superview);
         }];
         [currentController presentViewController:controller animated:YES completion:^{
-            [self layout];
+            [self _layout];
             self.isFullscreen = YES;
         }];
     }
@@ -413,16 +411,16 @@ static NSUInteger const kIconSize = 48;
 
 - (UIView *)fullscreenButton {
     BeginLazyPropInit(fullscreenButton)
-    UIView *view = [self _makeControlView:@"viewfinder.rectangular"];
+    UIView *view = [self _makeControlView:@"viewfinder"];
     fullscreenButton = view;
     EndLazyPropInit(fullscreenButton)
 }
 
-- (UIView *)gobackButton {
-    BeginLazyPropInit(gobackButton)
-    UIView *view = [self _makeControlView:@"chevron.backward"];
-    gobackButton = view;
-    EndLazyPropInit(gobackButton)
+- (UIView *)captionButton {
+    BeginLazyPropInit(captionButton)
+    UIView *view = [self _makeControlView:@"captions.bubble"];
+    captionButton = view;
+    EndLazyPropInit(captionButton)
 }
 
 - (UIView *)settingButton {
@@ -488,7 +486,7 @@ static NSUInteger const kIconSize = 48;
     view.ignoreViews = @[
         self.playButton,
         self.fullscreenButton,
-        self.gobackButton,
+        self.captionButton,
         self.settingButton,
         self.sliderBar
     ];
@@ -518,7 +516,7 @@ static NSUInteger const kIconSize = 48;
     view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25];
     view.layer.borderWidth = 0.5;
     view.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2].CGColor;
-    view.layer.cornerRadius = kIconSize / 2;
+    view.layer.cornerRadius = self.iconSize / 2;
     view.clipsToBounds = YES;
     view.layer.masksToBounds = YES;
     view.userInteractionEnabled = YES;
@@ -527,7 +525,7 @@ static NSUInteger const kIconSize = 48;
     [imageView remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(view);
         make.center.equalTo(view);
-        make.size.equalTo(@(kIconSize/2));
+        make.size.equalTo(view).multipliedBy(0.5);
     }];
     return view;
 }
@@ -545,5 +543,21 @@ static NSUInteger const kIconSize = 48;
         icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
     }
     imageView.image = icon;
+}
+
+#pragma mark - Setter
+
+- (void)setIconSize:(NSUInteger)iconSize {
+    _iconSize = iconSize;
+    NSArray<UIView *> *views = @[
+        self.playButton,
+        self.fullscreenButton,
+        self.captionButton,
+        self.settingButton,
+    ];
+    for (UIView *view in views) {
+        view.layer.cornerRadius = iconSize / 2;
+    }
+    [self _layout];
 }
 @end
