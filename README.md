@@ -23,8 +23,8 @@
 
 ### 安装包
 
-- [安卓](https://drive.endemy.me/od_bot/build/iPlay/20240319.1217/iPlay.apk)
-- [iOS](https://drive.endemy.me/od_bot/build/iPlay/20240319.1217/iPlay.ipa)
+- [安卓](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.apk)
+- [iOS](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.ipa)
 
 开发包下载路径
 ![](doc/image/20240319_213840.png)
