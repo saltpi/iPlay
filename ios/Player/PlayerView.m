@@ -77,7 +77,11 @@ static NSUInteger const kIconSize = 48;
 
     [self.eventsView remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.edges.equalTo(self);
+        make.left.equalTo(self);
+        make.right.equalTo(self);
+        make.top.equalTo(self.settingButton.bottom).with.offset(5);
+        make.bottom.lessThanOrEqualTo(self.titleLabel.top).with.offset(-5);
+        make.bottom.lessThanOrEqualTo(self.durationLabel.top).with.offset(-5);
     }];
 
     UIView *superview = self.controlView;
@@ -91,7 +95,6 @@ static NSUInteger const kIconSize = 48;
     }];
 
     [self.sliderBar remakeConstraints:^(MASConstraintMaker *make) {
-        @strongify(superview);
         @strongify(self);
         make.width.equalTo(self.progressBar);
         make.height.equalTo(4);
@@ -174,6 +177,11 @@ static NSUInteger const kIconSize = 48;
         self.fullscreenButton.userInteractionEnabled = !self.isFullscreen;
         self.gobackButton.userInteractionEnabled = self.isFullscreen;
         self.gobackButton.tintColor = !self.isFullscreen ? UIColor.grayColor : UIColor.whiteColor;
+    }];
+    
+    [RACObserve(self, title) subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        self.titleLabel.text = self.title;
     }];
 }
 
@@ -465,7 +473,7 @@ static NSUInteger const kIconSize = 48;
     titleLabel = [UILabel new];
     titleLabel.font = [UIFont systemFontOfSize:16];
     titleLabel.textColor = UIColor.whiteColor;
-    titleLabel.text = @"视频标题";
+    titleLabel.text = nil;
     EndLazyPropInit(titleLabel)
 }
 
@@ -509,6 +517,7 @@ static NSUInteger const kIconSize = 48;
     view.layer.cornerRadius = kIconSize / 2;
     view.clipsToBounds = YES;
     view.layer.masksToBounds = YES;
+    view.userInteractionEnabled = YES;
     [view addSubview:imageView];
     @weakify(view);
     [imageView remakeConstraints:^(MASConstraintMaker *make) {

@@ -31,7 +31,10 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <VLCPlayer ref={ref} source={{uri: "https://drive.endemy.me/iplay/demo.mp4"}}  />
+                    <VLCPlayer ref={ref} source={{
+                        uri: "https://drive.endemy.me/iplay/demo.mp4",
+                        title: "Demo"
+                    }}  />
                 </View>
             </ScrollView>
         </SafeAreaView>

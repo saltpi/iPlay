@@ -43,6 +43,12 @@ RCT_CUSTOM_VIEW_PROPERTY(url, NSString, UIView) {
     [instance.player play];
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(title, NSString, UIView) {
+    NSString *title = json;
+    PlayerView *instance = (PlayerView *)view;
+    instance.title = title;
+}
+
 RCT_EXPORT_METHOD(stop:(nonnull NSNumber*)reactTag) {
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
         PlayerView *view = (PlayerView *)viewRegistry[reactTag];

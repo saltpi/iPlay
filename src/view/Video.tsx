@@ -36,7 +36,7 @@ export type VideoProps = ComponentProps<typeof NativeVideo>;
 export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
     (props, ref) => {
         const nativeRef = useRef(null);
-        const {uri} = props.source as any;
+        const {uri, title} = props.source as any;
         const onPlayStateChange = (s: any) => {
             const event = s.nativeEvent;
             if (event.state === 5) {
@@ -61,13 +61,11 @@ export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
             [stop],
         );
 
-        console.log(`ref`, nativeRef.current);
-
         return (
             <PlayerView
                 style={style.player as any}
                 ref={nativeRef}
-                bgcolor="000000"
+                title={title}
                 onPlayStateChange={onPlayStateChange}
                 url={uri}
             />
