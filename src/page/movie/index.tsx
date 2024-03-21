@@ -148,7 +148,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
                 <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
             </TouchableOpacity> : null}
-            {/* {loading ? <Spin size="small" /> : null} */}
+            {loading ? <Spin size="small" /> : null}
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}

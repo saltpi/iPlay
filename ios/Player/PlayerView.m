@@ -496,7 +496,7 @@ static NSUInteger const kIconSize = 48;
 
 - (UIActivityIndicatorView *)indicator {
     BeginLazyPropInit(indicator)
-    indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
+    indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     EndLazyPropInit(indicator)
 }
 
