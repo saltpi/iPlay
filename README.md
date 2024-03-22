@@ -42,3 +42,18 @@
 
 开发包下载路径
 ![](doc/image/20240319_213840.png)
+
+## 第三方依赖
+
+- [MobileVLCKit](http://code.videolan.org/videolan/VLCKit.git)
+- [android-mpv](https://github.com/mpv-android/mpv-android)
+
+## 设计稿
+
+- [播放器UI设计稿](https://www.figma.com/file/2LMy996hxF2DZ2jB8eU0Fv/Video-Player-For-Web-%26-Mobile-(Community)?type=design&node-id=18-4120&mode=design&t=4xkVhM84OdC0jy9x-0)
+
+## 反馈交流
+
+* [iPlay product paddling group](https://t.me/boost?c=2045428505)
+
+* [Bug report](https://365.kdocs.cn/l/cile26Rklddg?from=docs&reqtype=kdocs&startTime=1711105971325)
