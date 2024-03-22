@@ -28,13 +28,13 @@ export async function getPlaybackInfo(site: EmbySite, id: number) {
 
 export const getPlayUrl = (detail?: MediaDetail) => {
     const sources = detail?.MediaSources ?? []
-    if (sources.length > 0) {
-        const source = sources[0]
+    const urls = sources.map((source) => {
+        console.log(source)
         if (source.Container === "strm") {
             return source.Path
         } else {
             return source.DirectStreamUrl
         }
-    }
-    return ""
+    })
+    return urls?.[0]
 }
