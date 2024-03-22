@@ -60,6 +60,10 @@ const style = StyleSheet.create({
         aspectRatio: 1,
         tintColor: "white",
         color: "white",
+    },
+    link: {
+        textAlign: "center",
+        color: "blue",
     }
 })
 
@@ -157,8 +161,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <Text style={style.overview}>{detail?.Overview}</Text>
             {isPlayable ?
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} /> : null}
-            <Text>📺 {getPlayUrl(detail)}</Text>
-            <Button title="Copy" onPress={() => Clipboard.setString(getPlayUrl(detail))} />
+            <Text style={style.link}>{getPlayUrl(detail)}</Text>
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             {detail?.People.length ? <Text style={style.actorSection}>演职人员</Text> : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
