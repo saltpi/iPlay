@@ -51,6 +51,8 @@
 ## 设计稿
 
 - [播放器UI设计稿](https://www.figma.com/file/2LMy996hxF2DZ2jB8eU0Fv/Video-Player-For-Web-%26-Mobile-(Community)?type=design&node-id=18-4120&mode=design&t=4xkVhM84OdC0jy9x-0)
+- [图标](https://www.figma.com/file/9Df5CaFUEomVzn20gRpaX3/Radix-Icons?type=design&node-id=0-1&mode=design&t=rpFwTmQyZQhc016k-0)
+- [界面元素](https://www.figma.com/file/B5TV95tj8PrCHwsSa3wV0N/Flat-Icon-Set-(Community)?type=design&node-id=2092-13469&mode=design&t=w8YD9Lw37sz019zc-0)
 
 ## 反馈交流
 

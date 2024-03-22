@@ -6,6 +6,8 @@ import ToastOrigin, {
     ToastConfig,
 } from 'react-native-toast-message';
 
+import MessageIcon from '@asset/message.svg';
+
 const style = StyleSheet.create({
     success: {
         borderLeftColor: 'transparent',
@@ -30,9 +32,9 @@ const toastConfig: ToastConfig = {
             style={style.success}
             contentContainerStyle={{paddingHorizontal: 15}}
             renderLeadingIcon={() => (
-                <Image
+                <MessageIcon
+                    width={style.icon.width}
                     style={style.icon}
-                    source={require('@view/settings/message.png')}
                 />
             )}
             text1Style={{
@@ -51,9 +53,9 @@ const toastConfig: ToastConfig = {
             style={style.success}
             contentContainerStyle={{paddingHorizontal: 15}}
             renderLeadingIcon={() => (
-                <Image
+                <MessageIcon
+                    width={style.icon.width}
                     style={style.icon}
-                    source={require('@view/settings/message.png')}
                 />
             )}
             text1Style={{

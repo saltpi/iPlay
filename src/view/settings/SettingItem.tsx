@@ -1,6 +1,14 @@
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Image } from '@view/Image';
 import { Navigation } from "@global";
+import VideoIcon from "@asset/video.svg"
+import EarphoneIcon from "@asset/earphone.svg"
+import TrashIcon from "@asset/trash.svg"
+import MessageIcon from "@asset/message.svg"
+import MobileIcon from "@asset/phone.svg"
+import ThemeIcon from "@asset/paint.svg"
+import Indicator from "@asset/right.arrow.svg"
+
 
 const style = StyleSheet.create({
     root: {
@@ -32,13 +40,13 @@ const style = StyleSheet.create({
 });
 
 export const Icon = {
-    Video: require("@view/settings/video.png"),
-    Audio: require("@view/settings/earphone.png"),
-    Trash: require("@view/settings/trash.png"),
-    Message: require("@view/settings/message.png"),
-    Indicator: require("@view/settings/right-arrows.png"),
-    Mobile: require("@view/settings/mobile.png"),
-    Theme: require("@asset/paint.png"),
+    Video: VideoIcon,
+    Audio: EarphoneIcon,
+    Trash: TrashIcon,
+    Message: MessageIcon,
+    Indicator: Indicator,
+    Mobile: MobileIcon,
+    Theme: ThemeIcon,
 }
 
 export type IconType = keyof typeof Icon;
@@ -50,13 +58,16 @@ export interface SettingItemProps {
 }
 
 export function SettingItem(props: SettingItemProps) {
-    const icon = Icon[props.icon];
+    const SettingIcon = Icon[props.icon];
     return (
         <TouchableHighlight onPress={() => props.onPress?.()} underlayColor={"lightgray"}>
         <View style={style.root}>
-            {icon ? <Image style={style.icon} source={icon} /> : null}
+            {SettingIcon ? <SettingIcon
+                width={style.icon.width}
+                style={style.icon} /> : null}
             <Text style={style.label}>{props.label}</Text>
-            <Image style={style.indicator} source={Icon.Indicator} />
+            <Icon.Indicator width={style.indicator.width} 
+                style={style.indicator} />
         </View>
         </TouchableHighlight>
     )
