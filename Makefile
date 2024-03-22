@@ -1,30 +1,37 @@
-PROJECT_ROOT = $(PWD)
-BUILD_DIR = $(PROJECT_ROOT)/build
-ANDROID_DIR = $(PROJECT_ROOT)/android
-IOS_DIR = $(PROJECT_ROOT)/ios
-APP_NAME = "iPlay"
+PROJECT_ROOT 	= $(PWD)
+BUILD_DIR 		= $(PROJECT_ROOT)/build
+ANDROID_DIR 	= $(PROJECT_ROOT)/android
+IOS_DIR 		= $(PROJECT_ROOT)/ios
+APP_NAME 		= "iPlay"
+BUILD_ID 		= $(shell git rev-parse --short HEAD)
 
 all: apk ipa
 
+version:
+	@echo $(BUILD_ID)
+
 apk:
-	@echo "📦 apk"
-	cd $(ANDROID_DIR) && ./gradlew assembleRelease
+	@echo "📦 apk $(BUILD_ID)"
+	cd $(ANDROID_DIR) && ./gradlew assembleRelease -PversionName="v1.0 ($(BUILD_ID))"
 	mkdir -p $(BUILD_DIR)
 	cp $(ANDROID_DIR)/app/build/outputs/apk/release/app-release.apk $(BUILD_DIR)/$(APP_NAME).apk
 
 ipa:
-	@echo "📦 ipa"
+	@echo "📦 ipa $(BUILD_ID)"
 	cd $(IOS_DIR) && xcodebuild archive \
 		-archivePath $(BUILD_DIR)/iPlay \
 		-configuration Release \
 		-scheme iPlayClient \
 		-workspace iPlayClient.xcworkspace \
 		-allowProvisioningUpdates \
-		CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty
+		CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO MARKETING_VERSION=$(BUILD_ID) | xcpretty
 	mkdir -p $(BUILD_DIR)/Release/Payload
 	cp -r $(BUILD_DIR)/iPlay.xcarchive/Products/Applications/iPlayClient.app $(BUILD_DIR)/Release/Payload
+	cp -r $(BUILD_DIR)/iPlay.xcarchive/dSYMs $(BUILD_DIR)/Release/dSYMs
 	cd $(BUILD_DIR)/Release && zip -r $(APP_NAME).ipa Payload
+	cd $(BUILD_DIR)/Release && zip -r $(APP_NAME).dSYMs.zip dSYMs 
 	mv $(BUILD_DIR)/Release/$(APP_NAME).ipa $(BUILD_DIR)/$(APP_NAME).ipa
+	mv $(BUILD_DIR)/Release/$(APP_NAME).dSYMs.zip $(BUILD_DIR)/$(APP_NAME).dSYMs.zip
 
 clean:
 	@echo "🧹 clean"
