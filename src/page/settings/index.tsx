@@ -55,7 +55,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                 text2: '功能暂未开放',
                 text2Style: {fontSize: 14, color: 'black'},
                 position: 'top',
-                topOffset: insets.top,
+                topOffset: insets.top + 2.5,
             });
         }
     }
