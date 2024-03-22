@@ -1,6 +1,7 @@
 import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BaseImage as Image } from '@view/Image';
 import { useMemo } from "react";
+import CopyLinkIcon from "@asset/link.svg"
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -108,6 +109,7 @@ export function ExternalPlayer({
     return (
         <View style={style.playerList}>
             {playerList}
+            <CopyLinkIcon />
         </View>
     );
 }
