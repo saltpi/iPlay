@@ -2,15 +2,15 @@ PROJECT_ROOT 	= $(PWD)
 BUILD_DIR 		= $(PROJECT_ROOT)/build
 ANDROID_DIR 	= $(PROJECT_ROOT)/android
 IOS_DIR 		= $(PROJECT_ROOT)/ios
-APP_NAME 		= "iPlay"
-VERSION			= "v1.0"
+APP_NAME 		= iPlay
+VERSION			= v1.0
 BUILD_ID 		= $(shell git rev-parse --short HEAD)
-VERSION_NAME 	= "$(VERSION) ($(BUILD_ID))"
+VERSION_NAME    = "$(VERSION) $(BUILD_ID)"
 
 all: apk ipa
 
 version:
-	@echo $(BUILD_ID)
+	@echo $(VERSION_NAME)
 
 apk:
 	@echo "📦 apk $(VERSION_NAME)"
@@ -19,7 +19,7 @@ apk:
 	cp $(ANDROID_DIR)/app/build/outputs/apk/release/app-release.apk $(BUILD_DIR)/$(APP_NAME).apk
 
 ipa:
-	@echo "📦 ipa $(BUILD_ID)"
+	@echo "📦 ipa $(VERSION_NAME)"
 	cd $(IOS_DIR) && xcodebuild archive \
 		-archivePath $(BUILD_DIR)/iPlay \
 		-configuration Release \
