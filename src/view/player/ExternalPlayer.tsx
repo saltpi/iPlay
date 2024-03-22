@@ -1,10 +1,11 @@
-import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BaseImage as Image } from '@view/Image';
 import { useMemo } from "react";
 import CopyLinkIcon from "@asset/link.svg"
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Toast } from "@helper/toast";
 import { Text } from "react-native-svg";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -78,6 +79,7 @@ const style = StyleSheet.create({
     playerList: {
         display: "flex",
         flexDirection: "row",
+        flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
         margin: 10,
@@ -102,6 +104,7 @@ export function ExternalPlayer({
     src,
     players = Object.keys(Players) as any
 }: ExternalPlayerProps) {
+    const insets = useSafeAreaInsets()
     const playerList = useMemo(() => 
         players?.map(type => Players[type]).map(player => (
             <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title)}>
@@ -115,6 +118,7 @@ export function ExternalPlayer({
             type: "success",
             text1: "Link copied to clipboard",
             text2: src,
+            topOffset: insets.top + 2.5,
         })
     }
     return (
