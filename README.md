@@ -1,3 +1,5 @@
+[![🌸 Build](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml/badge.svg?branch=main)](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml)
+
 ### 一个跨平台的媒体播放器
 
 <table>
