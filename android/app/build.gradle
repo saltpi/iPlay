@@ -80,7 +80,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName project.hasProperty('versionName') ? project.getProperty('versionName') : "1.0"
     }
     signingConfigs {
         debug {

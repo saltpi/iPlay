@@ -56,3 +56,8 @@ jobs:
             --header "Authorization: ${{ secrets.CLIENT_ID }}"\
             --header "Content-Type: application/zip" \
             --progress-bar | tee /dev/null
+          curl --location "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
+            --data-binary "@$PWD/Build/iPlay.dSYMs.zip" \
+            --header "Authorization: ${{ secrets.CLIENT_ID }}"\
+            --header "Content-Type: application/zip" \
+            --progress-bar | tee /dev/null
