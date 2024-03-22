@@ -18,6 +18,7 @@ import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { Like } from "@view/like/Like";
 
 const style = StyleSheet.create({
     overview: {
@@ -81,7 +82,22 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
     const insets = useSafeAreaInsets()
 
+    const fetchPlayUrl = useCallback(async () => {
+        let url = getPlayUrl(detail)
+        if (!url || url?.length === 0) {
+            const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
+            if (playbackInfo) {
+                url = emby?.videoUrl?.(playbackInfo) ?? ""
+            }
+            console.log("playbackInfo", url)
+        }
+        return url
+    }, [emby, movie.Id])
+
     useEffect(() => {
+        fetchPlayUrl()
+            .then(setUrl)
+
         return () => {
             console.log(`unmount`, videoRef)
             videoRef.current?.stop?.()
@@ -105,14 +121,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }
 
     const playVideo = async () => {
-        let url = getPlayUrl(detail)
-        if (!url || url?.length === 0) {
-            const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
-            if (playbackInfo) {
-                url = emby?.videoUrl?.(playbackInfo) ?? ""
-            }
-            console.log("playbackInfo", url)
-        }
         if (!url || url?.length === 0) {
             Toast.show({
                 type: "error",
@@ -136,7 +144,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView>
             <View>
-            {url ? <Video
+            {url && isPlaying ? <Video
                 ref={videoRef}
                 source={{uri: url, title: detail?.Name}}
                 controls={true}
@@ -148,7 +156,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 onError={onError}
                 style={style.player}
             /> : null}
-            {url ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
+            {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
                 <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
@@ -159,9 +167,9 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>
             <Text style={style.overview}>{detail?.Overview}</Text>
-            {isPlayable ?
-            <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} /> : null}
-            <Text style={style.link}>{getPlayUrl(detail)}</Text>
+            {isPlayable && url ?
+            <ExternalPlayer title={detail?.Name} src={url} /> : null}
+            <Text style={style.link}>{url}</Text>
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             {detail?.People.length ? <Text style={style.actorSection}>演职人员</Text> : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
