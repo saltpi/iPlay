@@ -57,6 +57,6 @@ jobs:
             --header "Content-Type: application/zip" \
             --progress-bar | tee /dev/null
           pip3 install requests
-          ./tools/upload.py "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
+          ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
             --file "$PWD/Build/iPlay.dSYMs.zip" \
             --token ${{ secrets.CLIENT_ID }}
