@@ -7,7 +7,7 @@ import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BaseImage, Image } from '@view/Image';
 import { VideoRef } from "react-native-video";
 import { Toast } from "@helper/toast";
@@ -17,6 +17,7 @@ import PlayIcon from "../../asset/play.svg"
 import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const style = StyleSheet.create({
     overview: {
@@ -59,6 +60,10 @@ const style = StyleSheet.create({
         aspectRatio: 1,
         tintColor: "white",
         color: "white",
+    },
+    link: {
+        textAlign: "center",
+        color: "blue",
     }
 })
 
@@ -156,6 +161,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <Text style={style.overview}>{detail?.Overview}</Text>
             {isPlayable ?
             <ExternalPlayer title={detail?.Name} src={getPlayUrl(detail)} /> : null}
+            <Text style={style.link}>{getPlayUrl(detail)}</Text>
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             {detail?.People.length ? <Text style={style.actorSection}>演职人员</Text> : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>

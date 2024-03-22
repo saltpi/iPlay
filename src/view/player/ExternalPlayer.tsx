@@ -1,6 +1,10 @@
 import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BaseImage as Image } from '@view/Image';
 import { useMemo } from "react";
+import CopyLinkIcon from "@asset/link.svg"
+import Clipboard from "@react-native-clipboard/clipboard";
+import { Toast } from "@helper/toast";
+import { Text } from "react-native-svg";
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -105,9 +109,20 @@ export function ExternalPlayer({
             </TouchableOpacity>
         ))
     , [players])
+    const copylinkToClipboard = () => {
+        Clipboard.setString(src)
+        Toast.show({
+            type: "success",
+            text1: "Link copied to clipboard",
+            text2: src,
+        })
+    }
     return (
         <View style={style.playerList}>
             {playerList}
+            <TouchableOpacity activeOpacity={1.0} onPress={copylinkToClipboard}>
+                <CopyLinkIcon style={style.icon} />
+            </TouchableOpacity>
         </View>
     );
 }
