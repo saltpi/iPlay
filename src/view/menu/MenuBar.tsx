@@ -5,7 +5,7 @@ import {getActiveMenu, switchToMenu} from '@store/menuSlice';
 import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {OSType, isOS} from '@helper/device';
 import {useEffect, useMemo, useRef} from 'react';
-import {switchRoute} from '@store/themeSlice';
+import {switchRoute, updateMenuBarHeight} from '@store/themeSlice';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import HomeIcon from '@asset/home.svg';
 import SearchIcon from '@asset/search.svg';
@@ -104,16 +104,21 @@ export function MenuBar() {
     };
 
     const menuBarStyle = useMemo(() => {
+        let result = null
         if (isOS(OSType.Android)) {
-            return {
+            result = {
                 ...style.menuBar,
                 paddingBottom: menuBarPaddingOffset,
-            };
+            }
+        } else {
+            result = {
+                ...style.menuBar,
+                paddingBottom: insets.bottom + menuBarPaddingOffset,
+            }
         }
-        return {
-            ...style.menuBar,
-            paddingBottom: insets.bottom + menuBarPaddingOffset,
-        };
+        const menuBarHeight = result.paddingTop + result.paddingBottom + style.icon.height
+        dispatch(updateMenuBarHeight(menuBarHeight))
+        return result
     }, [hideMenuBar, menuBarPaddingOffset]);
 
     return (

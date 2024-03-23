@@ -1,4 +1,4 @@
-import { Linking, NativeModules, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Linking, NativeModules, StyleSheet, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { BaseImage as Image } from '@view/Image';
 import { useMemo } from "react";
 import CopyLinkIcon from "@asset/link.svg"
@@ -13,12 +13,12 @@ const infuseIcon = require("@view/player/infuse.png");
 const potplayerIcon = require("@view/player/potplayer.png");
 const kmplayerIcon = require("@view/player/kmplayer.png");
 const mxplayerIcon = require("@view/player/mxplayer.png");
-const mxplayerProIcon = require("@view/player/mxplayerpro.png");
 const mpvIcon = require("@view/player/mpv.png");
 
 
 const Players = {
     iina: {
+        enable: isOS(OSType.macOS),
         title: "iina",
         icon: iinaIcon,
         action: (url: string, title?: string) => {
@@ -26,6 +26,7 @@ const Players = {
         }
     },
     nplayer: {
+        enable: isOS(OSType.iOS),
         title: "nPlayer",
         icon: nplayerIcon,
         action: (url: string, title?: string) => {
@@ -33,6 +34,7 @@ const Players = {
         }
     },
     vlc: {
+        enable: true,
         title: "VLC",
         icon: vlcIcon,
         action: (url: string, title?: string) => {
@@ -40,6 +42,7 @@ const Players = {
         }
     },
     infuse: {
+        enable: isOS(OSType.iOS) || isOS(OSType.macOS),
         title: "Infuse",
         icon: infuseIcon,
         // infuse://x-callback-url/play?url=
@@ -48,6 +51,7 @@ const Players = {
         }
     },
     portplayer: {
+        enable: isOS(OSType.Windows),
         title: "PortPlayer",
         icon: potplayerIcon,
         action: (url: string, title?: string) => {
@@ -55,6 +59,7 @@ const Players = {
         }
     },
     kmplayer: {
+        enable: isOS(OSType.Android) || isOS(OSType.iOS),
         title: "KMPlayer",
         icon: kmplayerIcon,
         action: (url: string, title?: string) => {
@@ -62,6 +67,7 @@ const Players = {
         }
     },
     mxplayer: {
+        enable: isOS(OSType.Android),
         title: "MXPlayer",
         icon: mxplayerIcon,
         action: (url: string, title: string = new URL(url).pathname) => {
@@ -74,6 +80,7 @@ const Players = {
         }
     },
     mpv: {
+        enable: isOS(OSType.Android),
         title: "mpv-android",
         icon: mpvIcon,
         action: (url: string, title: string = new URL(url).pathname) => {
@@ -103,6 +110,12 @@ const style = StyleSheet.create({
         height: 42,
         margin: 2.5,
         overflow: "hidden",
+    },
+    copy: {
+        margin: 2.5,
+        marginLeft: 5,
+        maxWidth: 42,
+        width: 36,
     }
 })
 
@@ -119,7 +132,8 @@ export function ExternalPlayer({
 }: ExternalPlayerProps) {
     const insets = useSafeAreaInsets()
     const playerList = useMemo(() => 
-        players?.map(type => Players[type]).map(player => (
+        players?.map(type => Players[type])
+            .filter(p => p.enable).map(player => (
             <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title)}>
                 <Image key={player.title} style={style.icon} source={player.icon} />
             </TouchableOpacity>
@@ -137,8 +151,10 @@ export function ExternalPlayer({
     return (
         <View style={style.playerList}>
             {playerList}
-            <TouchableOpacity activeOpacity={1.0} onPress={copylinkToClipboard}>
-                <CopyLinkIcon style={style.icon} />
+            <TouchableOpacity style={style.copy} 
+                activeOpacity={1.0}
+                onPress={copylinkToClipboard}>
+                <CopyLinkIcon width={style.copy.width} />
             </TouchableOpacity>
         </View>
     );
