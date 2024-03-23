@@ -1,11 +1,11 @@
-import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Linking, NativeModules, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BaseImage as Image } from '@view/Image';
 import { useMemo } from "react";
 import CopyLinkIcon from "@asset/link.svg"
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Toast } from "@helper/toast";
-import { Text } from "react-native-svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { OSType, isOS } from "@helper/device";
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -14,6 +14,8 @@ const potplayerIcon = require("@view/player/potplayer.png");
 const kmplayerIcon = require("@view/player/kmplayer.png");
 const mxplayerIcon = require("@view/player/mxplayer.png");
 const mxplayerProIcon = require("@view/player/mxplayerpro.png");
+const mpvIcon = require("@view/player/mpv.png");
+
 
 const Players = {
     iina: {
@@ -63,14 +65,25 @@ const Players = {
         title: "MXPlayer",
         icon: mxplayerIcon,
         action: (url: string, title: string = new URL(url).pathname) => {
-            Linking.openURL(`intent:${encodeURI(url)}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`)
+            if (isOS(OSType.Android)) {
+                const module = NativeModules.IntentModule
+                const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
+                const deepLink = `intent:${encodeURI(urlWithoutScheme)}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
+                module.openUrl(deepLink)
+            }
         }
     },
-    mxplayerpro: {
-        title: "MXPlayer Pro",
-        icon: mxplayerProIcon,
+    mpv: {
+        title: "mpv-android",
+        icon: mpvIcon,
         action: (url: string, title: string = new URL(url).pathname) => {
-            Linking.openURL(`intent:${encodeURI(url)}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`)
+            if (isOS(OSType.Android)) {
+                const module = NativeModules.IntentModule
+                const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
+                const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
+                console.log(deepLink)
+                module.openUrl(deepLink)
+            }
         }
     }
 }
