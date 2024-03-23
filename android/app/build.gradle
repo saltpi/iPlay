@@ -109,11 +109,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName project.hasProperty('versionName') ? project.getProperty('versionName') : "1.0"
-        externalNativeBuild {
-            ndkBuild {
-                cppFlags '-I/Users/ourfor/Code/iPlayClient/android/buildscripts/prefix/arm64/include'
-            }
-        }
     }
     signingConfigs {
         debug {
@@ -138,11 +133,6 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
-    externalNativeBuild {
-        ndkBuild {
-            path file('src/main/jni/Android.mk')
         }
     }
 }
