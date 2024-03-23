@@ -1,6 +1,27 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+
+ext.abiCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86":3, "x86_64":4]
+ext.universalBase = 8000
+
+
+tasks.register('copyAllDynamicLibraryToApk', Copy) {
+    from layout.buildDirectory.dir("src/main/jni")
+    include "**/*.h"
+    into layout.buildDirectory.dir("toArchive")
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        tasks.named(output.processResourcesProvider.getName()).configure {
+            finalizedBy 'copyAllDynamicLibraryToApk'
+        }
+    }
+}
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -74,6 +95,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
+    packagingOptions {
+        pickFirst "lib/arm64-v8a/libavcodec.so"
+        pickFirst "lib/arm64-v8a/libmpv.so"
+        pickFirst "lib/arm64-v8a/libplayer.so"
+        pickFirst "lib/arm64-v8a/libswscale.so"
+    }
+
     namespace "top.ourfor.app.iPlayClient"
     defaultConfig {
         applicationId "top.ourfor.app.iPlayClient"
@@ -81,6 +109,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName project.hasProperty('versionName') ? project.getProperty('versionName') : "1.0"
+        externalNativeBuild {
+            ndkBuild {
+                cppFlags '-I/Users/ourfor/Code/iPlayClient/android/buildscripts/prefix/arm64/include'
+            }
+        }
     }
     signingConfigs {
         debug {
@@ -90,6 +123,11 @@ android {
             keyPassword 'android'
         }
     }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -102,12 +140,19 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    externalNativeBuild {
+        ndkBuild {
+            path file('src/main/jni/Android.mk')
+        }
+    }
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+    implementation("androidx.media:media")
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
