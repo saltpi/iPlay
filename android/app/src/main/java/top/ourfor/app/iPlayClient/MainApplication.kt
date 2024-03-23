@@ -24,6 +24,7 @@ class MainApplication : Application(), ReactApplication {
               add(ModuleManager())
             }
 
+
         override fun getJSMainModuleName(): String = "index"
 
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
