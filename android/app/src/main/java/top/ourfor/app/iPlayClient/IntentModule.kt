@@ -1,5 +1,6 @@
 package top.ourfor.app.iPlayClient
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -18,6 +19,10 @@ class IntentModule(reactContext: ReactApplicationContext) : ReactContextBaseJava
         val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val context = BeanManager.get<Context>(Context::class.java)
-        context.startActivity(intent)
+        try {
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Log.d("IntentModule", e.toString())
+        }
     }
 }

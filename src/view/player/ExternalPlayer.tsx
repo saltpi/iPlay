@@ -67,8 +67,8 @@ const Players = {
         action: (url: string, title: string = new URL(url).pathname) => {
             if (isOS(OSType.Android)) {
                 const module = NativeModules.IntentModule
-                const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
-                const deepLink = `intent:${encodeURI(urlWithoutScheme)}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
+                const deepLink = `intent:${encodeURI(url)}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
+                console.log(deepLink)
                 module.openUrl(deepLink)
             }
         }
