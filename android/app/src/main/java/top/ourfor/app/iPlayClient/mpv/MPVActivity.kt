@@ -1,7 +1,5 @@
 package top.ourfor.app.iPlayClient.mpv
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -10,26 +8,27 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.ParcelFileDescriptor
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.WindowManager
 import android.widget.Toast
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import top.ourfor.app.iPlayClient.R
 import top.ourfor.app.iPlayClient.databinding.PlayerBinding
 import top.ourfor.lib.mpv.MPVLib
 
 typealias ActivityResultCallback = (Int, Intent?) -> Unit
-typealias StateRestoreCallback = () -> Unit
 
 class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     // for calls to eventUi() and eventPropertyUi()
@@ -44,7 +43,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     private var activityIsStopped = false
 
     private var activityIsForeground = true
-    private var didResumeBackgroundPlayback = false
 
     private var audioManager: AudioManager? = null
     private var audioFocusRestore: () -> Unit = {}
@@ -211,11 +209,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
                 return
             }
         }
-
-        onPauseImpl()
-    }
-
-    private fun onPauseImpl() {
     }
 
     private fun syncSettings() {
@@ -583,21 +576,10 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
 
     companion object {
         const val TAG = "mpv"
-        // how long should controls be displayed on screen (ms)
-        private const val CONTROLS_DISPLAY_TIMEOUT = 1500L
-        // how long controls fade to disappear (ms)
-        private const val CONTROLS_FADE_DURATION = 500L
-        // resolution (px) of the thumbnail displayed with playback notification
-        private const val THUMB_SIZE = 384
         // smallest aspect ratio that is considered non-square
         private const val ASPECT_RATIO_MIN = 1.2f // covers 5:4 and up
         // fraction to which audio volume is ducked on loss of audio focus
         private const val AUDIO_FOCUS_DUCKING = 0.5f
-        // request codes for invoking other activities
-        private const val RCODE_EXTERNAL_AUDIO = 1000
-        private const val RCODE_EXTERNAL_SUB = 1001
-        private const val RCODE_LOAD_FILE = 1002
-        // action of result intent
-        private const val RESULT_INTENT = "top.ourfor.app.iPlayClient.mpv.MPVActivity.result"
+
     }
 }
