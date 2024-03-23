@@ -1,6 +1,5 @@
 package top.ourfor.app.iPlayClient.mpv
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -8,19 +7,15 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
-import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Gravity
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -34,11 +29,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     // for calls to eventUi() and eventPropertyUi()
     private val eventUiHandler = Handler(Looper.getMainLooper())
 
-    /**
-     * DO NOT USE THIS
-     */
-    private var activityIsStopped = false
-
     private var activityIsForeground = true
 
     private var audioManager: AudioManager? = null
@@ -47,7 +37,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     private var mediaSession: MediaSessionCompat? = null
 
     private lateinit var binding: PlayerBinding
-    private lateinit var toast: Toast
 
     // convenience alias
     private val player get() = binding.player
@@ -94,67 +83,17 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         player.addObserver(this)
         player.playFile(filepath!!)
 
-        mediaSession = initMediaSession()
-        updateMediaSession()
-
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
     override fun onDestroy() {
-        Log.v(TAG, "Exiting.")
-
-        // Suppress any further callbacks
         activityIsForeground = false
-
-        mediaSession?.let {
-            it.isActive = false
-            it.release()
-        }
-        mediaSession = null
-
         player.removeObserver(this)
         player.destroy()
         super.onDestroy()
     }
-
-    override fun onPause() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if (isInMultiWindowMode || isInPictureInPictureMode) {
-                Log.v(TAG, "Going into multi-window mode")
-                super.onPause()
-                return
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        activityIsStopped = false
-    }
-
-    override fun onStop() {
-        super.onStop()
-        activityIsStopped = true
-    }
-
-    override fun onResume() {
-        // If we weren't actually in the background (e.g. multi window mode), don't reinitialize stuff
-        if (activityIsForeground) {
-            super.onResume()
-            return
-        }
-        // Init controls to be hidden and view fullscreen
-        activityIsForeground = true
-        // stop background service with a delay
-        super.onResume()
-    }
-
-    // UI
-
-    private var btnSelected = -1 // dpad navigation
-
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -276,14 +215,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun updateDecoderButton() {
-    }
-
-
-    private fun updatePlaylistButtons() {
-
-    }
-
     private fun updateOrientation(initial: Boolean = false) {
         // screen orientation is fixed (Android TV)
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_SCREEN_PORTRAIT))
@@ -315,51 +246,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
     }
 
-    private fun initMediaSession(): MediaSessionCompat {
-        /*
-            https://developer.android.com/guide/topics/media-apps/working-with-a-media-session
-            https://developer.android.com/guide/topics/media-apps/audio-app/mediasession-callbacks
-            https://developer.android.com/reference/android/support/v4/media/session/MediaSessionCompat
-         */
-        val session = MediaSessionCompat(this, TAG)
-        session.setFlags(0)
-        session.setCallback(object : MediaSessionCompat.Callback() {
-            override fun onPause() {
-                player.paused = true
-            }
-            override fun onPlay() {
-                player.paused = false
-            }
-            override fun onSeekTo(pos: Long) {
-                player.timePos = (pos / 1000).toInt()
-            }
-            override fun onSkipToNext() {
-                MPVLib.command(arrayOf("playlist-next"))
-            }
-            override fun onSkipToPrevious() {
-                MPVLib.command(arrayOf("playlist-prev"))
-            }
-            override fun onSetRepeatMode(repeatMode: Int) {
-                MPVLib.setPropertyString("loop-playlist",
-                    if (repeatMode == PlaybackStateCompat.REPEAT_MODE_ALL) "inf" else "no")
-                MPVLib.setPropertyString("loop-file",
-                    if (repeatMode == PlaybackStateCompat.REPEAT_MODE_ONE) "inf" else "no")
-            }
-            override fun onSetShuffleMode(shuffleMode: Int) {
-                player.changeShuffle(false, shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_ALL)
-            }
-        })
-        return session
-    }
-
-    private fun updateMediaSession() {
-        synchronized (psc) {
-            mediaSession?.let { psc.write(it) }
-        }
-    }
-
-    // mpv events
-
     private fun eventPropertyUi(property: String) {
         if (!activityIsForeground) return
         when (property) {
@@ -367,7 +253,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             "video-params/aspect" -> {
                 updateOrientation()
             }
-            "hwdec-current" -> updateDecoderButton()
         }
     }
 
@@ -406,8 +291,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     }
 
     override fun eventProperty(property: String, value: Boolean) {
-        if (psc.update(property, value))
-            updateMediaSession()
         if (property == "shuffle") {
             mediaSession?.setShuffleMode(if (value)
                 PlaybackStateCompat.SHUFFLE_MODE_ALL
@@ -421,8 +304,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
 
     override fun eventProperty(property: String, value: Long) {
         if (psc.update(property, value))
-            updateMediaSession()
-
         if (!activityIsForeground) return
         eventUiHandler.post { eventPropertyUi(property, value) }
     }
@@ -430,8 +311,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     override fun eventProperty(property: String, value: String) {
         val triggerMetaUpdate = psc.update(property, value)
         if (triggerMetaUpdate)
-            updateMediaSession()
-
         if (!activityIsForeground) return
         eventUiHandler.post { eventPropertyUi(property, value, triggerMetaUpdate) }
     }
