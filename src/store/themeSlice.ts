@@ -5,6 +5,7 @@ interface ThemeState {
     hideMenuBar: boolean;
     // menu bar padding bottom offset
     menuBarPaddingOffset: number;
+    menuBarHeight?: number;
 }
 
 const initialState: ThemeState = {
@@ -29,10 +30,13 @@ export const themeSlice = createSlice({
         },
         updateMenuBarPaddingOffset: (state, action: PayloadAction<number>) => {
             state.menuBarPaddingOffset = action.payload;
+        },
+        updateMenuBarHeight: (state, action: PayloadAction<number>) => {
+            state.menuBarHeight = action.payload;
         }
     },
 });
 
-export const { switchRoute, updateMenuBarPaddingOffset } = themeSlice.actions;
+export const { switchRoute, updateMenuBarPaddingOffset, updateMenuBarHeight } = themeSlice.actions;
 
 export default themeSlice.reducer;

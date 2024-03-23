@@ -24,6 +24,7 @@ const style = StyleSheet.create({
 export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     const emby = useAppSelector(state => state.emby?.emby)
+    const theme = useAppSelector(state => state.theme)
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -45,7 +46,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
-                <View>
+                <View style={{marginBottom: theme.menuBarHeight}}>
                 {site?.server && site?.user ? <SiteResource site={site} /> : <Button title="添加站点" onPress={goToLogin} />}
                 </View>
             </ScrollView>

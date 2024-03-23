@@ -30,7 +30,8 @@ const reducer = combineReducers({
       key: [Env.storeKey, "theme"].join("/"),
       blacklist: [
         "routeName",
-        "hideMenuBar"
+        "hideMenuBar",
+        "menuBarTopY"
       ],
       storage
   }, themeReducer),
