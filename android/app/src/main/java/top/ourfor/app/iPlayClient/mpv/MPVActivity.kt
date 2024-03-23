@@ -34,8 +34,7 @@ typealias StateRestoreCallback = () -> Unit
 class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     // for calls to eventUi() and eventPropertyUi()
     private val eventUiHandler = Handler(Looper.getMainLooper())
-    // for use with fadeRunnable1..3
-    private val fadeHandler = Handler(Looper.getMainLooper())
+
     // for use with stopServiceRunnable
     private val stopServiceHandler = Handler(Looper.getMainLooper())
 
@@ -89,43 +88,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         }
     }
 
-    // Fade out controls
-    private val fadeRunnable = object : Runnable {
-        var hasStarted = false
-        private val listener = object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator) { hasStarted = true }
-
-            override fun onAnimationCancel(animation: Animator) { hasStarted = false }
-
-            override fun onAnimationEnd(animation: Animator) {
-                if (hasStarted)
-                    hideControls()
-                hasStarted = false
-            }
-        }
-
-        override fun run() {
-        }
-    }
-
-    // Fade out unlock button
-    private val fadeRunnable2 = object : Runnable {
-        private val listener = object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-            }
-        }
-
-        override fun run() {
-        }
-    }
-
-    // Fade out gesture text
-    private val fadeRunnable3 = object : Runnable {
-        // okay this doesn't actually fade...
-        override fun run() {
-        }
-    }
-
     private val stopServiceRunnable = Runnable {
     }
 
@@ -171,9 +133,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         binding = PlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Init controls to be hidden and view fullscreen
-        hideControls()
-
         // Initialize listeners for the player view
         initListeners()
 
@@ -190,6 +149,7 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             insetsController.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         updateOrientation(true)
 
@@ -199,16 +159,9 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             parseIntentExtras(intent.extras)
         }
 
-        if (filepath == null) {
-            Log.e(TAG, "No file given, exiting")
-            showToast(getString(R.string.error_no_file))
-            finishWithResult(RESULT_CANCELED)
-            return
-        }
-
         player.initialize(applicationContext.filesDir.path, applicationContext.cacheDir.path)
         player.addObserver(this)
-        player.playFile(filepath)
+        player.playFile(filepath!!)
 
         mediaSession = initMediaSession()
         updateMediaSession()
@@ -225,21 +178,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             Log.w(TAG, "Audio focus not granted")
             onloadCommands.add(arrayOf("set", "pause", "yes"))
         }
-    }
-
-    private fun finishWithResult(code: Int, includeTimePos: Boolean = false) {
-        // Refer to http://mpv-android.github.io/mpv-android/intent.html
-        // FIXME: should track end-file events to accurately report OK vs CANCELED
-        if (isFinishing) // only count first call
-            return
-        val result = Intent(RESULT_INTENT)
-        result.data = if (intent.data?.scheme == "file") null else intent.data
-        if (includeTimePos) {
-            result.putExtra("position", psc.position.toInt())
-            result.putExtra("duration", psc.duration.toInt())
-        }
-        setResult(code, result)
-        finish()
     }
 
     override fun onDestroy() {
@@ -265,43 +203,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         super.onDestroy()
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        Log.v(TAG, "onNewIntent($intent)")
-        super.onNewIntent(intent)
-
-        // Happens when mpv is still running (not necessarily playing) and the user selects a new
-        // file to be played from another app
-        val filepath = intent?.let { parsePathFromIntent(it) }
-        if (filepath == null) {
-            return
-        }
-
-        if (!activityIsForeground && didResumeBackgroundPlayback) {
-            MPVLib.command(arrayOf("loadfile", filepath, "append"))
-            showToast(getString(R.string.notice_file_appended))
-            moveTaskToBack(true)
-        } else {
-            MPVLib.command(arrayOf("loadfile", filepath))
-        }
-    }
-
-    private fun isPlayingAudioOnly(): Boolean {
-        if (player.aid == -1)
-            return false
-        val fmt = MPVLib.getPropertyString("video-format")
-        return fmt.isNullOrEmpty() || arrayOf("mjpeg", "png", "bmp").indexOf(fmt) != -1
-    }
-
-    private fun shouldBackground(): Boolean {
-        if (isFinishing) // about to exit?
-            return false
-        return when (backgroundPlayMode) {
-            "always" -> true
-            "audio-only" -> isPlayingAudioOnly()
-            else -> false // "never"
-        }
-    }
-
     override fun onPause() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (isInMultiWindowMode || isInPictureInPictureMode) {
@@ -315,28 +216,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     }
 
     private fun onPauseImpl() {
-        val fmt = MPVLib.getPropertyString("video-format")
-        val shouldBackground = shouldBackground()
-        // media session uses the same thumbnail
-        updateMediaSession()
-
-        activityIsForeground = false
-        eventUiHandler.removeCallbacksAndMessages(null)
-        if (isFinishing) {
-            savePosition()
-            // tell mpv to shut down so that any other property changes or such are ignored,
-            // preventing useless busywork
-            MPVLib.command(arrayOf("stop"))
-        } else if (!shouldBackground) {
-            player.paused = true
-        }
-        super.onPause()
-
-        didResumeBackgroundPlayback = shouldBackground
-        if (shouldBackground) {
-            Log.v(TAG, "Resuming playback in background")
-            stopServiceHandler.removeCallbacks(stopServiceRunnable)
-        }
     }
 
     private fun syncSettings() {
@@ -378,202 +257,20 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             super.onResume()
             return
         }
-
-        if (lockedUI) { // precaution
-            Log.w(TAG, "resumed with locked UI, unlocking")
-            unlockUI()
-        }
-
         // Init controls to be hidden and view fullscreen
-        hideControls()
         syncSettings()
 
         activityIsForeground = true
         // stop background service with a delay
         stopServiceHandler.removeCallbacks(stopServiceRunnable)
         stopServiceHandler.postDelayed(stopServiceRunnable, 1000L)
-
-        refreshUi()
-
         super.onResume()
-    }
-
-    private fun savePosition() {
-        if (!shouldSavePosition)
-            return
-        if (MPVLib.getPropertyBoolean("eof-reached") ?: true) {
-            Log.d(TAG, "player indicates EOF, not saving watch-later config")
-            return
-        }
-        MPVLib.command(arrayOf("write-watch-later-config"))
     }
 
     // UI
 
     private var btnSelected = -1 // dpad navigation
 
-    private var mightWantToToggleControls = false
-
-    private var useAudioUI = false
-    private var lockedUI = false
-
-    private fun pauseForDialog(): StateRestoreCallback {
-        val useKeepOpen = when (noUIPauseMode) {
-            "always" -> true
-            "audio-only" -> isPlayingAudioOnly()
-            else -> false // "never"
-        }
-        if (useKeepOpen) {
-            // don't pause but set keep-open so mpv doesn't exit while the user is doing stuff
-            val oldValue = MPVLib.getPropertyString("keep-open")
-            MPVLib.setPropertyBoolean("keep-open", true)
-            return {
-                MPVLib.setPropertyString("keep-open", oldValue)
-            }
-        }
-
-        // Pause playback during UI dialogs
-        val wasPlayerPaused = player.paused ?: true
-        player.paused = true
-        return {
-            if (!wasPlayerPaused)
-                player.paused = false
-        }
-    }
-
-    private fun showControls() {
-        if (lockedUI) {
-            Log.w(TAG, "cannot show UI in locked mode")
-            return
-        }
-
-        // remove all callbacks that were to be run for fading
-        fadeHandler.removeCallbacks(fadeRunnable)
-
-    }
-
-    fun hideControls() {
-
-        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        insetsController.hide(WindowInsetsCompat.Type.systemBars())
-    }
-
-    private fun toggleControls(): Boolean {
-        return false
-    }
-
-    private fun showUnlockControls() {
-
-
-        fadeHandler.postDelayed(fadeRunnable2, CONTROLS_DISPLAY_TIMEOUT)
-    }
-
-    override fun dispatchKeyEvent(ev: KeyEvent): Boolean {
-        if (lockedUI) {
-            showUnlockControls()
-            return super.dispatchKeyEvent(ev)
-        }
-
-        // try built-in event handler first, forward all other events to libmpv
-        val handled = interceptDpad(ev) ||
-                (ev.action == KeyEvent.ACTION_DOWN && interceptKeyDown(ev)) ||
-                player.onKey(ev)
-        if (handled) {
-            return true
-        }
-        return super.dispatchKeyEvent(ev)
-    }
-
-    override fun dispatchGenericMotionEvent(ev: MotionEvent?): Boolean {
-        if (lockedUI)
-            return super.dispatchGenericMotionEvent(ev)
-
-        if (ev != null && ev.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
-            if (player.onPointerEvent(ev))
-                return true
-            // keep controls visible when mouse moves
-            if (ev.actionMasked == MotionEvent.ACTION_HOVER_MOVE)
-                showControls()
-        }
-        return super.dispatchGenericMotionEvent(ev)
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        if (lockedUI) {
-            if (ev.action == MotionEvent.ACTION_UP || ev.action == MotionEvent.ACTION_DOWN)
-                showUnlockControls()
-            return super.dispatchTouchEvent(ev)
-        }
-
-        if (super.dispatchTouchEvent(ev)) {
-            // reset delay if the event has been handled
-            // ideally we'd want to know if the event was delivered to controls, but we can't
-            if (ev.action == MotionEvent.ACTION_UP)
-                return true
-        }
-        if (ev.action == MotionEvent.ACTION_DOWN)
-            mightWantToToggleControls = true
-        if (ev.action == MotionEvent.ACTION_UP && mightWantToToggleControls) {
-            toggleControls()
-        }
-        return true
-    }
-
-    private fun interceptDpad(ev: KeyEvent): Boolean {
-        if (btnSelected == -1) { // UP and DOWN are always grabbed and overriden
-            when (ev.keyCode) {
-                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
-                    if (ev.action == KeyEvent.ACTION_DOWN) { // activate dpad navigation
-                        btnSelected = 0
-                        updateShowBtnSelected()
-                        showControls()
-                    }
-                    return true
-                }
-            }
-            return false
-        }
-
-        return false
-    }
-
-    private fun updateShowBtnSelected() {
-    }
-
-    private fun interceptKeyDown(event: KeyEvent): Boolean {
-        // intercept some keys to provide functionality "native" to
-        // mpv-android even if libmpv already implements these
-        var unhandeled = 0
-
-        when (event.unicodeChar.toChar()) {
-            // overrides a default binding:
-            'j' -> cycleSub()
-            '#' -> cycleAudio()
-
-            else -> unhandeled++
-        }
-        when (event.keyCode) {
-            // no default binding:
-            KeyEvent.KEYCODE_CAPTIONS -> cycleSub()
-            KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK -> cycleAudio()
-            KeyEvent.KEYCODE_INFO -> toggleControls()
-            KeyEvent.KEYCODE_MENU -> openTopMenu()
-            KeyEvent.KEYCODE_GUIDE -> openTopMenu()
-            KeyEvent.KEYCODE_DPAD_CENTER -> player.cyclePause()
-
-            // overrides a default binding:
-            KeyEvent.KEYCODE_ENTER -> player.cyclePause()
-
-            else -> unhandeled++
-        }
-
-        return unhandeled < 2
-    }
-
-    override fun onBackPressed() {
-        player.destroy();
-        super.onBackPressed();
-    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -584,33 +281,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         windowManager.defaultDisplay.getRealMetrics(dm)
     }
 
-    override fun onPictureInPictureModeChanged(state: Boolean) {
-        super.onPictureInPictureModeChanged(state)
-        Log.v(TAG, "onPiPModeChanged($state)")
-        if (state) {
-            lockedUI = true
-            hideControls()
-            return
-        }
-
-        unlockUI()
-        // For whatever stupid reason Android provides no good detection for when PiP is exited
-        // so we have to do this shit (https://stackoverflow.com/questions/43174507/#answer-56127742)
-        if (activityIsStopped) {
-            // audio-only detection doesn't work in this situation, I don't care to fix this:
-            this.backgroundPlayMode = "never"
-            onPauseImpl() // behave as if the app normally went into background
-        }
-    }
-
-    private fun showToast(msg: String, cancel: Boolean = false) {
-        if (cancel)
-            toast.cancel()
-        toast.setText(msg)
-        toast.show()
-    }
-
-    // Intent/Uri parsing
 
     private fun parsePathFromIntent(intent: Intent): String? {
         val filepath: String?
@@ -704,80 +374,15 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             val trackName = player.tracks[track_type]?.firstOrNull{ it.mpvId == track_id }?.name ?: "???"
             "$trackPrefix $trackName"
         }
-        showToast(msg, true)
     }
 
-    private fun cycleAudio() = trackSwitchNotification {
-        player.cycleAudio(); TrackData(player.aid, "audio")
-    }
-    private fun cycleSub() = trackSwitchNotification {
-        player.cycleSub(); TrackData(player.sid, "sub")
-    }
 
-    private fun unlockUI() {
-        lockedUI = false
-        showControls()
-    }
-
-    data class MenuItem(@IdRes val idRes: Int, val handler: () -> Boolean)
-
-    private fun openTopMenu() {
-        val restoreState = pauseForDialog()
-
-        fun addExternalThing(cmd: String, result: Int, data: Intent?) {
-            if (result != RESULT_OK)
-                return
-            // file picker may return a content URI or a bare file path
-            val path = data!!.getStringExtra("path")!!
-            val path2 = if (path.startsWith("content://"))
-                openContentFd(Uri.parse(path))
-            else
-                path
-            MPVLib.command(arrayOf(cmd, path2, "cached"))
-        }
-
-        /******/
-        val hiddenButtons = mutableSetOf<Int>()
-
-    }
 
     private var activityResultCallbacks: MutableMap<Int, ActivityResultCallback> = mutableMapOf()
-    private fun openFilePickerFor(requestCode: Int, title: String, skip: Int?, callback: ActivityResultCallback) {
-
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultCallbacks.remove(requestCode)?.invoke(resultCode, data)
-    }
-
-    private fun refreshUi() {
-        // forces update of entire UI, used when resuming the activity
-        val paused = player.paused ?: return
-        updatePlaybackStatus(paused)
-        updatePlaybackPos(psc.position_s)
-        updatePlaybackDuration(psc.duration_s)
-        updateAudioUI()
-        if (useAudioUI || showMediaTitle)
-            updateMetadataDisplay()
-        updatePlaylistButtons()
-        player.loadTracks()
-    }
-
-    private fun updateAudioUI() {
-
-    }
-
-    private fun updateMetadataDisplay() {
-
-    }
-
-    fun updatePlaybackPos(position: Int) {
-
-    }
-
-    private fun updatePlaybackDuration(duration: Int) {
-
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
@@ -791,8 +396,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     private fun updateDecoderButton() {
     }
 
-    private fun updateSpeedButton() {
-    }
 
     private fun updatePlaylistButtons() {
 
@@ -891,7 +494,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
                 updateOrientation()
                 updatePiPParams()
             }
-            "video-format" -> updateAudioUI()
             "hwdec-current" -> updateDecoderButton()
         }
     }
@@ -904,18 +506,10 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     }
 
     private fun eventPropertyUi(property: String, value: Long) {
-        if (!activityIsForeground) return
-        when (property) {
-            "time-pos" -> updatePlaybackPos(value.toInt())
-            "duration" -> updatePlaybackDuration(value.toInt())
-            "playlist-pos", "playlist-count" -> updatePlaylistButtons()
-        }
     }
 
     private fun eventPropertyUi(property: String, value: String, triggerMetaUpdate: Boolean) {
         if (!activityIsForeground) return
-        if (triggerMetaUpdate)
-            updateMetadataDisplay()
     }
 
     private fun eventUi(eventId: Int) {
@@ -970,9 +564,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     }
 
     override fun event(eventId: Int) {
-        if (eventId == MPVLib.mpvEventId.MPV_EVENT_SHUTDOWN)
-            finishWithResult(if (playbackHasStarted) RESULT_OK else RESULT_CANCELED)
-
         if (eventId == MPVLib.mpvEventId.MPV_EVENT_START_FILE) {
             for (c in onloadCommands)
                 MPVLib.command(c)
