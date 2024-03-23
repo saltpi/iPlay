@@ -34,9 +34,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     // for calls to eventUi() and eventPropertyUi()
     private val eventUiHandler = Handler(Looper.getMainLooper())
 
-    // for use with stopServiceRunnable
-    private val stopServiceHandler = Handler(Looper.getMainLooper())
-
     /**
      * DO NOT USE THIS
      */
@@ -45,7 +42,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     private var activityIsForeground = true
 
     private var audioManager: AudioManager? = null
-    private var audioFocusRestore: () -> Unit = {}
 
     private val psc = Utils.PlaybackStateCache()
     private var mediaSession: MediaSessionCompat? = null
@@ -56,66 +52,11 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     // convenience alias
     private val player get() = binding.player
 
-    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
-        Log.v(TAG, "Audio focus changed: $type")
-        if (ignoreAudioFocus)
-            return@OnAudioFocusChangeListener
-        when (type) {
-            AudioManager.AUDIOFOCUS_LOSS,
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                // loss can occur in addition to ducking, so remember the old callback
-                val oldRestore = audioFocusRestore
-                val wasPlayerPaused = player.paused ?: false
-                player.paused = true
-                audioFocusRestore = {
-                    oldRestore()
-                    if (!wasPlayerPaused) player.paused = false
-                }
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                MPVLib.command(arrayOf("multiply", "volume", AUDIO_FOCUS_DUCKING.toString()))
-                audioFocusRestore = {
-                    val inv = 1f / AUDIO_FOCUS_DUCKING
-                    MPVLib.command(arrayOf("multiply", "volume", inv.toString()))
-                }
-            }
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                audioFocusRestore()
-                audioFocusRestore = {}
-            }
-        }
-    }
-
-    private val stopServiceRunnable = Runnable {
-    }
-
-    /* Settings */
-    private var statsFPS = false
     private var statsLuaMode = 0 // ==0 disabled, >0 page number
 
-    private var backgroundPlayMode = ""
-    private var noUIPauseMode = ""
+    private var autoRotationMode = "landscape"
 
-    private var shouldSavePosition = false
-
-    private var autoRotationMode = ""
-
-    private var controlsAtBottom = true
-    private var showMediaTitle = false
-
-    private var ignoreAudioFocus = false
-
-    private var smoothSeekGesture = false
     /* * */
-
-    private fun initListeners() {
-    }
-
-    @SuppressLint("ShowToast")
-    private fun initMessageToast() {
-        toast = Toast.makeText(this, "This totally shouldn't be seen", Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
-    }
 
     private var playbackHasStarted = false
     private var onloadCommands = mutableListOf<Array<String>>()
@@ -131,14 +72,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         binding = PlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize listeners for the player view
-        initListeners()
-
-        // Initialize toast used for short messages
-        initMessageToast()
-
-        // set up initial UI state
-        syncSettings()
         onConfigurationChanged(resources.configuration)
         run {
             // edge-to-edge & immersive mode
@@ -167,15 +100,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         volumeControlStream = AudioManager.STREAM_MUSIC
-
-        @Suppress("DEPRECATION")
-        val res = audioManager!!.requestAudioFocus(
-            audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
-        )
-        if (res != AudioManager.AUDIOFOCUS_REQUEST_GRANTED && !ignoreAudioFocus) {
-            Log.w(TAG, "Audio focus not granted")
-            onloadCommands.add(arrayOf("set", "pause", "yes"))
-        }
     }
 
     override fun onDestroy() {
@@ -190,12 +114,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         }
         mediaSession = null
 
-        @Suppress("DEPRECATION")
-        audioManager?.abandonAudioFocus(audioFocusChangeListener)
-
-        // take the background service with us
-        stopServiceRunnable.run()
-
         player.removeObserver(this)
         player.destroy()
         super.onDestroy()
@@ -209,29 +127,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
                 return
             }
         }
-    }
-
-    private fun syncSettings() {
-        // FIXME: settings should be in their own class completely
-        val prefs = getDefaultSharedPreferences(applicationContext)
-        val getString: (String, Int) -> String = { key, defaultRes ->
-            prefs.getString(key, resources.getString(defaultRes))!!
-        }
-
-        val statsMode = prefs.getString("stats_mode", "") ?: ""
-        this.statsFPS = statsMode == "native_fps"
-        this.statsLuaMode = if (statsMode.startsWith("lua"))
-            statsMode.removePrefix("lua").toInt()
-        else
-            0
-        this.backgroundPlayMode = getString("background_play", R.string.pref_background_play_default)
-        this.noUIPauseMode = getString("no_ui_pause", R.string.pref_no_ui_pause_default)
-        this.shouldSavePosition = prefs.getBoolean("save_position", false)
-        this.autoRotationMode = getString("auto_rotation", R.string.pref_auto_rotation_default)
-        this.controlsAtBottom = prefs.getBoolean("bottom_controls", true)
-        this.showMediaTitle = prefs.getBoolean("display_media_title", false)
-        this.ignoreAudioFocus = prefs.getBoolean("ignore_audio_focus", false)
-        this.smoothSeekGesture = prefs.getBoolean("seek_gesture_smooth", false)
     }
 
     override fun onStart() {
@@ -251,12 +146,8 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             return
         }
         // Init controls to be hidden and view fullscreen
-        syncSettings()
-
         activityIsForeground = true
         // stop background service with a delay
-        stopServiceHandler.removeCallbacks(stopServiceRunnable)
-        stopServiceHandler.postDelayed(stopServiceRunnable, 1000L)
         super.onResume()
     }
 
@@ -379,7 +270,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        updatePiPParams()
         if (paused)
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else
@@ -424,15 +314,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         else
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
     }
-
-    private fun updatePiPParams(force: Boolean = false) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-            return
-        if (!isInPictureInPictureMode && !force)
-            return
-    }
-
-    // Media Session handling
 
     private fun initMediaSession(): MediaSessionCompat {
         /*
@@ -485,7 +366,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
             "track-list" -> player.loadTracks()
             "video-params/aspect" -> {
                 updateOrientation()
-                updatePiPParams()
             }
             "hwdec-current" -> updateDecoderButton()
         }
