@@ -1,4 +1,4 @@
-import { Linking, NativeModules, StyleSheet, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
 import { BaseImage as Image } from '@view/Image';
 import { useMemo } from "react";
 import CopyLinkIcon from "@asset/link.svg"
@@ -6,6 +6,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { OSType, isOS } from "@helper/device";
+import { IntentModule } from "@helper/native";
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -72,10 +73,9 @@ const Players = {
         icon: mxplayerIcon,
         action: (url: string, title: string = new URL(url).pathname) => {
             if (isOS(OSType.Android)) {
-                const module = NativeModules.IntentModule
                 const deepLink = `intent:${encodeURI(url)}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
                 console.log(deepLink)
-                module.openUrl(deepLink)
+                IntentModule.openUrl(deepLink)
             }
         }
     },
@@ -85,11 +85,10 @@ const Players = {
         icon: mpvIcon,
         action: (url: string, title: string = new URL(url).pathname) => {
             if (isOS(OSType.Android)) {
-                const module = NativeModules.IntentModule
                 const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
                 const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
                 console.log(deepLink)
-                module.openUrl(deepLink)
+                IntentModule.openUrl(deepLink)
             }
         }
     }
