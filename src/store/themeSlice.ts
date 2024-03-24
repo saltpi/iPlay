@@ -44,7 +44,6 @@ export const slice = createSlice({
             } else {
                 state.hideMenuBar = true;
             }
-            console.log(`switchRoute: ${routeName} ${state.hideMenuBar}`)
         },
         updateMenuBarPaddingOffset: (state, action: PayloadAction<number>) => {
             state.menuBarPaddingOffset = action.payload;

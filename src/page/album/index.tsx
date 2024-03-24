@@ -1,5 +1,6 @@
 import { Emby } from "@api/emby";
 import { PropsWithNavigation } from "@global";
+import { printException } from "@helper/log";
 import { useAppSelector } from "@hook/store";
 import { EmbyResponse } from "@model/EmbyResponse";
 import { Media } from "@model/Media";
@@ -38,6 +39,7 @@ export function Page({route, navigation}: PropsWithNavigation<"album">) {
         .then(res => {
             setData(res.data)
         })
+        .catch(printException)
         .finally(() => setLoading(false))
     }, [route.params.albumId, emby])
     return (

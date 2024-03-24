@@ -16,7 +16,6 @@ const style = StyleSheet.create({
 
 export function Page() {
     const ref= useRef<any>(null);
-    const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const barStyle = useAppSelector(state => state.theme.barStyle);
     useEffect(() => {
