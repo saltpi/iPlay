@@ -1,7 +1,8 @@
 import { Api } from "@api/emby";
+import { ThemeBasicStyle } from "@global";
 import { useAppSelector } from "@hook/store";
 import { People } from "@model/MediaDetail";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 const style = StyleSheet.create({
     root: {
@@ -24,17 +25,17 @@ const style = StyleSheet.create({
     }
 })
 
-export function ActorCard({actor}: {actor: People}) {
+export function ActorCard({actor, theme}: {actor: People, theme?: ThemeBasicStyle}) {
     const emby = useAppSelector(state => state.emby?.emby)
     return (
         <View style={style.root}>
             <Image style={style.image} source={{uri: emby?.imageUrl?.(actor.Id, actor.PrimaryImageTag, "Primary")}} />
-            <Text style={style.name}
+            <Text style={{...style.name, ...theme}}
                  numberOfLines={1} 
                  ellipsizeMode="tail">
                 {actor.Name}
             </Text>
-            <Text style={style.role}
+            <Text style={{...style.role, ...theme}}
                 numberOfLines={1} 
                 ellipsizeMode="tail">
                 扮演 {actor.Role}

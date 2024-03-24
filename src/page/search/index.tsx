@@ -74,7 +74,7 @@ export function Page() {
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                style={{flex: 1}}>
+                style={{flex: 1, backgroundColor}}>
                 <TextInput style={{...style.searchInput, color, backgroundColor}} 
                     value={searchKeyword}
                     onChangeText={setSearchKeyword}
