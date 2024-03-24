@@ -22,6 +22,7 @@ export type SeasonPageProps = PropsWithNavigation<'season'>;
 export function Page({route, navigation}: SeasonPageProps) {
     const season: Season = route.params.season
     const emby = useAppSelector(state => state.emby?.emby)
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const [episodes, setEpisodes] = useState<Episode[]>([])
     useEffect(() => {
         emby?.getEpisodes?.(Number(season.SeriesId), Number(season.Id))
@@ -35,13 +36,13 @@ export function Page({route, navigation}: SeasonPageProps) {
         });
     }
     return (
-        <SafeAreaView style={style.page}>
+        <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                style={{flex: 1}}>
+                style={{flex: 1, backgroundColor}}>
                 <View>
                     <Image style={{...style.cover, aspectRatio: season.PrimaryImageAspectRatio}} source={{uri: emby?.imageUrl?.(season.Id, season.BackdropImageTags[0])}} />
                 </View>

@@ -82,6 +82,8 @@ const kInactiveOpacity = 0.25;
 
 export function MenuBar() {
     const active = useAppSelector(getActiveMenu);
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const dispatch = useAppDispatch();
     const navigation: TabNavigation = useNavigation();
     const hideMenuBar = useAppSelector(state => state.theme.hideMenuBar);
@@ -123,7 +125,7 @@ export function MenuBar() {
 
     return (
         <Animated.View
-            style={{...menuBarStyle, transform: [{translateY: position}]}}>
+            style={{...menuBarStyle, backgroundColor, transform: [{translateY: position}]}}>
             {menu.map((item, i) => (
                 <TouchableOpacity
                     activeOpacity={1.0}

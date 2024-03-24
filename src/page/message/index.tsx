@@ -1,3 +1,4 @@
+import { useAppSelector } from "@hook/store";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, View } from "react-native";
 
 const style = StyleSheet.create({
@@ -10,9 +11,10 @@ const style = StyleSheet.create({
 });
 
 export function Page() {
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     return (
-        <SafeAreaView style={style.page}>
-            <StatusBar barStyle={"dark-content"} />
+        <SafeAreaView style={{...style.page, backgroundColor}}>
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

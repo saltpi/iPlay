@@ -1,7 +1,7 @@
 import { PropsWithNavigation } from "@global";
-import { IntentModule } from "@helper/native";
+import { useAppSelector } from "@hook/store";
 import { StatusBar } from "@view/StatusBar";
-import { Button, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -11,12 +11,9 @@ const style = StyleSheet.create({
 
 
 export function Page(props: PropsWithNavigation<"default">) {
-    const { navigation } = props
-    const playVideo = () => {
-        IntentModule.playFile("https://drive.endemy.me/iplay/demo.mp4")
-    }
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     return (
-        <SafeAreaView style={style.page}>
+        <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
@@ -24,7 +21,7 @@ export function Page(props: PropsWithNavigation<"default">) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <Button title="播放视频" onPress={playVideo} />
+
                 </View>
             </ScrollView>
         </SafeAreaView>

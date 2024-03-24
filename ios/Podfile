@@ -34,7 +34,7 @@ target 'iPlayClient' do
   
   pod "SPTPersistentCache", :modular_headers => true
   pod "DVAssetLoaderDelegate", :modular_headers => true
-  pod 'MobileVLCKit'
+  pod 'MobileVLCKit', "3.5.1"
   pod 'Masonry'
   pod 'ReactiveObjC'
   

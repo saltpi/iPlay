@@ -49,6 +49,8 @@ export function Page() {
     const [loading, setLoading] = useState(false)
     const [result, setResult] = useState<Media[]>([])
     const [searchKeyword, setSearchKeyword] = useState("")
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     useEffect(() => {
         setLoading(true)
         emby?.searchRecommend?.()
@@ -66,14 +68,14 @@ export function Page() {
             })
     }, [searchKeyword, emby])
     return (
-        <SafeAreaView style={style.page}>
+        <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
-                <TextInput style={style.searchInput} 
+                <TextInput style={{...style.searchInput, color, backgroundColor}} 
                     value={searchKeyword}
                     onChangeText={setSearchKeyword}
                     placeholder="搜索" />

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
+import { updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
 import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 
@@ -38,8 +38,18 @@ export function Page() {
     const dispatch = useAppDispatch();
     const menuBarPaddingOffset = useAppSelector((state) => state.theme.menuBarPaddingOffset);
     const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);
+    const headerTitleAlign = useAppSelector((state) => state.theme.headerTitleAlign);
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+
+    const updateTitleAlign = () => {
+        dispatch(updateTheme(s => {
+            s.headerTitleAlign = s.headerTitleAlign === 'center' ? 'left' : 'center';
+            return s
+        }));
+    }
     return (
-        <SafeAreaView style={style.page}>
+        <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
@@ -48,7 +58,7 @@ export function Page() {
                 style={{flex: 1}}>
                 <View style={style.inline}>
                     <Text style={style.label}>菜单栏下边距</Text>
-                    <TextInput style={style.input}
+                    <TextInput style={{...style.input, color}}
                         keyboardType="numeric"
                         value={menuBarPaddingOffset.toString()}
                         onChangeText={(text) => dispatch(updateMenuBarPaddingOffset(Number(text)))}
@@ -58,6 +68,11 @@ export function Page() {
                     <Text style={style.label}>显示视频链接</Text>
                     <Switch value={showVideoLink}
                         onChange={() => { dispatch(updateShowVideoLink(!showVideoLink)) }} />
+                </View>
+                <View style={style.inline}>
+                    <Text style={style.label}>导航栏标题居中(默认居左)</Text>
+                    <Switch value={headerTitleAlign === 'center'}
+                        onChange={updateTitleAlign} />
                 </View>
             </ScrollView>
         </SafeAreaView>
