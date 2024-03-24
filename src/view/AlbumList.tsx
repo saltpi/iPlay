@@ -140,7 +140,7 @@ export function SiteResource({site}: SiteResourceProps) {
             <AlbumCardList albums={albums} />
             {medias.map((media, i) => (
                 <AlbumCard
-                    key={albums[i]?.Id}
+                    key={albums[i]?.Id ?? i}
                     media={media}
                     title={albums[i]?.Name}
                 />

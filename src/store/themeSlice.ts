@@ -1,5 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import _ from 'lodash';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '@store';
+import _, { get } from 'lodash';
+import { useMemo } from 'react';
 
 interface ThemeState {
     routeName: string;
@@ -14,6 +17,7 @@ interface ThemeState {
     fontFamily?: string;
     backgroundColor?: string;
     barStyle?: 'default' | 'light-content' | 'dark-content';
+    headerTitleAlign?: 'left' | 'center';
 }
 
 type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
@@ -24,6 +28,7 @@ const initialState: ThemeState = {
     menuBarPaddingOffset: 0,
     showVideoLink: false,
     isDarkMode: false,
+    headerTitleAlign: 'center',
 };
 
 export const slice = createSlice({
@@ -58,6 +63,26 @@ export const slice = createSlice({
         }
     },
 });
+
+const getHeaderTintColor = (state: RootState) => state.theme.fontColor;
+const getBackgroundColor = (state: RootState) => state.theme.backgroundColor;
+const getHeaderTitleAlign = (state: RootState) => state.theme.headerTitleAlign;
+
+export const selectScreenOptions = createSelector([
+    getHeaderTintColor,
+    getBackgroundColor,
+    getHeaderTitleAlign
+], (headerTintColor, backgroundColor, headerTitleAlign) => {
+    const options = {
+        headerTitleAlign: headerTitleAlign,
+        headerStyle: {backgroundColor}, 
+        headerTintColor,
+        contentStyle: {
+            backgroundColor,
+        },
+    }
+    return options as {};
+})
 
 export const { 
     switchRoute, 

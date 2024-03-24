@@ -13,11 +13,11 @@ import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer, NavigationState} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NativeStackNavigationOptions, createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuBar, MenuType} from '@view/menu/MenuBar';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from '@hook/store';
-import {switchRoute} from '@store/themeSlice';
+import {selectScreenOptions, switchRoute} from '@store/themeSlice';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -36,11 +36,7 @@ const fullscreenOptions = (options: any) => {
     };
 };
 const HomeRouter = () => {
-    const headerTintColor = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(
-        state => state.theme.backgroundColor,
-    );
-    const options = {headerStyle: {backgroundColor}, headerTintColor};
+    const options = useAppSelector(selectScreenOptions)
     return (
         <HomeStack.Navigator initialRouteName="home" screenOptions={options}>
             <HomeStack.Screen
@@ -77,15 +73,7 @@ const HomeRouter = () => {
     );
 };
 const SettingsRouter = () => {
-    const headerTintColor = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(
-        state => state.theme.backgroundColor,
-    );
-    const options = {
-        headerStyle: {backgroundColor}, 
-        headerTintColor,
-        backgroundColor,
-    };
+    const options = useAppSelector(selectScreenOptions)
     return (
         <SettingsStack.Navigator
             initialRouteName="settings"
@@ -114,11 +102,7 @@ const SettingsRouter = () => {
     );
 };
 const SearchRouter = () => {
-    const headerTintColor = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(
-        state => state.theme.backgroundColor,
-    );
-    const options = {headerStyle: {backgroundColor}, headerTintColor};
+    const options = useAppSelector(selectScreenOptions)
     return (
         <SearchStack.Navigator
             initialRouteName="search"
@@ -147,11 +131,7 @@ const SearchRouter = () => {
     );
 };
 const MessageRouter = () => {
-    const headerTintColor = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(
-        state => state.theme.backgroundColor,
-    );
-    const options = {headerStyle: {backgroundColor}, headerTintColor};
+    const options = useAppSelector(selectScreenOptions)
     return (
         <MessageStack.Navigator
             initialRouteName="search"
@@ -165,19 +145,14 @@ const MessageRouter = () => {
     );
 };
 const StarRouter = () => {
-    const headerTintColor = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(
-        state => state.theme.backgroundColor,
-    );
+    const options = useAppSelector(selectScreenOptions)
     return (
-        <StarStack.Navigator initialRouteName="star">
+        <StarStack.Navigator initialRouteName="star" screenOptions={options}>
             <StarStack.Screen
                 name="star"
                 component={StarPage}
                 options={{
                     title: '收藏',
-                    headerStyle: {backgroundColor},
-                    headerTintColor,
                 }}
             />
             <StarStack.Screen
@@ -199,10 +174,7 @@ function getActiveRouteName(state: NavigationState) {
 
 export function Router() {
     const dispatch = useAppDispatch();
-    const color = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(
-        state => state.theme.backgroundColor,
-    );
+    const options = useAppSelector(selectScreenOptions)
     return (
         <NavigationContainer
             onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
@@ -211,8 +183,7 @@ export function Router() {
                 tabBar={() => null}
                 screenOptions={{
                     headerShown: false,
-                    headerStyle: {backgroundColor},
-                    headerTintColor: color,
+                    ...options
                 }}>
                 <Tab.Screen name={MenuType.Home} component={HomeRouter} />
                 <Tab.Screen
