@@ -70,6 +70,7 @@ const style = StyleSheet.create({
 
 export function Page({route}: PropsWithNavigation<"movie">) {
     const emby = useAppSelector(state => state.emby?.emby)
+    const showVideoLink = useAppSelector(state => state.theme.showVideoLink)
     const {title, type, movie} = route.params
     const [url, setUrl] = useState<string>()
     const [isPlaying, setIsPlaying] = useState(false)
@@ -169,11 +170,12 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <Text style={style.overview}>{detail?.Overview}</Text>
             {isPlayable && url ?
             <ExternalPlayer title={detail?.Name} src={url} /> : null}
+            {showVideoLink ? 
             <Text style={style.link}
                 ellipsizeMode="tail" 
                 numberOfLines={3}>
                 {url}
-            </Text>
+            </Text> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
             {detail?.People.length ? <Text style={style.actorSection}>演职人员</Text> : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>

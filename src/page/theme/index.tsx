@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { updateMenuBarPaddingOffset } from "@store/themeSlice";
+import { updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -19,6 +19,7 @@ const style = StyleSheet.create({
     },
     label: {
         fontSize: 16,
+        flex: 1,
     },
     input: {
         fontSize: 16,
@@ -36,6 +37,7 @@ const style = StyleSheet.create({
 export function Page() {
     const dispatch = useAppDispatch();
     const menuBarPaddingOffset = useAppSelector((state) => state.theme.menuBarPaddingOffset);
+    const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);
     return (
         <SafeAreaView style={style.page}>
             <StatusBar />
@@ -51,6 +53,11 @@ export function Page() {
                         value={menuBarPaddingOffset.toString()}
                         onChangeText={(text) => dispatch(updateMenuBarPaddingOffset(Number(text)))}
                         />
+                </View>
+                <View style={style.inline}>
+                    <Text style={style.label}>显示视频链接</Text>
+                    <Switch value={showVideoLink}
+                        onChange={() => { dispatch(updateShowVideoLink(!showVideoLink)) }} />
                 </View>
             </ScrollView>
         </SafeAreaView>

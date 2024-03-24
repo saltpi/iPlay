@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import _ from 'lodash';
 
 interface ThemeState {
     routeName: string;
@@ -6,15 +7,19 @@ interface ThemeState {
     // menu bar padding bottom offset
     menuBarPaddingOffset: number;
     menuBarHeight?: number;
+    showVideoLink?: boolean;
 }
+
+type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
 
 const initialState: ThemeState = {
     routeName: 'home',
     hideMenuBar: false,
     menuBarPaddingOffset: 0,
+    showVideoLink: false,
 };
 
-export const themeSlice = createSlice({
+export const slice = createSlice({
     name: 'theme',
     initialState,
     reducers: {
@@ -33,10 +38,25 @@ export const themeSlice = createSlice({
         },
         updateMenuBarHeight: (state, action: PayloadAction<number>) => {
             state.menuBarHeight = action.payload;
+        },
+        updateShowVideoLink: (state, action: PayloadAction<boolean>) => {
+            state.showVideoLink = action.payload;
+        },
+        updateTheme:(state, action: PayloadAction<Partial<ThemeState>|ThemeUpdateFunction>) => {
+            if (typeof action.payload === 'function') {
+                action.payload(state);
+            } else {
+                _.merge(state, action.payload)
+            }
         }
     },
 });
 
-export const { switchRoute, updateMenuBarPaddingOffset, updateMenuBarHeight } = themeSlice.actions;
+export const { 
+    switchRoute, 
+    updateMenuBarPaddingOffset, 
+    updateMenuBarHeight,
+    updateShowVideoLink
+} = slice.actions;
 
-export default themeSlice.reducer;
+export default slice.reducer;

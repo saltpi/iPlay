@@ -9,6 +9,7 @@ import { Page as SettingsPage } from "@page/settings/index.tsx";
 import { Page as StarPage } from "@page/star/index.tsx";
 import { Page as PlayerPage } from "@page/player/index.tsx";
 import { Page as ThemePage } from "@page/theme/index.tsx";
+import { Page as VideoConfigPage } from "@page/settings/video/index.tsx";
 import { Page as TestPage } from "@page/test/index.tsx";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, NavigationState } from "@react-navigation/native";
@@ -77,6 +78,10 @@ const SettingsRouter = () => (
             name="theme"
             component={ThemePage}
             options={{ title: '主题' }} />
+        <SettingsStack.Screen
+            name="config_video"
+            component={VideoConfigPage}
+            options={{ title: '视频配置' }} />
     </SettingsStack.Navigator>
 );
 const SearchRouter = () => (
