@@ -82,7 +82,6 @@ const kInactiveOpacity = 0.25;
 
 export function MenuBar() {
     const active = useAppSelector(getActiveMenu);
-    const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const dispatch = useAppDispatch();
     const navigation: TabNavigation = useNavigation();
@@ -92,7 +91,6 @@ export function MenuBar() {
     const position = useRef(new Animated.Value(!hideMenuBar ? 0 : 100)).current; // Assuming the height of the component is less than 100
 
     useEffect(() => {
-        console.log(`hideMenuBar: ${hideMenuBar}`)
         Animated.timing(position, {
             toValue: !hideMenuBar ? 0 : 100,
             duration: 200,
@@ -100,7 +98,7 @@ export function MenuBar() {
         }).start();
     }, [hideMenuBar]);
 
-    const setActive = (menu: MenuType) => {
+    const onActive = (menu: MenuType) => {
         dispatch(switchToMenu(menu));
         navigation.navigate(menu);
     };
@@ -118,25 +116,32 @@ export function MenuBar() {
                 paddingBottom: insets.bottom + menuBarPaddingOffset,
             }
         }
-        const menuBarHeight = result.paddingTop + result.paddingBottom + style.icon.height
-        dispatch(updateMenuBarHeight(menuBarHeight))
         return result
     }, [hideMenuBar, menuBarPaddingOffset]);
+
+    useEffect(() => {
+        const menuBarHeight = menuBarStyle.paddingTop + menuBarStyle.paddingBottom + style.icon.height
+        dispatch(updateMenuBarHeight(menuBarHeight))
+    }, [menuBarStyle])
+
+    const menuItems = useMemo(() => 
+        menu.map((item, i) => (
+            <TouchableOpacity
+                activeOpacity={1.0}
+                key={i}
+                style={style.menuItem}
+                onPress={() => onActive(item.type)}>
+                <View>
+                    {<item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />}
+                </View>
+            </TouchableOpacity>
+        ))
+    , [menu, active])
 
     return (
         <Animated.View
             style={{...menuBarStyle, backgroundColor, transform: [{translateY: position}]}}>
-            {menu.map((item, i) => (
-                <TouchableOpacity
-                    activeOpacity={1.0}
-                    key={i}
-                    style={style.menuItem}
-                    onPress={() => setActive(item.type)}>
-                    <View>
-                        {<item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />}
-                    </View>
-                </TouchableOpacity>
-            ))}
+            {menuItems}
         </Animated.View>
     );
 }

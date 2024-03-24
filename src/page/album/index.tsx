@@ -3,6 +3,7 @@ import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
 import { EmbyResponse } from "@model/EmbyResponse";
 import { Media } from "@model/Media";
+import { selectThemeBasicStyle } from "@store/themeSlice";
 import { MediaCard } from '@view/MediaCard';
 import { Spin } from "@view/Spin";
 import React, { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ export function Page({route, navigation}: PropsWithNavigation<"album">) {
     const emby = useAppSelector(state => state.emby?.emby)
     const [data, setData] = useState<EmbyResponse<Media>>()
     const [loading, setLoading] = useState(true)
+    const theme = useAppSelector(selectThemeBasicStyle)
     useEffect(() => {
         if (!emby) return
         setLoading(true)
@@ -40,9 +42,9 @@ export function Page({route, navigation}: PropsWithNavigation<"album">) {
     }, [route.params.albumId, emby])
     return (
         <ScrollView showsHorizontalScrollIndicator={false}>
-            <View style={style.root}>
-                {data?.Items.map(media => <MediaCard key={media.Id} media={media} />)}
-                {loading ? <Spin /> : null}
+            <View style={{...style.root, ...theme}}>
+                {data?.Items.map(media => <MediaCard key={media.Id} media={media} theme={theme} />)}
+                {loading ? <Spin color={theme.color} /> : null}
             </View>
         </ScrollView>
     )

@@ -58,15 +58,15 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: {
-      ignoredPaths: [
-        "emby.emby",
-        "theme.routeName",
-        "theme.hideMenuBar",
-        "theme/updateTheme",
-      ],
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
+    serializableCheck: false,
+    // serializableCheck: {
+    //   ignoredPaths: [
+    //     "emby.emby",
+    //     "theme.routeName",
+    //     "theme.hideMenuBar",
+    //   ],
+    //   ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    // },
     thunk: {
       extraArgument: Api
     },

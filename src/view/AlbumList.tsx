@@ -137,8 +137,8 @@ export function SiteResource({site}: SiteResourceProps) {
     }, [albums, emby]);
 
     return (
-        <View style={style.root}>
-            {loading ?  <Spin /> : null}
+        <View style={{...style.root, ...theme}}>
+            {loading ?  <Spin color={theme.color} /> : null}
             <AlbumCardList albums={albums} theme={theme} />
             {medias.map((media, i) => (
                 <AlbumCard
