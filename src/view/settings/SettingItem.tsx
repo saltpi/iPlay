@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View, useColorScheme } from "react-native";
 import { Image } from '@view/Image';
 import { Navigation } from "@global";
 import VideoIcon from "@asset/video.svg"
@@ -9,6 +9,7 @@ import MobileIcon from "@asset/phone.svg"
 import ThemeIcon from "@asset/paint.svg"
 import Indicator from "@asset/right.arrow.svg"
 import SiteIcon from "@asset/database-server.svg"
+import { useAppSelector } from "@hook/store";
 
 
 const style = StyleSheet.create({
@@ -61,13 +62,15 @@ export interface SettingItemProps {
 
 export function SettingItem(props: SettingItemProps) {
     const SettingIcon = Icon[props.icon];
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     return (
-        <TouchableHighlight onPress={() => props.onPress?.()} underlayColor={"lightgray"}>
-        <View style={style.root}>
+        <TouchableHighlight onPress={() => props.onPress?.()} underlayColor={backgroundColor}>
+        <View style={{...style.root, backgroundColor}}>
             {SettingIcon ? <SettingIcon
                 width={style.icon.width}
                 style={style.icon} /> : null}
-            <Text style={style.label}>{props.label}</Text>
+            <Text style={{...style.label, color}}>{props.label}</Text>
             <Icon.Indicator width={style.indicator.width} 
                 style={style.indicator} />
         </View>

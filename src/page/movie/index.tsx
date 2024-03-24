@@ -69,6 +69,8 @@ const style = StyleSheet.create({
 })
 
 export function Page({route}: PropsWithNavigation<"movie">) {
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const emby = useAppSelector(state => state.emby?.emby)
     const showVideoLink = useAppSelector(state => state.theme.showVideoLink)
     const {title, type, movie} = route.params
@@ -143,7 +145,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         transform: [{translateX: -iconSize/2}, {translateY: -iconSize/2}]
     }
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor}}>
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}
@@ -167,7 +169,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>
-            <Text style={style.overview}>{detail?.Overview}</Text>
+            <Text style={{...style.overview, color}}>{detail?.Overview}</Text>
             {isPlayable && url ?
             <ExternalPlayer title={detail?.Name} src={url} /> : null}
             {showVideoLink ? 

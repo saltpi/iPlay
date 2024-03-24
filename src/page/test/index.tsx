@@ -2,6 +2,7 @@ import { StatusBar } from "@view/StatusBar";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { VLCPlayer, Video } from "@view/Video";
 import { useEffect, useRef } from "react";
+import { useAppSelector } from "@hook/store";
 
 const style = StyleSheet.create({
     page: {
@@ -15,7 +16,9 @@ const style = StyleSheet.create({
 
 export function Page() {
     const ref= useRef<any>(null);
-    console.log(ref)
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const barStyle = useAppSelector(state => state.theme.barStyle);
     useEffect(() => {
         return () => {
             console.log(`unmount`, ref.current)
@@ -24,7 +27,7 @@ export function Page() {
 
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar />
+            <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

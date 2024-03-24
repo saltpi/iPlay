@@ -54,6 +54,8 @@ export function Page() {
     const [password, onChangePassword] = useState('');
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const color = useAppSelector(state => state.theme.fontColor);
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
@@ -77,7 +79,7 @@ export function Page() {
                     type: 'success',
                     text1: '登录成功',
                     position: 'top',
-                    topOffset: insets.top, 
+                    topOffset: insets.top + 2.5, 
                 });
             },
             reject: () => {
@@ -103,21 +105,21 @@ export function Page() {
         }))
     }
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex: 1, backgroundColor}}>
             <View style={style.inputLine}>
                 <Text style={style.inputLabel}>服务器</Text>
                 <TextInput
                     placeholder="https://server.emby.media"
-                    style={style.input}
+                    style={{...style.input, color, backgroundColor}}
                     onChangeText={onChangeServer}
                     value={server}
                 />
             </View>
             <View style={style.inputLine}>
-                <Text style={style.inputLabel}>用户名</Text>
+                <Text style={{...style.inputLabel, color}}>用户名</Text>
                 <TextInput
                     placeholder="guest"
-                    style={style.input}
+                    style={{...style.input, color, backgroundColor}}
                     onChangeText={onChangeUsername}
                     value={username}
                 />
@@ -126,7 +128,7 @@ export function Page() {
                 <Text style={style.inputLabel}>密码</Text>
                 <TextInput
                     placeholder="password"
-                    style={style.input}
+                    style={{...style.input, color, backgroundColor}}
                     onChangeText={onChangePassword}
                     value={password}
                 />
