@@ -1,4 +1,5 @@
 import { PropsWithNavigation } from '@global';
+import { printException } from '@helper/log';
 import { useAppSelector } from '@hook/store';
 import {SiteResource} from '@view/AlbumList';
 import { StatusBar } from '@view/StatusBar';
@@ -32,7 +33,9 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
         }
         emby?.getPublicInfo?.().then(data => {
             console.log(data.ServerName);
-        });
+        })
+        .catch(printException)
+        
     }, [site])
 
     const goToLogin = () => {

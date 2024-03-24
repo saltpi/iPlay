@@ -20,6 +20,7 @@ import { preferedSize, windowWidth } from "@helper/device";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Like } from "@view/like/Like";
 import { selectThemeBasicStyle } from "@store/themeSlice";
+import { printException } from "@helper/log";
 
 const style = StyleSheet.create({
     overview: {
@@ -100,19 +101,21 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }, [emby, movie.Id])
 
     useEffect(() => {
+        if (movie.Type === "Series") return
         fetchPlayUrl()
             .then(setUrl)
-
-        return () => {
-            console.log(`unmount`, videoRef)
-            videoRef.current?.stop?.()
-        }
+            .catch(printException)
     }, [])
 
     useEffect(() => {
-        emby?.getMedia?.(Number(movie.Id)).then(setDetail)
+        emby?.getMedia?.(Number(movie.Id))
+            .then(setDetail)
+            .catch(printException)
+
         if (type !== "Series") return
-        emby?.getSeasons?.(Number(movie.Id)).then(setSeasons)
+        emby?.getSeasons?.(Number(movie.Id))
+            .then(setSeasons)
+            .catch(printException)
     }, [emby, movie.Id])
     
     const onError = (e: any) => {
@@ -147,7 +150,8 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         transform: [{translateX: -iconSize/2}, {translateY: -iconSize/2}]
     }
     return (
-        <ScrollView style={{backgroundColor}}>
+        <ScrollView style={{backgroundColor}}
+            showsVerticalScrollIndicator={false}>
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}

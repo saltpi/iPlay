@@ -1,3 +1,4 @@
+import { printException } from "@helper/log";
 import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
 import { selectThemeBasicStyle } from "@store/themeSlice";
@@ -60,6 +61,7 @@ export function Page() {
                 console.log(data)
                 setMedias(data.Items)
             })
+            .catch(printException)
             .finally(() => setLoading(false))
     }, [])
     useEffect(() => {
@@ -68,6 +70,7 @@ export function Page() {
                 console.log(data)
                 setResult(data.Items)
             })
+            .catch(printException)
     }, [searchKeyword, emby])
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>

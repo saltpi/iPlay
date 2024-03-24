@@ -11,49 +11,17 @@ export interface Prefixs {
 export type Options = Prefixs
 
 const DEFAULT_PREFIXS: Prefixs = {
-    info: "%cINFO",
-    warn: "%cWARN",
-    error: "%cERROR",
-    trace: "%cTRACE",
+    info: "",
+    warn: "",
+    error: "",
+    trace: "",
 }
 
 const DEFAULT_OPTIONS: Options = {
-    info: `
-    color: #531dab;
-    background: #f9f0ff;
-    border-color: #d3adf7;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    margin-inline-end: 8px;
-    padding-inline: 7px;
-    `,
-    warn: `
-    color: #c41d7f;
-    background: #fff0f6;
-    border-color: #ffadd2;
-    border: 1px solid;
-    border-radius: 4px;
-    margin-inline-end: 8px;
-    padding-inline: 7px;
-    `,
-    error: `
-    color: #d46b08;
-    background: #fff7e6;
-    border-color: #ffd591;
-    border: 1px solid;
-    border-radius: 4px;
-    margin-inline-end: 8px;
-    padding-inline: 7px;
-    `,
-    trace: `
-    color: #d46b08;
-    background: #fff7e6;
-    border-color: #ffd591;
-    border: 1px solid;
-    border-radius: 4px;
-    margin-inline-end: 8px;
-    padding-inline: 7px;
-    `
+    info: ``,
+    warn: ``,
+    error: ``,
+    trace: ``
 }
 
 const EMPTY_IMPL = (message?: any, ...optionalParams: any[]) => {}
@@ -118,3 +86,7 @@ class ConsoleLogger implements Logger {
 }
 
 export const logger = new ConsoleLogger()
+
+export function printException(e: any) {
+    logger.info(e)
+}

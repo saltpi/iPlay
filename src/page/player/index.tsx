@@ -1,4 +1,5 @@
 import {PropsWithNavigation} from '@global';
+import { printException } from '@helper/log';
 import { Toast } from '@helper/toast';
 import { useAppSelector } from '@hook/store';
 import { Episode } from '@model/Episode';
@@ -89,6 +90,7 @@ export function Page({navigation, route}: PlayerPageProps) {
                     title: episode.Name
                 })
             })
+            .catch(printException)
     }
     useEffect(() => {
         playEpisode(episode)
