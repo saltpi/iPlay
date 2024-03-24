@@ -67,6 +67,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [episode, setEpisode] = useState(route.params.episode)
     const [loading, setLoading] = useState(true)
     const videoRef = useRef<VideoRef>(null);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const onError = (e: any) => {
         console.log(`player: `, url, e);
         Toast.show({
@@ -108,7 +109,7 @@ export function Page({navigation, route}: PlayerPageProps) {
             /> : null}
             {loading ? <Spin /> : null}
         </View>
-        <ScrollView>
+        <ScrollView style={{backgroundColor}}>
         {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
             style={e === episode ? style.playing : style.inactive}
