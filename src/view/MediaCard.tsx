@@ -7,7 +7,7 @@ import {
 import { Image } from '@view/Image';
 import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
-import {Navigation} from '@global';
+import {Navigation, ThemeBasicStyle} from '@global';
 import {Api} from '@api/emby';
 import {useAppSelector} from '@hook/store';
 
@@ -24,7 +24,7 @@ export const style = StyleSheet.create({
     }
 });
 
-export function MediaCard({media}: {media: Media}) {
+export function MediaCard({media, theme}: {media: Media, theme?: ThemeBasicStyle}) {
     const emby = useAppSelector(state => state.emby?.emby);
     const navigation: Navigation = useNavigation();
     const onPress = (media: Media) => {
@@ -47,12 +47,12 @@ export function MediaCard({media}: {media: Media}) {
                     source={{uri: emby?.imageUrl?.(media.Id, null)}}
                 />
             </TouchableOpacity>
-            <Text style={style.title}
+            <Text style={{...style.title, ...theme}}
                 numberOfLines={1} 
                 ellipsizeMode="tail">
                 {media.Name}
             </Text>
-            <Text>{media.ProductionYear}</Text>
+            <Text style={theme}>{media.ProductionYear}</Text>
         </View>
     );
 }

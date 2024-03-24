@@ -11,12 +11,13 @@ import {
 import { Image } from '@view/Image';
 import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
-import {Navigation} from '@global';
+import {Navigation, ThemeBasicStyle} from '@global';
 import { MediaCard } from './MediaCard';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { EmbySite } from '@model/EmbySite';
 import { fetchEmbyAlbumAsync } from '@store/embySlice';
 import { Spin } from './Spin';
+import { selectThemeBasicStyle } from '@store/themeSlice';
 
 export const style = StyleSheet.create({
     root: {
@@ -51,22 +52,22 @@ export const style = StyleSheet.create({
     }
 });
 
-export function AlbumCard({media, title}: {media?: Media[]; title: string}) {
+export function AlbumCard({media, title, theme}: {media?: Media[]; title: string, theme?: ThemeBasicStyle}) {
     if (!media || !media.length) return null;
     return (
         <View style={style.albumItem}>
-            <Text>{title}</Text>
+            <Text style={theme}>{title}</Text>
             <ScrollView horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {media?.map(m => (
-                    <MediaCard key={m.Id} media={m} />
+                    <MediaCard key={m.Id} media={m} theme={theme} />
                 ))}
             </ScrollView>
         </View>
     );
 }
 
-export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
+export function AlbumCardList({albums, theme}: {albums: ViewDetail[], theme?: ThemeBasicStyle}) {
     const navigation: Navigation = useNavigation();
     const emby = useAppSelector(state => state.emby.emby)
     const onPress = (album: ViewDetail) => {
@@ -86,7 +87,7 @@ export function AlbumCardList({albums}: {albums: ViewDetail[]}) {
                         <Image style={style.albumImage}
                             source={{uri: emby?.imageUrl?.(album.Id, album.Etag)}}
                         />
-                        <Text>{album.Name}</Text>
+                        <Text style={theme}>{album.Name}</Text>
                     </View>
                     </TouchableOpacity>
                 );
@@ -106,6 +107,7 @@ export function SiteResource({site}: SiteResourceProps) {
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const emby = useAppSelector(state => state.emby.emby)
+    const theme = useAppSelector(selectThemeBasicStyle)
 
     const getMediaContent = async (emby: Emby) => {
         dispatch(fetchEmbyAlbumAsync()).then(data => {
@@ -137,12 +139,13 @@ export function SiteResource({site}: SiteResourceProps) {
     return (
         <View style={style.root}>
             {loading ?  <Spin /> : null}
-            <AlbumCardList albums={albums} />
+            <AlbumCardList albums={albums} theme={theme} />
             {medias.map((media, i) => (
                 <AlbumCard
                     key={albums[i]?.Id ?? i}
                     media={media}
                     title={albums[i]?.Name}
+                    theme={theme}
                 />
             ))}
         </View>
