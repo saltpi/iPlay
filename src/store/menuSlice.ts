@@ -10,7 +10,7 @@ const initialState: MenuState = {
     value: MenuType.Home,
 };
 
-export const menuSlice = createSlice({
+export const slice = createSlice({
     name: 'menu',
     initialState,
     reducers: {
@@ -23,11 +23,11 @@ export const menuSlice = createSlice({
     },
 });
 
-export const { switchToMenu } = menuSlice.actions;
+export const { switchToMenu } = slice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const getActiveMenu = (state: RootState) => state.menu.value;
 
-export default menuSlice.reducer;
+export default slice.reducer;

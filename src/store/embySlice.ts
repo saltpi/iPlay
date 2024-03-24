@@ -68,7 +68,7 @@ export const helloAsync = createAsyncThunk<string, string, any>("emby/site", asy
     return content
 })
 
-export const EmbySlice = createSlice({
+export const slice = createSlice({
     name: 'emby',
     initialState,
     reducers: {
@@ -94,7 +94,7 @@ export const EmbySlice = createSlice({
     },
 });
 
-export const { updateCurrentEmbySite } = EmbySlice.actions;
+export const { updateCurrentEmbySite } = slice.actions;
 export const getActiveEmbySite = (state: RootState) => state.emby;
 
 
@@ -112,4 +112,4 @@ listenerMiddleware.startListening({
     }
 })
 
-export default EmbySlice.reducer;
+export default slice.reducer;

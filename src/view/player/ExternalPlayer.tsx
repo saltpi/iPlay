@@ -7,6 +7,7 @@ import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { OSType, isOS } from "@helper/device";
 import { IntentModule } from "@helper/native";
+import { useAppSelector } from "@hook/store";
 const iinaIcon = require("@view/player/iina.png");
 const nplayerIcon = require("@view/player/nplayer.png");
 const vlcIcon = require("@view/player/vlc.png");
@@ -17,12 +18,16 @@ const mxplayerIcon = require("@view/player/mxplayer.png");
 const mpvIcon = require("@view/player/mpv.png");
 
 
+interface PlayerPerference {
+    useInternalMPV?: boolean;
+}
+
 const Players = {
     iina: {
         enable: isOS(OSType.macOS),
         title: "iina",
         icon: iinaIcon,
-        action: (url: string, title?: string) => {
+        action: (url: string, title?: string, config?: PlayerPerference) => {
             Linking.openURL(`iina://weblink?url=${encodeURI(url)}`)
         }
     },
@@ -30,7 +35,7 @@ const Players = {
         enable: isOS(OSType.iOS),
         title: "nPlayer",
         icon: nplayerIcon,
-        action: (url: string, title?: string) => {
+        action: (url: string, title?: string, config?: PlayerPerference) => {
             Linking.openURL(`nplayer-${encodeURI(url)}`)
         }
     },
@@ -38,7 +43,7 @@ const Players = {
         enable: true,
         title: "VLC",
         icon: vlcIcon,
-        action: (url: string, title?: string) => {
+        action: (url: string, title?: string, config?: PlayerPerference) => {
             Linking.openURL(`vlc://${encodeURI(url)}`)
         }
     },
@@ -47,7 +52,7 @@ const Players = {
         title: "Infuse",
         icon: infuseIcon,
         // infuse://x-callback-url/play?url=
-        action: (url: string, title?: string) => {
+        action: (url: string, title?: string, config?: PlayerPerference) => {
             Linking.openURL(`infuse://x-callback-url/play?url=${encodeURI(url)}`)
         }
     },
@@ -55,7 +60,7 @@ const Players = {
         enable: isOS(OSType.Windows),
         title: "PortPlayer",
         icon: potplayerIcon,
-        action: (url: string, title?: string) => {
+        action: (url: string, title?: string, config?: PlayerPerference) => {
             Linking.openURL(`portplayer://${encodeURI(url)}`)
         }
     },
@@ -63,7 +68,7 @@ const Players = {
         enable: isOS(OSType.Android) || isOS(OSType.iOS),
         title: "KMPlayer",
         icon: kmplayerIcon,
-        action: (url: string, title?: string) => {
+        action: (url: string, title?: string, config?: PlayerPerference) => {
             Linking.openURL(`kmplayer://${encodeURI(url)}`)
         }
     },
@@ -71,7 +76,7 @@ const Players = {
         enable: isOS(OSType.Android),
         title: "MXPlayer",
         icon: mxplayerIcon,
-        action: (url: string, title: string = new URL(url).pathname) => {
+        action: (url: string, title: string = new URL(url).pathname, config?: PlayerPerference) => {
             if (isOS(OSType.Android)) {
                 const deepLink = `intent:${encodeURI(url)}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
                 console.log(deepLink)
@@ -83,12 +88,16 @@ const Players = {
         enable: isOS(OSType.Android),
         title: "mpv-android",
         icon: mpvIcon,
-        action: (url: string, title: string = new URL(url).pathname) => {
+        action: (url: string, title: string = new URL(url).pathname, config?: PlayerPerference) => {
             if (isOS(OSType.Android)) {
-                const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
-                const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
-                console.log(deepLink)
-                IntentModule.openUrl(deepLink)
+                if (config?.useInternalMPV) {
+                    IntentModule.playFile(url)
+                } else {
+                    const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
+                    const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
+                    console.log(deepLink)
+                    IntentModule.openUrl(deepLink)
+                }
             }
         }
     }
@@ -130,14 +139,16 @@ export function ExternalPlayer({
     players = Object.keys(Players) as any
 }: ExternalPlayerProps) {
     const insets = useSafeAreaInsets()
+    const useInternalMPV = useAppSelector(s => s.config.video.useInternalMPV)
+    const config = useMemo(() => ({useInternalMPV}), [useInternalMPV])
     const playerList = useMemo(() => 
         players?.map(type => Players[type])
             .filter(p => p.enable).map(player => (
-            <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title)}>
+            <TouchableOpacity activeOpacity={1.0} key={player.title} onPress={() => player.action(src, title, config)}>
                 <Image key={player.title} style={style.icon} source={player.icon} />
             </TouchableOpacity>
         ))
-    , [players])
+    , [players, config])
     const copylinkToClipboard = () => {
         Clipboard.setString(src)
         Toast.show({

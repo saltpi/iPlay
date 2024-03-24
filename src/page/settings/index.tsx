@@ -20,10 +20,17 @@ const settings: SettingItemProps[] = [
         }
     },
     {
+        icon: "Site",
+        label: "站点配置",
+        onPress: (setting, navigation) => {
+            navigation?.navigate("login")
+        }
+    },
+    {
         icon: "Video",
         label: "视频设置",
         onPress: (setting, navigation) => {
-            navigation?.navigate("login")
+            navigation?.navigate("config_video")
         }
     },
     {

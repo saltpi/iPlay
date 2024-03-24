@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import menuReducer from './menuSlice';
 import embyReducer from './embySlice';
 import themeReducer from './themeSlice';
+import configReducer from './configSlice';
 import { listener } from "./middleware/Listener";
 import { thunk } from 'redux-thunk';
 import { Api } from '@api/emby';
@@ -35,6 +36,10 @@ const reducer = combineReducers({
       ],
       storage
   }, themeReducer),
+  config: persistReducer({
+      key: [Env.storeKey, "config"].join("/"),
+      storage
+  }, configReducer),
   menu: persistReducer({
       key: [Env.storeKey, "menu"].join("/"),
       blacklist: [

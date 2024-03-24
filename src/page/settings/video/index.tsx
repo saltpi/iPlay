@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@hook/store";
+import { updateConfig } from "@store/configSlice";
 import { updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
-import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Switch, SwitchChangeEvent, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -36,8 +37,14 @@ const style = StyleSheet.create({
 
 export function Page() {
     const dispatch = useAppDispatch();
-    const menuBarPaddingOffset = useAppSelector((state) => state.theme.menuBarPaddingOffset);
-    const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);
+    const useMpv = useAppSelector((state) => state.config.video.useInternalMPV);
+    const toggleUseMpv = (event: SwitchChangeEvent) => {
+        dispatch(updateConfig(s => {
+            s.video.useInternalMPV = !s.video.useInternalMPV
+            return s
+        }))
+    }
+
     return (
         <SafeAreaView style={style.page}>
             <StatusBar />
@@ -47,17 +54,9 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View style={style.inline}>
-                    <Text style={style.label}>菜单栏下边距</Text>
-                    <TextInput style={style.input}
-                        keyboardType="numeric"
-                        value={menuBarPaddingOffset.toString()}
-                        onChangeText={(text) => dispatch(updateMenuBarPaddingOffset(Number(text)))}
-                        />
-                </View>
-                <View style={style.inline}>
-                    <Text style={style.label}>显示视频链接</Text>
-                    <Switch value={showVideoLink}
-                        onChange={() => { dispatch(updateShowVideoLink(!showVideoLink)) }} />
+                    <Text style={style.label}>使用内置MPV播放器(Android)</Text>
+                    <Switch value={useMpv}
+                        onChange={toggleUseMpv} />
                 </View>
             </ScrollView>
         </SafeAreaView>
