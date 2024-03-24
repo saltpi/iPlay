@@ -9,6 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Appearance, useColorScheme } from 'react-native';
 import { updateTheme } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { printException } from '@helper/log';
 
 function App() {
     const [inited, setInited] = useState(false);
@@ -32,7 +33,8 @@ function App() {
     }
 
     useEffect(() => {
-        init().then(() => setInited(true));
+        init().then(() => setInited(true))
+            .catch(printException)
     }, []);
 
     useEffect(() => {

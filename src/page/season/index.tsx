@@ -7,6 +7,7 @@ import { Episode } from "@model/Episode";
 import { EpisodeCard } from "@view/EpisodeCard";
 import { Image } from '@view/Image';
 import { StatusBar } from "@view/StatusBar";
+import { printException } from "@helper/log";
 
 const style = StyleSheet.create({
     page: {
@@ -26,7 +27,8 @@ export function Page({route, navigation}: SeasonPageProps) {
     const [episodes, setEpisodes] = useState<Episode[]>([])
     useEffect(() => {
         emby?.getEpisodes?.(Number(season.SeriesId), Number(season.Id))
-        .then(setEpisodes);
+        .then(setEpisodes)
+        .catch(printException)
     }, [emby, season])
     const onPress = async (episode: Episode) => {
         navigation.navigate('player', {
