@@ -25,6 +25,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     const emby = useAppSelector(state => state.emby?.emby)
     const theme = useAppSelector(state => state.theme)
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -39,7 +40,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     }
 
     return (
-        <SafeAreaView style={style.page}>
+        <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"

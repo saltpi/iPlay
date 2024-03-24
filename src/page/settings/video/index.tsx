@@ -36,6 +36,9 @@ const style = StyleSheet.create({
 });
 
 export function Page() {
+    const barStyle = useAppSelector(state => state.theme.barStyle);
+    const color = useAppSelector(state => state.theme.fontColor);
+    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const dispatch = useAppDispatch();
     const useMpv = useAppSelector((state) => state.config.video.useInternalMPV);
     const toggleUseMpv = (event: SwitchChangeEvent) => {
@@ -46,15 +49,15 @@ export function Page() {
     }
 
     return (
-        <SafeAreaView style={style.page}>
+        <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                style={{flex: 1}}>
+                style={{flex: 1, backgroundColor}}>
                 <View style={style.inline}>
-                    <Text style={style.label}>使用内置MPV播放器(Android)</Text>
+                    <Text style={{...style.label, color}}>使用内置MPV播放器(Android)</Text>
                     <Switch value={useMpv}
                         onChange={toggleUseMpv} />
                 </View>

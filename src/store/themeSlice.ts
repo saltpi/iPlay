@@ -8,6 +8,12 @@ interface ThemeState {
     menuBarPaddingOffset: number;
     menuBarHeight?: number;
     showVideoLink?: boolean;
+    isDarkMode: boolean;
+    fontColor?: string;
+    fontSize?: number;
+    fontFamily?: string;
+    backgroundColor?: string;
+    barStyle?: 'default' | 'light-content' | 'dark-content';
 }
 
 type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
@@ -17,6 +23,7 @@ const initialState: ThemeState = {
     hideMenuBar: false,
     menuBarPaddingOffset: 0,
     showVideoLink: false,
+    isDarkMode: false,
 };
 
 export const slice = createSlice({
@@ -56,7 +63,8 @@ export const {
     switchRoute, 
     updateMenuBarPaddingOffset, 
     updateMenuBarHeight,
-    updateShowVideoLink
+    updateShowVideoLink,
+    updateTheme
 } = slice.actions;
 
 export default slice.reducer;
