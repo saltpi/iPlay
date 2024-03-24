@@ -8,6 +8,7 @@ import MessageIcon from "@asset/message.svg"
 import MobileIcon from "@asset/phone.svg"
 import ThemeIcon from "@asset/paint.svg"
 import Indicator from "@asset/right.arrow.svg"
+import SiteIcon from "@asset/database-server.svg"
 
 
 const style = StyleSheet.create({
@@ -40,6 +41,7 @@ const style = StyleSheet.create({
 });
 
 export const Icon = {
+    Site: SiteIcon,
     Video: VideoIcon,
     Audio: EarphoneIcon,
     Trash: TrashIcon,
