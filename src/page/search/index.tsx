@@ -1,5 +1,6 @@
 import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
+import { selectThemeBasicStyle } from "@store/themeSlice";
 import { MediaCard } from "@view/MediaCard";
 import { Spin } from "@view/Spin";
 import { StatusBar } from "@view/StatusBar";
@@ -51,6 +52,7 @@ export function Page() {
     const [searchKeyword, setSearchKeyword] = useState("")
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const theme = useAppSelector(selectThemeBasicStyle)
     useEffect(() => {
         setLoading(true)
         emby?.searchRecommend?.()
@@ -75,7 +77,7 @@ export function Page() {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1, backgroundColor}}>
-                <TextInput style={{...style.searchInput, color, backgroundColor}} 
+                <TextInput style={{...style.searchInput, ...theme}} 
                     value={searchKeyword}
                     onChangeText={setSearchKeyword}
                     placeholder="搜索" />
@@ -88,10 +90,10 @@ export function Page() {
                     )}
                 </View>
                 <View style={style.result}>
-                {result.map(media => <MediaCard key={media.Id} media={media} />)}
+                {result.map(media => <MediaCard key={media.Id} media={media} theme={theme} />)}
                 </View>
             </ScrollView>
-            {loading ? <Spin /> : null}
+            {loading ? <Spin color={theme.color} /> : null}
         </SafeAreaView>
     )
 }
