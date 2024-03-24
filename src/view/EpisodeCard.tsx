@@ -47,7 +47,7 @@ export function EpisodeCard({style: extraStyle, emby, episode, onPress}: Episode
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     return (
         <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(episode)}>
-        <View style={{...style.basic, ...extraStyle}}>
+        <View style={{...style.basic, backgroundColor, ...extraStyle}}>
             <Image style={{...style.cover, aspectRatio: episode.PrimaryImageAspectRatio}}
                 source={{uri: emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary)}} />
             <View style={{...style.text, backgroundColor}}>
