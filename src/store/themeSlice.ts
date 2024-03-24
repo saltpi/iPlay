@@ -1,3 +1,4 @@
+import { ThemeBasicStyle } from '@global';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
@@ -82,6 +83,13 @@ export const selectScreenOptions = createSelector([
         },
     }
     return options as {};
+})
+
+export const selectThemeBasicStyle = createSelector([
+    getHeaderTintColor,
+    getBackgroundColor
+], (color, backgroundColor) => {
+    return {color, backgroundColor} as ThemeBasicStyle;
 })
 
 export const { 

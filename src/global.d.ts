@@ -41,6 +41,11 @@ type TabStackParamList = {
   [MenuType.Message]: undefined;
 };
 
+type ThemeBasicStyle = {
+  backgroundColor: string,
+  color?: string,
+}
+
 type Navigation = NavigationProp<RootStackParamList>;
 type TabNavigation = NavigationProp<TabStackParamList>;
 

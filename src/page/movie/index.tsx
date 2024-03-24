@@ -19,6 +19,7 @@ import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Like } from "@view/like/Like";
+import { selectThemeBasicStyle } from "@store/themeSlice";
 
 const style = StyleSheet.create({
     overview: {
@@ -71,6 +72,7 @@ const style = StyleSheet.create({
 export function Page({route}: PropsWithNavigation<"movie">) {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const themeStyle = useAppSelector(selectThemeBasicStyle)
     const emby = useAppSelector(state => state.emby?.emby)
     const showVideoLink = useAppSelector(state => state.theme.showVideoLink)
     const {title, type, movie} = route.params
@@ -179,9 +181,11 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 {url}
             </Text> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
-            {detail?.People.length ? <Text style={style.actorSection}>演职人员</Text> : null}
+            {detail?.People.length ? <Text style={{...style.actorSection, ...themeStyle}}>
+                演职人员
+            </Text> : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {detail?.People.map((actor, index) => <ActorCard key={index} actor={actor} />)}
+            {detail?.People.map((actor, index) => <ActorCard key={index} theme={themeStyle} actor={actor} />)}
             </ScrollView>
         </ScrollView>
     )

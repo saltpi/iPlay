@@ -70,7 +70,7 @@ export function Page() {
                         onChange={() => { dispatch(updateShowVideoLink(!showVideoLink)) }} />
                 </View>
                 <View style={style.inline}>
-                    <Text style={style.label}>导航栏标题居中(默认居左)</Text>
+                    <Text style={style.label}>导航栏标题居中(默认居左, 仅安卓)</Text>
                     <Switch value={headerTitleAlign === 'center'}
                         onChange={updateTitleAlign} />
                 </View>
