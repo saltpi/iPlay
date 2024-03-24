@@ -1,12 +1,12 @@
-import { getPlayUrl } from '@api/play';
 import {PropsWithNavigation} from '@global';
-import { set } from '@helper/store';
 import { Toast } from '@helper/toast';
 import { useAppSelector } from '@hook/store';
 import { Episode } from '@model/Episode';
+import { selectThemeBasicStyle } from '@store/themeSlice';
 import { EpisodeCard } from '@view/EpisodeCard';
 import { Spin } from '@view/Spin';
 import { Video } from '@view/Video';
+import { ExternalPlayer } from '@view/player/ExternalPlayer';
 import {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -68,8 +68,8 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [loading, setLoading] = useState(true)
     const videoRef = useRef<VideoRef>(null);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const theme = useAppSelector(selectThemeBasicStyle)
     const onError = (e: any) => {
-        console.log(`player: `, url, e);
         Toast.show({
             topOffset: insets.top,
             type: 'error',
@@ -107,9 +107,10 @@ export function Page({navigation, route}: PlayerPageProps) {
                 onError={onError}
                 style={style.player}
             /> : null}
-            {loading ? <Spin /> : null}
+            {loading ? <Spin color={theme.color} /> : null}
         </View>
         <ScrollView style={{backgroundColor}}>
+        {url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
         {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
             style={e === episode ? style.playing : style.inactive}

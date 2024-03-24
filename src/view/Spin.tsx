@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { ComponentProps } from "react";
 import { ActivityIndicator, StyleSheet } from "react-native";
 
@@ -12,8 +13,10 @@ const style = StyleSheet.create({
     }
 });
 
-export function Spin(props: SpinProps) {
+export function Spin({style: custom, ...rest}: SpinProps) {
     return (
-        <ActivityIndicator style={style.center} size={"small"} color="#0f0f0f" {...props} />
+        <ActivityIndicator style={style.center}
+            size={"small"} 
+            color="#0f0f0f" {...rest} />
     )
 }
