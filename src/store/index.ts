@@ -63,6 +63,7 @@ export const store = configureStore({
         "emby.emby",
         "theme.routeName",
         "theme.hideMenuBar",
+        "theme/updateTheme",
       ],
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
