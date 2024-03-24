@@ -1197,7 +1197,7 @@ DEPENDENCIES:
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
   - Masonry
-  - MobileVLCKit
+  - MobileVLCKit (= 3.5.1)
   - OpenSSL-Universal (= 1.1.1100)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -1475,6 +1475,6 @@ SPEC CHECKSUMS:
   SPTPersistentCache: df36ea46762d7cf026502bbb86a8b79d0080dff4
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
-PODFILE CHECKSUM: 25b703abb0b5e314c9c7bb821d0cb606fc1930c3
+PODFILE CHECKSUM: 04e2db3cae7452cc673f6d3596c82a169a049309
 
 COCOAPODS: 1.14.3
