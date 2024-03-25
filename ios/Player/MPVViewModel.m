@@ -159,6 +159,10 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
     mpv_set_property(self.mpv, "pause", MPV_FORMAT_FLAG, &flag);
 }
 
+- (void)keepaspect {
+    int flag = 1;
+    mpv_set_property(self.mpv, "keepaspect", MPV_FORMAT_FLAG, &flag);
+}
 
 - (void)dealloc {
     mpv_terminate_destroy(self.mpv);

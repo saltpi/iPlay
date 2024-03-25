@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void)setDrawable:(id)view;
+- (void)keepaspect;
 @end
 
 NS_ASSUME_NONNULL_END
