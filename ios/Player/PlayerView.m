@@ -29,6 +29,7 @@ static NSUInteger const kIconSize = 48;
 @property (nonatomic, assign) BOOL isControlsVisible;
 @property (nonatomic, assign) BOOL isFullscreen;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) NSDateComponentsFormatter *timeFormatter;
 @end
 
 @implementation PlayerView
@@ -203,11 +204,10 @@ static NSUInteger const kIconSize = 48;
 
 - (void)onPlayTap:(id)sender {
     [self _changePlayButtonIcon:self.player.isPlaying];
-
     if (self.player.isPlaying) {
         [self.player pause];
     } else {
-        [self.player play];
+        [self.player resume];
     }
 }
 
@@ -288,17 +288,17 @@ static NSUInteger const kIconSize = 48;
 
 - (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {
     if (direction == UISwipeGestureRecognizerDirectionLeft) {
-//        [self.player shortJumpBackward];
+        [self.player jumpBackward:10];
     } else {
-//        [self.player shortJumpForward];
+        [self.player jumpForward:10];
     }
 }
 
 - (void)adjustVolumeWithDirection:(UISwipeGestureRecognizerDirection)direction {
     if (direction == UISwipeGestureRecognizerDirectionUp) {
-//      [self.player.audio volumeUp];
+        [self.player volumeUp:0.05];
     } else {
-//      [self.player.audio volumeDown];
+        [self.player volumeDown:0.05];
     }
 }
 
@@ -335,15 +335,14 @@ static NSUInteger const kIconSize = 48;
                 [self.sliderBar setValue:current.intValue animated:YES];
             }
         
-            NSString *durationText = [NSString stringWithFormat:@"%@ / %@",
-                                      current.stringValue,
-                                      duration.stringValue];
+            NSString *currentTimeStr = [self.timeFormatter stringFromTimeInterval:current.unsignedIntValue];
+            NSString *totalTimeStr = [self.timeFormatter stringFromTimeInterval:duration.unsignedIntValue];
+            NSString *durationText = [NSString stringWithFormat:@"%@ / %@", currentTimeStr, totalTimeStr];
             self.durationLabel.text = durationText;
             break;
         }
         case PlayEventTypeOnPause: {
             BOOL isPlaying = ![data[@"state"] boolValue];
-            [self _changePlayButtonIcon:isPlaying];
             break;
         }
         case PlayEventTypeOnPauseForCache: {
@@ -353,6 +352,7 @@ static NSUInteger const kIconSize = 48;
             } else {
                 [self.indicator startAnimating];
             }
+            break;
         }
         default:
             break;
@@ -361,63 +361,6 @@ static NSUInteger const kIconSize = 48;
         @"state": @(event)
     });
 }
-
-//- (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
-//    switch (self.player.state) {
-//        case VLCMediaPlayerStateStopped: {
-//            break;
-//        }    
-//        case VLCMediaPlayerStateOpening: {
-//            [self.indicator startAnimating];
-//            break;
-//        }    
-//        case VLCMediaPlayerStateBuffering: {
-//            break;
-//        }  
-//        case VLCMediaPlayerStateEnded: {
-//            break;
-//        }    
-//        case VLCMediaPlayerStateError: {
-//            break;
-//        }    
-//        case VLCMediaPlayerStatePlaying: {
-//            [self.indicator stopAnimating];
-//            break;
-//        }    
-//        case VLCMediaPlayerStatePaused: {
-//            break;
-//        }
-//        case VLCMediaPlayerStateESAdded: {
-//            break;
-//        }
-//    }
-//
-//    if (!self.onPlayStateChange) {
-//        return;
-//    }
-//
-//    self.onPlayStateChange(@{
-//        @"state": @(self.player.state)
-//    });
-//}
-
-//- (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
-//    NSUInteger duration = self.player.media.length.intValue;
-//    NSUInteger current = self.player.time.value.intValue;
-//
-//    [self.progress setTotalUnitCount:duration / 1000];
-//    [self.progress setCompletedUnitCount:current / 1000];
-//
-//    if (self.sliderBar.state == UIControlStateNormal) {
-//        [self.sliderBar setMaximumValue:duration / 1000];
-//        [self.sliderBar setValue:current / 1000 animated:YES];
-//    }
-//
-//    NSString *durationText = [NSString stringWithFormat:@"%@ / %@",
-//                              self.player.time.stringValue,
-//                              self.player.media.length.stringValue];
-//    self.durationLabel.text = durationText;
-//}
 
 #pragma mark - Getter
 - (id<VideoPlayer>)player {
@@ -578,6 +521,16 @@ static NSUInteger const kIconSize = 48;
         icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
     }
     imageView.image = icon;
+}
+
+- (NSDateComponentsFormatter *)timeFormatter {
+    if (!_timeFormatter) {
+        NSDateComponentsFormatter *dateComponentsFormatter = [[NSDateComponentsFormatter alloc] init];
+        dateComponentsFormatter.allowedUnits = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+        dateComponentsFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+        _timeFormatter = dateComponentsFormatter;
+    }
+    return _timeFormatter;
 }
 
 #pragma mark - NSObject

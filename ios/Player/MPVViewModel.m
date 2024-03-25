@@ -80,6 +80,21 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         mpv_set_option_string(mpv, "hwdec", "videotoolbox");
         mpv_initialize(mpv);
         self.mpv = mpv;
+
+        mpv_observe_property(self.mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
+        mpv_observe_property(self.mpv, 0, "duration", MPV_FORMAT_DOUBLE);
+        mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
+        mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
+        mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
+        dispatch_async(self.queue, ^{
+            while (1) {
+                mpv_event *event = mpv_wait_event(self.mpv, -1);
+                if (event->event_id == MPV_EVENT_SHUTDOWN)
+                    break;
+                on_mpv_event(self.mpv, event, self);
+            }
+        });
+        
     } else {
         NSLog(@"view is not kind of CAMetalLayer");
     }
@@ -93,23 +108,38 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 - (void)play {
     const char *cmd[] = {"play", NULL};
     mpv_command(self.mpv, cmd);
-    mpv_observe_property(self.mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
-    mpv_observe_property(self.mpv, 0, "duration", MPV_FORMAT_DOUBLE);
-    mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
-    mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
-    mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
-    dispatch_async(self.queue, ^{
-        while (1) {
-            mpv_event *event = mpv_wait_event(self.mpv, -1);
-            if (event->event_id == MPV_EVENT_SHUTDOWN)
-                break;
-            on_mpv_event(self.mpv, event, self);
-        }
-    });
 }
 
 - (void)stop {
     const char *cmd[] = {"stop", NULL};
+    mpv_command(self.mpv, cmd);
+}
+
+- (void)volumeUp:(CGFloat)percent {
+    double volume;
+    mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+    volume += 100 * percent;
+    if (volume > 100) return;
+    mpv_set_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+}
+
+- (void)volumeDown:(CGFloat)percent {
+    double volume;
+    mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+    volume -= 100 * percent;
+    if (volume > 100) return;
+    mpv_set_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+}
+
+- (void)jumpBackward:(NSUInteger)seconds {
+    const char* pos = [@(-seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cmd[] = {"seek", pos, "relative", NULL};
+    mpv_command(self.mpv, cmd);
+}
+
+- (void)jumpForward:(NSUInteger)seconds {
+    const char* pos = [@(seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cmd[] = {"seek", pos, "relative", NULL};
     mpv_command(self.mpv, cmd);
 }
 
@@ -120,8 +150,13 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 - (void)pause {
-    const char *cmd[] = {"pause", NULL};
+    const char *cmd[] = {"cycle", "pause", NULL};
     mpv_command(self.mpv, cmd);
+}
+
+- (void)resume {
+    int flag = 0;
+    mpv_set_property(self.mpv, "pause", MPV_FORMAT_FLAG, &flag);
 }
 
 
