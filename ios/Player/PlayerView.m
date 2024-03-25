@@ -10,10 +10,11 @@
 #import "PlayerViewController.h"
 #import "UIView+FindViewController.h"
 #import <AVFoundation/AVAudioSession.h>
+#import "MPVView.h"
 
 static NSUInteger const kIconSize = 48;
 
-@interface PlayerView () <PlayerEventDelegate>
+@interface PlayerView () <PlayerEventDelegate, VideoPlayerDelegate>
 @property (nonatomic, strong) UIView *playButton;
 @property (nonatomic, strong) UIView *fullscreenButton;
 @property (nonatomic, strong) UIView *captionButton;
@@ -28,6 +29,7 @@ static NSUInteger const kIconSize = 48;
 @property (nonatomic, assign) BOOL isControlsVisible;
 @property (nonatomic, assign) BOOL isFullscreen;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) NSDateComponentsFormatter *timeFormatter;
 @end
 
 @implementation PlayerView
@@ -148,7 +150,6 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)_bind {
-    self.player.drawable = self.contentView;
     self.player.delegate = self;
     self.eventsView.eventDelegate = self;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPlayTap:)];
@@ -202,12 +203,11 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)onPlayTap:(id)sender {
-    [self _changePlayButtonIcon];
-
+    [self _changePlayButtonIcon:self.player.isPlaying];
     if (self.player.isPlaying) {
         [self.player pause];
     } else {
-        [self.player play];
+        [self.player resume];
     }
 }
 
@@ -240,25 +240,16 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)_seekToPlay:(id)sender {
-    if (![self.player isSeekable]) {
-        return;
-    }
-
     if ([sender isKindOfClass:UISlider.class]) {
         UISlider *slider = sender;
         CGFloat time = slider.value;
 
-        if (slider.continuous) {
-            return;
-        }
-
-        CGFloat position = time / slider.maximumValue;
-        self.player.position = position;
+        [self.player seek:time];
     }
 }
 
-- (void)_changePlayButtonIcon {
-    NSString *imageName = self.player.isPlaying ? @"play" : @"pause";
+- (void)_changePlayButtonIcon:(BOOL)isPlaying {
+    NSString *imageName = isPlaying ? @"play" : @"pause";
     [self _updateIcon:self.playButton icon:imageName];
 }
 
@@ -297,17 +288,17 @@ static NSUInteger const kIconSize = 48;
 
 - (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {
     if (direction == UISwipeGestureRecognizerDirectionLeft) {
-        [self.player shortJumpBackward];
+        [self.player jumpBackward:10];
     } else {
-        [self.player shortJumpForward];
+        [self.player jumpForward:10];
     }
 }
 
 - (void)adjustVolumeWithDirection:(UISwipeGestureRecognizerDirection)direction {
     if (direction == UISwipeGestureRecognizerDirectionUp) {
-      [self.player.audio volumeUp];
+        [self.player volumeUp:0.05];
     } else {
-      [self.player.audio volumeDown];
+        [self.player volumeDown:0.05];
     }
 }
 
@@ -320,74 +311,70 @@ static NSUInteger const kIconSize = 48;
     }
 }
 
-#pragma mark - VLCMediaPlayerDelegate
-- (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
-    switch (self.player.state) {
-        case VLCMediaPlayerStateStopped: {
-            break;
-        }    
-        case VLCMediaPlayerStateOpening: {
-            [self.indicator startAnimating];
-            break;
-        }    
-        case VLCMediaPlayerStateBuffering: {
-            break;
-        }  
-        case VLCMediaPlayerStateEnded: {
-            break;
-        }    
-        case VLCMediaPlayerStateError: {
-            break;
-        }    
-        case VLCMediaPlayerStatePlaying: {
-            [self.indicator stopAnimating];
-            break;
-        }    
-        case VLCMediaPlayerStatePaused: {
-            break;
-        }
-        case VLCMediaPlayerStateESAdded: {
-            break;
-        }
-    }
-
-    if (!self.onPlayStateChange) {
-        return;
-    }
-
-    self.onPlayStateChange(@{
-        @"state": @(self.player.state)
+#pragma mark - VideoPlayerDelegate
+- (void)onPlayEvent:(PlayEventType)event data:(NSDictionary *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onPlayEventImpl:event data:data];
     });
 }
 
-- (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
-    NSUInteger duration = self.player.media.length.intValue;
-    NSUInteger current = self.player.time.value.intValue;
-
-    [self.progress setTotalUnitCount:duration / 1000];
-    [self.progress setCompletedUnitCount:current / 1000];
-
-    if (self.sliderBar.state == UIControlStateNormal) {
-        [self.sliderBar setMaximumValue:duration / 1000];
-        [self.sliderBar setValue:current / 1000 animated:YES];
+- (void)onPlayEventImpl:(PlayEventType)event data:(NSDictionary *)data {
+    switch (event) {
+        case PlayEventTypeDuration: {
+            break;
+        }
+        case PlayEventTypeOnProgress: {
+            NSNumber *duration = @(self.player.duration);
+            NSNumber *current = data[@"time"];
+            
+            [self.progress setTotalUnitCount:duration.intValue];
+            [self.progress setCompletedUnitCount:current.intValue];
+            
+            if (self.sliderBar.state == UIControlStateNormal) {
+                [self.sliderBar setMaximumValue:duration.intValue];
+                [self.sliderBar setValue:current.intValue animated:YES];
+            }
+        
+            NSString *currentTimeStr = [self.timeFormatter stringFromTimeInterval:current.unsignedIntValue];
+            NSString *totalTimeStr = [self.timeFormatter stringFromTimeInterval:duration.unsignedIntValue];
+            NSString *durationText = [NSString stringWithFormat:@"%@ / %@", currentTimeStr, totalTimeStr];
+            self.durationLabel.text = durationText;
+            break;
+        }
+        case PlayEventTypeOnPause: {
+            BOOL isPlaying = ![data[@"state"] boolValue];
+            break;
+        }
+        case PlayEventTypeOnPauseForCache: {
+            BOOL isPlaying = ![data[@"state"] boolValue];
+            if (isPlaying) {
+                [self.indicator stopAnimating];
+            } else {
+                [self.indicator startAnimating];
+            }
+            break;
+        }
+        default:
+            break;
     }
-
-    NSString *durationText = [NSString stringWithFormat:@"%@ / %@",
-                              self.player.time.stringValue,
-                              self.player.media.length.stringValue];
-    self.durationLabel.text = durationText;
+    self.onPlayStateChange(@{
+        @"state": @(event)
+    });
 }
 
 #pragma mark - Getter
-- (VLCMediaPlayer *)player {
+- (id<VideoPlayer>)player {
     BeginLazyPropInit(player)
-    player = [[VLCMediaPlayer alloc] init];
+    if ([self.contentView isKindOfClass:MPVView.class]) {
+        MPVView *view = (MPVView *)self.contentView;
+        return view.viewModel;
+    }
     EndLazyPropInit(player)
 }
 
 - (UIView *)contentView {
     BeginLazyPropInit(contentView)
-    UIView *view = [UIView new];
+    UIView *view = [MPVView new];
     view.backgroundColor = UIColor.whiteColor;
     contentView = view;
     EndLazyPropInit(contentView)
@@ -534,6 +521,16 @@ static NSUInteger const kIconSize = 48;
         icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
     }
     imageView.image = icon;
+}
+
+- (NSDateComponentsFormatter *)timeFormatter {
+    if (!_timeFormatter) {
+        NSDateComponentsFormatter *dateComponentsFormatter = [[NSDateComponentsFormatter alloc] init];
+        dateComponentsFormatter.allowedUnits = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+        dateComponentsFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+        _timeFormatter = dateComponentsFormatter;
+    }
+    return _timeFormatter;
 }
 
 #pragma mark - NSObject

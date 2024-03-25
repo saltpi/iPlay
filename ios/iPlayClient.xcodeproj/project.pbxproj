@@ -14,6 +14,12 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-iPlayClient-iPlayClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-iPlayClient-iPlayClientTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		888CB5762BB11E22009E89E9 /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 888CB5752BB11E22009E89E9 /* MPVKit */; };
+		888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888CB5822BB13C08009E89E9 /* CoreAudio.framework */; };
+		888CB5B82BB14548009E89E9 /* MPVView.m in Sources */ = {isa = PBXBuildFile; fileRef = 888CB5B32BB14548009E89E9 /* MPVView.m */; };
+		888CB5B92BB14548009E89E9 /* MPVViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 888CB5B52BB14548009E89E9 /* MPVViewModel.m */; };
+		888CB5BC2BB1457A009E89E9 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888CB5BB2BB14579009E89E9 /* RootViewController.m */; };
+		888CB5BF2BB1488A009E89E9 /* RealAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 888CB5BE2BB1488A009E89E9 /* RealAppDelegate.m */; };
 		88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88AD4B982BAA9CF40065E8D9 /* PlayerManager.m */; };
 		88DC7F5A2BAAE9D500728201 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F592BAAE9D000728201 /* PlayerView.m */; };
 		88DC7F5D2BAB238500728201 /* PlayerEventView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88DC7F5C2BAB238500728201 /* PlayerEventView.m */; };
@@ -47,6 +53,16 @@
 		5B7EB9410499542E8C5724F5 /* Pods-iPlayClient-iPlayClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-iPlayClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iPlayClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = iPlayClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		888CB5822BB13C08009E89E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		888CB5B32BB14548009E89E9 /* MPVView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVView.m; sourceTree = "<group>"; };
+		888CB5B42BB14548009E89E9 /* MPVViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVViewModel.h; sourceTree = "<group>"; };
+		888CB5B52BB14548009E89E9 /* MPVViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVViewModel.m; sourceTree = "<group>"; };
+		888CB5B62BB14548009E89E9 /* VideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayer.h; sourceTree = "<group>"; };
+		888CB5B72BB14548009E89E9 /* MPVView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVView.h; sourceTree = "<group>"; };
+		888CB5BA2BB14579009E89E9 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		888CB5BB2BB14579009E89E9 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		888CB5BD2BB1488A009E89E9 /* RealAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RealAppDelegate.h; path = iPlayClient/RealAppDelegate.h; sourceTree = "<group>"; };
+		888CB5BE2BB1488A009E89E9 /* RealAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RealAppDelegate.m; path = iPlayClient/RealAppDelegate.m; sourceTree = "<group>"; };
 		88AD4B972BAA9CF40065E8D9 /* PlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerManager.h; sourceTree = "<group>"; };
 		88AD4B982BAA9CF40065E8D9 /* PlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerManager.m; sourceTree = "<group>"; };
 		88AD4B9A2BAA9F6F0065E8D9 /* iPlayClient-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iPlayClient-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -76,7 +92,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-iPlayClient.a in Frameworks */,
+				888CB5762BB11E22009E89E9 /* MPVKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +130,8 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */,
+				888CB5BD2BB1488A009E89E9 /* RealAppDelegate.h */,
+				888CB5BE2BB1488A009E89E9 /* RealAppDelegate.m */,
 			);
 			name = iPlayClient;
 			sourceTree = "<group>";
@@ -119,6 +139,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				888CB5822BB13C08009E89E9 /* CoreAudio.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-iPlayClient.a */,
 				19F6CBCC0A4E27FBF8BF4A61 /* libPods-iPlayClient-iPlayClientTests.a */,
@@ -160,6 +181,11 @@
 		88DC7F5E2BAB2E9600728201 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				888CB5B72BB14548009E89E9 /* MPVView.h */,
+				888CB5B32BB14548009E89E9 /* MPVView.m */,
+				888CB5B42BB14548009E89E9 /* MPVViewModel.h */,
+				888CB5B52BB14548009E89E9 /* MPVViewModel.m */,
+				888CB5B62BB14548009E89E9 /* VideoPlayer.h */,
 				88AD4B972BAA9CF40065E8D9 /* PlayerManager.h */,
 				88AD4B982BAA9CF40065E8D9 /* PlayerManager.m */,
 				88DC7F582BAAE9D000728201 /* PlayerView.h */,
@@ -170,6 +196,8 @@
 				88DC7F602BABA32400728201 /* UIView+FindViewController.m */,
 				88DC7F622BABA4B700728201 /* PlayerViewController.h */,
 				88DC7F632BABA4B700728201 /* PlayerViewController.m */,
+				888CB5BA2BB14579009E89E9 /* RootViewController.h */,
+				888CB5BB2BB14579009E89E9 /* RootViewController.m */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -226,6 +254,9 @@
 			dependencies = (
 			);
 			name = iPlayClient;
+			packageProductDependencies = (
+				888CB5752BB11E22009E89E9 /* MPVKit */,
+			);
 			productName = iPlayClient;
 			productReference = 13B07F961A680F5B00A75B9A /* iPlayClient.app */;
 			productType = "com.apple.product-type.application";
@@ -256,6 +287,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -431,10 +465,14 @@
 			files = (
 				88DC7F642BABA4B700728201 /* PlayerViewController.m in Sources */,
 				88DC7F612BABA32400728201 /* UIView+FindViewController.m in Sources */,
+				888CB5BC2BB1457A009E89E9 /* RootViewController.m in Sources */,
+				888CB5B82BB14548009E89E9 /* MPVView.m in Sources */,
+				888CB5BF2BB1488A009E89E9 /* RealAppDelegate.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				88DC7F5D2BAB238500728201 /* PlayerEventView.m in Sources */,
+				888CB5B92BB14548009E89E9 /* MPVViewModel.m in Sources */,
 				88DC7F5A2BAAE9D500728201 /* PlayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,10 +678,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -711,10 +746,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -753,6 +785,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cxfksword/MPVKit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.37.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		888CB5752BB11E22009E89E9 /* MPVKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */;
+			productName = MPVKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

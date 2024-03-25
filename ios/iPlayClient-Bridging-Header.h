@@ -3,5 +3,4 @@
 //
 
 
-#import <MobileVLCKit/MobileVLCKit.h>
 #import "PlayerView.h"

@@ -8,7 +8,7 @@ import {
     useRef,
 } from 'react';
 import NativeVideo from 'react-native-video';
-import { PlayerView } from './Player';
+import { PlayStateType, PlayerView } from './Player';
 import {NativeModules, StyleSheet, findNodeHandle} from 'react-native';
 
 export interface PlayerManagerType {
@@ -37,10 +37,16 @@ export const VLCPlayer = forwardRef<PlayerRef, VideoProps>(
     (props, ref) => {
         const nativeRef = useRef(null);
         const {uri, title} = props.source as any;
+        console.log(`uri: ${uri} title: ${title}`);
         const onPlayStateChange = (s: any) => {
-            const event = s.nativeEvent;
-            if (event.state === 5) {
+            const state = s.nativeEvent?.state;
+            console.log(`onPlayStateChange: ${state}`);
+            if (state === PlayStateType.PlayEventTypeOnPause) {
+                props.onPlaybackStateChanged?.({isPlaying: false});
+            } else if (state === PlayStateType.PlayEventTypeOnProgress) {
                 props.onPlaybackStateChanged?.({isPlaying: true});
+            } else if (state === PlayStateType.PlayEventTypeEnd) {
+                props.onPlaybackStateChanged?.({isPlaying: false});
             }
         };
 
