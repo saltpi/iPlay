@@ -69,13 +69,13 @@ jobs:
           echo "Uploading build artifacts..."
           echo "Uploaded iPlay.ipa"
           ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
-            --file "$PWD/Build/iPlay.ipa" \
+            --file "$PWD/build/iPlay.ipa" \
             --token "${{ secrets.CLIENT_ID }}"
           echo "Uploaded iPlay.apk"
           ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.apk" \
-            --file "$PWD/Build/iPlay.apk" \
+            --file "$PWD/build/iPlay.apk" \
             --token "${{ secrets.CLIENT_ID }}"
           echo "Uploaded iPlay.dSYMs.zip"
           ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
-            --file "$PWD/Build/iPlay.dSYMs.zip" \
+            --file "$PWD/build/iPlay.dSYMs.zip" \
             --token "${{ secrets.CLIENT_ID }}"
