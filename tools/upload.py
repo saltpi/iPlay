@@ -26,7 +26,6 @@ def upload(file_path: str, url: str, token: str):
         file.seek(0, os.SEEK_END)
         size = file.tell()
         file.seek(0, os.SEEK_SET)
-        print(f"Upload file: {size} url: {url}")
         link = get_upload_url(url, token)
         if not link:
             print("Failed to get upload link")
@@ -42,8 +41,9 @@ def upload(file_path: str, url: str, token: str):
                 "Content-Length": str(len(chunk)),
                 "Content-Range": f"bytes {start}-{end}/{size}",
             }
-            print(f"Uploading chunk {start}-{end}/{size}")
             requests.put(link, data=chunk, headers=headers)
+        
+        print(f"File: {file_path}\nSize: {size}Bytes \nURL: {url}")
 
 if __name__ == "__main__":
     upload(args.file, args.url, args.token)

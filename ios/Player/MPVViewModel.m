@@ -9,22 +9,34 @@
 @import MPVKit;
 
 @interface MPVViewModel ()
-@property (nonatomic) mpv_handle *mpv;
+//@property (nonatomic) mpv_handle *mpv;
 @end
 
 @implementation MPVViewModel
 
-- (void)initWithLayer:(CAMetalLayer *)layer {
-    mpv_handle *mpv = mpv_create();
-    mpv_request_log_messages(mpv, "debug");
-    mpv_set_option(mpv, "wid", MPV_FORMAT_INT64, &layer);
-    mpv_set_option_string(mpv, "subs-match-os-language", "yes");
-    mpv_set_option_string(mpv, "subs-fallback", "yes");
-    mpv_set_option_string(mpv, "vo", "gpu-next");
-    mpv_set_option_string(mpv, "gpu-api", "vulkan");
-    mpv_set_option_string(mpv, "hwdec", "videotoolbox");
-    mpv_initialize(mpv);
-    self.mpv = mpv;
+- (instancetype)initWithLayer:(CAMetalLayer *)layer {
+    self = [self init];
+    if (self) {
+        self.drawable = layer;
+    }
+    return self;
+}
+
+- (void)setDrawable:(id)view {
+    if ([view isKindOfClass:CAMetalLayer.class]) {
+        mpv_handle *mpv = mpv_create();
+        mpv_request_log_messages(mpv, "debug");
+        mpv_set_option(mpv, "wid", MPV_FORMAT_INT64, &view);
+        mpv_set_option_string(mpv, "subs-match-os-language", "yes");
+        mpv_set_option_string(mpv, "subs-fallback", "yes");
+        mpv_set_option_string(mpv, "vo", "gpu-next");
+        mpv_set_option_string(mpv, "gpu-api", "vulkan");
+        mpv_set_option_string(mpv, "hwdec", "videotoolbox");
+        mpv_initialize(mpv);
+        self.mpv = mpv;
+    } else {
+        NSLog(@"view is not kind of CAMetalLayer");
+    }
 }
 
 - (void)loadVideo:(NSString *)url {
@@ -35,6 +47,10 @@
 - (void)play {
     const char *cmd[] = {"play", NULL};
     mpv_command(self.mpv, cmd);
+}
+
+- (void)stop {
+    
 }
 
 - (void)pause {

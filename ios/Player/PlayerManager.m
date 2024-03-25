@@ -5,7 +5,6 @@
 //  Created by 赫拉 on 2024/3/20.
 //
 
-#import <MobileVLCKit/MobileVLCKit.h>
 #import "PlayerManager.h"
 #import "PlayerView.h"
 #import <React/RCTViewManager.h>
@@ -13,7 +12,7 @@
 #import <React/RCTLog.h>
 
 
-@interface PlayerManager ()<VLCMediaPlayerDelegate>
+@interface PlayerManager ()
 @end
 
 @implementation PlayerManager
@@ -41,7 +40,7 @@ RCT_CUSTOM_VIEW_PROPERTY(url, NSString, UIView) {
     NSString *url = json;
     PlayerView *instance = (PlayerView *)view;
 
-    instance.player.media = [VLCMedia mediaWithURL:[NSURL URLWithString:url]];
+    [instance.player loadVideo:url];
     [instance.player play];
 }
 

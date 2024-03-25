@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import <React/RCTViewManager.h>
-#import <MobileVLCKit/MobileVLCKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

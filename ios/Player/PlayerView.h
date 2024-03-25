@@ -6,17 +6,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MobileVLCKit/MobileVLCKit.h>
 #import <React/RCTViewManager.h>
 #import "PlayerEventView.h"
+#import "VideoPlayer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PlayerView : UIView<VLCMediaPlayerDelegate>
-@property (nonatomic, strong) VLCMediaPlayer *player;
+@interface PlayerView : UIView
+@property (nonatomic, strong) id<VideoPlayer> player;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) NSUInteger iconSize;
-@property (nonatomic, weak) id<VLCMediaPlayerDelegate> delegate;
+@property (nonatomic, weak) id delegate;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *controlView;
 @property (nonatomic, strong) PlayerEventView *eventsView;

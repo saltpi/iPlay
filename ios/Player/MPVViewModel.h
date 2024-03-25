@@ -6,12 +6,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MPVPlayer.h"
+#import "VideoPlayer.h"
+#import <UIKit/UIKit.h>
+@import MPVKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MPVViewModel : NSObject<MPVPlayer>
-- (void)initWithLayer:(CAMetalLayer *)layer;
+@interface MPVViewModel : NSObject<VideoPlayer>
+@property (nonatomic) mpv_handle *mpv;
+- (instancetype)initWithLayer:(CAMetalLayer *)layer;
 @end
 
 NS_ASSUME_NONNULL_END

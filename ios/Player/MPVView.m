@@ -6,6 +6,7 @@
 //
 
 #import "MPVView.h"
+@import MPVKit;
 
 @interface MPVView ()
 @property (nonatomic) CAMetalLayer *videoLayer;
@@ -44,6 +45,13 @@
         }
     }
     return _videoLayer;
+}
+
+- (MPVViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[MPVViewModel alloc] initWithLayer:self.videoLayer];
+    }
+    return _viewModel;
 }
 @end
 

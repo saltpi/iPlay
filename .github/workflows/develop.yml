@@ -9,18 +9,44 @@ on:
 jobs:
   build:
     name: 🌸 Build
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       - name: 👀 Checkout
         uses: actions/checkout@v4
           
+      - name: 🐧 set up Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: 5.8
+      
       - name: ☕️ set up JDK
         uses: actions/setup-java@v3
         with:
             java-version: '17'
             distribution: 'zulu'
             cache: gradle
+
+      - name:  Select Xcode version
+        run: |
+          ls /Applications/
+          sudo xcode-select --switch /Applications/Xcode_15.2.app
+      
+      - name: 🕸️ Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
+      - name: 🕸️ Cache CocoaPods
+        uses: actions/cache@v2
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
       - name: 🧱 Install Dependencies
         run: |
@@ -30,6 +56,7 @@ jobs:
       - name: 🧬 Build
         env:
           scheme: ${{ 'default' }}
+          DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
         run: |
           make all
 
@@ -38,17 +65,17 @@ jobs:
           scheme: ${{ 'default' }}
         run: |
           buildtime=$(date '+%Y%m%d.%H%M')
-          curl --location "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
-            --data-binary "@$PWD/Build/iPlay.ipa" \
-            --header "Authorization: ${{ secrets.CLIENT_ID }}"\
-            --header "Content-Type: application/zip" \
-            --progress-bar | tee /dev/null
-          curl --location "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.apk" \
-            --data-binary "@$PWD/Build/iPlay.apk" \
-            --header "Authorization: ${{ secrets.CLIENT_ID }}"\
-            --header "Content-Type: application/zip" \
-            --progress-bar | tee /dev/null
           pip3 install requests
+          echo "Uploading build artifacts..."
+          echo "Uploaded iPlay.ipa"
+          ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
+            --file "$PWD/Build/iPlay.ipa" \
+            --token "${{ secrets.CLIENT_ID }}"
+          echo "Uploaded iPlay.apk"
+          ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.apk" \
+            --file "$PWD/Build/iPlay.apk" \
+            --token "${{ secrets.CLIENT_ID }}"
+          echo "Uploaded iPlay.dSYMs.zip"
           ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
             --file "$PWD/Build/iPlay.dSYMs.zip" \
             --token "${{ secrets.CLIENT_ID }}"
