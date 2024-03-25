@@ -188,6 +188,8 @@ static NSUInteger const kIconSize = 48;
     [UIView animateWithDuration:0.5
                      animations:^{
         self.controlView.alpha = 1.0;
+    } completion:^(BOOL finished) {
+        self.controlView.hidden = NO;
     }];
     self.isControlsVisible = YES;
     [self.timer invalidate];
@@ -198,6 +200,8 @@ static NSUInteger const kIconSize = 48;
     [UIView animateWithDuration:0.5
                      animations:^{
         self.controlView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        self.controlView.hidden = YES;
     }];
     self.isControlsVisible = NO;
 }
@@ -211,7 +215,7 @@ static NSUInteger const kIconSize = 48;
     }
 }
 
-- (void)onFullscreenTap:(id)sender {
+- (void)onFullscreenTap:(id)sender {    
     UIViewController *currentController = [self.superview firstAvailableUIViewController];
     if (self.isFullscreen) {
         [self removeFromSuperview];
@@ -237,6 +241,7 @@ static NSUInteger const kIconSize = 48;
             self.isFullscreen = YES;
         }];
     }
+    [self.player keepaspect];
 }
 
 - (void)_seekToPlay:(id)sender {
@@ -283,7 +288,12 @@ static NSUInteger const kIconSize = 48;
     } else if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {
         // TODO
     }
-    [self showControls];
+    
+    if (self.isControlsVisible) {
+        [self hideControls];
+    } else {
+        [self showControls];
+    }
 }
 
 - (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {
