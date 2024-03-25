@@ -1,3 +1,10 @@
+<center>
+   <img src="doc/image/AppIcon.png" />
+   <div>iPlay</div>
+   <div>iPlay is a modern video player for android and iOS</div>
+</center>
+<br />
+
 [![🌸 Build](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml/badge.svg?branch=main)](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml)
 
 ### 一个跨平台的媒体播放器
