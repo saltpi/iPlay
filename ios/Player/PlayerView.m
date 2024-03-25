@@ -14,7 +14,7 @@
 
 static NSUInteger const kIconSize = 48;
 
-@interface PlayerView () <PlayerEventDelegate>
+@interface PlayerView () <PlayerEventDelegate, VideoPlayerDelegate>
 @property (nonatomic, strong) UIView *playButton;
 @property (nonatomic, strong) UIView *fullscreenButton;
 @property (nonatomic, strong) UIView *captionButton;
@@ -149,8 +149,7 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)_bind {
-//    self.player.drawable = self.contentView;
-//    self.player.delegate = self;
+    self.player.delegate = self;
     self.eventsView.eventDelegate = self;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPlayTap:)];
     self.playButton.userInteractionEnabled = YES;
@@ -206,7 +205,7 @@ static NSUInteger const kIconSize = 48;
     [self _changePlayButtonIcon];
 
 //    if (self.player.isPlaying) {
-//        [self.player pause];
+        [self.player pause];
 //    } else {
 //        [self.player play];
 //    }
@@ -241,21 +240,16 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)_seekToPlay:(id)sender {
-//    if (![self.player isSeekable]) {
-//        return;
-//    }
-//
-//    if ([sender isKindOfClass:UISlider.class]) {
-//        UISlider *slider = sender;
-//        CGFloat time = slider.value;
-//
-//        if (slider.continuous) {
-//            return;
-//        }
-//
-//        CGFloat position = time / slider.maximumValue;
-//        self.player.position = position;
-//    }
+    if ([sender isKindOfClass:UISlider.class]) {
+        UISlider *slider = sender;
+        CGFloat time = slider.value;
+
+        if (slider.continuous) {
+            return;
+        }
+
+        [self.player seek:time];
+    }
 }
 
 - (void)_changePlayButtonIcon {
@@ -321,7 +315,44 @@ static NSUInteger const kIconSize = 48;
     }
 }
 
-#pragma mark - VLCMediaPlayerDelegate
+#pragma mark - VideoPlayerDelegate
+- (void)onPlayEvent:(PlayEventType)event data:(NSDictionary *)data {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onPlayEventImpl:event data:data];
+    });
+}
+
+- (void)onPlayEventImpl:(PlayEventType)event data:(NSDictionary *)data {
+    switch (event) {
+        case PlayEventTypeDuration: {
+            break;
+        }
+        case PlayEventTypeOnProgress: {
+            NSNumber *duration = @(self.player.duration);
+            NSNumber *current = data[@"time"];
+            
+            [self.progress setTotalUnitCount:duration.intValue];
+            [self.progress setCompletedUnitCount:current.intValue];
+            
+            if (self.sliderBar.state == UIControlStateNormal) {
+                [self.sliderBar setMaximumValue:duration.intValue];
+                [self.sliderBar setValue:current.intValue animated:YES];
+            }
+        
+            NSString *durationText = [NSString stringWithFormat:@"%@ / %@",
+                                      current.stringValue,
+                                      duration.stringValue];
+            self.durationLabel.text = durationText;
+            break;
+        }
+        default:
+            break;
+    }
+    self.onPlayStateChange(@{
+        @"state": @(event)
+    });
+}
+
 //- (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
 //    switch (self.player.state) {
 //        case VLCMediaPlayerStateStopped: {

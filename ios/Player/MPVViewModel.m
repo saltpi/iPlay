@@ -8,8 +8,38 @@
 #import "MPVViewModel.h"
 @import MPVKit;
 
+void on_progress_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
+    [context.delegate onPlayEvent:PlayEventTypeOnProgress data:@{
+        @"time": @(time)
+    }];
+}
+
+void on_duration_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
+    ((MPVViewModel *)context).duration = time;
+    [context.delegate onPlayEvent:PlayEventTypeDuration data:@{
+        @"duration": @(time)
+    }];
+}
+
+void on_mpv_event(mpv_handle *mpv, mpv_event *event, id context) {
+    if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
+        mpv_event_property *prop = event->data;
+        if (strcmp(prop->name, "time-pos") == 0) {
+            if (prop->format == MPV_FORMAT_DOUBLE) {
+                on_progress_update(mpv, *(double *)prop->data, context);
+            }
+        } else if (strcmp(prop->name, "duration") == 0) {
+            if (prop->format == MPV_FORMAT_DOUBLE) {
+                on_duration_update(mpv, *(double *)prop->data, context);
+            }
+        }
+    }
+}
+
+
 @interface MPVViewModel ()
-//@property (nonatomic) mpv_handle *mpv;
+@property (nonatomic) dispatch_queue_t queue;
+@property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
 @end
 
 @implementation MPVViewModel
@@ -47,19 +77,55 @@
 - (void)play {
     const char *cmd[] = {"play", NULL};
     mpv_command(self.mpv, cmd);
+    mpv_observe_property(self.mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(self.mpv, 0, "duration", MPV_FORMAT_DOUBLE);
+    dispatch_async(self.queue, ^{
+        while (1) {
+            mpv_event *event = mpv_wait_event(self.mpv, -1);
+            if (event->event_id == MPV_EVENT_SHUTDOWN)
+                break;
+            on_mpv_event(self.mpv, event, self);
+        }
+    });
 }
 
 - (void)stop {
-    
+    const char *cmd[] = {"stop", NULL};
+    mpv_command(self.mpv, cmd);
+}
+
+- (void)seek:(NSUInteger)timeSeconds {
+//    const char* pos = [@(timeSeconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
+//    const char *cmd[] = {"seek", pos, "absolute"};
+//    mpv_command(self.mpv, cmd);
 }
 
 - (void)pause {
     const char *cmd[] = {"pause", NULL};
     mpv_command(self.mpv, cmd);
+    
+    char *filename = NULL;
+    double duration = 0;
+    int64_t width = 0, height = 0;
+    mpv_get_property(self.mpv, "path", MPV_FORMAT_STRING, &filename);
+    mpv_get_property(self.mpv, "duration", MPV_FORMAT_DOUBLE, &duration);
+    mpv_get_property(self.mpv, "width", MPV_FORMAT_INT64, &width);
+    mpv_get_property(self.mpv, "height", MPV_FORMAT_INT64, &height);
+    printf("Filename: %s\n", filename);
+    printf("Duration: %.2f seconds\n", duration);
+    printf("Resolution: %lldx%lld\n", width, height);
 }
+
 
 - (void)dealloc {
     mpv_terminate_destroy(self.mpv);
+}
+
+- (dispatch_queue_t)queue {
+    if (!_queue) {
+        _queue = dispatch_queue_create("mpv-player-queue", NULL);
+    }
+    return _queue;
 }
 
 @end

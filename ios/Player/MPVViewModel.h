@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MPVViewModel : NSObject<VideoPlayer>
 @property (nonatomic) mpv_handle *mpv;
+@property (nonatomic) NSUInteger duration;
 - (instancetype)initWithLayer:(CAMetalLayer *)layer;
 @end
 
