@@ -202,13 +202,13 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)onPlayTap:(id)sender {
-    [self _changePlayButtonIcon];
+    [self _changePlayButtonIcon:self.player.isPlaying];
 
-//    if (self.player.isPlaying) {
+    if (self.player.isPlaying) {
         [self.player pause];
-//    } else {
-//        [self.player play];
-//    }
+    } else {
+        [self.player play];
+    }
 }
 
 - (void)onFullscreenTap:(id)sender {
@@ -244,17 +244,13 @@ static NSUInteger const kIconSize = 48;
         UISlider *slider = sender;
         CGFloat time = slider.value;
 
-        if (slider.continuous) {
-            return;
-        }
-
         [self.player seek:time];
     }
 }
 
-- (void)_changePlayButtonIcon {
-//    NSString *imageName = self.player.isPlaying ? @"play" : @"pause";
-//    [self _updateIcon:self.playButton icon:imageName];
+- (void)_changePlayButtonIcon:(BOOL)isPlaying {
+    NSString *imageName = isPlaying ? @"play" : @"pause";
+    [self _updateIcon:self.playButton icon:imageName];
 }
 
 #pragma mark - Volume and Brightness
@@ -344,6 +340,19 @@ static NSUInteger const kIconSize = 48;
                                       duration.stringValue];
             self.durationLabel.text = durationText;
             break;
+        }
+        case PlayEventTypeOnPause: {
+            BOOL isPlaying = ![data[@"state"] boolValue];
+            [self _changePlayButtonIcon:isPlaying];
+            break;
+        }
+        case PlayEventTypeOnPauseForCache: {
+            BOOL isPlaying = ![data[@"state"] boolValue];
+            if (isPlaying) {
+                [self.indicator stopAnimating];
+            } else {
+                [self.indicator startAnimating];
+            }
         }
         default:
             break;

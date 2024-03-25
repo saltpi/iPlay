@@ -9,6 +9,8 @@
 
 typedef enum : NSUInteger {
     PlayEventTypeOnProgress,
+    PlayEventTypeOnPause,
+    PlayEventTypeOnPauseForCache,
     PlayEventTypeDuration,
     PlayEventTypeEnd,
 } PlayEventType;
@@ -25,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<VideoPlayerDelegate>)delegate;
 - (NSUInteger)duration;
 
+- (BOOL)isPlaying;
 - (void)loadVideo:(NSString *)url;
 - (void)play;
 - (void)pause;

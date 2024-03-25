@@ -21,7 +21,13 @@ void on_duration_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
     }];
 }
 
-void on_mpv_event(mpv_handle *mpv, mpv_event *event, id context) {
+void on_playstate_update(mpv_handle *mpv, PlayEventType type , int flag, id<VideoPlayer> context) {
+    [context.delegate onPlayEvent:type data:@{
+        @"state": @(flag)
+    }];
+}
+
+void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
     if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
         mpv_event_property *prop = event->data;
         if (strcmp(prop->name, "time-pos") == 0) {
@@ -31,6 +37,16 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, id context) {
         } else if (strcmp(prop->name, "duration") == 0) {
             if (prop->format == MPV_FORMAT_DOUBLE) {
                 on_duration_update(mpv, *(double *)prop->data, context);
+            }
+        } else if (strcmp(prop->name, "pause") == 0) {
+            if (prop->format == MPV_FORMAT_FLAG) {
+                context.isPlaying = *(int *)prop->data == 0;
+                on_playstate_update(mpv, PlayEventTypeOnPause, *(int *)prop->data, context);
+            }
+        } else if (strcmp(prop->name, "paused-for-cache") == 0) {
+            if (prop->format == MPV_FORMAT_FLAG) {
+                context.isPlaying = *(int *)prop->data == 0;
+                on_playstate_update(mpv, PlayEventTypeOnPauseForCache, *(int *)prop->data, context);
             }
         }
     }
@@ -79,6 +95,9 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, id context) {
     mpv_command(self.mpv, cmd);
     mpv_observe_property(self.mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
     mpv_observe_property(self.mpv, 0, "duration", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
+    mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
     dispatch_async(self.queue, ^{
         while (1) {
             mpv_event *event = mpv_wait_event(self.mpv, -1);
@@ -95,25 +114,14 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, id context) {
 }
 
 - (void)seek:(NSUInteger)timeSeconds {
-//    const char* pos = [@(timeSeconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
-//    const char *cmd[] = {"seek", pos, "absolute"};
-//    mpv_command(self.mpv, cmd);
+    const char* pos = [@(timeSeconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cmd[] = {"seek", pos, "absolute+keyframes", NULL};
+    mpv_command(self.mpv, cmd);
 }
 
 - (void)pause {
     const char *cmd[] = {"pause", NULL};
     mpv_command(self.mpv, cmd);
-    
-    char *filename = NULL;
-    double duration = 0;
-    int64_t width = 0, height = 0;
-    mpv_get_property(self.mpv, "path", MPV_FORMAT_STRING, &filename);
-    mpv_get_property(self.mpv, "duration", MPV_FORMAT_DOUBLE, &duration);
-    mpv_get_property(self.mpv, "width", MPV_FORMAT_INT64, &width);
-    mpv_get_property(self.mpv, "height", MPV_FORMAT_INT64, &height);
-    printf("Filename: %s\n", filename);
-    printf("Duration: %.2f seconds\n", duration);
-    printf("Resolution: %lldx%lld\n", width, height);
 }
 
 
