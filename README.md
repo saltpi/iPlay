@@ -1,9 +1,11 @@
-<center>
+<p align="center">
    <img src="doc/image/AppIcon.png" />
-   <div>iPlay</div>
-   <div>iPlay is a modern video player for android and iOS</div>
-</center>
+</p>
+<h2 align="center">iPlay</h2>
+<p align="center">iPlay is a modern video player for android and iOS</p>
 <br />
+
+---
 
 [![🌸 Build](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml/badge.svg?branch=main)](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml)
 
