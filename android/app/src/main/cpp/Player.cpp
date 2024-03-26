@@ -11,52 +11,72 @@ extern "C" {
 }
 
 JavaVM *g_vm;
-mpv_handle *g_mpv;
 static jobject surface;
+static mpv_handle *mpv_ctx;
 
-static void prepare_environment(JNIEnv *env, jobject appctx) {
+static void prepare_environment(JNIEnv *env) {
     setlocale(LC_NUMERIC, "C");
     if (!env->GetJavaVM(&g_vm) && g_vm)
         av_jni_set_java_vm(g_vm, NULL);
 }
 
+static inline mpv_handle * get_attached_mpv(JNIEnv *env, jobject obj) {
+    jclass cls = env->GetObjectClass(obj);
+    jfieldID fid = env->GetFieldID(cls, "holder", "J");
+    return reinterpret_cast<mpv_handle *>(env->GetLongField(obj, fid));
+}
+
+static inline void set_attached_mpv(JNIEnv *env, jobject obj, mpv_handle *ctx) {
+    jclass cls = env->GetObjectClass(obj);
+    jfieldID fid = env->GetFieldID(cls, "holder", "J");
+    env->SetLongField(obj, fid, reinterpret_cast<jlong>(ctx));
+}
+
+
 extern "C"
 JNIEXPORT void JNICALL
-Java_top_ourfor_lib_mpv_MPV_create(JNIEnv *env, jclass clazz, jobject appctx) {
-    prepare_environment(env, appctx);
-    g_mpv = mpv_create();
-    mpv_request_log_messages(g_mpv, "terminal-default");
-    mpv_set_option_string(g_mpv, "msg-level", "all=v");
+Java_top_ourfor_lib_mpv_MPV_create(JNIEnv *env, jobject self) {
+    prepare_environment(env);
+    mpv_handle *ctx = mpv_create();
+    set_attached_mpv(env, self, ctx);
+    mpv_request_log_messages(ctx, "terminal-default");
+    mpv_set_option_string(ctx, "msg-level", "all=v");
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_top_ourfor_lib_mpv_MPV_init(JNIEnv *env, jclass clazz) {
-    mpv_initialize(g_mpv);
+Java_top_ourfor_lib_mpv_MPV_init(JNIEnv *env, jobject self) {
+    mpv_handle *ctx = get_attached_mpv(env, self);
+    mpv_initialize(ctx);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_top_ourfor_lib_mpv_MPV_destroy(JNIEnv *env, jclass clazz) {
-
+Java_top_ourfor_lib_mpv_MPV_destroy(JNIEnv *env, jobject self) {
+    mpv_handle *ctx = get_attached_mpv(env, self);
+    if (ctx) {
+        mpv_destroy(ctx);
+    }
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_top_ourfor_lib_mpv_MPV_setDrawable(JNIEnv *env, jclass clazz, jobject surface_) {
+Java_top_ourfor_lib_mpv_MPV_setDrawable(JNIEnv *env, jobject self, jobject surface_) {
+    mpv_handle *ctx = get_attached_mpv(env, self);
     surface = env->NewGlobalRef(surface_);
     int64_t wid = (int64_t)(intptr_t) surface;
-    mpv_set_option(g_mpv, "wid", MPV_FORMAT_INT64, (void*) &wid);
+    mpv_set_option(ctx, "wid", MPV_FORMAT_INT64, (void*) &wid);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_top_ourfor_lib_mpv_MPV_command(JNIEnv *env, jclass clazz, jobjectArray cmd) {
+Java_top_ourfor_lib_mpv_MPV_command(JNIEnv *env, jobject self, jobjectArray cmd) {
+    mpv_handle *ctx = get_attached_mpv(env, self);
     const char *arguments[128] = { 0 };
     int len = env->GetArrayLength(cmd);
     for (int i = 0; i < len; ++i)
         arguments[i] = env->GetStringUTFChars((jstring)env->GetObjectArrayElement(cmd, i), NULL);
-    mpv_command(g_mpv, arguments);
+    mpv_command(ctx, arguments);
 
     for (int i = 0; i < len; ++i)
         env->ReleaseStringUTFChars((jstring)env->GetObjectArrayElement(cmd, i), arguments[i]);
@@ -64,11 +84,12 @@ Java_top_ourfor_lib_mpv_MPV_command(JNIEnv *env, jclass clazz, jobjectArray cmd)
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_top_ourfor_lib_mpv_MPV_setOptionString(JNIEnv *env, jclass clazz, jstring jname,
+Java_top_ourfor_lib_mpv_MPV_setOptionString(JNIEnv *env, jobject self, jstring jname,
                                             jstring jvalue) {
+    mpv_handle *ctx = get_attached_mpv(env, self);
     const char *option = env->GetStringUTFChars(jname, NULL);
     const char *value = env->GetStringUTFChars(jvalue, NULL);
-    int result = mpv_set_option_string(g_mpv, option, value);
+    int result = mpv_set_option_string(ctx, option, value);
     env->ReleaseStringUTFChars(jname, option);
     env->ReleaseStringUTFChars(jvalue, value);
     return result;

@@ -1,10 +1,11 @@
 package top.ourfor.lib.mpv;
 
-import android.content.Context;
 import android.view.Surface;
 
+
 public class MPV {
-    private Long id;
+    // native mpv c pointer
+    private long holder;
 
     static {
         String[] libs = {"mpv", "player"};
@@ -13,15 +14,18 @@ public class MPV {
         }
     }
 
-    public static native void create(Context appctx);
+    public MPV() {
+    }
 
-    public static native void init();
+    public native void create();
 
-    public static native void destroy();
+    public native void init();
 
-    public static native void setDrawable(Surface surface);
+    public native void destroy();
 
-    public static native void command(String... cmd);
+    public native void setDrawable(Surface surface);
 
-    public static native int setOptionString(String name, String value);
+    public native void command(String... cmd);
+
+    public native int setOptionString(String name, String value);
 }

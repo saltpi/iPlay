@@ -6,35 +6,28 @@ import top.ourfor.lib.mpv.MPV;
 
 public class PlayerViewModel implements Player {
     public String url = null;
+    private MPV mpv;
     public PlayerViewModel() {
-//        mpv = new MPV();
-//        mpv.create();
-//        mpv.setOptionString("profile", "fast");
-//        mpv.setOptionString("vo", "gpu-next");
-//        mpv.setOptionString("gpu-context", "android");
-//        mpv.setOptionString("opengl-es", "yes");
-//        mpv.setOptionString("hwdec", "auto");
-//        mpv.setOptionString("hwdec-codecs", "h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1");
-//        mpv.setOptionString("ao", "audiotrack,opensles");
-        MPV.create(null);
-        MPV.setOptionString("profile", "fast");
-        MPV.setOptionString("vo", "gpu-next");
-        MPV.setOptionString("gpu-context", "android");
-        MPV.setOptionString("opengl-es", "yes");
-        MPV.setOptionString("hwdec", "auto");
-        MPV.setOptionString("hwdec-codecs", "h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1");
-        MPV.setOptionString("ao", "audiotrack,opensles");
-        MPV.init();
+        mpv = new MPV();
+        mpv.create();
+        mpv.setOptionString("profile", "fast");
+        mpv.setOptionString("vo", "gpu-next");
+        mpv.setOptionString("gpu-context", "android");
+        mpv.setOptionString("opengl-es", "yes");
+        mpv.setOptionString("hwdec", "auto");
+        mpv.setOptionString("hwdec-codecs", "h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1");
+        mpv.setOptionString("ao", "audiotrack,opensles");
+        mpv.init();
     }
     public void attach(SurfaceHolder holder) {
 //        mpv.setDrawable(holder.getSurface());
-        MPV.setDrawable(holder.getSurface());
+        mpv.setDrawable(holder.getSurface());
     }
 
     @Override
     public void loadVideo(String url) {
 //        mpv.command("loadfile", url);
-        MPV.command("loadfile", url);
+        mpv.command("loadfile", url);
     }
 
     @Override
