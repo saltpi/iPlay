@@ -20,13 +20,11 @@ public class PlayerViewModel implements Player {
         mpv.init();
     }
     public void attach(SurfaceHolder holder) {
-//        mpv.setDrawable(holder.getSurface());
         mpv.setDrawable(holder.getSurface());
     }
 
     @Override
     public void loadVideo(String url) {
-//        mpv.command("loadfile", url);
         mpv.command("loadfile", url);
     }
 
