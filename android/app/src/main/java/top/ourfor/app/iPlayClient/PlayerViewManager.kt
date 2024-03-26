@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
+import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
 
 class PlayerViewManager(
@@ -16,6 +17,7 @@ class PlayerViewManager(
 ) : ViewGroupManager<FrameLayout>() {
     private var propWidth: Int? = null
     private var propHeight: Int? = null
+    private var videoSrc: String? = null
 
     override fun getName() = REACT_CLASS
 
@@ -46,6 +48,11 @@ class PlayerViewManager(
         }
     }
 
+    @ReactProp(name = "url")
+    fun setSrc(view: FrameLayout, url: String?) {
+        videoSrc = url
+    }
+
     @ReactPropGroup(names = ["width", "height"], customType = "Style")
     fun setStyle(view: FrameLayout, index: Int, value: Int) {
         if (index == 0) propWidth = value
@@ -59,7 +66,7 @@ class PlayerViewManager(
         val parentView = root.findViewById<ViewGroup>(reactNativeViewId)
         setupLayout(parentView)
 
-        val fragment = PlayerFragment()
+        val fragment = PlayerFragment(videoSrc)
         val activity = reactContext.currentActivity as FragmentActivity
         activity.supportFragmentManager
             .beginTransaction()

@@ -27,7 +27,9 @@ export function isAndroid() {
 
 
 export const windowWidth = Dimensions.get('window').width;
+export const screenWidth = Dimensions.get("screen").width;
 export const windowHeight = Dimensions.get('window').height;
+export const screenHeight = Dimensions.get("screen").height;
 
 export const preferedSize = (start: number, end: number, value: number) => {
     if (value < start) {
