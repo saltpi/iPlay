@@ -21,6 +21,7 @@ class PlayerContentView(context: Context) : SurfaceView(context), SurfaceHolder.
 
     // Called when back button is pressed, or app is shutting down
     fun destroy() {
+        viewModel.destroy()
         // Disable surface callbacks to avoid using unintialized mpv state
         holder.removeCallback(this)
     }

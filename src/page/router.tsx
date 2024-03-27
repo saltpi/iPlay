@@ -165,17 +165,17 @@ const StarRouter = () => {
                     title: '收藏',
                 }}
             />
-            <HomeStack.Screen
+            <StarStack.Screen
                 name="movie"
                 component={MoviePage as any}
                 options={defaultOptions}
             />
-            <HomeStack.Screen
+            <StarStack.Screen
                 name="season"
                 component={SeasonPage as any}
                 options={defaultOptions}
             />
-            <HomeStack.Screen
+            <StarStack.Screen
                 name="player"
                 component={PlayerPage as any}
                 options={fullscreenOptions}

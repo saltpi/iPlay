@@ -34,7 +34,7 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <MPVPlayerView style={style.video} url={url} />
+                    {/* <MPVPlayerView style={style.video} url={url} /> */}
                 </View>
             </ScrollView>
         </SafeAreaView>
