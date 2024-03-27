@@ -72,6 +72,7 @@ export function SettingItem(props: SettingItemProps) {
                 style={style.icon} /> : null}
             <Text style={{...style.label, color}}>{props.label}</Text>
             <Icon.Indicator width={style.indicator.width} 
+                stroke={color}
                 style={style.indicator} />
         </View>
         </TouchableHighlight>

@@ -2,14 +2,14 @@
    <img src="doc/image/AppIcon.png" />
 </p>
 <h2 align="center">iPlay</h2>
-<p align="center">iPlay is a modern video player for android and iOS</p>
+<p align="center">iPlay is a modern video player for Android and iOS</p>
 <br />
 
 ---
 
 [![🌸 Build](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml/badge.svg?branch=main)](https://github.com/ourfor/iPlayClient/actions/workflows/develop.yml)
 
-### 一个跨平台的媒体播放器
+### A cross-platform media player
 
 <table>
 <tr>
@@ -24,47 +24,50 @@
    <td><img src="./doc/image/Screen-20240319@2x.png" /></td>
    <td><img src="./doc/image/Screen-20240319@2x2.png" /></td>
 </tr>
+<tr>
+   <td><img src="./doc/image/Screen-20240327@2x.png" /></td>
+   <td><img src="./doc/image/Screen-20240327@2x1.png" /></td>
+   <td><img src="./doc/image/Screen-20240327@2x2.png" /></td>
+</tr>
 </table>
 
-使用React Native开发, 支持安卓和iOS
+Supports Android and iOS
 
-### 功能特性
+### Feature
 
-- [x] 支持Emby
-- [x] 支持播放视频
-- [x] 支持苹果芯片的Mac
-- [x] iOS内置VLC播放器
-- [ ] Android使用MPV播放器
-- [ ] 支持订阅视频更新
-- [ ] 完善用户界面
-- [ ] 完善播放器手势、字幕和配置支持
-- [ ] 支持Windows
+- [x] Support Emby
+- [x] Internal mpv player
+- [ ] Support subscribe movie and series
+- [ ] User interface
+- [ ] Enhance internal player
+- [ ] Support Windows
 
-### 开发进度
+### Development Progress
 
-业余时间开发
+It is developed in my free time
 
-### 安装包
+### Download
 
-- [安卓](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.apk)
+- [Android](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.apk)
 - [iOS](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.ipa)
 
-开发包下载路径
+Download the development package
 ![](doc/image/20240319_213840.png)
 
-## 第三方依赖
+## Third-party Dependencies
 
+### Player
 - [MobileVLCKit](http://code.videolan.org/videolan/VLCKit.git)
 - [android-mpv](https://github.com/mpv-android/mpv-android)
 
-## 设计稿
+## UI Design
 
-- [播放器UI设计稿](https://www.figma.com/file/2LMy996hxF2DZ2jB8eU0Fv/Video-Player-For-Web-%26-Mobile-(Community)?type=design&node-id=18-4120&mode=design&t=4xkVhM84OdC0jy9x-0)
-- [图标](https://www.figma.com/file/9Df5CaFUEomVzn20gRpaX3/Radix-Icons?type=design&node-id=0-1&mode=design&t=rpFwTmQyZQhc016k-0)
-- [界面元素](https://www.figma.com/file/B5TV95tj8PrCHwsSa3wV0N/Flat-Icon-Set-(Community)?type=design&node-id=2092-13469&mode=design&t=w8YD9Lw37sz019zc-0)
+- [Player UI Design](https://www.figma.com/file/2LMy996hxF2DZ2jB8eU0Fv/Video-Player-For-Web-%26-Mobile-(Community)?type=design&node-id=18-4120&mode=design&t=4xkVhM84OdC0jy9x-0)
+- [Icon](https://www.figma.com/file/9Df5CaFUEomVzn20gRpaX3/Radix-Icons?type=design&node-id=0-1&mode=design&t=rpFwTmQyZQhc016k-0)
+- [UI Element](https://www.figma.com/file/B5TV95tj8PrCHwsSa3wV0N/Flat-Icon-Set-(Community)?type=design&node-id=2092-13469&mode=design&t=w8YD9Lw37sz019zc-0)
 
-## 反馈交流
+## Feedback & Communication
 
-* [iPlay product paddling group](https://t.me/boost?c=2045428505)
+* [iPlay product discussion group](https://t.me/boost?c=2045428505)
 
-* [Bug report](https://365.kdocs.cn/l/cile26Rklddg?from=docs&reqtype=kdocs&startTime=1711105971325)
+* [Bug a report](https://365.kdocs.cn/l/cile26Rklddg?from=docs&reqtype=kdocs&startTime=1711105971325)

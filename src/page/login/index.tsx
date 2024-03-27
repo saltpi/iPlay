@@ -59,7 +59,6 @@ export function Page() {
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
-        console.log(groups)
         const protocol = groups?.protocol === "https" ? "https" : "http"
         const endpoint: EmbyConfig = {
             host: groups?.host ?? "",
@@ -67,14 +66,12 @@ export function Page() {
             protocol,
             path: groups?.path ? (groups?.path.length === 0 ? "/" : groups?.path) : "/"
         }
-        console.log(`endpoint: `, endpoint)
         const callback = {
             resolve: () => {
                 setLoading(false)
                 setTimeout(() => {
                     navigation.goBack()
                 }, 1000)
-                console.log("login success")
                 Toast.show({
                     type: 'success',
                     text1: '登录成功',
@@ -86,7 +83,6 @@ export function Page() {
                 setTimeout(() => {
                     setLoading(false)
                 }, 1000)
-                console.log("login failed")
                 Toast.show({
                     type: 'error',
                     text1: '登录失败',

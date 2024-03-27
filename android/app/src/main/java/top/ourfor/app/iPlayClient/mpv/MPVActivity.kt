@@ -8,46 +8,34 @@ import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.ParcelFileDescriptor
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import top.ourfor.app.iPlayClient.R
 import top.ourfor.app.iPlayClient.databinding.PlayerBinding
-import top.ourfor.lib.mpv.MPVLib
 
 typealias ActivityResultCallback = (Int, Intent?) -> Unit
 
-class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
-    // for calls to eventUi() and eventPropertyUi()
-    private val eventUiHandler = Handler(Looper.getMainLooper())
+class MPVActivity : AppCompatActivity() {
 
     private var activityIsForeground = true
 
     private var audioManager: AudioManager? = null
 
     private val psc = Utils.PlaybackStateCache()
-    private var mediaSession: MediaSessionCompat? = null
 
     private lateinit var binding: PlayerBinding
 
     // convenience alias
     private val player get() = binding.player
 
-    private var statsLuaMode = 0 // ==0 disabled, >0 page number
-
     private var autoRotationMode = "landscape"
 
     /* * */
 
-    private var playbackHasStarted = false
     private var onloadCommands = mutableListOf<Array<String>>()
 
     // Activity lifetime
@@ -80,7 +68,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
         }
 
         player.initialize(applicationContext.filesDir.path, applicationContext.cacheDir.path)
-        player.addObserver(this)
         player.playFile(filepath!!)
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -90,7 +77,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
 
     override fun onDestroy() {
         activityIsForeground = false
-        player.removeObserver(this)
         player.destroy()
         super.onDestroy()
     }
@@ -182,23 +168,6 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
     // UI (Part 2)
 
     data class TrackData(val track_id: Int, val track_type: String)
-    private fun trackSwitchNotification(f: () -> TrackData) {
-        val (track_id, track_type) = f()
-        val trackPrefix = when (track_type) {
-            "audio" -> getString(R.string.track_audio)
-            "sub"   -> getString(R.string.track_subs)
-            "video" -> "Video"
-            else    -> "???"
-        }
-
-        val msg = if (track_id == -1) {
-            "$trackPrefix ${getString(R.string.track_off)}"
-        } else {
-            val trackName = player.tracks[track_type]?.firstOrNull{ it.mpvId == track_id }?.name ?: "???"
-            "$trackPrefix $trackName"
-        }
-    }
-
 
 
     private var activityResultCallbacks: MutableMap<Int, ActivityResultCallback> = mutableMapOf()
@@ -229,116 +198,13 @@ class MPVActivity : AppCompatActivity(), MPVLib.EventObserver {
                 else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
-        if (initial || player.vid == -1)
-            return
-
-        val ratio = player.videoAspect?.toFloat() ?: 0f
-        Log.v(TAG, "auto rotation: aspect ratio = $ratio")
-
-        if (ratio == 0f || ratio in (1f / ASPECT_RATIO_MIN) .. ASPECT_RATIO_MIN) {
-            // video is square, let Android do what it wants
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            return
-        }
-        requestedOrientation = if (ratio > 1f)
-            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-        else
-            ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
     }
 
-    private fun eventPropertyUi(property: String) {
-        if (!activityIsForeground) return
-        when (property) {
-            "track-list" -> player.loadTracks()
-            "video-params/aspect" -> {
-                updateOrientation()
-            }
-        }
-    }
-
-    private fun eventPropertyUi(property: String, value: Boolean) {
-        if (!activityIsForeground) return
-        when (property) {
-            "pause" -> updatePlaybackStatus(value)
-        }
-    }
-
-    private fun eventPropertyUi(property: String, value: Long) {
-    }
-
-    private fun eventPropertyUi(property: String, value: String, triggerMetaUpdate: Boolean) {
-        if (!activityIsForeground) return
-    }
-
-    private fun eventUi(eventId: Int) {
-        if (!activityIsForeground) return
-        when (eventId) {
-            MPVLib.mpvEventId.MPV_EVENT_PLAYBACK_RESTART -> updatePlaybackStatus(player.paused!!)
-        }
-    }
-
-    override fun eventProperty(property: String) {
-        if (property == "loop-file" || property == "loop-playlist") {
-            mediaSession?.setRepeatMode(when (player.getRepeat()) {
-                2 -> PlaybackStateCompat.REPEAT_MODE_ONE
-                1 -> PlaybackStateCompat.REPEAT_MODE_ALL
-                else -> PlaybackStateCompat.REPEAT_MODE_NONE
-            })
-        }
-
-        if (!activityIsForeground) return
-        eventUiHandler.post { eventPropertyUi(property) }
-    }
-
-    override fun eventProperty(property: String, value: Boolean) {
-        if (property == "shuffle") {
-            mediaSession?.setShuffleMode(if (value)
-                PlaybackStateCompat.SHUFFLE_MODE_ALL
-            else
-                PlaybackStateCompat.SHUFFLE_MODE_NONE)
-        }
-
-        if (!activityIsForeground) return
-        eventUiHandler.post { eventPropertyUi(property, value) }
-    }
-
-    override fun eventProperty(property: String, value: Long) {
-        if (psc.update(property, value))
-        if (!activityIsForeground) return
-        eventUiHandler.post { eventPropertyUi(property, value) }
-    }
-
-    override fun eventProperty(property: String, value: String) {
-        val triggerMetaUpdate = psc.update(property, value)
-        if (triggerMetaUpdate)
-        if (!activityIsForeground) return
-        eventUiHandler.post { eventPropertyUi(property, value, triggerMetaUpdate) }
-    }
-
-    override fun event(eventId: Int) {
-        if (eventId == MPVLib.mpvEventId.MPV_EVENT_START_FILE) {
-            for (c in onloadCommands)
-                MPVLib.command(c)
-            if (this.statsLuaMode > 0 && !playbackHasStarted) {
-                MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
-                MPVLib.command(arrayOf("script-binding", "stats/${this.statsLuaMode}"))
-            }
-
-            playbackHasStarted = true
-        }
-
-        if (!activityIsForeground) return
-        eventUiHandler.post { eventUi(eventId) }
-    }
 
     // Gesture handler
 
     companion object {
         const val TAG = "mpv"
-        // smallest aspect ratio that is considered non-square
-        private const val ASPECT_RATIO_MIN = 1.2f // covers 5:4 and up
-        // fraction to which audio volume is ducked on loss of audio focus
-        private const val AUDIO_FOCUS_DUCKING = 0.5f
 
     }
 }

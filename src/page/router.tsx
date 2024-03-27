@@ -11,13 +11,14 @@ import {Page as PlayerPage} from '@page/player/index.tsx';
 import {Page as ThemePage} from '@page/theme/index.tsx';
 import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
+import {Page as AboutPage} from '@page/settings/about/index.tsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer, NavigationState} from '@react-navigation/native';
-import {NativeStackNavigationOptions, createNativeStackNavigator} from '@react-navigation/native-stack';
+import {DefaultTheme, NavigationContainer, NavigationState, Theme} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuBar, MenuType} from '@view/menu/MenuBar';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from '@hook/store';
-import {selectScreenOptions, switchRoute} from '@store/themeSlice';
+import {selectScreenOptions, selectThemeBasicStyle, switchRoute} from '@store/themeSlice';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -86,17 +87,22 @@ const SettingsRouter = () => {
             <SettingsStack.Screen
                 name="login"
                 component={LoginPage}
-                options={{title: '登录'}}
+                options={{title: '站点配置'}}
             />
             <SettingsStack.Screen
                 name="theme"
                 component={ThemePage}
-                options={{title: '主题'}}
+                options={{title: '主题配置'}}
             />
             <SettingsStack.Screen
                 name="config_video"
                 component={VideoConfigPage}
                 options={{title: '视频配置'}}
+            />
+            <SettingsStack.Screen
+                name="about"
+                component={AboutPage as any}
+                options={{title: '关于我们'}}
             />
         </SettingsStack.Navigator>
     );
@@ -150,10 +156,25 @@ const StarRouter = () => {
         <StarStack.Navigator initialRouteName="star" screenOptions={options}>
             <StarStack.Screen
                 name="star"
-                component={StarPage}
+                component={StarPage as any}
                 options={{
                     title: '收藏',
                 }}
+            />
+            <HomeStack.Screen
+                name="movie"
+                component={MoviePage as any}
+                options={defaultOptions}
+            />
+            <HomeStack.Screen
+                name="season"
+                component={SeasonPage as any}
+                options={defaultOptions}
+            />
+            <HomeStack.Screen
+                name="player"
+                component={PlayerPage as any}
+                options={fullscreenOptions}
             />
             <StarStack.Screen
                 name="test"
@@ -175,8 +196,21 @@ function getActiveRouteName(state: NavigationState) {
 export function Router() {
     const dispatch = useAppDispatch();
     const options = useAppSelector(selectScreenOptions)
+    const theme = useAppSelector(selectThemeBasicStyle);
+    const isDarkMode = useAppSelector(state => state.theme.isDarkMode);
+    // @ref https://reactnavigation.org/docs/themes/
+    const pageTheme: Theme = {
+        ...DefaultTheme, 
+        dark: isDarkMode, 
+        colors: {
+            ...DefaultTheme.colors,
+            text: theme.color ?? DefaultTheme.colors.text,
+            background: theme.backgroundColor,
+        }
+    }
     return (
         <NavigationContainer
+            theme={pageTheme}
             onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
             <Tab.Navigator
                 initialRouteName="home"

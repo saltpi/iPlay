@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import { Dimensions } from 'react-native';
+import DeviceInfo from "react-native-device-info";
 
 export enum OSType {
     Web = "web",
@@ -27,7 +28,9 @@ export function isAndroid() {
 
 
 export const windowWidth = Dimensions.get('window').width;
+export const screenWidth = Dimensions.get("screen").width;
 export const windowHeight = Dimensions.get('window').height;
+export const screenHeight = Dimensions.get("screen").height;
 
 export const preferedSize = (start: number, end: number, value: number) => {
     if (value < start) {
@@ -37,4 +40,15 @@ export const preferedSize = (start: number, end: number, value: number) => {
         return end;
     }
     return value;
+}
+
+export const Version = {
+    displayName: "iPlay",
+    buildNumber: DeviceInfo.getBuildNumber(),
+    versionCode: DeviceInfo.getVersion(),
+    deviceId: DeviceInfo.getDeviceId(),
+}
+
+export const Device = {
+    name: DeviceInfo.getDeviceName(),
 }

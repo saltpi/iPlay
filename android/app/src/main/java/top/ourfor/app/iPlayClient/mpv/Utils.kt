@@ -8,7 +8,6 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import top.ourfor.lib.mpv.MPVLib
 import java.io.*
 
 object Utils {
@@ -68,12 +67,6 @@ object Utils {
             private set
         var mediaAlbum: String? = null
             private set
-
-        fun readAll() {
-            mediaTitle = MPVLib.getPropertyString("media-title")
-            mediaArtist = MPVLib.getPropertyString("metadata/by-key/Artist")
-            mediaAlbum = MPVLib.getPropertyString("metadata/by-key/Album")
-        }
 
         fun update(property: String, value: String): Boolean {
             when (property) {

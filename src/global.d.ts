@@ -30,6 +30,7 @@ type RootStackParamList = {
   theme: undefined,
   test: undefined,
   config_video: undefined,
+  about: undefined,
   default: undefined,
 };
 

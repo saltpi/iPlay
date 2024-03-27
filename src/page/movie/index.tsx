@@ -7,18 +7,15 @@ import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BaseImage, Image } from '@view/Image';
-import { VideoRef } from "react-native-video";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image } from '@view/Image';
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Spin } from "@view/Spin";
+import { Spin, SpinBox } from "@view/Spin";
 import PlayIcon from "../../asset/play.svg"
 import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
-import Clipboard from "@react-native-clipboard/clipboard";
-import { Like } from "@view/like/Like";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { printException } from "@helper/log";
 
@@ -83,6 +80,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const [seasons, setSeasons] = useState<Season[]>();
     const videoRef = useRef<any>()
     const [loading, setLoading] = useState(false)
+    const [infoLoading, setInfoLoading] = useState(false)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
@@ -95,7 +93,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             if (playbackInfo) {
                 url = emby?.videoUrl?.(playbackInfo) ?? ""
             }
-            console.log("playbackInfo", url)
         }
         return url
     }, [emby, movie.Id])
@@ -108,9 +105,11 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }, [])
 
     useEffect(() => {
+        setInfoLoading(true)
         emby?.getMedia?.(Number(movie.Id))
             .then(setDetail)
             .catch(printException)
+            .finally(() => setInfoLoading(false))
 
         if (type !== "Series") return
         emby?.getSeasons?.(Number(movie.Id))
@@ -119,7 +118,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }, [emby, movie.Id])
     
     const onError = (e: any) => {
-        console.log(`player: `, url, e);
         setLoading(false)
         Toast.show({
             topOffset: insets.top,
@@ -170,16 +168,19 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
                 <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
             </TouchableOpacity> : null}
-            {loading ? <Spin size="small" /> : null}
+            {loading ? <Spin color={themeStyle.color} size="small" /> : null}
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
             </View>
+            {infoLoading ? 
+            <SpinBox color={themeStyle.color} size="small" /> 
+            : null}
             <Text style={{...style.overview, color}}>{detail?.Overview}</Text>
             {isPlayable && url ?
             <ExternalPlayer title={detail?.Name} src={url} /> : null}
             {showVideoLink ? 
-            <Text style={style.link}
+            <Text style={{...style.link, ...themeStyle}}
                 ellipsizeMode="tail" 
                 numberOfLines={3}>
                 {url}

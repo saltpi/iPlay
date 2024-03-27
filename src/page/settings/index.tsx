@@ -49,6 +49,9 @@ const settings: SettingItemProps[] = [
     {
         icon: "Mobile",
         label: "关于",
+        onPress: (setting, navigation) => {
+            navigation?.navigate("about")
+        }
     },
 ];
 
