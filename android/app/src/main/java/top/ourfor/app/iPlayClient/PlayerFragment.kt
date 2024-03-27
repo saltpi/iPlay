@@ -20,6 +20,7 @@ class PlayerFragment (
         super.onCreateView(inflater, container, savedInstanceState)
         binding = PlayerBinding.inflate(inflater)
         playerView = PlayerView(requireNotNull(context), url)
+        BeanManager.set(PlayerView::class.java, playerView)
         return playerView // this CustomView could be any view that you want to render
     }
 

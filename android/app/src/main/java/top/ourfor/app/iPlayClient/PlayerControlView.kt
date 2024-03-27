@@ -1,28 +1,39 @@
 package top.ourfor.app.iPlayClient
 
 import android.content.Context
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import java.util.Timer
-import java.util.concurrent.TimeUnit
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicInteger
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEventListener {
     private var shouldUpdateProgress = true;
     var player: Player? = null
+    private var resId: AtomicInteger = AtomicInteger(8000)
+    private val dateFormatter: DateTimeFormatter by lazy {
+        DateTimeFormatter.ofPattern("HH:mm:ss")
+    }
 
     private var playButton: View = run {
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
         icon.tag = ICON_TAG
         icon.setImageResource(androidx.media3.ui.R.drawable.exo_icon_pause)
-        val iconLayout = LayoutParams(CENTER_LAYOUT)
+        val iconLayout = centerLayout()
         iconLayout.width = ICON_SIZE
         iconLayout.height = ICON_SIZE
         layout.addView(icon, iconLayout)
@@ -30,6 +41,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         gradientDrawable.setColor(Color.argb(50, 0, 0, 0))
         gradientDrawable.cornerRadius = ICON_SIZE + 0f
         layout.background = gradientDrawable
+        layout.rootView.id = resId.getAndIncrement()
         layout.rootView
     }
 
@@ -46,32 +58,47 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
         icon.setImageResource(androidx.media3.ui.R.drawable.exo_icon_fullscreen_enter)
-        val iconLayout = LayoutParams(CENTER_LAYOUT)
-        iconLayout.width = ICON_SIZE
-        iconLayout.height = ICON_SIZE
+        val iconLayout = LayoutParams(centerLayout())
+        iconLayout.width = ICON_SMALL_SIZE
+        iconLayout.height = ICON_SMALL_SIZE
         layout.addView(icon, iconLayout)
         val gradientDrawable = GradientDrawable()
         gradientDrawable.setColor(Color.argb(50, 0, 0, 0))
-        gradientDrawable.cornerRadius = ICON_SIZE + 0f
+        gradientDrawable.cornerRadius = ICON_SMALL_SIZE + 0f
         layout.background = gradientDrawable
+        layout.rootView.id = resId.getAndIncrement()
         layout.rootView
     }
 
     private var fullscreenLayout = run {
-        val params = LayoutParams(ICON_SIZE * 2, ICON_SIZE * 2)
+        val params = LayoutParams(ICON_SMALL_SIZE * 2, ICON_SMALL_SIZE * 2)
         params.topToTop = LayoutParams.PARENT_ID
         params.rightToRight = LayoutParams.PARENT_ID
+        params.topMargin = 10
+        params.rightMargin = 10
         params
     }
 
     private var progressBar = run {
         val slide = SeekBar(context)
-        slide.max = 9999
+        val color = Color.WHITE
+        val colorStateList = ColorStateList.valueOf(color)
+        val thumbRadius = 10
+        val thumb = GradientDrawable()
+        thumb.shape = GradientDrawable.OVAL
+        thumb.setSize(thumbRadius * 2, thumbRadius * 2)
+        thumb.setColor(Color.RED)
+        slide.thumb = thumb
+        slide.thumbTintList = colorStateList
+        slide.progressTintList = colorStateList
+        slide.id = resId.getAndIncrement()
+        slide.setPadding(thumbRadius, thumbRadius, thumbRadius, thumbRadius)
         slide
     }
 
     private var progressBarLayout = run {
-        val params = LayoutParams(LayoutParams.MATCH_PARENT, 20)
+        val params = LayoutParams(0, 20)
+        params.matchConstraintPercentWidth = 0.9f
         params.bottomToBottom = LayoutParams.PARENT_ID
         params.bottomMargin = 20
         params.leftToLeft = LayoutParams.PARENT_ID
@@ -81,12 +108,14 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
 
     private var durationLabel = run {
         val label = TextView(context)
-        label.textSize = 14.0F
+        label.textSize = 12.0F
+        label.setTextColor(Color.WHITE)
+        label.id = resId.getAndIncrement()
         label
     }
 
     private var durationLayout = run {
-        val params = LayoutParams(ICON_SIZE * 2, ICON_SIZE * 2)
+        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         params.rightToRight = progressBar.id
         params.bottomToTop = progressBar.id
         params.bottomMargin = 10
@@ -95,8 +124,10 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
 
 
     init {
-        setupUI()
-        bind()
+        post {
+            setupUI()
+            bind()
+        }
     }
 
     private fun setupUI() {
@@ -111,7 +142,9 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
             Log.d(TAG, "play")
             val isPlaying = player?.isPlaying == true
             var resId = if (isPlaying) androidx.media3.ui.R.drawable.exo_icon_play else androidx.media3.ui.R.drawable.exo_icon_pause
-            updateIcon(playButton, resId)
+            post {
+                updateIcon(playButton, resId)
+            }
             if (isPlaying) {
                 player?.pause()
             } else {
@@ -128,11 +161,13 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 player?.seek(progressBar.progress.toDouble())
-                TimeUnit.MILLISECONDS.sleep(500)
                 shouldUpdateProgress = true;
             }
         })
-
+        fullscreenButton.setOnClickListener {
+            val intent = Intent(context, PlayerActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 
     private fun updateIcon(view: View, resId: Int) {
@@ -148,30 +183,43 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
             val duration = value as Double
             progressBar.max = duration.toInt()
             durationLabel.text = duration.toString()
+            durationLabel.text = formatTime(progressBar.progress, progressBar.max)
         } else if (name.equals("time-pos")) {
-            synchronized(shouldUpdateProgress) {
-                if (!shouldUpdateProgress) {
-                    return
-                }
+            if (!shouldUpdateProgress) {
+                return
+            }
 
-                val time = value as Double
+            val time = value as Double
+            post {
                 progressBar.progress = time.toInt()
+                durationLabel.text = formatTime(progressBar.progress, progressBar.max)
             }
         }
+    }
+
+    private fun formatTime(current: Int, total: Int): String {
+        var duration: Duration = Duration.ofSeconds(current.toLong())
+        var time = LocalDateTime.MIN.plus(duration)
+        val part1 = time.format(dateFormatter)
+        duration = Duration.ofSeconds(total.toLong())
+        time = LocalDateTime.MIN.plus(duration)
+        val part2 = time.format(dateFormatter)
+        return "$part1 / $part2"
     }
 
     companion object {
         val TAG = "PlayerControlView"
 
-        val CENTER_LAYOUT = run {
+        fun centerLayout(): LayoutParams {
             val centerParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             centerParams.topToTop = LayoutParams.PARENT_ID;
             centerParams.leftToLeft = LayoutParams.PARENT_ID
             centerParams.rightToRight = LayoutParams.PARENT_ID
             centerParams.bottomToBottom = LayoutParams.PARENT_ID
-            centerParams
+            return centerParams
         }
 
+        val ICON_SMALL_SIZE = 16 * 3
         val ICON_SIZE = 24 * 3
         val ICON_TAG = 2
     }

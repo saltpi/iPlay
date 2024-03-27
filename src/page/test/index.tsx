@@ -10,8 +10,8 @@ const style = StyleSheet.create({
         flex: 1,
     },
     video: {
-        width: 1440,
-        height: 810,
+        width: 1080,
+        height: 600,
         aspectRatio: 16/9,
     }
 });
