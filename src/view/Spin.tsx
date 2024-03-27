@@ -13,7 +13,9 @@ const style = StyleSheet.create({
     },
     box: {
         backgroundColor: "transparent",
-        padding: 10,
+        paddingTop: 10,
+        alignItems: "center",
+        justifyContent: "center",
     }
 });
 
