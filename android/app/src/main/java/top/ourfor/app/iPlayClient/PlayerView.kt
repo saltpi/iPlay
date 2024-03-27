@@ -2,13 +2,10 @@ package top.ourfor.app.iPlayClient
 
 import android.R
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +13,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.facebook.react.uimanager.ThemedReactContext
-import top.ourfor.app.iPlayClient.databinding.PlayerBinding
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -26,25 +22,28 @@ class PlayerView(
     url: String?
 ) : ConstraintLayout(context), PlayerEventListener {
     private var controlView: PlayerControlView?
-    private var contentView: ViewGroup?
+    private lateinit var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
     public var themedReactContext: ThemedReactContext? = null
     init {
-        val binding = PlayerBinding.inflate(LayoutInflater.from(context))
-        val player = binding.player
+        val border = GradientDrawable()
+        border.setColor(Color.TRANSPARENT) // background color
+        border.setStroke(2, Color.RED)
+        contentView = PlayerContentView(context)
+        contentView?.background = border
+        val player = contentView
         val contentLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         contentLayoutParams.topToTop = LayoutParams.PARENT_ID;
         contentLayoutParams.bottomToBottom = LayoutParams.PARENT_ID;
         contentLayoutParams.leftToLeft = LayoutParams.PARENT_ID;
         contentLayoutParams.rightToRight = LayoutParams.PARENT_ID;
-        contentView = binding.root
         addView(contentView, contentLayoutParams)
 
-        player.initialize(context.filesDir.path, context.cacheDir.path)
-        val viewModel = player.viewModel
-        viewModel.setDelegate(this)
-        if (url != null) player.playFile(url)
+        player?.initialize(context.filesDir.path, context.cacheDir.path)
+        val viewModel = player?.viewModel
+        viewModel?.setDelegate(this)
+        if (url != null) player?.playFile(url)
 
         val controlView = PlayerControlView(context)
         val controlLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)

@@ -2,6 +2,7 @@ package top.ourfor.app.iPlayClient;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
@@ -12,12 +13,12 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 public class PlayerFullscreenView extends Dialog {
     private ConstraintLayout containerView;
-    private ViewGroup contentView;
+    private View contentView;
     public ViewGroup controlView;
     private ViewGroup superview;
     public PlayerFullscreenView(
             Context context,
-            ViewGroup contentView,
+            View contentView,
             ViewGroup controlView) {
         super(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         ConstraintLayout layout = new ConstraintLayout(context);

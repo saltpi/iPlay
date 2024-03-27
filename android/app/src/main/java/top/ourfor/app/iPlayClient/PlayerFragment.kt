@@ -10,19 +10,16 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.facebook.react.uimanager.ThemedReactContext
-import top.ourfor.app.iPlayClient.databinding.PlayerBinding
 
 class PlayerFragment (
     var url: String?
 ) : Fragment() {
     private lateinit var playerView: PlayerView
-    private lateinit var binding: PlayerBinding
     var themedReactContext: ThemedReactContext? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = PlayerBinding.inflate(inflater)
         playerView = PlayerView(requireNotNull(context), url)
         playerView.themedReactContext = themedReactContext
         return playerView // this CustomView could be any view that you want to render

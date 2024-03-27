@@ -1,14 +1,11 @@
-package top.ourfor.app.iPlayClient.mpv
+package top.ourfor.app.iPlayClient
 
 import android.content.Context
-import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import top.ourfor.app.iPlayClient.Player
-import top.ourfor.app.iPlayClient.PlayerViewModel
 
-class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), SurfaceHolder.Callback {
+class PlayerContentView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     public lateinit var viewModel: Player
     fun initialize(configDir: String, cacheDir: String) {
         viewModel = PlayerViewModel(configDir, cacheDir)
@@ -31,7 +28,7 @@ class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attr
     var paused: Boolean? = true
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
+        viewModel.resize("${width}x$height")
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
