@@ -2,13 +2,19 @@ package top.ourfor.app.iPlayClient
 
 import android.R
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.facebook.react.uimanager.ThemedReactContext
 import top.ourfor.app.iPlayClient.databinding.PlayerBinding
 
 
@@ -22,9 +28,8 @@ class PlayerView(
     private var contentView: ViewGroup?
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
+    public var themedReactContext: ThemedReactContext? = null
     init {
-        setBackgroundColor(Color.BLUE)
-
         val binding = PlayerBinding.inflate(LayoutInflater.from(context))
         val player = binding.player
         val contentLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -60,10 +65,22 @@ class PlayerView(
     }
 
     override fun onWindowSizeChange() {
+        val activity = themedReactContext?.currentActivity ?: return
+        val window = activity.window
+
         if (isFullscreen) {
             fullscreenView?.dismiss()
+            requestLayout()
+            val controller = WindowInsetsControllerCompat(window, window.decorView)
+            WindowCompat.setDecorFitsSystemWindows(window, true)
+            controller.show(WindowInsetsCompat.Type.systemBars())
         } else {
             fullscreenView?.show()
+            val controller = WindowInsetsControllerCompat(window, window.decorView)
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
         isFullscreen = !isFullscreen
     }

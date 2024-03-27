@@ -13,7 +13,7 @@ public interface Player {
     default void play() {}
     default void resume() {}
     default void pause() {}
-    default void seek(double timeInSeconds) {}
+    default void seek(long timeInSeconds) {}
     default void stop() {}
     default void resize(String newSize) {}
     default void destroy() {}

@@ -101,7 +101,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val params = LayoutParams(0, 20)
         params.matchConstraintPercentWidth = 0.9f
         params.bottomToBottom = LayoutParams.PARENT_ID
-        params.bottomMargin = 20
+        params.bottomMargin = 30
         params.leftToLeft = LayoutParams.PARENT_ID
         params.rightToRight = LayoutParams.PARENT_ID
         params
@@ -161,7 +161,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                player?.seek(progressBar.progress.toDouble())
+                player?.seek(progressBar.progress.toLong())
                 shouldUpdateProgress = true;
             }
         })

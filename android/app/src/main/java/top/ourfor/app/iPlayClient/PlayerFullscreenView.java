@@ -3,7 +3,12 @@ package top.ourfor.app.iPlayClient;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.ViewGroup;
+import android.view.Window;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 public class PlayerFullscreenView extends Dialog {
     private ConstraintLayout containerView;

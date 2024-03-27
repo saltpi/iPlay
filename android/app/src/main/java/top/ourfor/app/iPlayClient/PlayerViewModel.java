@@ -62,7 +62,7 @@ public class PlayerViewModel implements Player {
     }
 
     @Override
-    public void seek(double timeInSeconds) {
+    public void seek(long timeInSeconds) {
         mpv.command("seek", String.valueOf(timeInSeconds), "absolute+keyframes");
     }
 
