@@ -288,7 +288,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */,
+				888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit.git" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -678,7 +678,10 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -746,7 +749,10 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -787,7 +793,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */ = {
+		888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/cxfksword/MPVKit.git";
 			requirement = {
@@ -800,7 +806,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		888CB5752BB11E22009E89E9 /* MPVKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */;
+			package = 888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit.git" */;
 			productName = MPVKit;
 		};
 /* End XCSwiftPackageProductDependency section */

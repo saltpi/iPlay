@@ -105,6 +105,17 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
     mpv_command(self.mpv, cmd);
 }
 
+- (void)resize:(CGSize)size {
+//    int64_t dwidth = 0;
+//    int64_t dheight = 0;
+//    mpv_get_property(self.mpv, "dwidth", MPV_FORMAT_INT64, &dwidth);
+//    mpv_get_property(self.mpv, "dheight", MPV_FORMAT_INT64, &dheight);
+//    int64_t scaleX = dwidth / size.width;
+//    int64_t scaleY = dheight / size.height;
+//    mpv_set_property(self.mpv, "video-scale-x", MPV_FORMAT_DOUBLE, &scaleX);
+//    mpv_set_property(self.mpv, "video-scale-y", MPV_FORMAT_DOUBLE, &scaleY);
+}
+
 - (void)play {
     const char *cmd[] = {"play", NULL};
     mpv_command(self.mpv, cmd);
@@ -160,7 +171,7 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 - (void)keepaspect {
-    int flag = 1;
+    int flag = -1;
     mpv_set_property(self.mpv, "keepaspect", MPV_FORMAT_FLAG, &flag);
 }
 

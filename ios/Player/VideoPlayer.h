@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)pause;
 - (void)stop;
 - (void)seek:(NSUInteger)timeSeconds;
+- (void)resize:(CGSize)size;
 
 @optional
 - (void)setDrawable:(id)view;
