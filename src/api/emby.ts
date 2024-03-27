@@ -1,5 +1,5 @@
 import { getPlaybackInfo } from "./play";
-import { getCollection, getEpisodes, getLatestMedia, getMedia, getRecommendations, getResume, getSeasons, getView, lookupItem, searchRecommend } from "./view";
+import { getCollection, getEpisodes, getItem, getLatestMedia, getMedia, getRecommendations, getResume, getSeasons, getView, lookupItem, searchRecommend } from "./view";
 import { getPublicInfo } from "./info";
 import { login } from "./login";
 import { EmbySite } from "@model/EmbySite";
@@ -34,6 +34,7 @@ export class Emby {
         this.getItemWithName = lookupItem.bind(this, this.site)
         this.searchRecommend = searchRecommend.bind(this, this.site)
         this.getPublicInfo = getPublicInfo.bind(this, this.site)
+        this.getItem = getItem.bind(this, this.site)
         this.imageUrl = imageUrl.bind(this, this.site)
         this.videoUrl = playUrl.bind(this, this.site)
     }
@@ -50,6 +51,7 @@ export class Emby {
     public getSeasons = this._site ? getSeasons.bind(this, this.site) : null
     public getItemWithName = this._site ? lookupItem.bind(this, this.site) : null
     public searchRecommend = this._site ? searchRecommend.bind(this, this.site) : null
+    public getItem = this._site ? getItem.bind(this, this.site) : null
     public imageUrl = this._site ? imageUrl.bind(this, this.site) : null
     public videoUrl = this._site ? playUrl.bind(this, this.site) : null
 }

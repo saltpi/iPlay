@@ -29,7 +29,6 @@ export async function getPlaybackInfo(site: EmbySite, id: number) {
 export const getPlayUrl = (detail?: MediaDetail) => {
     const sources = detail?.MediaSources ?? []
     const urls = sources.map((source) => {
-        console.log(source)
         if (source.Container === "strm") {
             return source.Path
         } else {

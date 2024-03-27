@@ -43,7 +43,12 @@ export const preferedSize = (start: number, end: number, value: number) => {
 }
 
 export const Version = {
+    displayName: "iPlay",
     buildNumber: DeviceInfo.getBuildNumber(),
     versionCode: DeviceInfo.getVersion(),
     deviceId: DeviceInfo.getDeviceId(),
+}
+
+export const Device = {
+    name: DeviceInfo.getDeviceName(),
 }

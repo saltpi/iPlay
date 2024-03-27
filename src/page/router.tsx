@@ -156,10 +156,25 @@ const StarRouter = () => {
         <StarStack.Navigator initialRouteName="star" screenOptions={options}>
             <StarStack.Screen
                 name="star"
-                component={StarPage}
+                component={StarPage as any}
                 options={{
                     title: '收藏',
                 }}
+            />
+            <HomeStack.Screen
+                name="movie"
+                component={MoviePage as any}
+                options={defaultOptions}
+            />
+            <HomeStack.Screen
+                name="season"
+                component={SeasonPage as any}
+                options={defaultOptions}
+            />
+            <HomeStack.Screen
+                name="player"
+                component={PlayerPage as any}
+                options={fullscreenOptions}
             />
             <StarStack.Screen
                 name="test"

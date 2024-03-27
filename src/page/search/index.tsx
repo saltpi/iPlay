@@ -58,16 +58,18 @@ export function Page() {
         setLoading(true)
         emby?.searchRecommend?.()
             .then((data) => {
-                console.log(data)
                 setMedias(data.Items)
             })
             .catch(printException)
             .finally(() => setLoading(false))
     }, [])
     useEffect(() => {
-        emby?.getItemWithName?.(searchKeyword)
+        const keyword = searchKeyword.trim()
+        if (keyword.length === 0) {
+            return
+        }
+        emby?.getItemWithName?.(keyword)
             .then((data) => {
-                console.log(data)
                 setResult(data.Items)
             })
             .catch(printException)
