@@ -1,5 +1,6 @@
 package top.ourfor.app.iPlayClient
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -49,5 +50,10 @@ class PlayerFragment (
         super.onDestroy()
         // do any logic that should happen in an `onDestroy` method
         // e.g.: customView.onDestroy();
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        playerView.requestLayout()
     }
 }

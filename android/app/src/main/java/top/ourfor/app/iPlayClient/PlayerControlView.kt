@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
@@ -23,6 +24,14 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
     public var delegate: PlayerEventListener? = null;
     private var shouldUpdateProgress = true;
     var player: Player? = null
+
+    fun updateFullscreenStyle(isFullscreen: Boolean) {
+        if (isFullscreen) {
+            updateIcon(fullscreenButton, androidx.media3.ui.R.drawable.exo_icon_fullscreen_exit)
+        } else {
+            updateIcon(fullscreenButton, androidx.media3.ui.R.drawable.exo_icon_fullscreen_enter)
+        }
+    }
 
     private var resId: AtomicInteger = AtomicInteger(8000)
     private val dateFormatter: DateTimeFormatter by lazy {
@@ -58,6 +67,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
     private var fullscreenButton = run {
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
+        icon.tag = ICON_TAG
         icon.setImageResource(androidx.media3.ui.R.drawable.exo_icon_fullscreen_enter)
         val iconLayout = LayoutParams(centerLayout())
         iconLayout.width = ICON_SMALL_SIZE
@@ -75,8 +85,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val params = LayoutParams(ICON_SMALL_SIZE * 2, ICON_SMALL_SIZE * 2)
         params.topToTop = LayoutParams.PARENT_ID
         params.rightToRight = LayoutParams.PARENT_ID
-        params.topMargin = 10
-        params.rightMargin = 10
+        params.topMargin = 36
+        params.rightMargin = 36
         params
     }
 
@@ -84,7 +94,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val slide = SeekBar(context)
         val color = Color.WHITE
         val colorStateList = ColorStateList.valueOf(color)
-        val thumbRadius = 10
+        val thumbRadius = 25
         val thumb = GradientDrawable()
         thumb.shape = GradientDrawable.OVAL
         thumb.setSize(thumbRadius * 2, thumbRadius * 2)
@@ -98,10 +108,10 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
     }
 
     private var progressBarLayout = run {
-        val params = LayoutParams(0, 20)
+        val params = LayoutParams(0, 60)
         params.matchConstraintPercentWidth = 0.9f
         params.bottomToBottom = LayoutParams.PARENT_ID
-        params.bottomMargin = 30
+        params.bottomMargin = 100
         params.leftToLeft = LayoutParams.PARENT_ID
         params.rightToRight = LayoutParams.PARENT_ID
         params

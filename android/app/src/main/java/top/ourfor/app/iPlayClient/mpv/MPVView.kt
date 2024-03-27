@@ -11,7 +11,7 @@ import top.ourfor.app.iPlayClient.PlayerViewModel
 class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), SurfaceHolder.Callback {
     public lateinit var viewModel: Player
     fun initialize(configDir: String, cacheDir: String) {
-        viewModel = PlayerViewModel()
+        viewModel = PlayerViewModel(configDir, cacheDir)
         // we need to call write-watch-later manually
         holder.addCallback(this)
     }

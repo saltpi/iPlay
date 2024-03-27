@@ -19,7 +19,7 @@ const style = StyleSheet.create({
 export function Page() {
     const ref= useRef<any>(null);
     const barStyle = useAppSelector(state => state.theme.barStyle);
-    const url = "https://drive.endemy.me/iplay/h265.mp4"
+    const url = "https://drive.endemy.me/iplay/hexo1.mp4"
     useEffect(() => {
         return () => {
             console.log(`unmount`, ref.current)

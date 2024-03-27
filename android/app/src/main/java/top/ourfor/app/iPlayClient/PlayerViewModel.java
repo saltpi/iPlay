@@ -15,7 +15,7 @@ public class PlayerViewModel implements Player {
 
     public String url = null;
     private MPV mpv;
-    public PlayerViewModel() {
+    public PlayerViewModel(String configDir, String cacheDir) {
         mpv = new MPV();
         mpv.create();
         mpv.setOptionString("profile", "fast");
@@ -25,6 +25,10 @@ public class PlayerViewModel implements Player {
         mpv.setOptionString("hwdec", "auto");
         mpv.setOptionString("hwdec-codecs", "h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1");
         mpv.setOptionString("ao", "audiotrack,opensles");
+        mpv.setOptionString("config", "yes");
+        mpv.setOptionString("config-dir", configDir);
+        mpv.setOptionString("gpu-shader-cache-dir", cacheDir);
+        mpv.setOptionString("icc-cache-dir", cacheDir);
         mpv.init();
 
         watch();
