@@ -35,8 +35,20 @@ public class PlayerViewModel implements Player {
         this.delegate = delegate;
     }
 
+    @Override
+    public void setVideoOutput(String value) {
+        mpv.setStringProperty("vo", value);
+    }
+
     public void attach(SurfaceHolder holder) {
         mpv.setDrawable(holder.getSurface());
+    }
+
+    @Override
+    public void detach() {
+        mpv.setStringProperty("vo", "null");
+        mpv.setOptionString("force-window", "no");
+        mpv.setDrawable(null);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package top.ourfor.app.iPlayClient
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -21,8 +20,10 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEventListener {
+    public var delegate: PlayerEventListener? = null;
     private var shouldUpdateProgress = true;
     var player: Player? = null
+
     private var resId: AtomicInteger = AtomicInteger(8000)
     private val dateFormatter: DateTimeFormatter by lazy {
         DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -165,8 +166,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
             }
         })
         fullscreenButton.setOnClickListener {
-            val intent = Intent(context, PlayerActivity::class.java)
-            context.startActivity(intent)
+            delegate?.onWindowSizeChange()
         }
     }
 
@@ -181,9 +181,11 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         Log.d(TAG, name + "" + value)
         if (name.equals("duration")) {
             val duration = value as Double
-            progressBar.max = duration.toInt()
-            durationLabel.text = duration.toString()
-            durationLabel.text = formatTime(progressBar.progress, progressBar.max)
+            post {
+                progressBar.max = duration.toInt()
+                durationLabel.text = duration.toString()
+                durationLabel.text = formatTime(progressBar.progress, progressBar.max)
+            }
         } else if (name.equals("time-pos")) {
             if (!shouldUpdateProgress) {
                 return

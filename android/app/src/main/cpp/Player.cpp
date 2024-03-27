@@ -178,12 +178,9 @@ Java_top_ourfor_lib_mpv_MPV_observeProperty(JNIEnv *env, jobject thiz, jlong rep
     return state;
 }
 
-pthread_mutex_t lock;
-
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout) {
-    pthread_mutex_lock(&lock);
     mpv_handle *ctx = get_attached_mpv(env, thiz);
     mpv_event *event = mpv_wait_event(ctx, timeout);
 
@@ -212,7 +209,6 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
         env->SetIntField(obj, formatFieldID, reinterpret_cast<int>(data->format));
         env->SetObjectField(obj, propFieldID, env->NewStringUTF(data->name));
     }
-    pthread_mutex_unlock(&lock);
     return obj;
 }
 

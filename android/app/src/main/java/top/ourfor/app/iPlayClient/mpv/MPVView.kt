@@ -41,13 +41,13 @@ class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attr
             viewModel.loadVideo(filePath)
             filePath = null
         } else {
-
+            viewModel.setVideoOutput("gpu")
         }
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         Log.w(TAG, "detaching surface")
-        viewModel.destroy();
+        viewModel.detach()
     }
 
     companion object {
