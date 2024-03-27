@@ -385,7 +385,7 @@ static NSUInteger const kIconSize = 48;
 - (UIView *)contentView {
     BeginLazyPropInit(contentView)
     UIView *view = [MPVView new];
-    view.backgroundColor = UIColor.whiteColor;
+    view.backgroundColor = UIColor.clearColor;
     contentView = view;
     EndLazyPropInit(contentView)
 }

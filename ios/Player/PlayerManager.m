@@ -26,7 +26,7 @@ RCT_EXPORT_VIEW_PROPERTY(iconSize, NSUInteger)
 - (UIView *)view {
     PlayerView *view = [PlayerView new];
 
-    view.backgroundColor = UIColor.whiteColor;
+    view.backgroundColor = UIColor.clearColor;
     return view;
 }
 
