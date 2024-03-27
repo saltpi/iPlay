@@ -140,13 +140,17 @@ const MessageRouter = () => {
     const options = useAppSelector(selectScreenOptions)
     return (
         <MessageStack.Navigator
-            initialRouteName="search"
+            initialRouteName="test"
             screenOptions={options}>
             <MessageStack.Screen
-                name="search"
+                name="message"
                 component={MessagePage}
                 options={{title: '消息'}}
             />
+            <MessageStack.Screen
+                name="test"
+                component={TestPage as any}
+                options={{title: '测试'}} />
         </MessageStack.Navigator>
     );
 };

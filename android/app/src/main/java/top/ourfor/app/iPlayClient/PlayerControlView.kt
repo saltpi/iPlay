@@ -8,9 +8,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.util.Timer
+import java.util.concurrent.TimeUnit
 
-class PlayerControlView(context: Context) : ConstraintLayout(context) {
+class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEventListener {
+    private var shouldUpdateProgress = true;
     var player: Player? = null
 
     private var playButton: View = run {
@@ -75,6 +79,20 @@ class PlayerControlView(context: Context) : ConstraintLayout(context) {
         params
     }
 
+    private var durationLabel = run {
+        val label = TextView(context)
+        label.textSize = 14.0F
+        label
+    }
+
+    private var durationLayout = run {
+        val params = LayoutParams(ICON_SIZE * 2, ICON_SIZE * 2)
+        params.rightToRight = progressBar.id
+        params.bottomToTop = progressBar.id
+        params.bottomMargin = 10
+        params
+    }
+
 
     init {
         setupUI()
@@ -85,6 +103,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context) {
         addView(playButton, playButtonLayout)
         addView(fullscreenButton, fullscreenLayout)
         addView(progressBar, progressBarLayout)
+        addView(durationLabel, durationLayout)
     }
 
     private fun bind() {
@@ -101,16 +120,16 @@ class PlayerControlView(context: Context) : ConstraintLayout(context) {
         }
         progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                // 这里处理滑块值改变的事件
-                // progress参数表示当前的滑块值
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // 这里处理开始滑动的事件
+                shouldUpdateProgress = false;
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                Log.d(TAG, "seek bar value ${seekBar.progress}")
+                player?.seek(progressBar.progress.toDouble())
+                TimeUnit.MILLISECONDS.sleep(500)
+                shouldUpdateProgress = true;
             }
         })
 
@@ -120,6 +139,25 @@ class PlayerControlView(context: Context) : ConstraintLayout(context) {
         val imageView = view.findViewWithTag<ImageView?>(ICON_TAG)
         if (imageView !is ImageView) return
         imageView?.setImageResource(resId)
+    }
+
+    override fun onPropertyChange(name: String?, value: Any?) {
+        if (value == null) return
+        Log.d(TAG, name + "" + value)
+        if (name.equals("duration")) {
+            val duration = value as Double
+            progressBar.max = duration.toInt()
+            durationLabel.text = duration.toString()
+        } else if (name.equals("time-pos")) {
+            synchronized(shouldUpdateProgress) {
+                if (!shouldUpdateProgress) {
+                    return
+                }
+
+                val time = value as Double
+                progressBar.progress = time.toInt()
+            }
+        }
     }
 
     companion object {

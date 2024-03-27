@@ -10,14 +10,13 @@ extern "C" {
 #include <libavcodec/jni.h>
 }
 
-JavaVM *g_vm;
+JavaVM *jvm;
 static jobject surface;
-static mpv_handle *mpv_ctx;
 
 static void prepare_environment(JNIEnv *env) {
     setlocale(LC_NUMERIC, "C");
-    if (!env->GetJavaVM(&g_vm) && g_vm)
-        av_jni_set_java_vm(g_vm, NULL);
+    if (!env->GetJavaVM(&jvm) && jvm)
+        av_jni_set_java_vm(jvm, NULL);
 }
 
 static inline mpv_handle * get_attached_mpv(JNIEnv *env, jobject obj) {
@@ -94,4 +93,139 @@ Java_top_ourfor_lib_mpv_MPV_setOptionString(JNIEnv *env, jobject self, jstring j
     env->ReleaseStringUTFChars(jvalue, value);
     return result;
 
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_top_ourfor_lib_mpv_MPV_getBoolProperty(JNIEnv *env, jobject thiz, jstring key) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_FLAG;
+    int data;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    mpv_get_property(ctx, prop, format, &data);
+    env->ReleaseStringUTFChars(key, prop);
+    return data == 1;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_top_ourfor_lib_mpv_MPV_setBoolProperty(JNIEnv *env, jobject thiz, jstring key, jboolean flag) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_FLAG;
+    int data = flag;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    int state = mpv_set_property(ctx, prop, format, &data);
+    env->ReleaseStringUTFChars(key, prop);
+    return state;
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_top_ourfor_lib_mpv_MPV_getLongProperty(JNIEnv *env, jobject thiz, jstring key) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_INT64;
+    long data;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    mpv_get_property(ctx, prop, format, &data);
+    env->ReleaseStringUTFChars(key, prop);
+    return data;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_top_ourfor_lib_mpv_MPV_setLongProperty(JNIEnv *env, jobject thiz, jstring key, jlong value) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_INT64;
+    long data = value;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    int state = mpv_set_property(ctx, prop, format, &data);
+    env->ReleaseStringUTFChars(key, prop);
+    return state;
+}
+
+extern "C"
+JNIEXPORT jdouble JNICALL
+Java_top_ourfor_lib_mpv_MPV_getDoubleProperty(JNIEnv *env, jobject thiz, jstring key) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_DOUBLE;
+    double data;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    mpv_get_property(ctx, prop, format, &data);
+    env->ReleaseStringUTFChars(key, prop);
+    return data;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_top_ourfor_lib_mpv_MPV_setDoubleProperty(JNIEnv *env, jobject thiz, jstring key,
+                                              jdouble value) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_DOUBLE;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    int state = mpv_set_property(ctx, prop, format, &value);
+    env->ReleaseStringUTFChars(key, prop);
+    return state;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_top_ourfor_lib_mpv_MPV_observeProperty(JNIEnv *env, jobject thiz, jlong reply_userdata,
+                                            jstring name, jint format) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const char *prop = env->GetStringUTFChars(name, NULL);
+    int state = mpv_observe_property(ctx, reply_userdata, prop, static_cast<mpv_format>(format));
+    env->ReleaseStringUTFChars(name, prop);
+    return state;
+}
+
+pthread_mutex_t lock;
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout) {
+    pthread_mutex_lock(&lock);
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    mpv_event *event = mpv_wait_event(ctx, timeout);
+
+    jclass cls = env->FindClass("top/ourfor/lib/mpv/MPV$Event");
+    if (cls == nullptr) {
+        return nullptr; // class not found
+    }
+
+    jfieldID typeFieldID = env->GetFieldID(cls, "type", "I");
+    jfieldID propFieldID = env->GetFieldID(cls, "prop", "Ljava/lang/String;");
+    jfieldID formatFieldID = env->GetFieldID(cls, "format", "I");
+    if (typeFieldID == nullptr ||
+        propFieldID == nullptr ||
+        formatFieldID == nullptr) {
+        return nullptr; // field not found
+    }
+
+    jobject obj = env->NewObject(cls, env->GetMethodID(cls, "<init>", "()V"));
+    if (obj == nullptr) {
+        return nullptr; // object not created
+    }
+
+    env->SetIntField(obj, typeFieldID, reinterpret_cast<int>(event->event_id));
+    if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
+        mpv_event_property *data = static_cast<mpv_event_property *>(event->data);
+        env->SetIntField(obj, formatFieldID, reinterpret_cast<int>(data->format));
+        env->SetObjectField(obj, propFieldID, env->NewStringUTF(data->name));
+    }
+    pthread_mutex_unlock(&lock);
+    return obj;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_top_ourfor_lib_mpv_MPV_setStringProperty(JNIEnv *env, jobject thiz, jstring key,
+                                              jstring value) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    const mpv_format format = MPV_FORMAT_STRING;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    const char *data = env->GetStringUTFChars(value, NULL);
+    int state = mpv_set_property(ctx, prop, format, &data);
+    env->ReleaseStringUTFChars(key, prop);
+    env->ReleaseStringUTFChars(value, data);
+    return state;
 }

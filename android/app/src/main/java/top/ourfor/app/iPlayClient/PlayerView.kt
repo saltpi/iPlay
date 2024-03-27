@@ -12,7 +12,8 @@ import top.ourfor.app.iPlayClient.databinding.PlayerBinding
 class PlayerView(
     context: Context,
     url: String?
-) : ConstraintLayout(context) {
+) : ConstraintLayout(context), PlayerEventListener {
+    private var controlView: PlayerControlView?
     init {
         setBackgroundColor(Color.BLUE)
 
@@ -27,6 +28,7 @@ class PlayerView(
 
         player.initialize(context.filesDir.path, context.cacheDir.path)
         val viewModel = player.viewModel
+        viewModel.setDelegate(this)
         if (url != null) player.playFile(url)
 
         val controlView = PlayerControlView(context)
@@ -37,5 +39,10 @@ class PlayerView(
         controlLayoutParams.rightToRight = LayoutParams.PARENT_ID;
         controlView.player = viewModel
         addView(controlView, controlLayoutParams)
+        this.controlView = controlView;
+    }
+
+    override fun onPropertyChange(name: String?, value: Any?) {
+        this.controlView?.onPropertyChange(name, value)
     }
 }

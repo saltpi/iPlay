@@ -3,6 +3,7 @@ package top.ourfor.app.iPlayClient;
 import android.view.SurfaceHolder;
 
 public interface Player {
+    default void setDelegate(PlayerEventListener delegate) {}
 
     default void attach(SurfaceHolder holder) {}
     boolean isPlaying();
