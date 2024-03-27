@@ -13,12 +13,12 @@ import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
 import {Page as AboutPage} from '@page/settings/about/index.tsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer, NavigationState} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer, NavigationState, Theme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuBar, MenuType} from '@view/menu/MenuBar';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from '@hook/store';
-import {selectScreenOptions, switchRoute} from '@store/themeSlice';
+import {selectScreenOptions, selectThemeBasicStyle, switchRoute} from '@store/themeSlice';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -196,8 +196,21 @@ function getActiveRouteName(state: NavigationState) {
 export function Router() {
     const dispatch = useAppDispatch();
     const options = useAppSelector(selectScreenOptions)
+    const theme = useAppSelector(selectThemeBasicStyle);
+    const isDarkMode = useAppSelector(state => state.theme.isDarkMode);
+    // @ref https://reactnavigation.org/docs/themes/
+    const pageTheme: Theme = {
+        ...DefaultTheme, 
+        dark: isDarkMode, 
+        colors: {
+            ...DefaultTheme.colors,
+            text: theme.color ?? DefaultTheme.colors.text,
+            background: theme.backgroundColor,
+        }
+    }
     return (
         <NavigationContainer
+            theme={pageTheme}
             onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
             <Tab.Navigator
                 initialRouteName="home"
