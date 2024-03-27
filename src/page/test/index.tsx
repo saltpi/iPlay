@@ -3,40 +3,38 @@ import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { VLCPlayer, Video } from "@view/Video";
 import { useEffect, useRef } from "react";
 import { useAppSelector } from "@hook/store";
+import { MPVPlayer, MPVPlayerView } from "@view/MPVPlayer";
 
 const style = StyleSheet.create({
     page: {
         flex: 1,
     },
     video: {
-        width: "100%",
+        width: 1440,
+        height: 810,
         aspectRatio: 16/9,
     }
 });
 
 export function Page() {
     const ref= useRef<any>(null);
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const barStyle = useAppSelector(state => state.theme.barStyle);
+    const url = "https://drive.endemy.me/iplay/hexo1.mp4"
     useEffect(() => {
         return () => {
             console.log(`unmount`, ref.current)
         }
     }, [ref.current])
-
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
+            <StatusBar barStyle={barStyle} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <VLCPlayer ref={ref} source={{
-                        uri: "https://drive.endemy.me/iplay/demo.mp4",
-                        title: "Demo"
-                    }}  />
+                    <Video style={style.video} source={{uri: url}} />
                 </View>
             </ScrollView>
         </SafeAreaView>

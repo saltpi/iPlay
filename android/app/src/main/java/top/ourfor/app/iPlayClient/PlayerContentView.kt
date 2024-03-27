@@ -1,17 +1,14 @@
-package top.ourfor.app.iPlayClient.mpv
+package top.ourfor.app.iPlayClient
 
 import android.content.Context
-import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import top.ourfor.app.iPlayClient.Player
-import top.ourfor.app.iPlayClient.PlayerViewModel
 
-class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), SurfaceHolder.Callback {
+class PlayerContentView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     public lateinit var viewModel: Player
     fun initialize(configDir: String, cacheDir: String) {
-        viewModel = PlayerViewModel()
+        viewModel = PlayerViewModel(configDir, cacheDir)
         // we need to call write-watch-later manually
         holder.addCallback(this)
     }
@@ -24,6 +21,7 @@ class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attr
 
     // Called when back button is pressed, or app is shutting down
     fun destroy() {
+        viewModel.destroy()
         // Disable surface callbacks to avoid using unintialized mpv state
         holder.removeCallback(this)
     }
@@ -31,7 +29,7 @@ class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attr
     var paused: Boolean? = true
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
+        viewModel.resize("${width}x$height")
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -41,13 +39,13 @@ class MPVView(context: Context, attrs: AttributeSet) : SurfaceView(context, attr
             viewModel.loadVideo(filePath)
             filePath = null
         } else {
-
+            viewModel.setVideoOutput("gpu")
         }
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         Log.w(TAG, "detaching surface")
-        viewModel.destroy();
+        viewModel.detach()
     }
 
     companion object {

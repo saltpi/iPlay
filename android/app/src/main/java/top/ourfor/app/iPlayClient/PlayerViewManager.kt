@@ -67,6 +67,7 @@ class PlayerViewManager(
         setupLayout(parentView)
 
         val fragment = PlayerFragment(videoSrc)
+        fragment.themedReactContext = root.context as ThemedReactContext?
         val activity = reactContext.currentActivity as FragmentActivity
         activity.supportFragmentManager
             .beginTransaction()

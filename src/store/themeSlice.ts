@@ -38,7 +38,7 @@ export const slice = createSlice({
     reducers: {
         switchRoute: (state, action: PayloadAction<string>) => {
             const routeName = action.payload;
-            const whitelist = ['home', 'settings', 'search', 'star', 'message'];
+            const whitelist = ['home', 'settings', 'search', 'star', 'message', 'test'];
             if (whitelist.includes(routeName)) {
                 state.hideMenuBar = false;
             } else {

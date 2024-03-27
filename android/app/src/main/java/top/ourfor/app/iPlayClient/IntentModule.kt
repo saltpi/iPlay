@@ -33,7 +33,7 @@ class IntentModule(reactContext: ReactApplicationContext) : ReactContextBaseJava
         intent.putExtra("filepath", filepath)
         val context = BeanManager.get<Context>(Context::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.setClassName(context, "top.ourfor.app.iPlayClient.mpv.MPVActivity")
+        intent.setClassName(context, "top.ourfor.app.iPlayClient.MPVActivity")
         context.startActivity(intent)
     }
 }

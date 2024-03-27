@@ -140,13 +140,17 @@ const MessageRouter = () => {
     const options = useAppSelector(selectScreenOptions)
     return (
         <MessageStack.Navigator
-            initialRouteName="search"
+            initialRouteName="message"
             screenOptions={options}>
             <MessageStack.Screen
-                name="search"
+                name="message"
                 component={MessagePage}
                 options={{title: '消息'}}
             />
+            <MessageStack.Screen
+                name="test"
+                component={TestPage as any}
+                options={{title: '测试'}} />
         </MessageStack.Navigator>
     );
 };
@@ -161,17 +165,17 @@ const StarRouter = () => {
                     title: '收藏',
                 }}
             />
-            <HomeStack.Screen
+            <StarStack.Screen
                 name="movie"
                 component={MoviePage as any}
                 options={defaultOptions}
             />
-            <HomeStack.Screen
+            <StarStack.Screen
                 name="season"
                 component={SeasonPage as any}
                 options={defaultOptions}
             />
-            <HomeStack.Screen
+            <StarStack.Screen
                 name="player"
                 component={PlayerPage as any}
                 options={fullscreenOptions}

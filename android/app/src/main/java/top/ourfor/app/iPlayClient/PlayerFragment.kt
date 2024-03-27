@@ -1,25 +1,27 @@
 package top.ourfor.app.iPlayClient
 
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import top.ourfor.app.iPlayClient.databinding.PlayerBinding
-import top.ourfor.app.iPlayClient.mpv.MPVView
+import com.facebook.react.uimanager.ThemedReactContext
 
 class PlayerFragment (
     var url: String?
 ) : Fragment() {
     private lateinit var playerView: PlayerView
-    private lateinit var binding: PlayerBinding
+    var themedReactContext: ThemedReactContext? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = PlayerBinding.inflate(inflater)
         playerView = PlayerView(requireNotNull(context), url)
+        playerView.themedReactContext = themedReactContext
         return playerView // this CustomView could be any view that you want to render
     }
 
@@ -45,5 +47,10 @@ class PlayerFragment (
         super.onDestroy()
         // do any logic that should happen in an `onDestroy` method
         // e.g.: customView.onDestroy();
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        playerView.requestLayout()
     }
 }

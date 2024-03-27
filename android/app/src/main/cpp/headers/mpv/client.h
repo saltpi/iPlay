@@ -1398,7 +1398,7 @@ typedef struct mpv_event_property {
      * the property could not be retrieved (unavailable, or an error happened),
      * in which case the format is MPV_FORMAT_NONE.
      */
-    mpv_format format;
+    int format;
     /**
      * Received property value. Depends on the format. This is like the
      * pointer argument passed to mpv_get_property().
@@ -1583,7 +1583,7 @@ typedef struct mpv_event {
      * One of mpv_event. Keep in mind that later ABI compatible releases might
      * add new event types. These should be ignored by the API user.
      */
-    mpv_event_id event_id;
+    int event_id;
     /**
      * This is mainly used for events that are replies to (asynchronous)
      * requests. It contains a status code, which is >= 0 on success, or < 0
