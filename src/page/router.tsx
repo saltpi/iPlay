@@ -11,9 +11,10 @@ import {Page as PlayerPage} from '@page/player/index.tsx';
 import {Page as ThemePage} from '@page/theme/index.tsx';
 import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
+import {Page as AboutPage} from '@page/settings/about/index.tsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer, NavigationState} from '@react-navigation/native';
-import {NativeStackNavigationOptions, createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuBar, MenuType} from '@view/menu/MenuBar';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from '@hook/store';
@@ -86,17 +87,22 @@ const SettingsRouter = () => {
             <SettingsStack.Screen
                 name="login"
                 component={LoginPage}
-                options={{title: '登录'}}
+                options={{title: '站点配置'}}
             />
             <SettingsStack.Screen
                 name="theme"
                 component={ThemePage}
-                options={{title: '主题'}}
+                options={{title: '主题配置'}}
             />
             <SettingsStack.Screen
                 name="config_video"
                 component={VideoConfigPage}
                 options={{title: '视频配置'}}
+            />
+            <SettingsStack.Screen
+                name="about"
+                component={AboutPage as any}
+                options={{title: '关于我们'}}
             />
         </SettingsStack.Navigator>
     );

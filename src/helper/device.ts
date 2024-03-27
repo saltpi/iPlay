@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import { Dimensions } from 'react-native';
+import DeviceInfo from "react-native-device-info";
 
 export enum OSType {
     Web = "web",
@@ -39,4 +40,10 @@ export const preferedSize = (start: number, end: number, value: number) => {
         return end;
     }
     return value;
+}
+
+export const Version = {
+    buildNumber: DeviceInfo.getBuildNumber(),
+    versionCode: DeviceInfo.getVersion(),
+    deviceId: DeviceInfo.getDeviceId(),
 }
