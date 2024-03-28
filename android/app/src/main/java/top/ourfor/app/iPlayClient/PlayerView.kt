@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
+import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -111,5 +112,15 @@ class PlayerView(
         } else {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+    }
+
+    fun onDestroy() {
+        Log.d(TAG, "destroy player")
+        contentView.viewModel.stop()
+        contentView.destroy()
+    }
+
+    companion object {
+        val TAG = "PlayerView"
     }
 }

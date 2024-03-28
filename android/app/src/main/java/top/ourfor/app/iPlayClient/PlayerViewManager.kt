@@ -1,11 +1,13 @@
 package top.ourfor.app.iPlayClient
 
 import android.os.Build
+import android.util.Log
 import android.view.Choreographer
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
@@ -20,6 +22,7 @@ class PlayerViewManager(
     private var propHeight: Int? = null
     private var videoSrc: String? = null
     private var videoTitle: String? = null
+    private var fragment: Fragment? = null
 
     override fun getName() = REACT_CLASS
 
@@ -32,7 +35,10 @@ class PlayerViewManager(
     /**
      * Map the "create" command to an integer
      */
-    override fun getCommandsMap() = mapOf("create" to COMMAND_CREATE)
+    override fun getCommandsMap() = mapOf(
+        "create" to COMMAND_CREATE,
+        "destroy" to COMMAND_DESTROY
+    )
 
     /**
      * Handle "create" command (called from JS) and call createFragment method
@@ -49,6 +55,7 @@ class PlayerViewManager(
         propHeight = root.height
         when (commandId.toInt()) {
             COMMAND_CREATE -> createFragment(root, reactNativeViewId)
+            COMMAND_DESTROY -> fragment?.let { destroyFragment(it) }
         }
     }
 
@@ -89,6 +96,18 @@ class PlayerViewManager(
             .beginTransaction()
             .replace(reactNativeViewId, fragment, reactNativeViewId.toString())
             .commit()
+        this.fragment = fragment
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun destroyFragment(fragment: Fragment) {
+        Log.d(TAG, "remove fragment")
+        val activity = reactContext.currentActivity as FragmentActivity
+        activity.supportFragmentManager
+            .beginTransaction()
+            .remove(fragment)
+            .commit()
+        this.fragment = null
     }
 
     fun setupLayout(view: View) {
@@ -119,5 +138,7 @@ class PlayerViewManager(
     companion object {
         private const val REACT_CLASS = "PlayerViewManager"
         private const val COMMAND_CREATE = 1
+        private const val COMMAND_DESTROY = 2
+        private const val TAG = "PlayerViewManager"
     }
 }

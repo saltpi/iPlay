@@ -59,9 +59,9 @@ class PlayerFragment (
     }
 
     override fun onDestroy() {
+        playerView.onDestroy();
         super.onDestroy()
         // do any logic that should happen in an `onDestroy` method
-        // e.g.: customView.onDestroy();
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

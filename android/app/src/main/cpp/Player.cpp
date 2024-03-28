@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL
 Java_top_ourfor_lib_mpv_MPV_destroy(JNIEnv *env, jobject self) {
     mpv_handle *ctx = get_attached_mpv(env, self);
     if (ctx) {
-        mpv_destroy(ctx);
+        mpv_terminate_destroy(ctx);
     }
 }
 

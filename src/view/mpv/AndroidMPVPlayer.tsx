@@ -32,7 +32,6 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
 
     const onPlayStateChange = (s: any) => {
         const state = s.nativeEvent?.state;
-        console.log(`onPlayStateChange: ${state}`);
         if (state === PlayStateType.PlayEventTypeOnPause) {
             props.onPlaybackStateChanged?.({isPlaying: false});
         } else if (state === PlayStateType.PlayEventTypeOnProgress) {
@@ -41,11 +40,19 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
             props.onPlaybackStateChanged?.({isPlaying: false});
         }
     };
-    console.log("source", source);
 
     useEffect(() => {
         const viewId = findNodeHandle(ref.current);
         if (viewId) createFragment(viewId);
+        () => {
+            console.log("destroy");
+            UIManager.dispatchViewManagerCommand(
+                viewId,
+                // we are calling the 'destroy' command
+                (UIManager as any).PlayerViewManager.Commands.destroy.toString(),
+                [viewId],
+            )
+        }
     }, []);
 
 
