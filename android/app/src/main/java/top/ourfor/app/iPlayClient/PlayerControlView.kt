@@ -217,7 +217,6 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
 
     override fun onPropertyChange(name: String?, value: Any?) {
         if (value == null) return
-        Log.d(TAG, name + "" + value)
         if (name.equals("duration")) {
             val duration = value as Double
             post {

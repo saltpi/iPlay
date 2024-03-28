@@ -25,7 +25,7 @@ public class DemoViewManager extends SimpleViewManager<View> {
     @NonNull
     @Override
     protected View createViewInstance(@NonNull ThemedReactContext themedReactContext) {
-        TextView text = new TagView(themedReactContext);
+        TextView text = new DemoView(themedReactContext);
         text.setText("Hello world");
         return text;
     }

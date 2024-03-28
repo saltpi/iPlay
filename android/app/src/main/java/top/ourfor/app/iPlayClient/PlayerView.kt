@@ -34,6 +34,13 @@ class PlayerView(
     private var isFullscreen = false
     var themedReactContext: ThemedReactContext? = null
     var onPlayStateChange: (state: Int) -> Unit  = {}
+    var url: String? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                contentView.playFile(value)
+            }
+        }
     var title: String? = null
         @RequiresApi(Build.VERSION_CODES.O)
         set(value) {
@@ -114,10 +121,10 @@ class PlayerView(
         }
     }
 
-    fun onDestroy() {
+    override fun onDetachedFromWindow() {
         Log.d(TAG, "destroy player")
-        contentView.viewModel.stop()
         contentView.destroy()
+        super.onDetachedFromWindow()
     }
 
     companion object {

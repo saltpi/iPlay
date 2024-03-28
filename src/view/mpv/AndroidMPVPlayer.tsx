@@ -57,18 +57,6 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
     };
 
     useEffect(() => {
-        console.log("create");
-        const viewId = findNodeHandle(ref.current);
-        if (viewId) createFragment(viewId);
-        () => {
-            console.log("destroy");
-            UIManager.dispatchViewManagerCommand(
-                viewId,
-                // we are calling the 'destroy' command
-                (UIManager as any).PlayerViewManager.Commands.destroy.toString(),
-                [viewId],
-            )
-        }
     }, []);
 
 

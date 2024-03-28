@@ -104,9 +104,9 @@ public class PlayerViewModel implements Player {
             mpv.observeProperty(0, "paused", MPV.MPV_FORMAT_FLAG);
             eventLoop = new Thread(() -> {
                 while (true) {
-                    Log.d(TAG, "wait mpv event");
                     MPV.Event e = mpv.waitEvent(-1);
                     if (e.type == MPV_EVENT_SHUTDOWN) {
+                        Log.d(TAG, "close mpv player");
                         break;
                     }
 

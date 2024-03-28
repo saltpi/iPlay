@@ -3,9 +3,9 @@ package top.ourfor.app.iPlayClient;
 import android.content.Context;
 import android.util.Log;
 
-public class TagView extends androidx.appcompat.widget.AppCompatTextView {
+public class DemoView extends androidx.appcompat.widget.AppCompatTextView {
 
-    public TagView(Context context) {
+    public DemoView(Context context) {
         super(context);
     }
 
