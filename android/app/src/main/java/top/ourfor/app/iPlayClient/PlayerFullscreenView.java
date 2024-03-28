@@ -11,6 +11,8 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import java.util.function.Function;
+
 public class PlayerFullscreenView extends Dialog {
     private ConstraintLayout containerView;
     private View contentView;

@@ -110,6 +110,11 @@ class PlayerView(
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+            fullscreenView?.setOnDismissListener {
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                controlView?.updateFullscreenStyle(false)
+            }
         }
         isFullscreen = !isFullscreen
         controlView?.updateFullscreenStyle(isFullscreen)
