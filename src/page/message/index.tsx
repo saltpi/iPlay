@@ -6,7 +6,7 @@ import { selectThemeBasicStyle } from "@store/themeSlice";
 import { EpisodeCard } from "@view/EpisodeCard";
 import { MediaCard } from "@view/MediaCard";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { RefreshControl, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -30,6 +30,14 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
     const [items, setItems] = useState<Media[]>([])
     const menuBarHeight = useAppSelector(state => state.theme.menuBarHeight)
     const theme = useAppSelector(selectThemeBasicStyle)
+    const [refreshing, setRefreshing] = useState(false)
+    const onRefresh = () => {
+        setRefreshing(true)
+        emby?.getResume?.().then(res => {
+            setItems(res ?? [])
+            setRefreshing(false)
+        })
+    }
     const onPress = (media: Media) => {
         navigation.navigate('movie', {
             title: media.Name,
@@ -49,6 +57,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={{flex: 1, marginBottom: menuBarHeight}}>
             <View style={style.watchList}>
                 {items.length !== 0 ? <Text style={{...style.sectionTitle, ...theme}}>观看记录</Text> : null}

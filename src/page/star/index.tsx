@@ -4,10 +4,10 @@ import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { MediaCard } from "@view/MediaCard";
-import { Spin, SpinBox } from "@view/Spin";
+import { Spin } from "@view/Spin";
 import { StatusBar } from "@view/StatusBar";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -45,8 +45,8 @@ export function Page(props: PropsWithNavigation<"default">) {
     const [loading, setLoading] = useState(false)
     const [favoriteMovies, setFavoriteMovies] = useState<Media[]>([])
     const [favoriteEpisodes, setFavoriteEpisodes] = useState<Media[]>([])
+    const menuBarHeight = useAppSelector(state => state.theme.menuBarHeight)
     const fetchFavoriteItems = () => {
-        setLoading(true)
         Promise.all(
             ["Movie", "Episode"].map((type: any) => emby?.getItem?.({type, Filters: "IsFavorite"}))
         ).then(result => {
@@ -56,10 +56,20 @@ export function Page(props: PropsWithNavigation<"default">) {
             })
         })
         .catch(printException)
-        .finally(() => setLoading(false))
+        .finally(() => { 
+            setLoading(false)
+            setRefreshing(false)
+        })
+    }
+
+    const [refreshing, setRefreshing] = useState(false)
+    const onRefresh = () => {
+        setRefreshing(true)
+        fetchFavoriteItems()
     }
 
     useEffect(() => {
+        setLoading(true)
         fetchFavoriteItems()
     }, [emby])
 
@@ -70,7 +80,8 @@ export function Page(props: PropsWithNavigation<"default">) {
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                style={{flex: 1}}>
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                style={{flex: 1, marginBottom: menuBarHeight}}>
                 {loading ? 
                 <Spin color={theme.color} /> 
                 : null}

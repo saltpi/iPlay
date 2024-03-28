@@ -3,9 +3,11 @@ import { printException } from '@helper/log';
 import { useAppSelector } from '@hook/store';
 import {SiteResource} from '@view/AlbumList';
 import { StatusBar } from '@view/StatusBar';
-import React, {useEffect} from 'react';
+import { set } from 'lodash';
+import React, {useEffect, useState} from 'react';
 import {
     Button,
+    RefreshControl,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -27,6 +29,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const emby = useAppSelector(state => state.emby?.emby)
     const theme = useAppSelector(state => state.theme)
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const [etag, setEtag] = useState(Date.now().toString())
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -42,6 +45,15 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
         navigation.navigate("login")
     }
 
+    const [refreshing, setRefreshing] = useState(false)
+    const onRefresh = () => {
+        setRefreshing(true)
+        setEtag(Date.now().toString())
+        setTimeout(() => {
+            setRefreshing(false)
+        }, 500)
+    }
+
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>
             <StatusBar />
@@ -49,9 +61,10 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={{flex: 1}}>
                 <View style={{marginBottom: theme.menuBarHeight}}>
-                {site?.server && site?.user ? <SiteResource site={site} /> : <Button title="添加站点" onPress={goToLogin} />}
+                {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
                 </View>
             </ScrollView>
         </SafeAreaView>
