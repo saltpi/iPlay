@@ -98,10 +98,10 @@ export function AlbumCardList({albums, theme}: {albums: ViewDetail[], theme?: Th
 }
 
 export interface SiteResourceProps {
-    site: EmbySite;
+    etag: string;
 }
 
-export function SiteResource({site}: SiteResourceProps) {
+export function SiteResource({etag}: SiteResourceProps) {
     const [albums, setAlbums] = useState<ViewDetail[]>([]);
     const [medias, setMedias] = useState<(Media[] | undefined)[]>([]);
     const [loading, setLoading] = useState(false);
@@ -118,7 +118,7 @@ export function SiteResource({site}: SiteResourceProps) {
     useEffect(() => {
         if (!emby) return
         getMediaContent(emby)
-    }, [emby]);
+    }, [emby, etag]);
 
     useEffect(() => {
         const getMedia = async () => {

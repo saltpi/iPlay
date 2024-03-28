@@ -2,7 +2,7 @@ import {PropsWithNavigation} from '@global';
 import { printException } from '@helper/log';
 import { Toast } from '@helper/toast';
 import { useAppSelector } from '@hook/store';
-import { Episode } from '@model/Episode';
+import { Episode } from "@model/Episode";
 import { selectThemeBasicStyle } from '@store/themeSlice';
 import { EpisodeCard } from '@view/EpisodeCard';
 import { Spin } from '@view/Spin';

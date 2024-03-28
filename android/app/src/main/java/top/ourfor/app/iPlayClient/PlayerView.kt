@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
+import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -33,6 +34,13 @@ class PlayerView(
     private var isFullscreen = false
     var themedReactContext: ThemedReactContext? = null
     var onPlayStateChange: (state: Int) -> Unit  = {}
+    var url: String? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                contentView.playFile(value)
+            }
+        }
     var title: String? = null
         @RequiresApi(Build.VERSION_CODES.O)
         set(value) {
@@ -102,7 +110,17 @@ class PlayerView(
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+            fullscreenView?.setOnDismissListener {
+                val controller = WindowInsetsControllerCompat(window, window.decorView)
+                WindowCompat.setDecorFitsSystemWindows(window, true)
+                controller.show(WindowInsetsCompat.Type.systemBars())
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                controlView?.updateFullscreenStyle(false)
+            }
         }
+
         isFullscreen = !isFullscreen
         controlView?.updateFullscreenStyle(isFullscreen)
 
@@ -111,5 +129,15 @@ class PlayerView(
         } else {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        Log.d(TAG, "destroy player")
+        contentView.viewModel.stop()
+        super.onDetachedFromWindow()
+    }
+
+    companion object {
+        val TAG = "PlayerView"
     }
 }

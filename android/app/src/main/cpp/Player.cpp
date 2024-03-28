@@ -54,7 +54,8 @@ JNIEXPORT void JNICALL
 Java_top_ourfor_lib_mpv_MPV_destroy(JNIEnv *env, jobject self) {
     mpv_handle *ctx = get_attached_mpv(env, self);
     if (ctx) {
-        mpv_destroy(ctx);
+        mpv_terminate_destroy(ctx);
+        set_attached_mpv(env, self, nullptr);
     }
 }
 
@@ -62,6 +63,7 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_top_ourfor_lib_mpv_MPV_setDrawable(JNIEnv *env, jobject self, jobject surface_) {
     mpv_handle *ctx = get_attached_mpv(env, self);
+    if (ctx == nullptr) return;
     surface = env->NewGlobalRef(surface_);
     int64_t wid = (int64_t)(intptr_t) surface;
     mpv_set_option(ctx, "wid", MPV_FORMAT_INT64, (void*) &wid);
@@ -71,6 +73,7 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_top_ourfor_lib_mpv_MPV_command(JNIEnv *env, jobject self, jobjectArray cmd) {
     mpv_handle *ctx = get_attached_mpv(env, self);
+    if (ctx == nullptr) return;
     const char *arguments[128] = { 0 };
     int len = env->GetArrayLength(cmd);
     for (int i = 0; i < len; ++i)
@@ -86,6 +89,7 @@ JNIEXPORT jint JNICALL
 Java_top_ourfor_lib_mpv_MPV_setOptionString(JNIEnv *env, jobject self, jstring jname,
                                             jstring jvalue) {
     mpv_handle *ctx = get_attached_mpv(env, self);
+    if (ctx == nullptr) return -1;
     const char *option = env->GetStringUTFChars(jname, NULL);
     const char *value = env->GetStringUTFChars(jvalue, NULL);
     int result = mpv_set_option_string(ctx, option, value);
@@ -99,6 +103,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_top_ourfor_lib_mpv_MPV_getBoolProperty(JNIEnv *env, jobject thiz, jstring key) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return false;
     const mpv_format format = MPV_FORMAT_FLAG;
     int data;
     const char *prop = env->GetStringUTFChars(key, NULL);
@@ -111,6 +116,7 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_top_ourfor_lib_mpv_MPV_setBoolProperty(JNIEnv *env, jobject thiz, jstring key, jboolean flag) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const mpv_format format = MPV_FORMAT_FLAG;
     int data = flag;
     const char *prop = env->GetStringUTFChars(key, NULL);
@@ -123,6 +129,7 @@ extern "C"
 JNIEXPORT jlong JNICALL
 Java_top_ourfor_lib_mpv_MPV_getLongProperty(JNIEnv *env, jobject thiz, jstring key) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const mpv_format format = MPV_FORMAT_INT64;
     long data;
     const char *prop = env->GetStringUTFChars(key, NULL);
@@ -135,6 +142,7 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_top_ourfor_lib_mpv_MPV_setLongProperty(JNIEnv *env, jobject thiz, jstring key, jlong value) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const mpv_format format = MPV_FORMAT_INT64;
     long data = value;
     const char *prop = env->GetStringUTFChars(key, NULL);
@@ -147,6 +155,7 @@ extern "C"
 JNIEXPORT jdouble JNICALL
 Java_top_ourfor_lib_mpv_MPV_getDoubleProperty(JNIEnv *env, jobject thiz, jstring key) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const mpv_format format = MPV_FORMAT_DOUBLE;
     double data;
     const char *prop = env->GetStringUTFChars(key, NULL);
@@ -160,6 +169,7 @@ JNIEXPORT jint JNICALL
 Java_top_ourfor_lib_mpv_MPV_setDoubleProperty(JNIEnv *env, jobject thiz, jstring key,
                                               jdouble value) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const mpv_format format = MPV_FORMAT_DOUBLE;
     const char *prop = env->GetStringUTFChars(key, NULL);
     int state = mpv_set_property(ctx, prop, format, &value);
@@ -172,6 +182,7 @@ JNIEXPORT jint JNICALL
 Java_top_ourfor_lib_mpv_MPV_observeProperty(JNIEnv *env, jobject thiz, jlong reply_userdata,
                                             jstring name, jint format) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const char *prop = env->GetStringUTFChars(name, NULL);
     int state = mpv_observe_property(ctx, reply_userdata, prop, static_cast<mpv_format>(format));
     env->ReleaseStringUTFChars(name, prop);
@@ -182,6 +193,7 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return nullptr;
     mpv_event *event = mpv_wait_event(ctx, timeout);
 
     jclass cls = env->FindClass("top/ourfor/lib/mpv/MPV$Event");
@@ -217,6 +229,7 @@ JNIEXPORT jint JNICALL
 Java_top_ourfor_lib_mpv_MPV_setStringProperty(JNIEnv *env, jobject thiz, jstring key,
                                               jstring value) {
     mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return -1;
     const mpv_format format = MPV_FORMAT_STRING;
     const char *prop = env->GetStringUTFChars(key, NULL);
     const char *data = env->GetStringUTFChars(value, NULL);

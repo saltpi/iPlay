@@ -12,6 +12,7 @@ import top.ourfor.lib.mpv.MPV;
 
 public class PlayerViewModel implements Player {
     public PlayerEventListener delegate;
+    public Thread eventLoop;
 
     public String url = null;
     private MPV mpv;
@@ -96,31 +97,43 @@ public class PlayerViewModel implements Player {
     }
 
     public void watch() {
-        mpv.observeProperty(0, "time-pos", MPV.MPV_FORMAT_DOUBLE);
-        mpv.observeProperty(0, "duration", MPV.MPV_FORMAT_DOUBLE);
-        mpv.observeProperty(0, "paused-for-cache", MPV.MPV_FORMAT_FLAG);
-        mpv.observeProperty(0, "paused", MPV.MPV_FORMAT_FLAG);
-        Thread thread = new Thread(() -> {
-            while (true) {
-                Log.d(TAG, "wait mpv event");
-                MPV.Event e = mpv.waitEvent(-1);
-                if (e.type == MPV_EVENT_SHUTDOWN) {
-                    break;
-                }
-
-                if (e.type == MPV_EVENT_PROPERTY_CHANGE) {
-                    if (delegate == null) return;
-                    Object value = null;
-                    if (e.format == MPV_FORMAT_DOUBLE) {
-                        value = mpv.getDoubleProperty(e.prop);
-                    } else if (e.format == MPV_FORMAT_FLAG) {
-                        value = mpv.getBoolProperty(e.prop);
+        if (eventLoop ==  null) {
+            mpv.observeProperty(0, "time-pos", MPV.MPV_FORMAT_DOUBLE);
+            mpv.observeProperty(0, "duration", MPV.MPV_FORMAT_DOUBLE);
+            mpv.observeProperty(0, "paused-for-cache", MPV.MPV_FORMAT_FLAG);
+            mpv.observeProperty(0, "paused", MPV.MPV_FORMAT_FLAG);
+            eventLoop = new Thread(() -> {
+                while (true) {
+                    MPV.Event e = mpv.waitEvent(-1);
+                    if (e == null) {
+                        Log.d(TAG, "event is null, close mpv player");
+                        break;
                     }
-                    delegate.onPropertyChange(e.prop, value);
+                    if (e.type == MPV_EVENT_SHUTDOWN) {
+                        Log.d(TAG, "close mpv player");
+                        break;
+                    }
+
+                    if (e.type == MPV_EVENT_PROPERTY_CHANGE) {
+                        if (delegate == null) return;
+                        Object value = null;
+                        if (e.format == MPV_FORMAT_DOUBLE) {
+                            value = mpv.getDoubleProperty(e.prop);
+                        } else if (e.format == MPV_FORMAT_FLAG) {
+                            value = mpv.getBoolProperty(e.prop);
+                        }
+                        delegate.onPropertyChange(e.prop, value);
+                    }
                 }
-            }
-        });
-        thread.start();
+            });
+        }
+        eventLoop.start();
+    }
+
+    public void unwatch() {
+        if (eventLoop != null) {
+            eventLoop.stop();
+        }
     }
 
     static String TAG = "PlayerViewModel";

@@ -1,4 +1,4 @@
-import {forwardRef, useEffect, useRef} from 'react';
+import {forwardRef, useEffect, useImperativeHandle, useRef} from 'react';
 import {
     UIManager,
     ViewProps,
@@ -13,6 +13,21 @@ export interface MPVPlayerProps extends ViewProps {
     title?: string
     onPlayStateChange?: any
 }
+
+export const RealDemoView =
+    requireNativeComponent<ViewProps>('DemoView');
+
+export const DemoView = forwardRef<any,ViewProps>((props: ViewProps, extRef) => {
+    const ref = useRef<any>()
+    useImperativeHandle(extRef, () => ref.current, [ref.current])
+    useEffect(() => {
+        console.log("mount video view")
+        return () => {
+            console.log("unmount video view", ref)
+        }
+    }, [])
+    return <RealDemoView ref={ref} {...props} />;
+})
 
 export const MPVPlayer =
     requireNativeComponent<MPVPlayerProps>('PlayerViewManager');
@@ -32,7 +47,6 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
 
     const onPlayStateChange = (s: any) => {
         const state = s.nativeEvent?.state;
-        console.log(`onPlayStateChange: ${state}`);
         if (state === PlayStateType.PlayEventTypeOnPause) {
             props.onPlaybackStateChanged?.({isPlaying: false});
         } else if (state === PlayStateType.PlayEventTypeOnProgress) {
@@ -41,11 +55,8 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
             props.onPlaybackStateChanged?.({isPlaying: false});
         }
     };
-    console.log("source", source);
 
     useEffect(() => {
-        const viewId = findNodeHandle(ref.current);
-        if (viewId) createFragment(viewId);
     }, []);
 
 

@@ -148,6 +148,11 @@ const MessageRouter = () => {
                 options={{title: '消息'}}
             />
             <MessageStack.Screen
+                name="movie"
+                component={MoviePage as any}
+                options={defaultOptions}
+            />
+            <MessageStack.Screen
                 name="test"
                 component={TestPage as any}
                 options={{title: '测试'}} />

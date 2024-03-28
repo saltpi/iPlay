@@ -1,13 +1,17 @@
+import { UserData } from "./UserData";
+
 export interface Episode {
-    Id: string
-    Name: string
-    Overview: string
-    SeriesId: string
-    SeriesName: string
-    SeasonId: string
-    SeasonName: string
-    PrimaryImageAspectRatio: number
+    Id: string;
+    Name: string;
+    Overview: string;
+    SeriesId: string;
+    SeriesName: string;
+    SeasonId: string;
+    SeasonName: string;
+    PrimaryImageAspectRatio: number;
+    IndexNumber: number;
     ImageTags: {
-        Primary: string
-    }
+        Primary: string;
+    };
+    UserData: UserData;
 }
