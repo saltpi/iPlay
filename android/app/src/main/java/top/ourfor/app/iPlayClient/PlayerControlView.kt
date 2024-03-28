@@ -156,10 +156,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
 
 
     init {
-        post {
-            setupUI()
-            bind()
-        }
+        setupUI()
+        bind()
     }
 
     private fun setupUI() {
