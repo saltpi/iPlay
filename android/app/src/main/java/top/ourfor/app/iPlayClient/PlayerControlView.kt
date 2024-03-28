@@ -90,8 +90,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val params = LayoutParams(ICON_SMALL_SIZE * 2, ICON_SMALL_SIZE * 2)
         params.topToTop = LayoutParams.PARENT_ID
         params.rightToRight = LayoutParams.PARENT_ID
-        params.topMargin = 36
-        params.rightMargin = 36
+        params.topMargin = 48
+        params.rightMargin = 48
         params
     }
 
@@ -257,8 +257,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
             return centerParams
         }
 
-        val ICON_SMALL_SIZE = 16 * 3
-        val ICON_SIZE = 24 * 3
+        val ICON_SMALL_SIZE = 24 * 3
+        val ICON_SIZE = 32 * 3
         val ICON_TAG = 2
     }
 }

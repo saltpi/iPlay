@@ -112,10 +112,15 @@ class PlayerView(
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             fullscreenView?.setOnDismissListener {
+                val controller = WindowInsetsControllerCompat(window, window.decorView)
+                WindowCompat.setDecorFitsSystemWindows(window, true)
+                controller.show(WindowInsetsCompat.Type.systemBars())
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 controlView?.updateFullscreenStyle(false)
             }
         }
+
         isFullscreen = !isFullscreen
         controlView?.updateFullscreenStyle(isFullscreen)
 
