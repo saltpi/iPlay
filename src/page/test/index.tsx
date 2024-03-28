@@ -33,7 +33,7 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View>
-                    <Video style={style.video} source={{uri: url}} />
+                    <Video style={style.video} source={{uri: url, title: "ABC"}} />
                 </View>
             </ScrollView>
         </SafeAreaView>

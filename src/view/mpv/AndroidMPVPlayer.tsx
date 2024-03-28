@@ -9,6 +9,7 @@ import { VideoProps } from './type';
 
 export interface MPVPlayerProps extends ViewProps {
     url?: string;
+    title?: string
 }
 
 export const MPVPlayer =
@@ -32,5 +33,5 @@ export function AndroidMPVPlayerView(props: VideoProps) {
         if (viewId) createFragment(viewId);
     }, []);
 
-    return <MPVPlayer ref={ref} url={source.uri} {...rest} />;
+    return <MPVPlayer ref={ref} title={source.title} url={source.uri} {...rest} />;
 }

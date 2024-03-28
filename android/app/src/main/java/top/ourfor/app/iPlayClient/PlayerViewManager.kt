@@ -19,6 +19,7 @@ class PlayerViewManager(
     private var propWidth: Int? = null
     private var propHeight: Int? = null
     private var videoSrc: String? = null
+    private var videoTitle: String? = null
 
     override fun getName() = REACT_CLASS
 
@@ -55,6 +56,11 @@ class PlayerViewManager(
         videoSrc = url
     }
 
+    @ReactProp(name = "title")
+    fun setTitle(view: FrameLayout, title: String?) {
+        videoTitle = title
+    }
+
     /**
      * Replace your React Native view with a custom fragment
      */
@@ -63,6 +69,7 @@ class PlayerViewManager(
         setupLayout(parentView)
 
         val fragment = PlayerFragment(videoSrc)
+        fragment.title = videoTitle
         fragment.themedReactContext = root.context as ThemedReactContext?
         val activity = reactContext.currentActivity as FragmentActivity
         activity.supportFragmentManager

@@ -24,6 +24,11 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
     public var delegate: PlayerEventListener? = null;
     private var shouldUpdateProgress = true;
     var player: Player? = null
+    var videoTitle: String? = null
+        set(value) {
+            field = value
+            titleLabel.text = value
+        }
 
     fun updateFullscreenStyle(isFullscreen: Boolean) {
         if (isFullscreen) {
@@ -133,6 +138,22 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         params
     }
 
+    var titleLabel = run {
+        val label = TextView(context)
+        label.textSize = 14.0F
+        label.setTextColor(Color.WHITE)
+        label.id = resId.getAndIncrement()
+        label
+    }
+
+    private var titleLayout = run {
+        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        params.leftToLeft = progressBar.id
+        params.bottomToTop = progressBar.id
+        params.bottomMargin = 10
+        params
+    }
+
 
     init {
         post {
@@ -146,6 +167,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         addView(fullscreenButton, fullscreenLayout)
         addView(progressBar, progressBarLayout)
         addView(durationLabel, durationLayout)
+        addView(titleLabel, titleLayout)
     }
 
     private fun bind() {
@@ -177,6 +199,13 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         })
         fullscreenButton.setOnClickListener {
             delegate?.onWindowSizeChange()
+        }
+
+        setOnClickListener {
+            animate()
+                .alpha(1.0f - alpha)
+                .setDuration(800)
+                .start()
         }
     }
 

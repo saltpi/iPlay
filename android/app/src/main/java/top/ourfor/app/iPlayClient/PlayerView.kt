@@ -3,6 +3,7 @@ package top.ourfor.app.iPlayClient
 import android.R
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -15,24 +16,25 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.facebook.react.uimanager.ThemedReactContext
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("ResourceType")
 class PlayerView(
     context: Context,
     url: String?
 ) : ConstraintLayout(context), PlayerEventListener {
     private var controlView: PlayerControlView?
-    private lateinit var contentView: PlayerContentView
+    private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
-    public var themedReactContext: ThemedReactContext? = null
+    var themedReactContext: ThemedReactContext? = null
+    var title: String? = null
+        @RequiresApi(Build.VERSION_CODES.O)
+        set(value) {
+            field = value
+            if (controlView == null) return
+            controlView!!.videoTitle = title
+        }
     init {
         contentView = PlayerContentView(context)
-        val border = GradientDrawable()
-        border.setColor(Color.TRANSPARENT)
-        border.setStroke(2, Color.RED)
-        contentView?.background = border
-
         val player = contentView
         val contentLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         contentLayoutParams.topToTop = LayoutParams.PARENT_ID;
@@ -87,5 +89,11 @@ class PlayerView(
         }
         isFullscreen = !isFullscreen
         controlView?.updateFullscreenStyle(isFullscreen)
+
+        if (isFullscreen) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 }
