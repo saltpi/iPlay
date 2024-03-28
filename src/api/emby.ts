@@ -1,5 +1,5 @@
 import { getPlaybackInfo } from "./play";
-import { getCollection, getEpisodes, getItem, getLatestMedia, getMedia, getRecommendations, getResume, getSeasons, getView, lookupItem, markFavorite, searchRecommend } from "./view";
+import { getCollection, getEpisodes, getItem, getLatestMedia, getMedia, getRecommendations, getResume, getSeasons, getView, lookupItem, markFavorite, searchRecommend, startPlay, trackPlay } from "./view";
 import { getPublicInfo } from "./info";
 import { login } from "./login";
 import { EmbySite } from "@model/EmbySite";
@@ -38,6 +38,8 @@ export class Emby {
         this.imageUrl = imageUrl.bind(this, this.site)
         this.videoUrl = playUrl.bind(this, this.site)
         this.markFavorite = markFavorite.bind(this, this.site)
+        this.startPlay = startPlay.bind(this, this.site)
+        this.trackPlay = trackPlay.bind(this, this.site)
     }
 
     public getPlaybackInfo = this._site ? getPlaybackInfo.bind(this, this.site) : null
@@ -56,6 +58,8 @@ export class Emby {
     public imageUrl = this._site ? imageUrl.bind(this, this.site) : null
     public videoUrl = this._site ? playUrl.bind(this, this.site) : null
     public markFavorite = this._site ? markFavorite.bind(this, this.site) : null
+    public startPlay = this._site ? startPlay.bind(this, this.site) : null
+    public trackPlay = this._site ? trackPlay.bind(this, this.site) : null
 }
 
 export const Api = {
