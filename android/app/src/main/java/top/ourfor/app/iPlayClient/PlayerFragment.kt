@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.events.RCTEventEmitter
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PlayerFragment (
@@ -18,6 +21,7 @@ class PlayerFragment (
     private lateinit var playerView: PlayerView
     var themedReactContext: ThemedReactContext? = null
     var title: String? = null
+    var reactContext: ReactContext? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -25,6 +29,14 @@ class PlayerFragment (
         playerView = PlayerView(requireNotNull(context), url)
         playerView.title = title
         playerView.themedReactContext = themedReactContext
+        playerView.onPlayStateChange = { state ->
+            val event = Arguments.createMap().apply {
+                putInt("state", state)
+            }
+            reactContext
+                ?.getJSModule(RCTEventEmitter::class.java)
+                ?.receiveEvent(id, "onPlayStateChange", event)
+        }
         return playerView // this CustomView could be any view that you want to render
     }
 

@@ -13,9 +13,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.events.RCTEventEmitter
+import top.ourfor.app.iPlayClient.Player.PlayEventType
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("ResourceType")
 class PlayerView(
     context: Context,
@@ -26,6 +32,7 @@ class PlayerView(
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
     var themedReactContext: ThemedReactContext? = null
+    var onPlayStateChange: (state: Int) -> Unit  = {}
     var title: String? = null
         @RequiresApi(Build.VERSION_CODES.O)
         set(value) {
@@ -65,6 +72,15 @@ class PlayerView(
 
     override fun onPropertyChange(name: String?, value: Any?) {
         this.controlView?.onPropertyChange(name, value)
+        if (name.equals("time-pos") ||
+            name.equals("pause") ||
+            name.equals("paused-for-cache")) {
+            var state = PlayEventType.PlayEventTypeOnProgress
+            if (name.equals("time-pos")) state = PlayEventType.PlayEventTypeOnProgress;
+            else if (name.equals("pause")) state = PlayEventType.PlayEventTypeOnPause;
+            else if (name.equals("paused-for-cache")) state = PlayEventType.PlayEventTypeOnPauseForCache
+            onPlayStateChange(state.value)
+        }
     }
 
     override fun onWindowSizeChange() {

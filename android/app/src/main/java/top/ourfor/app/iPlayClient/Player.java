@@ -17,4 +17,19 @@ public interface Player {
     default void stop() {}
     default void resize(String newSize) {}
     default void destroy() {}
+
+
+    enum PlayEventType {
+        PlayEventTypeOnProgress(0),
+        PlayEventTypeOnPause(1),
+        PlayEventTypeOnPauseForCache(2),
+        PlayEventTypeDuration(3),
+        PlayEventTypeEnd(4);
+
+        int value;
+
+        PlayEventType(int value) {
+            this.value = value;
+        }
+    }
 }

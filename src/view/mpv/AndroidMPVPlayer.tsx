@@ -6,10 +6,12 @@ import {
     requireNativeComponent,
 } from 'react-native';
 import { VideoProps } from './type';
+import { PlayStateType } from './Player';
 
 export interface MPVPlayerProps extends ViewProps {
     url?: string;
     title?: string
+    onPlayStateChange?: any
 }
 
 export const MPVPlayer =
@@ -28,10 +30,28 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
     const ref = useRef(null);
     const { source, ...rest } = props;
 
+    const onPlayStateChange = (s: any) => {
+        const state = s.nativeEvent?.state;
+        console.log(`onPlayStateChange: ${state}`);
+        if (state === PlayStateType.PlayEventTypeOnPause) {
+            props.onPlaybackStateChanged?.({isPlaying: false});
+        } else if (state === PlayStateType.PlayEventTypeOnProgress) {
+            props.onPlaybackStateChanged?.({isPlaying: true});
+        } else if (state === PlayStateType.PlayEventTypeEnd) {
+            props.onPlaybackStateChanged?.({isPlaying: false});
+        }
+    };
+    console.log("source", source);
+
     useEffect(() => {
         const viewId = findNodeHandle(ref.current);
         if (viewId) createFragment(viewId);
     }, []);
 
-    return <MPVPlayer ref={ref} title={source.title} url={source.uri} {...rest} />;
+
+    return <MPVPlayer ref={ref} 
+            title={source.title} 
+            url={source.uri} 
+            onPlayStateChange={onPlayStateChange}
+            {...rest} />;
 })
