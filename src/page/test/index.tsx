@@ -1,17 +1,16 @@
 import { StatusBar } from "@view/StatusBar";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { VLCPlayer, Video } from "@view/Video";
+import { iOSMPVPlayer, Video } from "@view/Video";
 import { useEffect, useRef } from "react";
 import { useAppSelector } from "@hook/store";
-import { MPVPlayer, MPVPlayerView } from "@view/MPVPlayer";
+import { MPVPlayer, AndroidMPVPlayerView } from "@view/mpv/AndroidMPVPlayer";
 
 const style = StyleSheet.create({
     page: {
         flex: 1,
     },
     video: {
-        width: 1440,
-        height: 810,
+        width: "100%",
         aspectRatio: 16/9,
     }
 });

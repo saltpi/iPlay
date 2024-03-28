@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -42,7 +43,8 @@ class PlayerViewManager(
     ) {
         super.receiveCommand(root, commandId, args)
         val reactNativeViewId = requireNotNull(args).getInt(0)
-
+        propWidth = root.width
+        propHeight = root.height
         when (commandId.toInt()) {
             COMMAND_CREATE -> createFragment(root, reactNativeViewId)
         }
@@ -51,12 +53,6 @@ class PlayerViewManager(
     @ReactProp(name = "url")
     fun setSrc(view: FrameLayout, url: String?) {
         videoSrc = url
-    }
-
-    @ReactPropGroup(names = ["width", "height"], customType = "Style")
-    fun setStyle(view: FrameLayout, index: Int, value: Int) {
-        if (index == 0) propWidth = value
-        if (index == 1) propHeight = value
     }
 
     /**
@@ -90,8 +86,8 @@ class PlayerViewManager(
      */
     private fun manuallyLayoutChildren(view: View) {
         // propWidth and propHeight coming from react-native props
-        val width = requireNotNull(propWidth)
-        val height = requireNotNull(propHeight)
+        val width = requireNotNull(propWidth).toInt()
+        val height = requireNotNull(propHeight).toInt()
 
         view.measure(
             View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),

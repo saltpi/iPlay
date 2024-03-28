@@ -5,6 +5,7 @@ import {
     findNodeHandle,
     requireNativeComponent,
 } from 'react-native';
+import { VideoProps } from './type';
 
 export interface MPVPlayerProps extends ViewProps {
     url?: string;
@@ -22,13 +23,14 @@ const createFragment = (viewId: number) => {
     )
 }
 
-export function MPVPlayerView(props: MPVPlayerProps) {
+export function AndroidMPVPlayerView(props: VideoProps) {
     const ref = useRef(null);
+    const { source, ...rest } = props;
 
     useEffect(() => {
         const viewId = findNodeHandle(ref.current);
         if (viewId) createFragment(viewId);
     }, []);
 
-    return <MPVPlayer ref={ref} {...props} />;
+    return <MPVPlayer ref={ref} url={source.uri} {...rest} />;
 }

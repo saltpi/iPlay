@@ -90,14 +90,10 @@ const Players = {
         icon: mpvIcon,
         action: (url: string, title: string = new URL(url).pathname, config?: PlayerPerference) => {
             if (isOS(OSType.Android)) {
-                if (config?.useInternalMPV) {
-                    IntentModule.playFile(url)
-                } else {
-                    const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
-                    const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
-                    console.log(deepLink)
-                    IntentModule.openUrl(deepLink)
-                }
+                const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
+                const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
+                console.log(deepLink)
+                IntentModule.openUrl(deepLink)
             }
         }
     }

@@ -27,11 +27,12 @@ class PlayerView(
     private var isFullscreen = false
     public var themedReactContext: ThemedReactContext? = null
     init {
-        val border = GradientDrawable()
-        border.setColor(Color.TRANSPARENT) // background color
-        border.setStroke(2, Color.RED)
         contentView = PlayerContentView(context)
+        val border = GradientDrawable()
+        border.setColor(Color.TRANSPARENT)
+        border.setStroke(2, Color.RED)
         contentView?.background = border
+
         val player = contentView
         val contentLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         contentLayoutParams.topToTop = LayoutParams.PARENT_ID;
