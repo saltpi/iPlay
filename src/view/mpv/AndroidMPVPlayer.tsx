@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {forwardRef, useEffect, useRef} from 'react';
 import {
     UIManager,
     ViewProps,
@@ -24,7 +24,7 @@ const createFragment = (viewId: number) => {
     )
 }
 
-export function AndroidMPVPlayerView(props: VideoProps) {
+export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoProps, vRef: any) => {
     const ref = useRef(null);
     const { source, ...rest } = props;
 
@@ -34,4 +34,4 @@ export function AndroidMPVPlayerView(props: VideoProps) {
     }, []);
 
     return <MPVPlayer ref={ref} title={source.title} url={source.uri} {...rest} />;
-}
+})
