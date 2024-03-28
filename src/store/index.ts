@@ -3,6 +3,7 @@ import menuReducer from './menuSlice';
 import embyReducer from './embySlice';
 import themeReducer from './themeSlice';
 import configReducer from './configSlice';
+import playerReducer from './playerSlice';
 import { listener } from "./middleware/Listener";
 import { thunk } from 'redux-thunk';
 import { Api } from '@api/emby';
@@ -51,6 +52,10 @@ const reducer = combineReducers({
       key: [Env.storeKey, "emby"].join("/"),
       storage
   }, embyReducer),
+  player: persistReducer({
+      key: [Env.storeKey, "player"].join("/"),
+      storage
+  }, playerReducer),
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer);

@@ -1,8 +1,9 @@
 import React, { forwardRef } from 'react';
 import {ViewProps, requireNativeComponent} from 'react-native';
+import { PlaybackStateType } from './type';
 const Player = requireNativeComponent('PlayerView');
 
-export enum PlayStateType {
+export enum PlayEventType {
     PlayEventTypeOnProgress,
     PlayEventTypeOnPause,
     PlayEventTypeOnPauseForCache,
@@ -12,7 +13,7 @@ export enum PlayStateType {
 
 export interface PlayerViewProps extends ViewProps {
     title?: string
-    onPlayStateChange?: (state: PlayStateType) => void
+    onPlayStateChange?: (state: PlaybackStateType) => void
     url: string
     iconSize?: number
 }

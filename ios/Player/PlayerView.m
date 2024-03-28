@@ -329,6 +329,7 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)onPlayEventImpl:(PlayEventType)event data:(NSDictionary *)data {
+    NSDictionary *payload = nil;
     switch (event) {
         case PlayEventTypeDuration: {
             break;
@@ -349,10 +350,18 @@ static NSUInteger const kIconSize = 48;
             NSString *totalTimeStr = [self.timeFormatter stringFromTimeInterval:duration.unsignedIntValue];
             NSString *durationText = [NSString stringWithFormat:@"%@ / %@", currentTimeStr, totalTimeStr];
             self.durationLabel.text = durationText;
+            payload = @{
+                @"type": @(PlayEventTypeOnProgress),
+                @"duration": duration ?: @0,
+                @"position": current ?: @0
+            };
             break;
         }
         case PlayEventTypeOnPause: {
             BOOL isPlaying = ![data[@"state"] boolValue];
+            payload = @{
+                @"type": @(PlayEventTypeOnPause),
+            };
             break;
         }
         case PlayEventTypeOnPauseForCache: {
@@ -367,8 +376,8 @@ static NSUInteger const kIconSize = 48;
         default:
             break;
     }
-    self.onPlayStateChange(@{
-        @"state": @(event)
+    self.onPlayStateChange(payload ?: @{
+        @"type": @(event)
     });
 }
 

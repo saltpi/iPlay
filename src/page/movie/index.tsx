@@ -1,5 +1,5 @@
 import { PropsWithNavigation } from "@global";
-import { useAppSelector } from "@hook/store";
+import { useAppDispatch, useAppSelector } from "@hook/store";
 import { MediaDetail } from "@model/MediaDetail";
 import { Season } from "@model/Season";
 import { ActorCard } from "@view/ActorCard";
@@ -18,6 +18,9 @@ import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { printException } from "@helper/log";
+import { updatePlayerState } from "@store/playerSlice";
+import { kSecond2TickScale } from "@model/PlaybackData";
+import { PlayEventType } from "@view/mpv/Player";
 
 const style = StyleSheet.create({
     overview: {
@@ -73,6 +76,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const themeStyle = useAppSelector(selectThemeBasicStyle)
     const emby = useAppSelector(state => state.emby?.emby)
     const showVideoLink = useAppSelector(state => state.theme.showVideoLink)
+    const dispatch = useAppDispatch()
     const {title, type, movie} = route.params
     const [url, setUrl] = useState<string>()
     const [isPlaying, setIsPlaying] = useState(false)
@@ -92,6 +96,14 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
             if (playbackInfo) {
                 url = emby?.videoUrl?.(playbackInfo) ?? ""
+                dispatch(updatePlayerState({
+                    source: "emby",
+                    mediaId: movie.Id,
+                    sessionId: playbackInfo.PlaySessionId,
+                    startTime: Date.now() * kSecond2TickScale,
+                    mediaPoster: poster,
+                    position: 0,
+                }))
             }
         }
         return url
@@ -138,7 +150,28 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         setUrl(url)
         setIsPlaying(true)
         setLoading(true)
+        dispatch(updatePlayerState({
+            status: "playing",
+            mediaName: detail?.Name,
+        }))
     }
+
+    const onPlaybackStateChanged = (data: any) => {
+        setLoading(false)
+        if (data.type === PlayEventType.PlayEventTypeOnProgress) {
+            dispatch(updatePlayerState({
+                mediaEvent: "timeupdate",
+                position: data.position,
+                duration: data.duration,
+            }))
+        } else if (data.type === PlayEventType.PlayEventTypeOnPause) {
+            dispatch(updatePlayerState({
+                mediaEvent: "pause",
+                isPaused: true,
+            }))
+        }
+    }
+
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     const iconSize = preferedSize(24, 36, windowWidth/10)
     const playButtonStyle = {
@@ -158,7 +191,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 poster={poster}
                 fullscreenAutorotate={true}
                 fullscreenOrientation="landscape"
-                onPlaybackStateChanged={state => setLoading(false)}
+                onPlaybackStateChanged={onPlaybackStateChanged}
                 onProgress={progress => console.log("progress", progress)}
                 onError={onError}
                 style={style.player}

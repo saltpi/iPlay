@@ -6,7 +6,7 @@ import {
     requireNativeComponent,
 } from 'react-native';
 import { VideoProps } from './type';
-import { PlayStateType } from './Player';
+import { PlayEventType } from './Player';
 
 export interface MPVPlayerProps extends ViewProps {
     url?: string;
@@ -47,11 +47,11 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
 
     const onPlayStateChange = (s: any) => {
         const state = s.nativeEvent?.state;
-        if (state === PlayStateType.PlayEventTypeOnPause) {
+        if (state === PlayEventType.PlayEventTypeOnPause) {
             props.onPlaybackStateChanged?.({isPlaying: false});
-        } else if (state === PlayStateType.PlayEventTypeOnProgress) {
+        } else if (state === PlayEventType.PlayEventTypeOnProgress) {
             props.onPlaybackStateChanged?.({isPlaying: true});
-        } else if (state === PlayStateType.PlayEventTypeEnd) {
+        } else if (state === PlayEventType.PlayEventTypeEnd) {
             props.onPlaybackStateChanged?.({isPlaying: false});
         }
     };

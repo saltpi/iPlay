@@ -13,7 +13,7 @@ export interface PlaybackData {
     PlaybackStartTimeTicks: number,
     PlaylistIndex: number,
     PlaylistLength: number,
-    PositionTicks: number,
+    PositionTicks?: number,
     RepeatMode: "RepeatAll" | "RepeatOne" | "RepeatNone",
     SeekableRanges: [number, number][],
     SubtitleOffset: number,

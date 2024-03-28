@@ -5,9 +5,9 @@ import {
     useImperativeHandle,
     useRef,
 } from 'react';
-import { PlayStateType, PlayerView } from './Player';
+import { PlayerView } from './Player';
 import {NativeModules, StyleSheet, findNodeHandle} from 'react-native';
-import { VideoProps } from './type';
+import { PlaybackStateType, VideoProps } from './type';
 
 export interface PlayerManagerType {
     resume: (reactTag: number) => void;
@@ -35,15 +35,9 @@ export const iOSMPVPlayer = forwardRef<PlayerRef, VideoProps>(
         const {uri, title} = props.source as any;
         console.log(`uri: ${uri} title: ${title}`);
         const onPlayStateChange = (s: any) => {
-            const state = s.nativeEvent?.state;
+            const state: PlaybackStateType = s.nativeEvent;
             console.log(`onPlayStateChange: ${state}`);
-            if (state === PlayStateType.PlayEventTypeOnPause) {
-                props.onPlaybackStateChanged?.({isPlaying: false});
-            } else if (state === PlayStateType.PlayEventTypeOnProgress) {
-                props.onPlaybackStateChanged?.({isPlaying: true});
-            } else if (state === PlayStateType.PlayEventTypeEnd) {
-                props.onPlaybackStateChanged?.({isPlaying: false});
-            }
+            props.onPlaybackStateChanged?.(state);
         };
 
         const stop = useCallback(() => {
