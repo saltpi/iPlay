@@ -3,6 +3,7 @@ package top.ourfor.app.iPlayClient
 import android.R
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -12,7 +13,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.events.RCTEventEmitter
+import top.ourfor.app.iPlayClient.Player.PlayEventType
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -22,16 +28,20 @@ class PlayerView(
     url: String?
 ) : ConstraintLayout(context), PlayerEventListener {
     private var controlView: PlayerControlView?
-    private lateinit var contentView: PlayerContentView
+    private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
-    public var themedReactContext: ThemedReactContext? = null
+    var themedReactContext: ThemedReactContext? = null
+    var onPlayStateChange: (state: Int) -> Unit  = {}
+    var title: String? = null
+        @RequiresApi(Build.VERSION_CODES.O)
+        set(value) {
+            field = value
+            if (controlView == null) return
+            controlView!!.videoTitle = title
+        }
     init {
-        val border = GradientDrawable()
-        border.setColor(Color.TRANSPARENT) // background color
-        border.setStroke(2, Color.RED)
         contentView = PlayerContentView(context)
-        contentView?.background = border
         val player = contentView
         val contentLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         contentLayoutParams.topToTop = LayoutParams.PARENT_ID;
@@ -62,6 +72,15 @@ class PlayerView(
 
     override fun onPropertyChange(name: String?, value: Any?) {
         this.controlView?.onPropertyChange(name, value)
+        if (name.equals("time-pos") ||
+            name.equals("pause") ||
+            name.equals("paused-for-cache")) {
+            var state = PlayEventType.PlayEventTypeOnProgress
+            if (name.equals("time-pos")) state = PlayEventType.PlayEventTypeOnProgress;
+            else if (name.equals("pause")) state = PlayEventType.PlayEventTypeOnPause;
+            else if (name.equals("paused-for-cache")) state = PlayEventType.PlayEventTypeOnPauseForCache
+            onPlayStateChange(state.value)
+        }
     }
 
     override fun onWindowSizeChange() {
@@ -86,5 +105,11 @@ class PlayerView(
         }
         isFullscreen = !isFullscreen
         controlView?.updateFullscreenStyle(isFullscreen)
+
+        if (isFullscreen) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 }

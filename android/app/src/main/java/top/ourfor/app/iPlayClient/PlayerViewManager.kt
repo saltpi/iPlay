@@ -1,16 +1,17 @@
 package top.ourfor.app.iPlayClient
 
+import android.os.Build
 import android.view.Choreographer
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.uimanager.annotations.ReactPropGroup
 
 class PlayerViewManager(
     private val reactContext: ReactApplicationContext
@@ -18,6 +19,7 @@ class PlayerViewManager(
     private var propWidth: Int? = null
     private var propHeight: Int? = null
     private var videoSrc: String? = null
+    private var videoTitle: String? = null
 
     override fun getName() = REACT_CLASS
 
@@ -35,6 +37,7 @@ class PlayerViewManager(
     /**
      * Handle "create" command (called from JS) and call createFragment method
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun receiveCommand(
         root: FrameLayout,
         commandId: String,
@@ -42,7 +45,8 @@ class PlayerViewManager(
     ) {
         super.receiveCommand(root, commandId, args)
         val reactNativeViewId = requireNotNull(args).getInt(0)
-
+        propWidth = root.width
+        propHeight = root.height
         when (commandId.toInt()) {
             COMMAND_CREATE -> createFragment(root, reactNativeViewId)
         }
@@ -53,21 +57,33 @@ class PlayerViewManager(
         videoSrc = url
     }
 
-    @ReactPropGroup(names = ["width", "height"], customType = "Style")
-    fun setStyle(view: FrameLayout, index: Int, value: Int) {
-        if (index == 0) propWidth = value
-        if (index == 1) propHeight = value
+    @ReactProp(name = "title")
+    fun setTitle(view: FrameLayout, title: String?) {
+        videoTitle = title
+    }
+
+    override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
+        return mapOf(
+            "onPlayStateChange" to mapOf(
+                "phasedRegistrationNames" to mapOf(
+                    "bubbled" to "onPlayStateChange"
+                )
+            )
+        )
     }
 
     /**
      * Replace your React Native view with a custom fragment
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun createFragment(root: FrameLayout, reactNativeViewId: Int) {
         val parentView = root.findViewById<ViewGroup>(reactNativeViewId)
         setupLayout(parentView)
 
         val fragment = PlayerFragment(videoSrc)
+        fragment.title = videoTitle
         fragment.themedReactContext = root.context as ThemedReactContext?
+        fragment.reactContext = reactContext
         val activity = reactContext.currentActivity as FragmentActivity
         activity.supportFragmentManager
             .beginTransaction()
@@ -90,8 +106,8 @@ class PlayerViewManager(
      */
     private fun manuallyLayoutChildren(view: View) {
         // propWidth and propHeight coming from react-native props
-        val width = requireNotNull(propWidth)
-        val height = requireNotNull(propHeight)
+        val width = requireNotNull(propWidth).toInt()
+        val height = requireNotNull(propHeight).toInt()
 
         view.measure(
             View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
