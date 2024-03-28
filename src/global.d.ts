@@ -1,4 +1,4 @@
-import { Episode } from '@model/Episode';
+import { Episode } from "@model/Episode";
 import { Media } from '@model/Media';
 import { PlaybackInfo } from '@model/PlaybackInfo';
 import { NavigationProp, ParamListBase, RouteProp, Router } from '@react-navigation/native';

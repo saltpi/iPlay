@@ -7,6 +7,7 @@ import { EmbyResponse } from "@model/EmbyResponse";
 import { Episode } from "@model/Episode";
 import { EmbySite } from "@model/EmbySite";
 import { Device, Version } from "@helper/device";
+import { UserData } from "@model/UserData";
 
 export const CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,
@@ -66,13 +67,13 @@ export async function getMedia(site: EmbySite, id: number) {
     return data
 }
 
-export async function getResume(site: EmbySite) {
+export async function getResume(site: EmbySite, type: "Video"|"Audio" = "Video") {
     const params = {
         Recursive: true,
-        Fields: "BasicSyncInfo,CanDelete,Container,PrimaryImageAspectRatio,ProductionYear",
+        Fields: "BasicSyncInfo,CanDelete,Container,PrimaryImageAspectRatio,ProductionYear,Status,EndDate,Overview",
         ImageTypeLimit: 1,
         EnableImageTypes: "Primary,Backdrop,Thumb",
-        MediaTypes: "Video",
+        MediaTypes: type,
         Limit: 12,
         "X-Emby-Language": "zh-cn"
     }
@@ -246,5 +247,24 @@ export async function lookupItem(site: EmbySite, title: string) {
         }
     })
     const data = await response.json() as EmbyResponse<Media>
+    return data
+}
+
+export async function markFavorite(site: EmbySite, id: number, favorite: boolean) {
+    const uid = site.user.User.Id
+    const params = {
+        "X-Emby-Language": "zh-cn"
+    }
+    const url = favorite ?
+        makeEmbyUrl(params, `emby/Users/${uid}/FavoriteItems/${id}`, site.server) :
+        makeEmbyUrl(params, `emby/Users/${uid}/FavoriteItems/${id}/Delete`, site.server)
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            ...CLIENT_HEADERS,
+            "X-Emby-Token": site.user.AccessToken,
+        }
+    })
+    const data = await response.json() as UserData
     return data
 }

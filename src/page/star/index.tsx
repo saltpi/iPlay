@@ -19,7 +19,23 @@ const style = StyleSheet.create({
         marginTop: 20,
         marginBottom: 10,
         paddingLeft: 20,
-    }
+    },
+    movieList: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignContent: "flex-start",
+        justifyContent: "space-between",
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    episodeList: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignContent: "flex-start",
+        justifyContent: "space-between",
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
 });
 
 
@@ -62,13 +78,17 @@ export function Page(props: PropsWithNavigation<"default">) {
                     {favoriteMovies.length > 0 ? 
                     <Text style={{...style.sectionTitle, ...theme}}>喜爱的电影</Text>
                     : null}
+                    <View style={style.movieList}>
                     {favoriteMovies.map((movie, idx) => 
                         <MediaCard key={idx} media={movie} theme={theme} />)}
+                    </View>
                     {favoriteEpisodes.length > 0 ?
                     <Text style={{...style.sectionTitle, ...theme}}>喜爱的剧集</Text>
                     : null}
+                    <View style={style.episodeList}>
                     {favoriteEpisodes.map((episode, idx) => 
                         <MediaCard key={idx} media={episode} theme={theme} />)}
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
