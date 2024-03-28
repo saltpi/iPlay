@@ -105,6 +105,10 @@ public class PlayerViewModel implements Player {
             eventLoop = new Thread(() -> {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);
+                    if (e == null) {
+                        Log.d(TAG, "event is null, close mpv player");
+                        break;
+                    }
                     if (e.type == MPV_EVENT_SHUTDOWN) {
                         Log.d(TAG, "close mpv player");
                         break;
