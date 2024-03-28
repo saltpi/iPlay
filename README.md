@@ -48,8 +48,8 @@ It is developed in my free time
 
 ### Download
 
-- [Android](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.apk)
-- [iOS](https://drive.endemy.me/od_bot/build/iPlay/20240321.0631/iPlay.ipa)
+- [Android](https://drive.endemy.me/od_bot/build/iPlay/latest/iPlay.apk)
+- [iOS](https://drive.endemy.me/od_bot/build/iPlay/latest/iPlay.ipa)
 
 Download the development package
 ![](doc/image/20240319_213840.png)
