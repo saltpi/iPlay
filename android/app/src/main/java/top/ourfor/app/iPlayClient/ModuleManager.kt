@@ -9,7 +9,8 @@ class ModuleManager : ReactPackage {
     override fun createViewManagers(
         reactContext: ReactApplicationContext
     ) = listOf(
-        PlayerViewManager(reactContext)
+        PlayerViewManager(reactContext),
+        DemoViewManager(reactContext)
     ).toMutableList()
 
     override fun createNativeModules(

@@ -8,6 +8,7 @@
         android:icon="@mipmap/appicon"
         android:roundIcon="@mipmap/appicon"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
       <activity

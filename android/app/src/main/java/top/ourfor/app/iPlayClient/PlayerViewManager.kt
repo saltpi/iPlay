@@ -84,6 +84,7 @@ class PlayerViewManager(
      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun createFragment(root: FrameLayout, reactNativeViewId: Int) {
+        Log.d(TAG, "add fragment")
         val parentView = root.findViewById<ViewGroup>(reactNativeViewId)
         setupLayout(parentView)
 
