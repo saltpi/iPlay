@@ -62,7 +62,6 @@ const style = StyleSheet.create({
 export type PlayerPageProps = PropsWithNavigation<'player'>;
 
 export function Page({navigation, route}: PlayerPageProps) {
-    const insets = useSafeAreaInsets()
     const { episodes } = route.params;
     const emby = useAppSelector(state => state.emby.emby);
     const [url, setUrl] = useState<string>()
@@ -120,6 +119,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     useEffect(() => {
         playEpisode(episode)
         return () => {
+            console.log("stop player")
             dispatch(updatePlayerState({
                 status: "stopped",
             }))
