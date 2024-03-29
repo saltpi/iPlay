@@ -3,6 +3,7 @@ import { PlaybackInfo } from "../model/PlaybackInfo";
 import device from "./device.json"
 import { EmbySite } from "@model/EmbySite";
 import { MediaDetail } from "@model/MediaDetail";
+import { CLIENT_HEADERS } from "./view";
 
 export async function getPlaybackInfo(site: EmbySite, id: number) {
     const params = {
@@ -11,18 +12,17 @@ export async function getPlaybackInfo(site: EmbySite, id: number) {
         AutoOpenLiveStream: false,
         MaxStreamingBitrate: 1500000,
         UserId: site.user.User.Id,
-        "X-Emby-Client": "Emby Web",
-        "X-Emby-Device-Name": "Microsoft Edge macOS",
-        "X-Emby-Device-Id": "feed8217-7abd-4d2d-a561-ed21c0b9c30e",
-        "X-Emby-Client-Version": "4.7.13.0",
         "X-Emby-Token": site.user.AccessToken,
         "X-Emby-Language": "zh-cn",
         reqformat: "json"
     }
     const url = makeEmbyUrl(params, `emby/Items/${id}/PlaybackInfo`, site.server)
-    const response = await fetch(url, {method: "POST", body: JSON.stringify(device), headers: {
+    const headers = {
+        ...CLIENT_HEADERS,
+        "X-Emby-Token": site.user.AccessToken,
         "content-type": "text/plain"
-    }})
+    }
+    const response = await fetch(url, {method: "POST", body: "", headers})
     return await response.json() as PlaybackInfo
 }
 

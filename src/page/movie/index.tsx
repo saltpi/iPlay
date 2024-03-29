@@ -169,14 +169,14 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         if (data.type === PlayEventType.PlayEventTypeOnProgress) {
             dispatch(updatePlayerState({
                 status: "playing",
-                mediaEvent: "timeupdate",
+                mediaEvent: "TimeUpdate",
                 position: data.position,
                 duration: data.duration,
             }))
         } else if (data.type === PlayEventType.PlayEventTypeOnPause) {
             dispatch(updatePlayerState({
                 status: "paused",
-                mediaEvent: "pause",
+                mediaEvent: "Pause",
                 isPaused: true,
             }))
         }

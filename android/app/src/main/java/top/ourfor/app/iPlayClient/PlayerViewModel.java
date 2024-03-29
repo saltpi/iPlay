@@ -13,6 +13,7 @@ import top.ourfor.lib.mpv.MPV;
 public class PlayerViewModel implements Player {
     public PlayerEventListener delegate;
     public Thread eventLoop;
+    public double _duration;
 
     public String url = null;
     private MPV mpv;
@@ -33,6 +34,11 @@ public class PlayerViewModel implements Player {
         mpv.init();
 
         watch();
+    }
+
+    @Override
+    public Double duration() {
+        return _duration;
     }
 
     @Override

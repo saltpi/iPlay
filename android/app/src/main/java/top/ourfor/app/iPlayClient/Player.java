@@ -8,6 +8,8 @@ public interface Player {
     default void setVideoOutput(String value) {}
     default void attach(SurfaceHolder holder) {}
     default void detach() {}
+    default Double progress() { return 0.0; }
+    default Double duration() { return 0.0; }
     boolean isPlaying();
     default void loadVideo(String url) {}
     default void play() {}

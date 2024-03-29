@@ -19,7 +19,7 @@ interface PlayerState {
     mediaSourceId?: string;
     mediaPlot?: string;
     mediaType?: string;
-    mediaEvent?: "start" | "timeupdate" | "pause" | "stop";
+    mediaEvent?: "Start" | "TimeUpdate" | "Pause" | "Stop";
     mediaPoster?: string;
     seasonId?: string;
     sessionId?: string;
@@ -54,8 +54,10 @@ export const trackPlayAsync = createAppAsyncThunk("player/track", async (_, conf
         ItemId: player.mediaId,
         MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,
-        PlaybackStartTimeTicks: player.startTime,
         PositionTicks: second2Tick(player.position),
+        NowPlayingQueue: [
+            {Id: player.mediaId ?? "", PlaylistItemId: "playlistItem0"}
+        ]
     })
     return data
 })
@@ -71,8 +73,10 @@ export const startPlayAsync = createAppAsyncThunk("player/start", async (_, conf
         MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,
         SeekableRanges: [{start: 0, end: second2Tick(player.duration)}],
-        PlaybackStartTimeTicks: second2Tick(player.startTime),
         PositionTicks: second2Tick(player.position),
+        NowPlayingQueue: [
+            {Id: player.mediaId ?? "", PlaylistItemId: "playlistItem0"}
+        ]
     })
     return data
 })
@@ -88,7 +92,7 @@ export const stopPlayAsync = createAppAsyncThunk("player/stop", async (_, config
         MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,
         SeekableRanges: [{start: 0, end: second2Tick(player.duration)}],
-        PlaybackStartTimeTicks: second2Tick(player.startTime),
+        // PlaybackStartTimeTicks: second2Tick(player.startTime),
         PositionTicks: second2Tick(player.position),
     })
     return data
