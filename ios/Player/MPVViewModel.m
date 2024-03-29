@@ -86,12 +86,19 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
+        
+        @weakify(self);
         dispatch_async(self.queue, ^{
             while (1) {
+                @strongify(self);
                 mpv_event *event = mpv_wait_event(self.mpv, -1);
                 if (event->event_id == MPV_EVENT_SHUTDOWN)
                     break;
-                on_mpv_event(self.mpv, event, self);
+                if (self.mpv) {
+                    on_mpv_event(self.mpv, event, self);
+                } else {
+                    break;
+                }
             }
         });
         
@@ -101,6 +108,7 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 - (void)loadVideo:(NSString *)url {
+    if (!self.mpv) return;
     const char *cmd[] = {"loadfile", [url cStringUsingEncoding:NSUTF8StringEncoding], "replace", NULL};
     mpv_command(self.mpv, cmd);
 }
@@ -117,16 +125,19 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 - (void)play {
+    if (!self.mpv) return;
     const char *cmd[] = {"play", NULL};
     mpv_command(self.mpv, cmd);
 }
 
 - (void)stop {
+    if (!self.mpv) return;
     const char *cmd[] = {"stop", NULL};
     mpv_command(self.mpv, cmd);
 }
 
 - (void)volumeUp:(CGFloat)percent {
+    if (!self.mpv) return;
     double volume;
     mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
     volume += 100 * percent;
@@ -135,6 +146,7 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 - (void)volumeDown:(CGFloat)percent {
+    if (!self.mpv) return;
     double volume;
     mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
     volume -= 100 * percent;
@@ -143,40 +155,50 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 - (void)jumpBackward:(NSUInteger)seconds {
+    if (!self.mpv) return;
     const char* pos = [@(-seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
     const char *cmd[] = {"seek", pos, "relative", NULL};
     mpv_command(self.mpv, cmd);
 }
 
 - (void)jumpForward:(NSUInteger)seconds {
+    if (!self.mpv) return;
     const char* pos = [@(seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
     const char *cmd[] = {"seek", pos, "relative", NULL};
     mpv_command(self.mpv, cmd);
 }
 
 - (void)seek:(NSUInteger)timeSeconds {
+    if (!self.mpv) return;
     const char* pos = [@(timeSeconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
     const char *cmd[] = {"seek", pos, "absolute+keyframes", NULL};
     mpv_command(self.mpv, cmd);
 }
 
 - (void)pause {
+    if (!self.mpv) return;
     const char *cmd[] = {"cycle", "pause", NULL};
     mpv_command(self.mpv, cmd);
 }
 
 - (void)resume {
+    if (!self.mpv) return;
     int flag = 0;
     mpv_set_property(self.mpv, "pause", MPV_FORMAT_FLAG, &flag);
 }
 
 - (void)keepaspect {
+    if (!self.mpv) return;
     int flag = -1;
     mpv_set_property(self.mpv, "keepaspect", MPV_FORMAT_FLAG, &flag);
 }
 
-- (void)dealloc {
-    mpv_terminate_destroy(self.mpv);
+- (void)destroy {
+    if (_mpv) {
+        mpv_set_option_string(_mpv, "vo", "null");
+        mpv_destroy(_mpv);
+        _mpv = nil;
+    }
 }
 
 - (dispatch_queue_t)queue {
