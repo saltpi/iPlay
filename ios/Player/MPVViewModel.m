@@ -101,10 +101,14 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         dispatch_async(mpvEventRunloop, ^{
             while (1) {
                 @strongify(self);
-                if (self == nil) break;
+                if (self == nil ||
+                    self.mpv == nil) {
+                    break;
+                }
                 mpv_event *event = mpv_wait_event(self.mpv, -1);
                 if (event->event_id == MPV_EVENT_SHUTDOWN)
                     break;
+                
                 if (self.mpv) {
                     on_mpv_event(self.mpv, event, self);
                 } else {
