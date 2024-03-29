@@ -11,7 +11,7 @@ import { Video } from '@view/Video';
 import { PlayEventType } from '@view/mpv/Player';
 import { PlaybackStateType } from '@view/mpv/type';
 import { ExternalPlayer } from '@view/player/ExternalPlayer';
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -98,7 +98,7 @@ export function Page({navigation, route}: PlayerPageProps) {
             .catch(printException)
     }
 
-    const onPlaybackStateChanged = (data: PlaybackStateType) => {
+    const onPlaybackStateChanged = useCallback((data: PlaybackStateType) => {
         if (data.type === PlayEventType.PlayEventTypeOnProgress) {
             setLoading(false)
             dispatch(updatePlayerState({
@@ -115,7 +115,7 @@ export function Page({navigation, route}: PlayerPageProps) {
                 isPaused: true,
             }))
         }
-    }
+    }, [dispatch, setLoading])
 
     useEffect(() => {
         playEpisode(episode)
