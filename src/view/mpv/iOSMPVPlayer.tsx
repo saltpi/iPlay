@@ -36,7 +36,6 @@ export const iOSMPVPlayer = forwardRef<PlayerRef, VideoProps>(
         console.log(`uri: ${uri} title: ${title}`);
         const onPlayStateChange = (s: any) => {
             const state: PlaybackStateType = s.nativeEvent;
-            console.log(`onPlayStateChange: ${state}`);
             props.onPlaybackStateChanged?.(state);
         };
 

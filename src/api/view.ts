@@ -13,7 +13,7 @@ import { PlaybackData, kPlayStopData, kPlaybackData } from "@model/PlaybackData"
 export const CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,
     "X-Emby-Device-Name": Device.name,
-    "X-Emby-Device-Id": Version.deviceId,
+    "X-Emby-Device-Id": Device.did,
     "X-Emby-Client-Version": Version.versionCode, 
 } as any
 
@@ -279,12 +279,14 @@ export async function play(site: EmbySite,
         ...kPlaybackData,
         ...data
     }
-    const url = makeEmbyUrl(params, `emby/Sessions/Playing${path}`, site.server)
+    const url = makeEmbyUrl(params, `emby/Sessions/Playing/${path}`, site.server)
     const response = await fetch(url, {
         method: "POST",
         headers: {
             ...CLIENT_HEADERS,
+            "Content-Type": "application/json",
             "X-Emby-Token": site.user.AccessToken,
+            reqformat: "json"
         },
         body: JSON.stringify(body)
     })

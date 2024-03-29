@@ -7,15 +7,16 @@ import { EmbySite } from '@model/EmbySite';
 import { EmbyConfig } from '@helper/env';
 import { Emby } from '@api/emby';
 import { View } from '@model/View';
-import { kPlaybackData, kPlayStartData } from '@model/PlaybackData';
+import { kPlaybackData, kPlayStartData, kSecond2TickScale } from '@model/PlaybackData';
 
 interface PlayerState {
     source: "emby" | "local";
-    status?: "playing" | "paused" | "stopped";
+    status?: "start" | "playing" | "paused" | "stopped";
 
     // for type emby
     mediaName?: string;
     mediaId?: string;
+    mediaSourceId?: string;
     mediaPlot?: string;
     mediaType?: string;
     mediaEvent?: "start" | "timeupdate" | "pause" | "stop";
@@ -39,45 +40,56 @@ const initialState: PlayerState = {
     source: "local",
 };
 
+function second2Tick(second: number = 0) {
+    return Math.round(second * kSecond2TickScale)
+}
 
-export const trackPlayAsync = createAppAsyncThunk<View|undefined, void>("player/track", async (_, config) => {
+export const trackPlayAsync = createAppAsyncThunk("player/track", async (_, config) => {
     const state = await config.getState()
     const emby = state.emby.emby
     const player = state.player
+    console.log("track play", player.mediaId, player.sessionId, player.startTime, player.position)
     const data = emby?.trackPlay?.({
         ...kPlaybackData,
         ItemId: player.mediaId,
+        MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,
         PlaybackStartTimeTicks: player.startTime,
-        PositionTicks: player.position,
+        PositionTicks: second2Tick(player.position),
     })
     return data
 })
 
-export const startPlayAsync = createAppAsyncThunk<View|undefined, void>("player/start", async (_, config) => {
+export const startPlayAsync = createAppAsyncThunk("player/start", async (_, config) => {
     const state = await config.getState()
     const emby = state.emby.emby
     const player = state.player
+    console.log("start play", player.mediaId, player.sessionId, player.startTime, player.position)
     const data = await emby?.startPlay?.({
         ...kPlayStartData,
         ItemId: player.mediaId,
+        MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,
-        PlaybackStartTimeTicks: player.startTime,
-        PositionTicks: 0,
+        SeekableRanges: [{start: 0, end: second2Tick(player.duration)}],
+        PlaybackStartTimeTicks: second2Tick(player.startTime),
+        PositionTicks: second2Tick(player.position),
     })
     return data
 })
 
-export const stopPlayAsync = createAppAsyncThunk<View|undefined, void>("player/stop", async (_, config) => {
+export const stopPlayAsync = createAppAsyncThunk("player/stop", async (_, config) => {
     const state = await config.getState()
     const emby = state.emby.emby
     const player = state.player
+    console.log("stop play", player.mediaId, player.sessionId, player.startTime, player.position)
     const data = await emby?.stopPlay?.({
         ...kPlayStartData,
         ItemId: player.mediaId,
+        MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,
-        PlaybackStartTimeTicks: player.startTime,
-        PositionTicks: 0,
+        SeekableRanges: [{start: 0, end: second2Tick(player.duration)}],
+        PlaybackStartTimeTicks: second2Tick(player.startTime),
+        PositionTicks: second2Tick(player.position),
     })
     return data
 })

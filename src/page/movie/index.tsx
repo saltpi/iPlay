@@ -21,6 +21,7 @@ import { printException } from "@helper/log";
 import { updatePlayerState } from "@store/playerSlice";
 import { kSecond2TickScale } from "@model/PlaybackData";
 import { PlayEventType } from "@view/mpv/Player";
+import { PlayerMonitor } from "@view/PlayerMonitor";
 
 const style = StyleSheet.create({
     overview: {
@@ -99,8 +100,9 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 dispatch(updatePlayerState({
                     source: "emby",
                     mediaId: movie.Id,
+                    mediaSourceId: playbackInfo.MediaSources[0].Id,
                     sessionId: playbackInfo.PlaySessionId,
-                    startTime: Date.now() * kSecond2TickScale,
+                    startTime: Date.now(),
                     mediaPoster: poster,
                     position: 0,
                 }))
@@ -114,6 +116,11 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         fetchPlayUrl()
             .then(setUrl)
             .catch(printException)
+        return () => {
+            dispatch(updatePlayerState({
+                status: "stopped",
+            }))
+        }
     }, [])
 
     useEffect(() => {
@@ -151,8 +158,9 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         setIsPlaying(true)
         setLoading(true)
         dispatch(updatePlayerState({
-            status: "playing",
+            status: "start",
             mediaName: detail?.Name,
+            startTime: Date.now(),
         }))
     }
 
@@ -160,12 +168,14 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         setLoading(false)
         if (data.type === PlayEventType.PlayEventTypeOnProgress) {
             dispatch(updatePlayerState({
+                status: "playing",
                 mediaEvent: "timeupdate",
                 position: data.position,
                 duration: data.duration,
             }))
         } else if (data.type === PlayEventType.PlayEventTypeOnPause) {
             dispatch(updatePlayerState({
+                status: "paused",
                 mediaEvent: "pause",
                 isPaused: true,
             }))
@@ -225,6 +235,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {detail?.People.map((actor, index) => <ActorCard key={index} theme={themeStyle} actor={actor} />)}
             </ScrollView>
+            <PlayerMonitor />
         </ScrollView>
     )
 }
