@@ -25,7 +25,6 @@ static NSUInteger const kIconSize = 48;
 @property (nonatomic, strong) UILabel *durationLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, assign) CGRect initialBounds;
-@property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, assign) BOOL isControlsVisible;
 @property (nonatomic, assign) BOOL isFullscreen;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
@@ -166,10 +165,6 @@ static NSUInteger const kIconSize = 48;
 
     self.progressBar.observedProgress = self.progress;
     [self.sliderBar addTarget:self action:@selector(_seekToPlay:) forControlEvents:UIControlEventValueChanged];
-
-    if (self.isControlsVisible) {
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
-    }
   
     @weakify(self);
     [RACObserve(self, isFullscreen) subscribeNext:^(id  _Nullable x) {
@@ -192,8 +187,6 @@ static NSUInteger const kIconSize = 48;
         self.controlView.hidden = NO;
     }];
     self.isControlsVisible = YES;
-    [self.timer invalidate];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
 }
 
 - (void)hideControls {
@@ -358,7 +351,6 @@ static NSUInteger const kIconSize = 48;
             break;
         }
         case PlayEventTypeOnPause: {
-            BOOL isPlaying = ![data[@"state"] boolValue];
             payload = @{
                 @"type": @(PlayEventTypeOnPause),
             };
