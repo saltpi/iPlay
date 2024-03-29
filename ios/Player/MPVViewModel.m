@@ -55,9 +55,29 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
     }
 }
 
+void on_mpv_wakeup(void *ctx) {
+    __block MPVViewModel *self = (__bridge MPVViewModel *)ctx;
+    @weakify(self);
+    dispatch_async(mpvEventRunloop, ^{
+        while (1) {
+            @strongify(self);
+            if (self.mpv == nil) break;
+            mpv_event *event = mpv_wait_event(self.mpv, 0);
+            if (event->event_id == MPV_EVENT_NONE) break;
+            if (event->event_id == MPV_EVENT_SHUTDOWN) {
+                [self destroy];
+                break;
+            }
+            if (self.mpv) {
+                on_mpv_event(self.mpv, event, self);
+            } else {
+                break;
+            }
+        }
+    });
+}
 
 @interface MPVViewModel ()
-@property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
 @end
 
@@ -96,26 +116,7 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
-        
-        @weakify(self);
-        dispatch_async(mpvEventRunloop, ^{
-            while (1) {
-                @strongify(self);
-                if (self == nil ||
-                    self.mpv == nil) {
-                    break;
-                }
-                mpv_event *event = mpv_wait_event(self.mpv, -1);
-                if (event->event_id == MPV_EVENT_SHUTDOWN)
-                    break;
-                
-                if (self.mpv) {
-                    on_mpv_event(self.mpv, event, self);
-                } else {
-                    break;
-                }
-            }
-        });
+        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
         
     } else {
         NSLog(@"view is not kind of CAMetalLayer");
