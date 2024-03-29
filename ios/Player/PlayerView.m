@@ -90,7 +90,6 @@ static NSUInteger const kIconSize = 48;
     [self.progressBar remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(superview);
         make.bottom.equalTo(superview).multipliedBy(0.85);
-        make.height.equalTo(4);
         make.centerX.equalTo(superview);
         make.width.equalTo(superview).with.multipliedBy(0.90);
     }];
@@ -98,7 +97,6 @@ static NSUInteger const kIconSize = 48;
     [self.sliderBar remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         make.width.equalTo(self.progressBar);
-        make.height.equalTo(4);
         make.center.equalTo(self.progressBar);
     }];
   
