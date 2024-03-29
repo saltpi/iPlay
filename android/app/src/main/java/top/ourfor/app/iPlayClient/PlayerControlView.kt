@@ -126,6 +126,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val label = TextView(context)
         label.textSize = 12.0F
         label.setTextColor(Color.WHITE)
+        label.text = formatTime(0, 0)
         label.id = resId.getAndIncrement()
         label
     }
@@ -217,21 +218,18 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         if (value == null) return
         if (name.equals("duration")) {
             val duration = value as Double
-            post {
-                progressBar.max = duration.toInt()
-                durationLabel.text = duration.toString()
-                durationLabel.text = formatTime(progressBar.progress, progressBar.max)
-            }
+            progressBar.max = duration.toInt()
+            durationLabel.text = duration.toString()
+            durationLabel.text = formatTime(progressBar.progress, progressBar.max)
+            requestLayout()
         } else if (name.equals("time-pos")) {
             if (!shouldUpdateProgress) {
                 return
             }
 
             val time = value as Double
-            post {
-                progressBar.progress = time.toInt()
-                durationLabel.text = formatTime(progressBar.progress, progressBar.max)
-            }
+            progressBar.progress = time.toInt()
+            durationLabel.text = formatTime(progressBar.progress, progressBar.max)
         }
     }
 

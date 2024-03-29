@@ -5,6 +5,7 @@ import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "@view/StatusBar";
 import { useAppSelector } from "@hook/store";
+import { selectThemeBasicStyle } from "@store/themeSlice";
 
 const style = StyleSheet.create({
     page: {
@@ -58,6 +59,7 @@ const settings: SettingItemProps[] = [
 export function Page({navigation}: PropsWithNavigation<"default">) {
     const insets = useSafeAreaInsets()
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const theme = useAppSelector(selectThemeBasicStyle)
     const onPress = (setting: SettingItemProps) => {
         if (setting.onPress) {
             setting.onPress.bind(null, setting, navigation)()
@@ -81,7 +83,9 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                 style={{flex: 1}}>
                 <View>
                     {settings.map((setting, idx) => 
-                        <SettingItem key={idx} {...setting} onPress={() => onPress(setting)} />)}
+                        <SettingItem key={idx} {...setting}
+                            theme={theme} 
+                            onPress={() => onPress(setting)} />)}
                 </View>
             </ScrollView>
         </SafeAreaView>

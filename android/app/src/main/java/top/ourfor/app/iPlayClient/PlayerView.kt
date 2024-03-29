@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import top.ourfor.app.iPlayClient.Player.PlayEventType
+import java.time.Duration
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -32,8 +33,10 @@ class PlayerView(
     private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
+    private var duration: Double = 0.0
+    private var position: Double = 0.0
     var themedReactContext: ThemedReactContext? = null
-    var onPlayStateChange: (state: Int) -> Unit  = {}
+    var onPlayStateChange: (data: HashMap<String, Any>) -> Unit  = {}
     var url: String? = null
         set(value) {
             field = value
@@ -79,15 +82,33 @@ class PlayerView(
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {
-        this.controlView?.onPropertyChange(name, value)
+        this.controlView?.post {
+            this.controlView?.onPropertyChange(name, value)
+        }
+        if (value == null) return
+        
         if (name.equals("time-pos") ||
-            name.equals("pause") ||
+            name.equals("paused") ||
             name.equals("paused-for-cache")) {
             var state = PlayEventType.PlayEventTypeOnProgress
-            if (name.equals("time-pos")) state = PlayEventType.PlayEventTypeOnProgress;
-            else if (name.equals("pause")) state = PlayEventType.PlayEventTypeOnPause;
-            else if (name.equals("paused-for-cache")) state = PlayEventType.PlayEventTypeOnPauseForCache
-            onPlayStateChange(state.value)
+            val data = HashMap<String, Any>()
+            if (name.equals("time-pos")) {
+                state = PlayEventType.PlayEventTypeOnProgress
+                position = value as Double
+                data.put("duration", duration);
+                data.put("position", position);
+            } else if (name.equals("paused")) {
+                state = PlayEventType.PlayEventTypeOnPause
+                data.put("duration", duration);
+                data.put("position", position);
+            } else if (name.equals("paused-for-cache")) {
+                state = PlayEventType.PlayEventTypeOnPauseForCache
+            }
+
+            data.put("type", state.value)
+            onPlayStateChange(data)
+        } else if (name.equals("duration")) {
+            duration = value as Double
         }
     }
 

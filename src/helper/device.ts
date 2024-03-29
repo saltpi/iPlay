@@ -50,5 +50,11 @@ export const Version = {
 }
 
 export const Device = {
-    name: DeviceInfo.getDeviceName(),
+    name: "",
+    did: "",
+
+    init: async () => {
+        Device.did = await DeviceInfo.getUniqueId();
+        Device.name = await DeviceInfo.getDeviceName();
+    }
 }

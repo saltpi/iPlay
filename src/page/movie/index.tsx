@@ -1,5 +1,5 @@
 import { PropsWithNavigation } from "@global";
-import { useAppSelector } from "@hook/store";
+import { useAppDispatch, useAppSelector } from "@hook/store";
 import { MediaDetail } from "@model/MediaDetail";
 import { Season } from "@model/Season";
 import { ActorCard } from "@view/ActorCard";
@@ -18,6 +18,9 @@ import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { printException } from "@helper/log";
+import { updatePlayerState } from "@store/playerSlice";
+import { PlayEventType } from "@view/mpv/Player";
+import { PlaybackStateType } from "@view/mpv/type";
 
 const style = StyleSheet.create({
     overview: {
@@ -73,6 +76,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const themeStyle = useAppSelector(selectThemeBasicStyle)
     const emby = useAppSelector(state => state.emby?.emby)
     const showVideoLink = useAppSelector(state => state.theme.showVideoLink)
+    const dispatch = useAppDispatch()
     const {title, type, movie} = route.params
     const [url, setUrl] = useState<string>()
     const [isPlaying, setIsPlaying] = useState(false)
@@ -88,10 +92,22 @@ export function Page({route}: PropsWithNavigation<"movie">) {
 
     const fetchPlayUrl = useCallback(async () => {
         let url = getPlayUrl(detail)
+        console.log(`fetch play url`, url)
         if (!url || url?.length === 0) {
             const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
+            console.log(`playback info`, playbackInfo)
             if (playbackInfo) {
                 url = emby?.videoUrl?.(playbackInfo) ?? ""
+                console.log(`url from playback`, url)
+                dispatch(updatePlayerState({
+                    source: "emby",
+                    mediaId: movie.Id,
+                    mediaSourceId: playbackInfo.MediaSources[0].Id,
+                    sessionId: playbackInfo.PlaySessionId,
+                    startTime: Date.now(),
+                    mediaPoster: poster,
+                    position: 0,
+                }))
             }
         }
         return url
@@ -102,6 +118,11 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         fetchPlayUrl()
             .then(setUrl)
             .catch(printException)
+        return () => {
+            dispatch(updatePlayerState({
+                status: "stopped",
+            }))
+        }
     }, [])
 
     useEffect(() => {
@@ -138,7 +159,32 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         setUrl(url)
         setIsPlaying(true)
         setLoading(true)
+        dispatch(updatePlayerState({
+            status: "start",
+            mediaName: detail?.Name,
+            startTime: Date.now(),
+        }))
     }
+
+    const onPlaybackStateChanged = (data: PlaybackStateType) => {
+        setLoading(false)
+        if (data.type === PlayEventType.PlayEventTypeOnProgress) {
+            dispatch(updatePlayerState({
+                status: "playing",
+                mediaEvent: "TimeUpdate",
+                position: data.position,
+                duration: data.duration,
+            }))
+        } else if (data.type === PlayEventType.PlayEventTypeOnPause) {
+            console.log("player paused")
+            dispatch(updatePlayerState({
+                status: "paused",
+                mediaEvent: "Pause",
+                isPaused: true,
+            }))
+        }
+    }
+
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     const iconSize = preferedSize(24, 36, windowWidth/10)
     const playButtonStyle = {
@@ -153,14 +199,8 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}
-                source={{uri: url, title: detail?.Name}}
-                controls={true}
-                poster={poster}
-                fullscreenAutorotate={true}
-                fullscreenOrientation="landscape"
-                onPlaybackStateChanged={state => setLoading(false)}
-                onProgress={progress => console.log("progress", progress)}
-                onError={onError}
+                source={{uri: url, title: detail?.Name ?? ""}}
+                onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             /> : null}
             {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}

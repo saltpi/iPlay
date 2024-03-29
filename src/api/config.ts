@@ -62,7 +62,7 @@ export function playUrl(site: EmbySite, path: string|PlaybackInfo) {
             if (source.Container === "strm") {
                 return source.Path
             } else {
-                const streamPath = source.DirectStreamUrl
+                const streamPath = source.DirectStreamUrl ?? source.Path
                 if (streamPath?.startsWith("http")) return streamPath
                 else {
                     return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby${streamPath}`

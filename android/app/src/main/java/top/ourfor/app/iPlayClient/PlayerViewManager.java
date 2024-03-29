@@ -40,8 +40,16 @@ public class PlayerViewManager extends SimpleViewManager<View> {
         playerView.setThemedReactContext(themedReactContext);
         playerView.setOnPlayStateChange((state) -> {
             WritableMap event = Arguments.createMap();
-            event.putInt("state", state);
-            ReactContext context = (ReactContext) themedReactContext;
+            state.forEach((k, v) -> {
+                if (v instanceof Double) {
+                    event.putDouble(k, (Double) v);
+                } else if (v instanceof Integer) {
+                    event.putInt(k, (Integer)v);
+                } else {
+                    event.putString(k, v.toString());
+                }
+            });
+            ReactContext context = themedReactContext;
             context.getJSModule(RCTEventEmitter.class)
                     .receiveEvent(playerView.getId(), "onPlayStateChange", event);
             return null;

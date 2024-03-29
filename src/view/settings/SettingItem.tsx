@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableHighlight, View, useColorScheme } from "react-native";
 import { Image } from '@view/Image';
-import { Navigation } from "@global";
+import { Navigation, ThemeBasicStyle } from "@global";
 import VideoIcon from "@asset/video.svg"
 import EarphoneIcon from "@asset/earphone.svg"
 import TrashIcon from "@asset/trash.svg"
@@ -57,22 +57,21 @@ export type IconType = keyof typeof Icon;
 export interface SettingItemProps {
     icon: IconType;
     label: string;
+    theme?: ThemeBasicStyle;
     onPress?: (setting?: SettingItemProps, navigation?: Navigation) => void;
 }
 
-export function SettingItem(props: SettingItemProps) {
-    const SettingIcon = Icon[props.icon];
-    const color = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+export function SettingItem({theme, icon, label, onPress}: SettingItemProps) {
+    const SettingIcon = Icon[icon];
     return (
-        <TouchableHighlight onPress={() => props.onPress?.()} underlayColor={backgroundColor}>
-        <View style={{...style.root, backgroundColor}}>
+        <TouchableHighlight onPress={() => onPress?.()} underlayColor={theme?.backgroundColor}>
+        <View style={{...style.root, ...theme}}>
             {SettingIcon ? <SettingIcon
                 width={style.icon.width}
                 style={style.icon} /> : null}
-            <Text style={{...style.label, color}}>{props.label}</Text>
+            <Text style={{...style.label, ...theme}}>{label}</Text>
             <Icon.Indicator width={style.indicator.width} 
-                stroke={color}
+                stroke={theme?.color}
                 style={style.indicator} />
         </View>
         </TouchableHighlight>

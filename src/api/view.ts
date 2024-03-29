@@ -8,11 +8,12 @@ import { Episode } from "@model/Episode";
 import { EmbySite } from "@model/EmbySite";
 import { Device, Version } from "@helper/device";
 import { UserData } from "@model/UserData";
+import { PlaybackData, kPlayStopData, kPlaybackData } from "@model/PlaybackData";
 
 export const CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,
     "X-Emby-Device-Name": Device.name,
-    "X-Emby-Device-Id": Version.deviceId,
+    "X-Emby-Device-Id": Device.did,
     "X-Emby-Client-Version": Version.versionCode, 
 } as any
 
@@ -267,4 +268,40 @@ export async function markFavorite(site: EmbySite, id: number, favorite: boolean
     })
     const data = await response.json() as UserData
     return data
+}
+
+export async function play(site: EmbySite, 
+    path: ""|"Progress"|"Stopped", data: Partial<PlaybackData>) {
+    const params = {
+        "X-Emby-Language": "zh-cn"
+    }
+    const body: PlaybackData = {
+        ...kPlaybackData,
+        ...data
+    }
+    const url = makeEmbyUrl(params, `emby/Sessions/Playing/${path}`, site.server)
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            ...CLIENT_HEADERS,
+            "Content-Type": "application/json",
+            "X-Emby-Token": site.user.AccessToken,
+            reqformat: "json"
+        },
+        body: JSON.stringify(body)
+    })
+    const json = await response.json() as UserData
+    return json
+}
+
+export async function startPlay(site: EmbySite, info: Partial<PlaybackData>) {
+    return await play(site, "", info)
+}
+
+export async function trackPlay(site: EmbySite, info: Partial<PlaybackData>) {
+    return await play(site, "Progress", info)
+}
+
+export async function stopPlay(site: EmbySite, info: Partial<PlaybackData>) {
+    return await play(site, "Stopped", info)
 }
