@@ -81,7 +81,7 @@ class PlayerView(
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {
-        post {
+        this.controlView?.post {
             this.controlView?.onPropertyChange(name, value)
         }
         if (value == null) return

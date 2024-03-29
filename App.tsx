@@ -11,6 +11,7 @@ import { updateTheme } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { printException } from '@helper/log';
 import { Device } from '@helper/device';
+import { PlayerMonitor } from '@view/PlayerMonitor';
 
 function App() {
     const [inited, setInited] = useState(false);
@@ -55,6 +56,7 @@ function App() {
                 <Router />
                 </SafeAreaProvider>
                 <Toast config={toastConfig} />
+                <PlayerMonitor />
                 </PersistGate>
             </Provider>
         );

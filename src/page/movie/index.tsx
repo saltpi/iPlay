@@ -19,9 +19,7 @@ import { preferedSize, windowWidth } from "@helper/device";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { printException } from "@helper/log";
 import { updatePlayerState } from "@store/playerSlice";
-import { kSecond2TickScale } from "@model/PlaybackData";
 import { PlayEventType } from "@view/mpv/Player";
-import { PlayerMonitor } from "@view/PlayerMonitor";
 import { PlaybackStateType } from "@view/mpv/type";
 
 const style = StyleSheet.create({
@@ -232,7 +230,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {detail?.People.map((actor, index) => <ActorCard key={index} theme={themeStyle} actor={actor} />)}
             </ScrollView>
-            <PlayerMonitor />
         </ScrollView>
     )
 }

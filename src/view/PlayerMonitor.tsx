@@ -31,6 +31,7 @@ export function PlayerMonitor() {
     }, [player, emby, dispatch])
 
     useEffect(() => {
+        dispatch(stopPlayAsync())
         return () => throttleUpdate.cancel()
     }, [])
     return null
