@@ -545,6 +545,7 @@ static NSUInteger const kIconSize = 48;
 #pragma mark - NSObject
 - (void)dealloc {
     [self.player stop];
+    [self.player destroy];
 }
 
 #pragma mark - Setter
