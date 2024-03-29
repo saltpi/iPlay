@@ -86,8 +86,11 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
+        
+        @weakify(self);
         dispatch_async(self.queue, ^{
             while (1) {
+                @strongify(self);
                 mpv_event *event = mpv_wait_event(self.mpv, -1);
                 if (event->event_id == MPV_EVENT_SHUTDOWN)
                     break;
