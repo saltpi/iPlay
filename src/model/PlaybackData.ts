@@ -41,8 +41,8 @@ export const kPlaybackData: PlaybackData = {
         }
     ],
     PlayMethod: "DirectPlay",
-    PlaySessionId: "2eb21e210d9445e1b6a2fced0d506adb",
-    MediaSourceId: "c3a29bc633cec7d531d3eb34b672b8e6",
+    PlaySessionId: "",
+    MediaSourceId: "",
     CanSeek: true,
     ItemId: "-1",
     EventName: "timeupdate",
