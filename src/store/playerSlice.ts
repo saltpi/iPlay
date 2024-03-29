@@ -44,13 +44,19 @@ function second2Tick(second: number = 0) {
     return Math.round(second * kSecond2TickScale)
 }
 
-export const trackPlayAsync = createAppAsyncThunk("player/track", async (_, config) => {
+export type TrackPlayOption = {
+    isPause?: boolean
+}
+
+export const trackPlayAsync = createAppAsyncThunk("player/track", async ({isPause = false}: TrackPlayOption, config) => {
     const state = await config.getState()
     const emby = state.emby.emby
     const player = state.player
-    console.log("track play", player.mediaId, player.sessionId, player.startTime, player.position)
+    console.log(`track ${isPause ? "pause" : "play"}`, player.mediaId, player.sessionId, player.startTime, player.position)
     const data = emby?.trackPlay?.({
         ...kPlaybackData,
+        IsPaused: isPause,
+        EventName: isPause ? "Pause" : "TimeUpdate",
         ItemId: player.mediaId,
         MediaSourceId: player.mediaSourceId,
         PlaySessionId: player.sessionId,

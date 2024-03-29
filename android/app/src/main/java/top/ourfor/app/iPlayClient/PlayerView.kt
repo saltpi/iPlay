@@ -33,7 +33,8 @@ class PlayerView(
     private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
-    private var duration: Double = 0.0;
+    private var duration: Double = 0.0
+    private var position: Double = 0.0
     var themedReactContext: ThemedReactContext? = null
     var onPlayStateChange: (data: HashMap<String, Any>) -> Unit  = {}
     var url: String? = null
@@ -87,16 +88,19 @@ class PlayerView(
         if (value == null) return
         
         if (name.equals("time-pos") ||
-            name.equals("pause") ||
+            name.equals("paused") ||
             name.equals("paused-for-cache")) {
             var state = PlayEventType.PlayEventTypeOnProgress
             val data = HashMap<String, Any>()
             if (name.equals("time-pos")) {
                 state = PlayEventType.PlayEventTypeOnProgress
+                position = value as Double
                 data.put("duration", duration);
-                data.put("position", value as Double);
-            } else if (name.equals("pause")) {
+                data.put("position", position);
+            } else if (name.equals("paused")) {
                 state = PlayEventType.PlayEventTypeOnPause
+                data.put("duration", duration);
+                data.put("position", position);
             } else if (name.equals("paused-for-cache")) {
                 state = PlayEventType.PlayEventTypeOnPauseForCache
             }

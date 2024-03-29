@@ -17,16 +17,14 @@ export function PlayerMonitor() {
     useEffect(() => {
         if (player.status === "playing") {
             throttleUpdate(() => {
-                dispatch(trackPlayAsync())
+                dispatch(trackPlayAsync({isPause: false}))
             })
+        } else if (player.status === "paused") {
+            dispatch(trackPlayAsync({isPause: true}))
         } else if (player.status === "start") {
-            throttleUpdate(() => {
-                dispatch(startPlayAsync())
-            })
+            dispatch(startPlayAsync())
         } else if (player.status === "stopped") {
-            throttleUpdate(() => {
-                dispatch(stopPlayAsync())
-            })
+            dispatch(stopPlayAsync())
         }
     }, [player, emby, dispatch])
 

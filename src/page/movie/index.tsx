@@ -95,6 +95,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         console.log(`fetch play url`, url)
         if (!url || url?.length === 0) {
             const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
+            console.log(`playback info`, playbackInfo)
             if (playbackInfo) {
                 url = emby?.videoUrl?.(playbackInfo) ?? ""
                 console.log(`url from playback`, url)
@@ -175,6 +176,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 duration: data.duration,
             }))
         } else if (data.type === PlayEventType.PlayEventTypeOnPause) {
+            console.log("player paused")
             dispatch(updatePlayerState({
                 status: "paused",
                 mediaEvent: "Pause",
