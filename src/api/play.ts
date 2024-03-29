@@ -22,7 +22,7 @@ export async function getPlaybackInfo(site: EmbySite, id: number) {
         "X-Emby-Token": site.user.AccessToken,
         "content-type": "text/plain"
     }
-    const response = await fetch(url, {method: "POST", body: "", headers})
+    const response = await fetch(url, {method: "POST", body: JSON.stringify(device), headers})
     return await response.json() as PlaybackInfo
 }
 
