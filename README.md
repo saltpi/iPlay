@@ -37,6 +37,8 @@ Supports Android and iOS
 
 - [x] Support Emby
 - [x] Internal mpv player
+- [ ] Download video and audio
+- [ ] Audio player
 - [ ] Support subscribe movie and series
 - [ ] User interface
 - [ ] Enhance internal player
@@ -57,7 +59,8 @@ Download the development package
 ## Third-party Dependencies
 
 ### Player
-- [MobileVLCKit](http://code.videolan.org/videolan/VLCKit.git)
+
+- [MPVKit](https://github.com/cxfksword/MPVKit.git)
 - [android-mpv](https://github.com/mpv-android/mpv-android)
 
 ## UI Design
