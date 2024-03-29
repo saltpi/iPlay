@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
+import { selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
 import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 
@@ -41,6 +41,7 @@ export function Page() {
     const headerTitleAlign = useAppSelector((state) => state.theme.headerTitleAlign);
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const theme = useAppSelector(selectThemeBasicStyle)
 
     const updateTitleAlign = () => {
         dispatch(updateTheme(s => {
@@ -57,7 +58,7 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
                 <View style={style.inline}>
-                    <Text style={style.label}>菜单栏下边距</Text>
+                    <Text style={{...style.label, ...theme}}>菜单栏下边距</Text>
                     <TextInput style={{...style.input, color}}
                         keyboardType="numeric"
                         value={menuBarPaddingOffset.toString()}
@@ -65,12 +66,12 @@ export function Page() {
                         />
                 </View>
                 <View style={style.inline}>
-                    <Text style={style.label}>显示视频链接</Text>
+                    <Text style={{...style.label, ...theme}}>显示视频链接</Text>
                     <Switch value={showVideoLink}
                         onChange={() => { dispatch(updateShowVideoLink(!showVideoLink)) }} />
                 </View>
                 <View style={style.inline}>
-                    <Text style={style.label}>导航栏标题居中(默认居左, 仅安卓)</Text>
+                    <Text style={{...style.label, ...theme}}>导航栏标题居中(默认居左, 仅安卓)</Text>
                     <Switch value={headerTitleAlign === 'center'}
                         onChange={updateTitleAlign} />
                 </View>

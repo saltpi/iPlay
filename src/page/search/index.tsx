@@ -51,7 +51,6 @@ export function Page() {
     const [loading, setLoading] = useState(false)
     const [result, setResult] = useState<Media[]>([])
     const [searchKeyword, setSearchKeyword] = useState("")
-    const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     useEffect(() => {
@@ -85,6 +84,7 @@ export function Page() {
                 <TextInput style={{...style.searchInput, ...theme}} 
                     value={searchKeyword}
                     onChangeText={setSearchKeyword}
+                    placeholderTextColor={theme.color}
                     placeholder="搜索" />
                 <View style={style.recommendations}>
                     {medias.map((media, i) => 

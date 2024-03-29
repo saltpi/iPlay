@@ -1,4 +1,4 @@
-import {forwardRef, useEffect, useRef} from 'react';
+import {forwardRef, useEffect, useImperativeHandle, useRef} from 'react';
 import {
     ViewProps,
     requireNativeComponent,
@@ -15,8 +15,8 @@ export const MPVPlayer =
     requireNativeComponent<MPVPlayerProps>('PlayerViewManager');
 
 
-export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoProps) => {
-    const ref = useRef(null);
+export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoProps, ref) => {
+    const nativeRef = useRef(null);
     const { source, ...rest } = props;
 
     const onPlayStateChange = (s: any) => {
@@ -24,11 +24,21 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
         props.onPlaybackStateChanged?.(state);
     };
 
+    useImperativeHandle(
+        ref,
+        () => ({
+            stop: () => null,
+            resume: () => null,
+            pause: () => null,
+        }),
+        [],
+    );
+
     useEffect(() => {
     }, []);
 
 
-    return <MPVPlayer ref={ref} 
+    return <MPVPlayer ref={nativeRef} 
             title={source.title} 
             url={source.uri} 
             onPlayStateChange={onPlayStateChange}

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@hook/store';
 import { embyUrl } from '@model/EmbySite';
 import { useNavigation } from '@react-navigation/native';
 import { loginToSiteAsync } from '@store/embySlice';
+import { selectThemeBasicStyle } from '@store/themeSlice';
 import {useState} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -55,7 +56,7 @@ export function Page() {
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
-    const color = useAppSelector(state => state.theme.fontColor);
+    const theme = useAppSelector(selectThemeBasicStyle)
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
@@ -103,28 +104,31 @@ export function Page() {
     return (
         <SafeAreaView style={{flex: 1, backgroundColor}}>
             <View style={style.inputLine}>
-                <Text style={style.inputLabel}>服务器</Text>
+                <Text style={{...style.inputLabel, ...theme}}>服务器</Text>
                 <TextInput
                     placeholder="https://server.emby.media"
-                    style={{...style.input, color, backgroundColor}}
+                    style={{...style.input, ...theme}}
+                    placeholderTextColor={theme.color}
                     onChangeText={onChangeServer}
                     value={server}
                 />
             </View>
             <View style={style.inputLine}>
-                <Text style={{...style.inputLabel, color}}>用户名</Text>
+                <Text style={{...style.inputLabel, ...theme}}>用户名</Text>
                 <TextInput
                     placeholder="guest"
-                    style={{...style.input, color, backgroundColor}}
+                    style={{...style.input, ...theme}}
+                    placeholderTextColor={theme.color}
                     onChangeText={onChangeUsername}
                     value={username}
                 />
             </View>
             <View style={style.inputLine}>
-                <Text style={style.inputLabel}>密码</Text>
+                <Text style={{...style.inputLabel, ...theme}}>密码</Text>
                 <TextInput
                     placeholder="password"
-                    style={{...style.input, color, backgroundColor}}
+                    style={{...style.input, ...theme}}
+                    placeholderTextColor={theme.color}
                     onChangeText={onChangePassword}
                     value={password}
                 />
