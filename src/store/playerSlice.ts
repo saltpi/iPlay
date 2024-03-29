@@ -11,7 +11,7 @@ import { kPlaybackData, kPlayStartData, kSecond2TickScale } from '@model/Playbac
 
 interface PlayerState {
     source: "emby" | "local";
-    status?: "start" | "playing" | "paused" | "stopped";
+    status?: undefined | "start" | "playing" | "paused" | "stopped";
 
     // for type emby
     mediaName?: string;
@@ -91,6 +91,7 @@ export const stopPlayAsync = createAppAsyncThunk("player/stop", async (_, config
     const state = await config.getState()
     const emby = state.emby.emby
     const player = state.player
+    if (!player.mediaId) return
     console.log("stop play", player.mediaId, player.sessionId, player.startTime, player.position)
     const data = await emby?.stopPlay?.({
         ...kPlayStartData,

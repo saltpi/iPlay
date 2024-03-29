@@ -107,7 +107,7 @@ public class PlayerViewModel implements Player {
             mpv.observeProperty(0, "time-pos", MPV.MPV_FORMAT_DOUBLE);
             mpv.observeProperty(0, "duration", MPV.MPV_FORMAT_DOUBLE);
             mpv.observeProperty(0, "paused-for-cache", MPV.MPV_FORMAT_FLAG);
-            mpv.observeProperty(0, "paused", MPV.MPV_FORMAT_FLAG);
+            mpv.observeProperty(0, "pause", MPV.MPV_FORMAT_FLAG);
             eventLoop = new Thread(() -> {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);

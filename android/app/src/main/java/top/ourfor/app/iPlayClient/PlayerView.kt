@@ -82,14 +82,13 @@ class PlayerView(
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {
-        Log.d(TAG, "$name = $value")
         this.controlView?.post {
             this.controlView?.onPropertyChange(name, value)
         }
         if (value == null) return
         
         if (name.equals("time-pos") ||
-            name.equals("paused") ||
+            name.equals("pause") ||
             name.equals("paused-for-cache")) {
             var state = PlayEventType.PlayEventTypeOnProgress
             val data = HashMap<String, Any>()
@@ -98,7 +97,7 @@ class PlayerView(
                 position = value as Double
                 data.put("duration", duration);
                 data.put("position", position);
-            } else if (name.equals("paused")) {
+            } else if (name.equals("pause")) {
                 state = PlayEventType.PlayEventTypeOnPause
                 data.put("duration", duration);
                 data.put("position", position);

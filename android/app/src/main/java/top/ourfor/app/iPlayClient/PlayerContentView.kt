@@ -17,6 +17,9 @@ class PlayerContentView(context: Context) : SurfaceView(context), SurfaceHolder.
 
     fun playFile(filePath: String) {
         this.filePath = filePath
+        if (filePath != null) {
+            this.viewModel.loadVideo(filePath)
+        }
     }
 
     // Called when back button is pressed, or app is shutting down
