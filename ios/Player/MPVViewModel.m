@@ -6,6 +6,9 @@
 //
 
 #import "MPVViewModel.h"
+
+static dispatch_queue_t mpvEventRunloop = nil;
+
 @import MPVKit;
 
 void on_progress_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
@@ -60,6 +63,13 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 
 @implementation MPVViewModel
 
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        mpvEventRunloop = dispatch_queue_create("mpv-player-queue", DISPATCH_QUEUE_CONCURRENT);
+    });
+}
+
 - (instancetype)initWithLayer:(CAMetalLayer *)layer {
     self = [self init];
     if (self) {
@@ -88,9 +98,10 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
         
         @weakify(self);
-        dispatch_async(self.queue, ^{
+        dispatch_async(mpvEventRunloop, ^{
             while (1) {
                 @strongify(self);
+                if (self == nil) break;
                 mpv_event *event = mpv_wait_event(self.mpv, -1);
                 if (event->event_id == MPV_EVENT_SHUTDOWN)
                     break;
@@ -199,13 +210,6 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
         mpv_destroy(_mpv);
         _mpv = nil;
     }
-}
-
-- (dispatch_queue_t)queue {
-    if (!_queue) {
-        _queue = dispatch_queue_create("mpv-player-queue", NULL);
-    }
-    return _queue;
 }
 
 @end

@@ -71,6 +71,6 @@ Download the development package
 
 ## Feedback & Communication
 
-* [iPlay product discussion group](https://t.me/boost?c=2045428505)
+* [iPlay product discussion group](https://t.me/iPlayClient)
 
 * [Bug a report](https://365.kdocs.cn/l/cile26Rklddg?from=docs&reqtype=kdocs&startTime=1711105971325)
