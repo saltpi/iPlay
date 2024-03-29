@@ -22,7 +22,8 @@ const persistConfig = {
   storage,
   blacklist: [
       "menu",
-      "theme"
+      "theme",
+      "player"
   ]
 }
 
@@ -54,7 +55,10 @@ const reducer = combineReducers({
   }, embyReducer),
   player: persistReducer({
       key: [Env.storeKey, "player"].join("/"),
-      storage
+      storage,
+      blacklist: [
+        "status"
+      ]
   }, playerReducer),
 })
 

@@ -1,12 +1,15 @@
 import {PropsWithNavigation} from '@global';
 import { printException } from '@helper/log';
 import { Toast } from '@helper/toast';
-import { useAppSelector } from '@hook/store';
+import { useAppDispatch, useAppSelector } from '@hook/store';
 import { Episode } from "@model/Episode";
+import { updatePlayerState } from '@store/playerSlice';
 import { selectThemeBasicStyle } from '@store/themeSlice';
 import { EpisodeCard } from '@view/EpisodeCard';
 import { Spin } from '@view/Spin';
 import { Video } from '@view/Video';
+import { PlayEventType } from '@view/mpv/Player';
+import { PlaybackStateType } from '@view/mpv/type';
 import { ExternalPlayer } from '@view/player/ExternalPlayer';
 import {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
@@ -69,14 +72,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const videoRef = useRef<any>(null);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
-    const onError = (e: any) => {
-        Toast.show({
-            topOffset: insets.top,
-            type: 'error',
-            text2: JSON.stringify(e)
-        })
-        navigation.goBack()
-    };
+    const dispatch = useAppDispatch()
 
     const playEpisode = (episode: Episode) => {
         setLoading(true)
@@ -88,24 +84,55 @@ export function Page({navigation, route}: PlayerPageProps) {
                 navigation.setOptions({
                     title: episode.Name
                 })
+                dispatch(updatePlayerState({
+                    source: "emby",
+                    status: "start",
+                    mediaId: episode.Id,
+                    mediaSourceId: res.MediaSources[0]?.Id,
+                    sessionId: res.PlaySessionId,
+                    startTime: Date.now(),
+                    mediaPoster: poster,
+                    position: 0,
+                }))
             })
             .catch(printException)
     }
+
+    const onPlaybackStateChanged = (data: PlaybackStateType) => {
+        if (data.type === PlayEventType.PlayEventTypeOnProgress) {
+            setLoading(false)
+            dispatch(updatePlayerState({
+                status: "playing",
+                mediaEvent: "TimeUpdate",
+                position: data.position,
+                duration: data.duration,
+            }))
+        } else if (data.type === PlayEventType.PlayEventTypeOnPause) {
+            console.log("player paused")
+            dispatch(updatePlayerState({
+                status: "paused",
+                mediaEvent: "Pause",
+                isPaused: true,
+            }))
+        }
+    }
+
     useEffect(() => {
         playEpisode(episode)
+        return () => {
+            dispatch(updatePlayerState({
+                status: "stopped",
+            }))
+        }
     }, [])
+
     return (
         <View style={style.root}>
         <View style={style.playerContainer}>
             {url ? <Video
                 source={{uri: url, title: episode.Name}}
-                controls={true}
-                poster={poster}
-                fullscreenAutorotate={true}
-                fullscreenOrientation="landscape"
                 ref={videoRef}
-                onProgress={() => setLoading(false)}
-                onError={onError}
+                onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             /> : null}
             {loading ? <Spin color={theme.color} /> : null}

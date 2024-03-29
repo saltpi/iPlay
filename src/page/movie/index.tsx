@@ -10,7 +10,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from '@view/Image';
 import { Toast } from "@helper/toast";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Spin, SpinBox } from "@view/Spin";
 import PlayIcon from "../../asset/play.svg"
 import { getPlayUrl } from "@api/play";
@@ -77,7 +76,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const emby = useAppSelector(state => state.emby?.emby)
     const showVideoLink = useAppSelector(state => state.theme.showVideoLink)
     const dispatch = useAppDispatch()
-    const {title, type, movie} = route.params
+    const {type, movie} = route.params
     const [url, setUrl] = useState<string>()
     const [isPlaying, setIsPlaying] = useState(false)
     const [detail, setDetail] = useState<MediaDetail>();
@@ -88,7 +87,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
-    const insets = useSafeAreaInsets()
 
     const fetchPlayUrl = useCallback(async () => {
         let url = getPlayUrl(detail)
@@ -138,14 +136,6 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             .catch(printException)
     }, [emby, movie.Id])
     
-    const onError = (e: any) => {
-        setLoading(false)
-        Toast.show({
-            topOffset: insets.top,
-            type: 'error',
-            text2: JSON.stringify(e)
-        })
-    }
 
     const playVideo = async () => {
         if (!url || url?.length === 0) {
@@ -167,8 +157,8 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     }
 
     const onPlaybackStateChanged = (data: PlaybackStateType) => {
-        setLoading(false)
         if (data.type === PlayEventType.PlayEventTypeOnProgress) {
+            setLoading(false)
             dispatch(updatePlayerState({
                 status: "playing",
                 mediaEvent: "TimeUpdate",

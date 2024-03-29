@@ -20,6 +20,7 @@ export function PlayerMonitor() {
                 dispatch(trackPlayAsync({isPause: false}))
             })
         } else if (player.status === "paused") {
+            throttleUpdate.cancel()
             dispatch(trackPlayAsync({isPause: true}))
         } else if (player.status === "start") {
             dispatch(startPlayAsync())
