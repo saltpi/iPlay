@@ -35,5 +35,5 @@ export const getPlayUrl = (detail?: MediaDetail) => {
             return source.DirectStreamUrl
         }
     })
-    return urls?.[0]
+    return urls?.[0] ?? null
 }

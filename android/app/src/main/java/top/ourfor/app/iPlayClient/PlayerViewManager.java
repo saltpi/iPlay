@@ -49,7 +49,7 @@ public class PlayerViewManager extends SimpleViewManager<View> {
                     event.putString(k, v.toString());
                 }
             });
-            ReactContext context = (ReactContext) themedReactContext;
+            ReactContext context = themedReactContext;
             context.getJSModule(RCTEventEmitter.class)
                     .receiveEvent(playerView.getId(), "onPlayStateChange", event);
             return null;

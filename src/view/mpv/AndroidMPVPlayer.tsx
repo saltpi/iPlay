@@ -19,6 +19,7 @@ export const AndroidMPVPlayerView = forwardRef<any, VideoProps>((props: VideoPro
     const nativeRef = useRef(null);
     const { source, ...rest } = props;
 
+    console.log(`player source: `, source)
     const onPlayStateChange = (s: any) => {
         const state: PlaybackStateType = s.nativeEvent;
         props.onPlaybackStateChanged?.(state);

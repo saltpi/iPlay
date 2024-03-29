@@ -81,7 +81,9 @@ class PlayerView(
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {
-        this.controlView?.onPropertyChange(name, value)
+        post {
+            this.controlView?.onPropertyChange(name, value)
+        }
         if (value == null) return
         
         if (name.equals("time-pos") ||
@@ -93,9 +95,13 @@ class PlayerView(
                 state = PlayEventType.PlayEventTypeOnProgress
                 data.put("duration", duration);
                 data.put("position", value as Double);
-            } else if (name.equals("pause")) state = PlayEventType.PlayEventTypeOnPause;
-            else if (name.equals("paused-for-cache")) state = PlayEventType.PlayEventTypeOnPauseForCache
-            data.put("state", state)
+            } else if (name.equals("pause")) {
+                state = PlayEventType.PlayEventTypeOnPause
+            } else if (name.equals("paused-for-cache")) {
+                state = PlayEventType.PlayEventTypeOnPauseForCache
+            }
+
+            data.put("type", state.value)
             onPlayStateChange(data)
         } else if (name.equals("duration")) {
             duration = value as Double

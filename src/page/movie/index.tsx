@@ -22,6 +22,7 @@ import { updatePlayerState } from "@store/playerSlice";
 import { kSecond2TickScale } from "@model/PlaybackData";
 import { PlayEventType } from "@view/mpv/Player";
 import { PlayerMonitor } from "@view/PlayerMonitor";
+import { PlaybackStateType } from "@view/mpv/type";
 
 const style = StyleSheet.create({
     overview: {
@@ -93,10 +94,12 @@ export function Page({route}: PropsWithNavigation<"movie">) {
 
     const fetchPlayUrl = useCallback(async () => {
         let url = getPlayUrl(detail)
+        console.log(`fetch play url`, url)
         if (!url || url?.length === 0) {
             const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
             if (playbackInfo) {
                 url = emby?.videoUrl?.(playbackInfo) ?? ""
+                console.log(`url from playback`, url)
                 dispatch(updatePlayerState({
                     source: "emby",
                     mediaId: movie.Id,
@@ -164,7 +167,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         }))
     }
 
-    const onPlaybackStateChanged = (data: any) => {
+    const onPlaybackStateChanged = (data: PlaybackStateType) => {
         setLoading(false)
         if (data.type === PlayEventType.PlayEventTypeOnProgress) {
             dispatch(updatePlayerState({
@@ -196,14 +199,8 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}
-                source={{uri: url, title: detail?.Name}}
-                controls={true}
-                poster={poster}
-                fullscreenAutorotate={true}
-                fullscreenOrientation="landscape"
+                source={{uri: url, title: detail?.Name ?? ""}}
                 onPlaybackStateChanged={onPlaybackStateChanged}
-                onProgress={progress => console.log("progress", progress)}
-                onError={onError}
                 style={style.player}
             /> : null}
             {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
