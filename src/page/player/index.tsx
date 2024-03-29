@@ -11,7 +11,6 @@ import { ExternalPlayer } from '@view/player/ExternalPlayer';
 import {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { VideoRef } from 'react-native-video';
 
 // Later on in your styles..
 const style = StyleSheet.create({
@@ -67,7 +66,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [poster, setPoster] = useState<string>()
     const [episode, setEpisode] = useState(route.params.episode)
     const [loading, setLoading] = useState(true)
-    const videoRef = useRef<VideoRef>(null);
+    const videoRef = useRef<any>(null);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     const onError = (e: any) => {

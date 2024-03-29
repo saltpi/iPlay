@@ -82,6 +82,7 @@ class PlayerView(
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {
+        Log.d(TAG, "$name = $value")
         this.controlView?.post {
             this.controlView?.onPropertyChange(name, value)
         }
