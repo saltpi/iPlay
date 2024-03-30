@@ -177,7 +177,15 @@ export async function getItem(site: EmbySite, options: ItemOptions) {
     return data
 }
 
-export async function getCollection(site: EmbySite, cid: number, type: "Series"|"Movie" = "Series", page: number = 0) {
+export const kEmbyItemPageSize = 50
+export type CollectionOptions = {
+    StartIndex?: number
+    Limit?: number
+}
+export async function getCollection(site: EmbySite, cid: number, type: "Series"|"Movie" = "Series", {
+    StartIndex = 0,
+    Limit = kEmbyItemPageSize
+}: CollectionOptions) {
     const uid = site.user.User.Id
     const params = {
         UserId: site.user.User.Id,
@@ -186,12 +194,12 @@ export async function getCollection(site: EmbySite, cid: number, type: "Series"|
         IncludeItemTypes: type,
         Recursive: true,
         Fields: "BasicSyncInfo,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
-        StartIndex: page * 100,
         ParentId: cid,
         EnableImageTypes: "Primary,Backdrop,Thumb",
         ImageTypeLimit: 1,
-        Limit: 50,
-        "X-Emby-Language": "zh-cn"
+        "X-Emby-Language": "zh-cn",
+        StartIndex,
+        Limit
     }
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Items`, site.server)
     const response = await fetch(url, {
