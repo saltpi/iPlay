@@ -31,12 +31,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #import <ReactiveObjC/ReactiveObjC.h>
 
 
-#define BeginPropInit(property) typeof(_##property) property = nil;
-#define EndPropInit(property) _##property = property;
-#define BeginLazyPropInit(property) if (! _##property) {\
-    BeginPropInit(property)
-#define EndLazyPropInit(property) EndPropInit(property) \
-}\
-    return _##property;
+#define BLOCK_INVOKE(block, ...) (block ? block(__VA_ARGS__) : nil)
 
 #endif /* prefix_pch */
