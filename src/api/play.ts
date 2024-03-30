@@ -5,12 +5,14 @@ import { EmbySite } from "@model/EmbySite";
 import { MediaDetail } from "@model/MediaDetail";
 import { CLIENT_HEADERS } from "./view";
 
-export async function getPlaybackInfo(site: EmbySite, id: number) {
+export async function getPlaybackInfo(site: EmbySite, id: number, option?: {
+    MaxStreamingBitrate?: number
+}) {
     const params = {
         StartTimeTicks: 0,
         IsPlayback: false,
         AutoOpenLiveStream: false,
-        MaxStreamingBitrate: 1500000,
+        MaxStreamingBitrate: option?.MaxStreamingBitrate ?? 600000000,
         UserId: site.user.User.Id,
         "X-Emby-Token": site.user.AccessToken,
         "X-Emby-Language": "zh-cn",

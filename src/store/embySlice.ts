@@ -7,6 +7,7 @@ import { EmbySite } from '@model/EmbySite';
 import { EmbyConfig } from '@helper/env';
 import { Emby } from '@api/emby';
 import { View } from '@model/View';
+import { PlaybackInfo } from '@model/PlaybackInfo';
 
 interface EmbyState {
     site: EmbySite|null;
@@ -68,6 +69,16 @@ export const helloAsync = createAsyncThunk<string, string, any>("emby/site", asy
     return content
 })
 
+export const fetchPlaybackAsync = createAppAsyncThunk<PlaybackInfo|undefined, number>("emby/playback", async (vid, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const videoConfig = state.config.video
+    const data = await emby?.getPlaybackInfo?.(vid, {
+        MaxStreamingBitrate: videoConfig.MaxStreamingBitrate
+    })
+    return data
+})
+
 export const slice = createSlice({
     name: 'emby',
     initialState,
@@ -90,6 +101,8 @@ export const slice = createSlice({
         .addCase(restoreSiteAsync.fulfilled, (state, action) => {
             state.site = action.payload;
             state.emby = action.payload ? new Emby(action.payload) : null
+        })
+        .addCase(fetchEmbyAlbumAsync.fulfilled, (state, action) => {
         })
     },
 });
