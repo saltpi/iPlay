@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 interface ConfigState {
     video: {
-        useInternalMPV?: boolean;
+        MaxStreamingBitrate?: number;
     }
 }
 
@@ -11,7 +11,7 @@ type ThemeUpdateFunction = (state: ConfigState) => ConfigState;
 
 const initialState: ConfigState = {
     video: {
-        useInternalMPV: false
+        MaxStreamingBitrate: 60000000
     }
 };
 

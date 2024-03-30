@@ -7,15 +7,19 @@ import { EmbySite } from '@model/EmbySite';
 import { EmbyConfig } from '@helper/env';
 import { Emby } from '@api/emby';
 import { View } from '@model/View';
+import { PlaybackInfo } from '@model/PlaybackInfo';
+import _ from 'lodash';
 
 interface EmbyState {
     site: EmbySite|null;
     emby: Emby|null;
+    sites?: EmbySite[];
 }
 
 const initialState: EmbyState = {
     site: null,
-    emby: null
+    emby: null,
+    sites: []
 };
 
 type Authentication = {
@@ -43,11 +47,21 @@ export const restoreSiteAsync = createAppAsyncThunk<EmbySite|null, void>("emby/r
     return null
 });
 
+export const switchToSiteAsync = createAppAsyncThunk<EmbySite|null, string>("emby/switch", async (id, config) => {
+    const state = config.getState().emby
+    const site = state.sites?.filter(site => site.id === id)?.[0]
+    if (site) {
+        await StorageHelper.set("@site", JSON.stringify(site))
+    }
+    return site
+});
+
 export const loginToSiteAsync = createAppAsyncThunk<EmbySite|null, Authentication>("emby/site", async (user, config) => {
     const api = config.extra
     const data = await api.login(user.username, user.password, user.endpoint!)
     if (data) {
         const site: EmbySite = {
+            id: data.ServerId,
             user: data, 
             server: user.endpoint!, 
             status: 'idle'
@@ -64,8 +78,19 @@ export const fetchEmbyAlbumAsync = createAppAsyncThunk<View|undefined, void>("em
     return data
 })
 
+
 export const helloAsync = createAsyncThunk<string, string, any>("emby/site", async (content, _config) => {
     return content
+})
+
+export const fetchPlaybackAsync = createAppAsyncThunk<PlaybackInfo|undefined, number>("emby/playback", async (vid, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const videoConfig = state.config.video
+    const data = await emby?.getPlaybackInfo?.(vid, {
+        MaxStreamingBitrate: videoConfig.MaxStreamingBitrate
+    })
+    return data
 })
 
 export const slice = createSlice({
@@ -76,6 +101,26 @@ export const slice = createSlice({
         updateCurrentEmbySite: (state, action: PayloadAction<EmbySite>) => {
             state.site = action.payload;
         },
+        patchCurrentEmbySite: (state, action: PayloadAction<Partial<EmbySite>>) => {
+            state.site = _.merge(state.site, action.payload)
+            state.sites = state.sites?.map(site => {
+                if (site.id === state.site?.id) {
+                    return _.merge(site, action.payload)
+                }
+                return site
+            })
+        }, 
+        switchToSite: (state, action: PayloadAction<string>) => {
+            const id = action.payload
+            const target = state.sites?.filter(site => site.id === id)?.[0]
+            if (target) {
+                state.site = target
+            }
+        },
+        removeSite: (state, action: PayloadAction<string>) => {
+            const id = action.payload
+            state.sites = state.sites?.filter(site => site.id !== id)
+        }
     },
     extraReducers: builder => {
         builder.addCase(loginToSiteAsync.pending, state => {
@@ -86,15 +131,22 @@ export const slice = createSlice({
             if (!site) return
             state.site = site;
             state.emby = new Emby(site)
+            state.sites = [...(state.sites ?? []), site]
         })
         .addCase(restoreSiteAsync.fulfilled, (state, action) => {
             state.site = action.payload;
             state.emby = action.payload ? new Emby(action.payload) : null
         })
+        .addCase(switchToSiteAsync.fulfilled, (state, action) => {
+            state.site = action.payload;
+            state.emby = action.payload ? new Emby(action.payload) : null
+        })
+        .addCase(fetchEmbyAlbumAsync.fulfilled, (state, action) => {
+        })
     },
 });
 
-export const { updateCurrentEmbySite } = slice.actions;
+export const { switchToSite, removeSite, updateCurrentEmbySite, patchCurrentEmbySite } = slice.actions;
 export const getActiveEmbySite = (state: RootState) => state.emby;
 
 

@@ -20,6 +20,7 @@ import { printException } from "@helper/log";
 import { updatePlayerState } from "@store/playerSlice";
 import { PlayEventType } from "@view/mpv/Player";
 import { PlaybackStateType } from "@view/mpv/type";
+import { fetchPlaybackAsync } from "@store/embySlice";
 
 const style = StyleSheet.create({
     overview: {
@@ -92,7 +93,8 @@ export function Page({route}: PropsWithNavigation<"movie">) {
         let url = getPlayUrl(detail)
         console.log(`fetch play url`, url)
         if (!url || url?.length === 0) {
-            const playbackInfo = await emby?.getPlaybackInfo?.(Number(movie.Id))
+            const response = await dispatch(fetchPlaybackAsync(Number(movie.Id)))
+            const playbackInfo = typeof response.payload !== "string" ? response.payload : null
             console.log(`playback info`, playbackInfo)
             if (playbackInfo) {
                 url = emby?.videoUrl?.(playbackInfo) ?? ""

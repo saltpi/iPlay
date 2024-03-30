@@ -31,19 +31,18 @@ const style = StyleSheet.create({
         borderColor: "lightgray",
         borderRadius: 5,
         marginLeft: 10,
-        minWidth: 50,
+        minWidth: 150,
     }
 });
 
 export function Page() {
-    const barStyle = useAppSelector(state => state.theme.barStyle);
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const dispatch = useAppDispatch();
-    const useMpv = useAppSelector((state) => state.config.video.useInternalMPV);
-    const toggleUseMpv = (event: SwitchChangeEvent) => {
+    const maxStreamingBitrate = useAppSelector((state) => state.config.video.MaxStreamingBitrate);
+    const updateMaxStreamingBitrate = (text: string) => {
         dispatch(updateConfig(s => {
-            s.video.useInternalMPV = !s.video.useInternalMPV
+            s.video.MaxStreamingBitrate = Number(text);
             return s
         }))
     }
@@ -57,9 +56,12 @@ export function Page() {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1, backgroundColor}}>
                 <View style={style.inline}>
-                    <Text style={{...style.label, color}}>使用内置MPV播放器(Android)</Text>
-                    <Switch value={useMpv}
-                        onChange={toggleUseMpv} />
+                    <Text style={{...style.label, color}}>视频流比特率</Text>
+                    <TextInput style={{...style.input, color}}
+                        keyboardType="numeric"
+                        value={maxStreamingBitrate?.toString()}
+                        onChangeText={updateMaxStreamingBitrate}
+                        />
                 </View>
             </ScrollView>
         </SafeAreaView>
