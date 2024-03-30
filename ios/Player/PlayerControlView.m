@@ -221,9 +221,10 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (NSProgress *)progress {
-    BeginLazyPropInit(progress)
-    progress = [[NSProgress alloc] init];
-    EndLazyPropInit(progress)
+    if (!_progress) {
+        _progress = [[NSProgress alloc] init];
+    }
+    return _progress;
 }
 
 - (UISlider *)sliderBar {

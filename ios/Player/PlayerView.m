@@ -184,7 +184,8 @@
         default:
             break;
     }
-    self.onPlayStateChange(payload ?: @{
+    
+    BLOCK_INVOKE(self.onPlayStateChange, payload ?: @{
         @"type": @(event)
     });
 }
