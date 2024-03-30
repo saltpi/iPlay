@@ -196,8 +196,8 @@
     [self.contentView removeFromSuperview];
     if (self.isFullscreen) {
         [self _setupUI];
+        [self _layout];
         [currentController dismissViewControllerAnimated:YES completion:^{
-            [self _layout];
             self.isFullscreen = NO;
             self.controlView.isFullscreen = NO;
         }];
