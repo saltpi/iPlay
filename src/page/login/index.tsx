@@ -5,10 +5,11 @@ import { Toast } from '@helper/toast';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { embyUrl } from '@model/EmbySite';
 import { useNavigation } from '@react-navigation/native';
-import { loginToSiteAsync } from '@store/embySlice';
+import { loginToSiteAsync, removeSite, switchToSiteAsync } from '@store/embySlice';
 import { selectThemeBasicStyle } from '@store/themeSlice';
+import { Site } from '@view/Site';
 import {useState} from 'react';
-import {Button, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const style = StyleSheet.create({
@@ -49,6 +50,7 @@ const style = StyleSheet.create({
 export function Page() {
     const navigation: Navigation = useNavigation()
     const insets = useSafeAreaInsets()
+    const sites = useAppSelector(state => state.emby.sites)
     const emby = useAppSelector(state => state.emby.site)
     const [server, onChangeServer] = useState(embyUrl(emby) ?? '');
     const [username, onChangeUsername] = useState(emby?.user.User.Name ?? '');
@@ -101,6 +103,7 @@ export function Page() {
             callback
         }))
     }
+
     return (
         <SafeAreaView style={{flex: 1, backgroundColor}}>
             <View style={style.inputLine}>
@@ -138,6 +141,15 @@ export function Page() {
                     color={isOS(OSType.Android) ? "black" : "white"}
                     onPress={onLoginPress} />
             </View>
+            <ScrollView>
+                {sites?.map((site, index) => (
+                    <Site key={index} site={site}
+                        active={site.id === emby?.id}
+                        onPress={() => dispatch(switchToSiteAsync(site.id))}
+                        onDelete={(id) => dispatch(removeSite(id))}
+                        theme={theme} />
+                ))}
+            </ScrollView>
         </SafeAreaView>
     );
 }

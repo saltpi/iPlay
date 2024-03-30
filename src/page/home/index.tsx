@@ -1,6 +1,7 @@
 import { PropsWithNavigation } from '@global';
 import { printException } from '@helper/log';
-import { useAppSelector } from '@hook/store';
+import { useAppDispatch, useAppSelector } from '@hook/store';
+import { patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
 import {SiteResource} from '@view/AlbumList';
 import { StatusBar } from '@view/StatusBar';
 import { set } from 'lodash';
@@ -27,6 +28,7 @@ const style = StyleSheet.create({
 export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     const emby = useAppSelector(state => state.emby?.emby)
+    const dispatch = useAppDispatch()
     const theme = useAppSelector(state => state.theme)
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const [etag, setEtag] = useState(Date.now().toString())
@@ -35,7 +37,11 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
             return
         }
         emby?.getPublicInfo?.().then(data => {
-            console.log(data.ServerName);
+            console.log(`site: `, data.ServerName);
+            dispatch(patchCurrentEmbySite({
+                name: data.ServerName,
+                version: data.Version,
+            }))
         })
         .catch(printException)
         
