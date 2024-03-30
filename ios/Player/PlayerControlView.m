@@ -11,8 +11,6 @@
 static NSUInteger const kIconSize = 48;
 
 @interface PlayerControlView ()
-@property (nonatomic, assign) CGRect initialBounds;
-@property (nonatomic, assign) BOOL isFullscreen;
 @end
 
 @implementation PlayerControlView

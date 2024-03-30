@@ -10,7 +10,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PlayerViewController : UIViewController
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIView *controlView;
+@property (nonatomic, strong) UIView *eventsView;
 
+- (void)layoutPlayerView;
 @end
 
 NS_ASSUME_NONNULL_END

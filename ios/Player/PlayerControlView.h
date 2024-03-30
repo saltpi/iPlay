@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 @property (nonatomic, strong) NSDateComponentsFormatter *timeFormatter;
 @property (nonatomic, assign) BOOL isControlsVisible;
+@property (nonatomic, assign) BOOL isFullscreen;
 
 - (void)hideControls;
 - (void)showControls;

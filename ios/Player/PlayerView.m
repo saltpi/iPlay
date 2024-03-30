@@ -191,20 +191,26 @@
 
 - (void)onFullscreenTap:(id)sender {
     UIViewController *currentController = [self.superview firstAvailableUIViewController];
+    [self.eventsView removeFromSuperview];
+    [self.controlView removeFromSuperview];
+    [self.contentView removeFromSuperview];
     if (self.isFullscreen) {
-        [self.controlView removeFromSuperview];
-        [self addSubview:self.controlView];
+        [self _setupUI];
         [currentController dismissViewControllerAnimated:YES completion:^{
             [self _layout];
             self.isFullscreen = NO;
+            self.controlView.isFullscreen = NO;
         }];
     } else {
         PlayerViewController *controller = [PlayerViewController new];
         controller.modalPresentationStyle = UIModalPresentationFullScreen;
-        [self.controlView removeFromSuperview];
-        [controller.view addSubview:self.controlView];
+        controller.contentView = self.contentView;
+        controller.controlView = self.controlView;
+        controller.eventsView = self.eventsView;
+        [controller layoutPlayerView];
         [currentController presentViewController:controller animated:YES completion:^{
             self.isFullscreen = YES;
+            self.controlView.isFullscreen = YES;
         }];
     }
     [self.player keepaspect];
