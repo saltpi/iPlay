@@ -55,27 +55,28 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
     }
 }
 
-void on_mpv_wakeup(void *ctx) {
-    __block PlayerViewModel *self = (__bridge PlayerViewModel *)ctx;
-    @weakify(self);
-    dispatch_async(mpvEventRunloop, ^{
-        while (1) {
-            @strongify(self);
-            if (self.mpv == nil) break;
-            mpv_event *event = mpv_wait_event(self.mpv, 0);
-            if (event->event_id == MPV_EVENT_NONE) break;
-            if (event->event_id == MPV_EVENT_SHUTDOWN) {
-                [self destroy];
-                break;
-            }
-            if (self.mpv) {
-                on_mpv_event(self.mpv, event, self);
-            } else {
-                break;
-            }
-        }
-    });
-}
+//// MPV_EVENT_QUEUE_OVERFLOW
+//void on_mpv_wakeup(void *ctx) {
+//    __block PlayerViewModel *self = (__bridge PlayerViewModel *)ctx;
+//    @weakify(self);
+//    dispatch_async(mpvEventRunloop, ^{
+//        while (1) {
+//            @strongify(self);
+//            if (self.mpv == nil) break;
+//            mpv_event *event = mpv_wait_event(self.mpv, 0);
+//            if (event->event_id == MPV_EVENT_NONE) break;
+//            if (event->event_id == MPV_EVENT_SHUTDOWN) {
+//                [self destroy];
+//                break;
+//            }
+//            if (self.mpv) {
+//                on_mpv_event(self.mpv, event, self);
+//            } else {
+//                break;
+//            }
+//        }
+//    });
+//}
 
 @interface PlayerViewModel ()
 @property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
@@ -116,7 +117,24 @@ void on_mpv_wakeup(void *ctx) {
         mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
-        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
+//        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
+        @weakify(self);
+        dispatch_async(mpvEventRunloop, ^{
+            while (1) {
+                @strongify(self);
+                if (!self.mpv) break;
+                mpv_event *event = mpv_wait_event(self.mpv, -1);
+                if (event->event_id == MPV_EVENT_SHUTDOWN) {
+                    [self destroy];
+                    break;
+                }
+                if (self.mpv) {
+                    on_mpv_event(self.mpv, event, self);
+                } else {
+                    break;
+                }
+            }
+        });
         
     } else {
         NSLog(@"view is not kind of CAMetalLayer");
