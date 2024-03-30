@@ -26,12 +26,6 @@ jobs:
             java-version: '17'
             distribution: 'zulu'
             cache: gradle
-        
-      - name: 🐍 set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          cache: 'pip' # caching pip dependencies
 
       - name:  Select Xcode version
         run: |
@@ -71,7 +65,7 @@ jobs:
           scheme: ${{ 'default' }}
         run: |
           buildtime=$(date '+%Y%m%d.%H%M')
-          pip3 install requests
+          python -m pip install requests
           echo "Uploading build artifacts..."
           echo "Uploaded iPlay.ipa"
           ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
