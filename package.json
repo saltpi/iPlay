@@ -26,6 +26,7 @@
     "react-native-svg": "^15.1.0",
     "react-native-toast-message": "^2.2.0",
     "react-redux": "^9.1.0",
+    "recyclerlistview": "^4.2.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0"
   },

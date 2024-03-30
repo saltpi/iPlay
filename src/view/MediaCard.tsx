@@ -15,7 +15,6 @@ export const style = StyleSheet.create({
     mediaCard: {
         margin: 10,
         overflow: 'hidden',
-        maxWidth: '45%',
         alignItems: 'center',
     },
     title: {

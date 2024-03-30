@@ -18,6 +18,7 @@ import { EmbySite } from '@model/EmbySite';
 import { fetchEmbyAlbumAsync } from '@store/embySlice';
 import { Spin } from './Spin';
 import { selectThemeBasicStyle } from '@store/themeSlice';
+import { ListBaseView, ListView } from './ListView';
 
 export const style = StyleSheet.create({
     root: {
@@ -57,12 +58,19 @@ export function AlbumCard({media, title, theme}: {media?: Media[]; title: string
     return (
         <View style={style.albumItem}>
             <Text style={theme}>{title}</Text>
-            <ScrollView horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                {media?.map(m => (
-                    <MediaCard key={m.Id} media={m} theme={theme} />
-                ))}
-            </ScrollView>
+            <ListView items={media} 
+                isHorizontal={true}
+                style={{width: "100%", height: 200}}
+                layoutForType={(i, dim) => {
+                    dim.width = 120;
+                    dim.height = 200;
+                }}
+                render={m => 
+                <MediaCard key={m.Id} 
+                    media={m} 
+                    theme={theme} />
+                }
+            />
         </View>
     );
 }
