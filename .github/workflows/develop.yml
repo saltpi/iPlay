@@ -30,7 +30,7 @@ jobs:
       - name: 🐍 set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.12'
           cache: 'pip' # caching pip dependencies
 
       - name:  Select Xcode version
