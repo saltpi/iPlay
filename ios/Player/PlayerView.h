@@ -8,6 +8,8 @@
 #import <UIKit/UIKit.h>
 #import <React/RCTViewManager.h>
 #import "PlayerEventView.h"
+#import "PlayerControlView.h"
+#import "PlayerContentView.h"
 #import "VideoPlayer.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,12 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) NSUInteger iconSize;
 @property (nonatomic, weak) id delegate;
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) UIView *controlView;
+@property (nonatomic, strong) PlayerContentView *contentView;
+@property (nonatomic, strong) PlayerControlView *controlView;
 @property (nonatomic, strong) PlayerEventView *eventsView;
-@property (nonatomic, weak) UIView *parentView;
 
 @property (nonatomic, copy) RCTDirectEventBlock onPlayStateChange;
+
+- (void)onFullscreenTap:(id)sender;
 @end
 
 NS_ASSUME_NONNULL_END

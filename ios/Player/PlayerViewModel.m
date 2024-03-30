@@ -1,11 +1,11 @@
 //
-//  MPVViewModel.m
+//  PlayerViewModel.m
 //  iPlayClient
 //
 //  Created by 赫拉 on 2024/3/25.
 //
 
-#import "MPVViewModel.h"
+#import "PlayerViewModel.h"
 
 static dispatch_queue_t mpvEventRunloop = nil;
 
@@ -18,7 +18,7 @@ void on_progress_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
 }
 
 void on_duration_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
-    ((MPVViewModel *)context).duration = time;
+    ((PlayerViewModel *)context).duration = time;
     [context.delegate onPlayEvent:PlayEventTypeDuration data:@{
         @"duration": @(time)
     }];
@@ -30,7 +30,7 @@ void on_playstate_update(mpv_handle *mpv, PlayEventType type , int flag, id<Vide
     }];
 }
 
-void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
+void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
     if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
         mpv_event_property *prop = event->data;
         if (strcmp(prop->name, "time-pos") == 0) {
@@ -55,33 +55,34 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
     }
 }
 
-void on_mpv_wakeup(void *ctx) {
-    __block MPVViewModel *self = (__bridge MPVViewModel *)ctx;
-    @weakify(self);
-    dispatch_async(mpvEventRunloop, ^{
-        while (1) {
-            @strongify(self);
-            if (self.mpv == nil) break;
-            mpv_event *event = mpv_wait_event(self.mpv, 0);
-            if (event->event_id == MPV_EVENT_NONE) break;
-            if (event->event_id == MPV_EVENT_SHUTDOWN) {
-                [self destroy];
-                break;
-            }
-            if (self.mpv) {
-                on_mpv_event(self.mpv, event, self);
-            } else {
-                break;
-            }
-        }
-    });
-}
+//// MPV_EVENT_QUEUE_OVERFLOW
+//void on_mpv_wakeup(void *ctx) {
+//    __block PlayerViewModel *self = (__bridge PlayerViewModel *)ctx;
+//    @weakify(self);
+//    dispatch_async(mpvEventRunloop, ^{
+//        while (1) {
+//            @strongify(self);
+//            if (self.mpv == nil) break;
+//            mpv_event *event = mpv_wait_event(self.mpv, 0);
+//            if (event->event_id == MPV_EVENT_NONE) break;
+//            if (event->event_id == MPV_EVENT_SHUTDOWN) {
+//                [self destroy];
+//                break;
+//            }
+//            if (self.mpv) {
+//                on_mpv_event(self.mpv, event, self);
+//            } else {
+//                break;
+//            }
+//        }
+//    });
+//}
 
-@interface MPVViewModel ()
+@interface PlayerViewModel ()
 @property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
 @end
 
-@implementation MPVViewModel
+@implementation PlayerViewModel
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -116,7 +117,24 @@ void on_mpv_wakeup(void *ctx) {
         mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
-        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
+//        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
+        @weakify(self);
+        dispatch_async(mpvEventRunloop, ^{
+            while (1) {
+                @strongify(self);
+                if (!self.mpv) break;
+                mpv_event *event = mpv_wait_event(self.mpv, -1);
+                if (event->event_id == MPV_EVENT_SHUTDOWN) {
+                    [self destroy];
+                    break;
+                }
+                if (self.mpv) {
+                    on_mpv_event(self.mpv, event, self);
+                } else {
+                    break;
+                }
+            }
+        });
         
     } else {
         NSLog(@"view is not kind of CAMetalLayer");
