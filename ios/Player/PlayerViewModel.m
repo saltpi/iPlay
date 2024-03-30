@@ -87,7 +87,9 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        mpvEventRunloop = dispatch_queue_create("mpv-player-queue", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_USER_INITIATED, -1);
+        dispatch_queue_t queue = dispatch_queue_create_with_target("mpv-player-queue", attr, NULL);
+        mpvEventRunloop = queue;
     });
 }
 
