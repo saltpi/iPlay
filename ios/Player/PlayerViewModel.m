@@ -11,49 +11,6 @@ static dispatch_queue_t mpvEventRunloop = nil;
 
 @import MPVKit;
 
-void on_progress_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
-    [context.delegate onPlayEvent:PlayEventTypeOnProgress data:@{
-        @"time": @(time)
-    }];
-}
-
-void on_duration_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
-    ((PlayerViewModel *)context).duration = time;
-    [context.delegate onPlayEvent:PlayEventTypeDuration data:@{
-        @"duration": @(time)
-    }];
-}
-
-void on_playstate_update(mpv_handle *mpv, PlayEventType type , int flag, id<VideoPlayer> context) {
-    [context.delegate onPlayEvent:type data:@{
-        @"state": @(flag)
-    }];
-}
-
-void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
-    if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
-        mpv_event_property *prop = event->data;
-        if (strcmp(prop->name, "time-pos") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
-                on_progress_update(mpv, *(double *)prop->data, context);
-            }
-        } else if (strcmp(prop->name, "duration") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
-                on_duration_update(mpv, *(double *)prop->data, context);
-            }
-        } else if (strcmp(prop->name, "pause") == 0) {
-            if (prop->format == MPV_FORMAT_FLAG) {
-                context.isPlaying = *(int *)prop->data == 0;
-                on_playstate_update(mpv, PlayEventTypeOnPause, *(int *)prop->data, context);
-            }
-        } else if (strcmp(prop->name, "paused-for-cache") == 0) {
-            if (prop->format == MPV_FORMAT_FLAG) {
-                context.isPlaying = *(int *)prop->data == 0;
-                on_playstate_update(mpv, PlayEventTypeOnPauseForCache, *(int *)prop->data, context);
-            }
-        }
-    }
-}
 
 //// MPV_EVENT_QUEUE_OVERFLOW
 //void on_mpv_wakeup(void *ctx) {
@@ -124,14 +81,16 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
         dispatch_async(mpvEventRunloop, ^{
             while (1) {
                 @strongify(self);
-                if (!self.mpv) break;
-                mpv_event *event = mpv_wait_event(self.mpv, -1);
+                mpv_handle *ctx = self.mpv;
+                if (!ctx) break;
+                mpv_event *event = mpv_wait_event(ctx, 1);
                 if (event->event_id == MPV_EVENT_SHUTDOWN) {
                     [self destroy];
                     break;
                 }
-                if (self.mpv) {
-                    on_mpv_event(self.mpv, event, self);
+                
+                if (ctx) {
+                    [self handleEvent:event];
                 } else {
                     break;
                 }
@@ -229,11 +188,62 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
     mpv_set_property(self.mpv, "keepaspect", MPV_FORMAT_FLAG, &flag);
 }
 
+- (void)quit {
+    if (!self.mpv) return;
+    mpv_unobserve_property(self.mpv, 0);
+    const char *cmd[] = {"quit", NULL};
+    mpv_command(self.mpv, cmd);
+}
+
 - (void)destroy {
     if (_mpv) {
         mpv_set_option_string(_mpv, "vo", "null");
         mpv_destroy(_mpv);
         _mpv = nil;
+    }
+}
+
+- (void)onProgressUpdate:(double)time {
+    [self.delegate onPlayEvent:PlayEventTypeOnProgress data:@{
+        @"time": @(time)
+    }];
+}
+
+- (void)onDurationUpdate:(double)time {
+    self.duration = time;
+    [self.delegate onPlayEvent:PlayEventTypeDuration data:@{
+        @"duration": @(time)
+    }];
+}
+
+- (void)onPlaystateUpdate:(PlayEventType)type
+                    state:(int)state {
+    self.isPlaying = state == 0;
+    [self.delegate onPlayEvent:type data:@{
+        @"state": @(state)
+    }];
+}
+
+- (void)handleEvent:(mpv_event *)event {
+    if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
+        mpv_event_property *prop = event->data;
+        if (strcmp(prop->name, "time-pos") == 0) {
+            if (prop->format == MPV_FORMAT_DOUBLE) {
+                [self onProgressUpdate:*(double *)prop->data];
+            }
+        } else if (strcmp(prop->name, "duration") == 0) {
+            if (prop->format == MPV_FORMAT_DOUBLE) {
+                [self onDurationUpdate:*(double *)prop->data];
+            }
+        } else if (strcmp(prop->name, "pause") == 0) {
+            if (prop->format == MPV_FORMAT_FLAG) {
+                [self onPlaystateUpdate:PlayEventTypeOnPause state:*(int *)prop->data];
+            }
+        } else if (strcmp(prop->name, "paused-for-cache") == 0) {
+            if (prop->format == MPV_FORMAT_FLAG) {
+                [self onPlaystateUpdate:PlayEventTypeOnPauseForCache state:*(int *)prop->data];
+            }
+        }
     }
 }
 
