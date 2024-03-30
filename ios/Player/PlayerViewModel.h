@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MPVViewModel : NSObject<VideoPlayer>
+@interface PlayerViewModel : NSObject<VideoPlayer>
 @property (nonatomic, nullable) mpv_handle *mpv;
 @property (nonatomic) NSUInteger duration;
 @property (nonatomic) BOOL isPlaying;

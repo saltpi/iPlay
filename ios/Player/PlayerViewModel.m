@@ -1,11 +1,11 @@
 //
-//  MPVViewModel.m
+//  PlayerViewModel.m
 //  iPlayClient
 //
 //  Created by 赫拉 on 2024/3/25.
 //
 
-#import "MPVViewModel.h"
+#import "PlayerViewModel.h"
 
 static dispatch_queue_t mpvEventRunloop = nil;
 
@@ -18,7 +18,7 @@ void on_progress_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
 }
 
 void on_duration_update(mpv_handle *mpv, double time, id<VideoPlayer> context) {
-    ((MPVViewModel *)context).duration = time;
+    ((PlayerViewModel *)context).duration = time;
     [context.delegate onPlayEvent:PlayEventTypeDuration data:@{
         @"duration": @(time)
     }];
@@ -30,7 +30,7 @@ void on_playstate_update(mpv_handle *mpv, PlayEventType type , int flag, id<Vide
     }];
 }
 
-void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
+void on_mpv_event(mpv_handle *mpv, mpv_event *event, PlayerViewModel *context) {
     if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
         mpv_event_property *prop = event->data;
         if (strcmp(prop->name, "time-pos") == 0) {
@@ -56,7 +56,7 @@ void on_mpv_event(mpv_handle *mpv, mpv_event *event, MPVViewModel *context) {
 }
 
 void on_mpv_wakeup(void *ctx) {
-    __block MPVViewModel *self = (__bridge MPVViewModel *)ctx;
+    __block PlayerViewModel *self = (__bridge PlayerViewModel *)ctx;
     @weakify(self);
     dispatch_async(mpvEventRunloop, ^{
         while (1) {
@@ -77,11 +77,11 @@ void on_mpv_wakeup(void *ctx) {
     });
 }
 
-@interface MPVViewModel ()
+@interface PlayerViewModel ()
 @property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
 @end
 
-@implementation MPVViewModel
+@implementation PlayerViewModel
 
 + (void)load {
     static dispatch_once_t onceToken;

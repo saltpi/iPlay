@@ -6,12 +6,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MPVViewModel.h"
+#import "PlayerViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MPVView : UIView
-@property (nonatomic, strong) MPVViewModel *viewModel;
+@interface PlayerContentView : UIView
+@property (nonatomic, strong) PlayerViewModel *viewModel;
 @end
 
 NS_ASSUME_NONNULL_END
