@@ -65,17 +65,17 @@ jobs:
           scheme: ${{ 'default' }}
         run: |
           buildtime=$(date '+%Y%m%d.%H%M')
-          pip3 install requests
+          python -m pip install requests
           echo "Uploading build artifacts..."
           echo "Uploaded iPlay.ipa"
-          ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
+          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
             --file "$PWD/build/iPlay.ipa" \
             --token "${{ secrets.CLIENT_ID }}"
           echo "Uploaded iPlay.apk"
-          ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.apk" \
+          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.apk" \
             --file "$PWD/build/iPlay.apk" \
             --token "${{ secrets.CLIENT_ID }}"
           echo "Uploaded iPlay.dSYMs.zip"
-          ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
+          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.dSYMs.zip" \
             --file "$PWD/build/iPlay.dSYMs.zip" \
             --token "${{ secrets.CLIENT_ID }}"

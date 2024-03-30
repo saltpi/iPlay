@@ -218,7 +218,7 @@
 
 - (void)removeFromSuperview {
     [self.player stop];
-    [self.player destroy];
+    [self.player quit];
     [super removeFromSuperview];
 }
 
