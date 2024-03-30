@@ -1,5 +1,11 @@
-import { ViewStyle } from "react-native";
+import _ from "lodash";
+import { Dimensions, ViewStyle } from "react-native";
 import { DataProvider, Dimension, LayoutProvider, RecyclerListView } from "recyclerlistview";
+
+export const kFullScreenStyle = { 
+    width: Dimensions.get("window").width, 
+    height: Dimensions.get("window").height 
+}
 
 export const ListBaseView = RecyclerListView
 
@@ -18,7 +24,7 @@ export interface MyListViewProps<T> {
 export function ListView<T>({
     items,
     render,
-    style,
+    style = {},
     typeForIndex = (idx) => 0,
     layoutForType = (type, dim, index) => {
         dim.width = 120
@@ -30,19 +36,19 @@ export function ListView<T>({
     isIdentity = (a, b) => a === b
 }: MyListViewProps<T>) {
     const dataProvider = new DataProvider(isIdentity).cloneWithRows(items)
-
+    
     const layoutProvider = new LayoutProvider(
         typeForIndex,
         layoutForType
     )
 
     return (
-        <ListBaseView style={style}
+        <ListBaseView style={{...kFullScreenStyle, ...style}}
             isHorizontal={isHorizontal}
             showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
             showsVerticalScrollIndicator={showsVerticalScrollIndicator}
             dataProvider={dataProvider} 
-            layoutProvider={layoutProvider} 
+            layoutProvider={layoutProvider}
             rowRenderer={(type, data, i) => render(data, i, type)} />
     )
 }

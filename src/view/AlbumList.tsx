@@ -1,4 +1,4 @@
-import {Api, Emby} from '@api/emby';
+import {Emby} from '@api/emby';
 import {ViewDetail} from '@model/View';
 import {useEffect, useState} from 'react';
 import {
@@ -14,11 +14,10 @@ import {useNavigation} from '@react-navigation/native';
 import {Navigation, ThemeBasicStyle} from '@global';
 import { MediaCard } from './MediaCard';
 import { useAppDispatch, useAppSelector } from '@hook/store';
-import { EmbySite } from '@model/EmbySite';
 import { fetchEmbyAlbumAsync } from '@store/embySlice';
 import { Spin } from './Spin';
 import { selectThemeBasicStyle } from '@store/themeSlice';
-import { ListBaseView, ListView } from './ListView';
+import { ListView } from './ListView';
 
 export const style = StyleSheet.create({
     root: {
