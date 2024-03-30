@@ -1,3 +1,4 @@
+import { PropsWithNavigation } from "@global";
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
@@ -34,7 +35,7 @@ const style = StyleSheet.create({
     }
 });
 
-export function Page() {
+export function Page({navigation}: PropsWithNavigation<"theme">) {
     const dispatch = useAppDispatch();
     const menuBarPaddingOffset = useAppSelector((state) => state.theme.menuBarPaddingOffset);
     const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);
@@ -51,7 +52,7 @@ export function Page() {
     }
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar />
+            <StatusBar translucent={false} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

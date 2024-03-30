@@ -1,4 +1,4 @@
-import { PropsWithNavigation } from "@global";
+import { Navigation, PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -30,6 +30,7 @@ export function Page({route, navigation}: SeasonPageProps) {
         .then(setEpisodes)
         .catch(printException)
     }, [emby, season])
+
     const onPress = async (episode: Episode) => {
         navigation.navigate('player', {
             title: episode.Name,
@@ -37,9 +38,17 @@ export function Page({route, navigation}: SeasonPageProps) {
             episodes,
         });
     }
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: false,
+            headerMode: "none"
+        })
+    }, [])
+
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar />
+            <StatusBar backgroundColor={"transparent"} translucent={true} />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

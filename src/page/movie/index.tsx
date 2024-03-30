@@ -21,6 +21,7 @@ import { updatePlayerState } from "@store/playerSlice";
 import { PlayEventType } from "@view/mpv/Player";
 import { PlaybackStateType } from "@view/mpv/type";
 import { fetchPlaybackAsync } from "@store/embySlice";
+import { StatusBar } from "@view/StatusBar";
 
 const style = StyleSheet.create({
     overview: {
@@ -188,6 +189,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView style={{backgroundColor}}
             showsVerticalScrollIndicator={false}>
+            <StatusBar backgroundColor={"transparent"} translucent={true} />
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}

@@ -34,6 +34,11 @@ const defaultOptions = (options: any) => {
 const fullscreenOptions = (options: any) => {
     return {
         title: (options.route.params as any)?.title ?? '',
+        headerTransparent: true,
+        headerStyle: {backgroundColor: "transparent"}, 
+        contentStyle: {
+            backgroundColor: "transparent",
+        },
     };
 };
 const HomeRouter = () => {
@@ -58,12 +63,12 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={defaultOptions}
+                options={fullscreenOptions}
             />
             <HomeStack.Screen
                 name="season"
                 component={SeasonPage as any}
-                options={defaultOptions}
+                options={fullscreenOptions}
             />
             <HomeStack.Screen
                 name="player"
