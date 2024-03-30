@@ -186,7 +186,7 @@ export async function getCollection(site: EmbySite, cid: number, type: "Series"|
         IncludeItemTypes: type,
         Recursive: true,
         Fields: "BasicSyncInfo,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
-        StartIndex: page * 50,
+        StartIndex: page * 100,
         ParentId: cid,
         EnableImageTypes: "Primary,Backdrop,Thumb",
         ImageTypeLimit: 1,

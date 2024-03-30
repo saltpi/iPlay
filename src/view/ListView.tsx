@@ -19,6 +19,8 @@ export interface MyListViewProps<T> {
     showsHorizontalScrollIndicator?: boolean
     showsVerticalScrollIndicator?: boolean
     isIdentity?: (a: T, b: T) => boolean
+    onEndReached?: () => void
+    renderFooter?: () => JSX.Element
 }
 
 export function ListView<T>({
@@ -33,7 +35,9 @@ export function ListView<T>({
     isHorizontal = false,
     showsHorizontalScrollIndicator = false,
     showsVerticalScrollIndicator = false,
-    isIdentity = (a, b) => a === b
+    isIdentity = (a, b) => a === b,
+    onEndReached,
+    renderFooter
 }: MyListViewProps<T>) {
     const dataProvider = new DataProvider(isIdentity).cloneWithRows(items)
     
@@ -49,6 +53,8 @@ export function ListView<T>({
             showsVerticalScrollIndicator={showsVerticalScrollIndicator}
             dataProvider={dataProvider} 
             layoutProvider={layoutProvider}
+            onEndReached={onEndReached}
+            renderFooter={renderFooter}
             rowRenderer={(type, data, i) => render(data, i, type)} />
     )
 }

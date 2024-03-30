@@ -8,8 +8,9 @@ import { selectThemeBasicStyle } from "@store/themeSlice";
 import { ListView, kFullScreenStyle } from "@view/ListView";
 import { MediaCard } from '@view/MediaCard';
 import { Spin, SpinBox } from "@view/Spin";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const style = StyleSheet.create({
     root: {
@@ -30,30 +31,51 @@ async function getAlbum(emby: Emby, id: number, page: number = 1) {
 
 export function Page({route, navigation}: PropsWithNavigation<"album">) {
     const emby = useAppSelector(state => state.emby?.emby)
-    const [data, setData] = useState<EmbyResponse<Media>>()
+    const [data, setData] = useState<Media[]>()
+    const [totalCount, setTotalCount] = useState(0)
     const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState(1)
     const theme = useAppSelector(selectThemeBasicStyle)
     useEffect(() => {
         if (!emby) return
         setLoading(true)
-        getAlbum(emby, Number(route.params.albumId))
+        getAlbum(emby, Number(route.params.albumId), page)
         .then(res => {
-            setData(res.data)
+            const total = res.data?.TotalRecordCount
+            const newItems = res.data?.Items ?? []
+            setTotalCount(total ?? 0)
+            setData(data => [...(data ?? []), ...newItems]),
+            setPage(page => page + 1)
         })
         .catch(printException)
         .finally(() => setLoading(false))
     }, [route.params.albumId, emby])
 
+    const onEndReached = () => {
+        if (!emby) return
+        if (data?.length === totalCount) return
+        setLoading(true)
+        getAlbum(emby, Number(route.params.albumId), page)
+        .then(res => {
+            const newItems = res.data?.Items ?? []
+            setData(data => [...(data ?? []), ...newItems]),
+            setPage(page => page + 1)
+        })
+        .catch(printException)
+        .finally(() => setLoading(false))
+    }
+
     const rowItemWidth = (kFullScreenStyle.width -20) / Math.floor((kFullScreenStyle.width - 20) / 120)
     
     return (
             <View style={{...style.root, ...theme}}>
-                {data?.Items ? <ListView items={data?.Items} 
-                    style={{width: "100%", height: kFullScreenStyle.height - 50, padding: 10}}
+                {data ? <ListView items={data} 
+                    style={{width: "100%", flex: 1, padding: 10}}
                     layoutForType={(i, dim) => {
                         dim.width = rowItemWidth;
                         dim.height = 200;
                     }}
+                    onEndReached={onEndReached}
                     render={media =>
                         <MediaCard key={media.Id}
                             media={media} 
