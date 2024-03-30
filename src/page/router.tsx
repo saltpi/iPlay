@@ -73,7 +73,7 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="player"
                 component={PlayerPage as any}
-                options={fullscreenOptions}
+                options={options}
             />
         </HomeStack.Navigator>
     );

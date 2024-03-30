@@ -39,12 +39,12 @@ export function Page({route, navigation}: SeasonPageProps) {
         });
     }
 
-    useEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-            headerMode: "none"
-        })
-    }, [])
+    // useEffect(() => {
+    //     navigation.setOptions({
+    //         headerShown: false,
+    //         headerMode: "none"
+    //     })
+    // }, [])
 
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>
