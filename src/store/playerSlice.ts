@@ -1,12 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { listenerMiddleware } from './middleware/Listener';
-import { RootState } from '.';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from './type';
-import { StorageHelper } from '@helper/store';
-import { EmbySite } from '@model/EmbySite';
-import { EmbyConfig } from '@helper/env';
-import { Emby } from '@api/emby';
-import { View } from '@model/View';
 import { kPlaybackData, kPlayStartData, kSecond2TickScale } from '@model/PlaybackData';
 
 interface PlayerState {

@@ -1,9 +1,7 @@
 import { ThemeBasicStyle } from '@global';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
-import _, { get } from 'lodash';
-import { useMemo } from 'react';
+import _ from 'lodash';
 import { EdgeInsets } from 'react-native-safe-area-context';
 
 export enum ColorScheme {

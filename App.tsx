@@ -12,6 +12,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { printException } from '@helper/log';
 import { Device } from '@helper/device';
 import { PlayerMonitor } from '@view/PlayerMonitor';
+import { StatusBarHeight } from '@view/StatusBar';
 
 function App() {
     const [inited, setInited] = useState(false);
@@ -36,10 +37,10 @@ function App() {
             theme.fontColor = isDarkMode ? Colors.light : Colors.dark;
             theme.backgroundColor = isDarkMode ? Colors.darker : Colors.lighter;
             theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';
+            theme.statusBarHeight = StatusBarHeight;
+            theme.pagePaddingTop = StatusBarHeight + 56;
             if (insets) {
-                theme.statusBarHeight = insets.top;
                 theme.safeInsets = insets;
-                theme.pagePaddingTop = insets.top + 56;
             }
             return theme
         }))
