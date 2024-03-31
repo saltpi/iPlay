@@ -189,7 +189,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView style={{backgroundColor}}
             showsVerticalScrollIndicator={false}>
-            {/* <StatusBar backgroundColor={"transparent"} translucent={true} /> */}
+            <StatusBar backgroundColor={"transparent"} translucent={true} />
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}

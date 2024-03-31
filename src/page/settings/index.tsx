@@ -74,7 +74,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
         }
     }
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
@@ -88,6 +88,6 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                             onPress={() => onPress(setting)} />)}
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

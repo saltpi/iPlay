@@ -15,7 +15,7 @@ const style = StyleSheet.create({
     },
     cover: {
         width: "100%",
-        aspectRatio: 1.5
+        aspectRatio: 16/9,
     }
 });
 
@@ -48,7 +48,7 @@ export function Page({route, navigation}: SeasonPageProps) {
 
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar backgroundColor={"transparent"} translucent={true} />
+            <StatusBar backgroundColor={"transparent"} translucent />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

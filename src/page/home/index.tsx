@@ -31,6 +31,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const dispatch = useAppDispatch()
     const theme = useAppSelector(state => state.theme)
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const statusBarHeight = useAppSelector(state => state.theme.statusBarHeight);
     const [etag, setEtag] = useState(Date.now().toString())
     useEffect(() => {
         if (!site?.server || !site?.user) {
@@ -61,18 +62,16 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     }
 
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                style={{flex: 1}}>
-                <View style={{marginBottom: theme.menuBarHeight}}>
-                {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+        <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            style={{...style.page, backgroundColor, paddingTop: statusBarHeight}}>
+            <StatusBar backgroundColor={"transparent"} translucent />
+            <View style={{marginBottom: theme.menuBarHeight}}>
+            {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
+            </View>
+        </ScrollView>
     );
 }

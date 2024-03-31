@@ -51,7 +51,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
         })
     }, [emby])
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
@@ -72,6 +72,6 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                 ))}
             </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 import { Dimensions } from 'react-native';
 import DeviceInfo from "react-native-device-info";
+import { initialWindowMetrics } from "react-native-safe-area-context";
 
 export enum OSType {
     Web = "web",
@@ -52,9 +53,15 @@ export const Version = {
 export const Device = {
     name: "",
     did: "",
+    // safe area insets
+    insets: { top: 0, right: 0, bottom: 0, left: 0 },
 
     init: async () => {
         Device.did = await DeviceInfo.getUniqueId();
         Device.name = await DeviceInfo.getDeviceName();
+        const insets = initialWindowMetrics ?.insets 
+        if (insets) {
+            Device.insets = insets
+        }
     }
 }

@@ -74,8 +74,8 @@ export function Page() {
             .catch(printException)
     }, [searchKeyword, emby])
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar />
+        <View style={{...style.page, ...theme}}>
+            <StatusBar backgroundColor={"transparent"} translucent />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
@@ -99,6 +99,6 @@ export function Page() {
                 </View>
             </ScrollView>
             {loading ? <Spin color={theme.color} /> : null}
-        </SafeAreaView>
+        </View>
     )
 }

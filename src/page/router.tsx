@@ -44,7 +44,8 @@ const fullscreenOptions = (options: any) => {
 const HomeRouter = () => {
     const options = useAppSelector(selectScreenOptions)
     return (
-        <HomeStack.Navigator initialRouteName="home" screenOptions={options}>
+        <HomeStack.Navigator initialRouteName="home"
+            screenOptions={fullscreenOptions}>
             <HomeStack.Screen
                 name="login"
                 component={LoginPage}
@@ -63,7 +64,7 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={defaultOptions}
+                options={fullscreenOptions}
             />
             <HomeStack.Screen
                 name="season"
