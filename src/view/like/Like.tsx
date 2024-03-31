@@ -9,11 +9,11 @@ import {printException} from '@helper/log';
 
 const style = StyleSheet.create({
     icon: {
-        width: 32,
+        width: 28,
     },
     favorite: {
-        width: 32,
-        height: 32,
+        width: 28,
+        height: 28,
         flexShrink: 0,
         flexGrow: 0,
     },

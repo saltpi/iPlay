@@ -33,7 +33,7 @@ export function MediaCard({media, theme}: {media: Media, theme?: ThemeBasicStyle
             movie: media,
         });
     };
-    console.log(media?.PrimaryImageAspectRatio)
+    
     const postStyle = {
         width: media?.Type === "Episode" ? 160 : 90, 
         aspectRatio: media?.Type !== "Episode" ? 0.666 : 16/9, 

@@ -1,8 +1,7 @@
-import { Api } from "@api/emby";
 import { ThemeBasicStyle } from "@global";
 import { useAppSelector } from "@hook/store";
 import { People } from "@model/MediaDetail";
-import { Image, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const style = StyleSheet.create({
     root: {
@@ -27,10 +26,17 @@ const style = StyleSheet.create({
     }
 })
 
-export function ActorCard({actor, theme}: {actor: People, theme?: ThemeBasicStyle}) {
+export interface ActorCardProps {
+    actor: People;
+    theme?: ThemeBasicStyle;
+    onPress?: (actor: People) => void;
+}
+
+export function ActorCard({actor, theme, onPress}: ActorCardProps) {
     const emby = useAppSelector(state => state.emby?.emby)
     const avatorUrl = emby?.imageUrl?.(actor.Id, actor.PrimaryImageTag, "Primary")
     return (
+        <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(actor)}>
         <View style={style.root}>
             <Image style={style.image} source={{uri: avatorUrl}} />
             <Text style={{...style.name, ...theme}}
@@ -44,5 +50,6 @@ export function ActorCard({actor, theme}: {actor: People, theme?: ThemeBasicStyl
                 扮演 {actor.Role}
             </Text>
         </View>
+        </TouchableOpacity>
     )
 }

@@ -68,6 +68,8 @@ export async function getMedia(site: EmbySite, id: number) {
     return data
 }
 
+export const getActor = getMedia
+
 export async function getResume(site: EmbySite, type: "Video"|"Audio" = "Video") {
     const params = {
         Recursive: true,
@@ -144,9 +146,11 @@ export async function getEpisodes(site: EmbySite, vid: number, sid: number) {
 }
 
 interface ItemOptions {
+    IncludeItemTypes?: string
+    PersonIds?: string
     Filters?: string
     page?: number
-    type: "Series"|"Episode"|"Movie"
+    type?: "Series"|"Episode"|"Movie"
 }
 
 export async function getItem(site: EmbySite, options: ItemOptions) {

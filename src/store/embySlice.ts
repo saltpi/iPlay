@@ -10,6 +10,8 @@ import { View, ViewDetail } from '@model/View';
 import { PlaybackInfo } from '@model/PlaybackInfo';
 import _ from 'lodash';
 import { Media } from '@model/Media';
+import { Map } from '@model/Map';
+import { Actor } from '@model/Actor';
 
 interface EmbyState {
     site: EmbySite|null;
@@ -18,13 +20,14 @@ interface EmbyState {
     source?: {
         albums?: ViewDetail[]
         latestMedias?: Media[][]
+        actors?: Map<string, Actor>
     }
 }
 
 const initialState: EmbyState = {
     site: null,
     emby: null,
-    sites: []
+    sites: [],
 };
 
 type Authentication = {
@@ -81,6 +84,27 @@ export const fetchEmbyAlbumAsync = createAppAsyncThunk<View|undefined, void>("em
     const emby = await config.getState().emby.emby
     const data = emby?.getView?.()
     return data
+})
+
+export const fetchEmbyActorAsync = createAppAsyncThunk<Actor|undefined, string>("emby/actor", async (id, config) => {
+    const emby = await config.getState().emby.emby
+    const data = await emby?.getActor?.(Number(id))
+    const actor: Actor = {
+        id: data?.Id ?? id,
+        name: data?.Name ?? "",
+        overview: data?.Overview ?? "",
+        avatar: emby?.imageUrl?.(data?.Id ?? "", data?.ImageTags.Primary ?? "", "Primary")
+    }
+    return actor
+})
+
+export const fetchEmbyActorWorksAsync = createAppAsyncThunk<Media[]|undefined, string>("emby/actor/works", async (id, config) => {
+    const emby = await config.getState().emby.emby
+    const data = await emby?.getItem?.({
+        PersonIds: id,
+        IncludeItemTypes: "Movie,Series",
+    })
+    return data?.Items
 })
 
 export const fetchLatestMediaAsync = createAppAsyncThunk<(Media[]|undefined)[]|undefined, void>("emby/latest", async (_, config) => {
@@ -173,6 +197,17 @@ export const slice = createSlice({
                 state.source = {
                     latestMedias: action.payload as Media[][]
                 }
+            }
+        })
+        .addCase(fetchEmbyActorAsync.fulfilled, (state, action) => {
+            const actor = action.payload
+            if (!actor) return
+            if (state.source && !state.source?.actors) {
+                state.source.actors = {
+                    [actor.id]: actor
+                }
+            } else if (state.source?.actors) {
+                state.source.actors[actor.id] = actor
             }
         })
     },

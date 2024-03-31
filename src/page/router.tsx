@@ -11,6 +11,7 @@ import {Page as PlayerPage} from '@page/player/index.tsx';
 import {Page as ThemePage} from '@page/settings/theme';
 import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
+import {Page as ActorPage} from '@page/actor/index.tsx';
 import {Page as AboutPage} from '@page/settings/about/index.tsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
@@ -40,17 +41,18 @@ const StarStack = createNativeStackNavigator();
 const MessageStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const OptionWithTitle = (kv: any) => {
+    return (options: any) => ({
+        title: (options.route.params as any)?.title ?? '',
+        ...kv
+    })
+}
+
 const immersiveOptions = (options: any) => ({
     title: (options.route.params as any)?.title ?? '',
     headerTransparent: true,
     headerStyle: {backgroundColor: 'transparent'},
 });
-
-const defaultOptions = (options: any) => {
-    return {
-        title: (options.route.params as any)?.title ?? '',
-    };
-};
 
 const HomeRouter = () => {
     const options = useAppSelector(selectScreenOptions);
@@ -85,6 +87,11 @@ const HomeRouter = () => {
                 name="player"
                 component={PlayerPage as any}
                 options={options}
+            />
+            <HomeStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
         </HomeStack.Navigator>
     );
@@ -134,7 +141,7 @@ const SearchRouter = () => {
                 component={SearchPage}
                 options={{title: '搜索'}}
             />
-            <HomeStack.Screen
+            <SearchStack.Screen
                 name="movie"
                 component={MoviePage as any}
                 options={immersiveOptions}
@@ -148,6 +155,11 @@ const SearchRouter = () => {
                 name="player"
                 component={PlayerPage as any}
                 options={immersiveOptions}
+            />
+            <SearchStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
         </SearchStack.Navigator>
     );
@@ -167,6 +179,11 @@ const MessageRouter = () => {
                 name="movie"
                 component={MoviePage as any}
                 options={immersiveOptions}
+            />
+            <MessageStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
             <MessageStack.Screen
                 name="test"
@@ -208,6 +225,11 @@ const StarRouter = () => {
                 name="test"
                 component={TestPage}
                 options={{title: '测试'}}
+            />
+            <StarStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
         </StarStack.Navigator>
     );

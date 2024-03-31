@@ -1,5 +1,6 @@
 import { Episode } from "@model/Episode";
 import { Media } from '@model/Media';
+import { People } from "@model/MediaDetail";
 import { PlaybackInfo } from '@model/PlaybackInfo';
 import { NavigationProp, ParamListBase, RouteProp, Router } from '@react-navigation/native';
 import { MenuType } from '@view/menu/MenuBar';
@@ -32,6 +33,11 @@ type RootStackParamList = {
   config_video: undefined,
   about: undefined,
   default: undefined,
+  actor: {
+    title?: string
+    id?: string
+    actor?: People
+  }
 };
 
 type TabStackParamList = {

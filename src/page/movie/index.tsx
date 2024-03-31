@@ -31,8 +31,9 @@ const style = StyleSheet.create({
     },
     actorSection: {
         marginTop: 5,
+        marginLeft: 5,
         fontWeight: "600",
-        fontSize: 20,
+        fontSize: 17,
     },
     logo: {
         width: "50%", 
@@ -253,11 +254,18 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
                 {url}
             </Text> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
-            {detail?.People.length ? <Text style={{...style.actorSection, ...themeStyle}}>
+            {detail?.People.length ? 
+            <Text style={{...style.actorSection, ...themeStyle}}>
                 演职人员
-            </Text> : null}
+            </Text> 
+            : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {detail?.People.map((actor, index) => <ActorCard key={index} theme={themeStyle} actor={actor} />)}
+            {detail?.People.map((actor, index) => 
+                <ActorCard key={index} 
+                    theme={themeStyle} 
+                    actor={actor}
+                    onPress={() => navigation.navigate("actor", {title: actor.Name, actor})}
+                />)}
             </ScrollView>
         </ScrollView>
     )
