@@ -1,13 +1,14 @@
-import { Navigation, PropsWithNavigation } from "@global";
+import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Season } from "@model/Season";
 import { Episode } from "@model/Episode";
 import { EpisodeCard } from "@view/EpisodeCard";
 import { Image } from '@view/Image';
 import { StatusBar } from "@view/StatusBar";
 import { printException } from "@helper/log";
+import { selectThemedPageStyle } from "@store/themeSlice";
 
 const style = StyleSheet.create({
     page: {
@@ -24,6 +25,7 @@ export function Page({route, navigation}: SeasonPageProps) {
     const season: Season = route.params.season
     const emby = useAppSelector(state => state.emby?.emby)
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     const [episodes, setEpisodes] = useState<Episode[]>([])
     useEffect(() => {
         emby?.getEpisodes?.(Number(season.SeriesId), Number(season.Id))
@@ -39,6 +41,12 @@ export function Page({route, navigation}: SeasonPageProps) {
         });
     }
 
+    const coverUrl = emby?.imageUrl?.(season.Id, season.BackdropImageTags[0])
+    const coverStyle = {
+        ...style.cover,
+        minHeight: pageStyle.paddingTop,
+        aspectRatio: season.PrimaryImageAspectRatio
+    }
     return (
         <View style={{...style.page, backgroundColor}}>
             <StatusBar />

@@ -233,7 +233,9 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
                 emby={emby}
                 isFavorite={detail?.UserData?.IsFavorite ?? false}
              />
-            <PlayCount count={detail?.UserData?.PlayCount ?? 0} />
+            <PlayCount 
+                style={{color: themeStyle.color}}
+                count={detail?.UserData?.PlayCount ?? 0} />
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}

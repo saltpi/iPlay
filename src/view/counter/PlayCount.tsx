@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
 import ViewShowIcon from "@asset/view-show.svg"
 
 const style = StyleSheet.create({
@@ -20,15 +20,15 @@ const style = StyleSheet.create({
 
 export interface PlayCountProps {
     count: number;
-    style?: Partial<ViewStyle>;
+    style?: TextStyle;
 }
 
-export function PlayCount({count}: PlayCountProps) {
+export function PlayCount({count, style: extraStyle}: PlayCountProps) {
     return (
         <View style={{...style.root, height: style.icon.height}}>
             <ViewShowIcon width={style.icon.width} 
                 style={style.icon} />
-            <Text>{count}</Text>
+            <Text style={{color: extraStyle?.color}}>{count}</Text>
         </View>
     );
 }
