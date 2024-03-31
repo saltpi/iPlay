@@ -244,10 +244,7 @@ export function Router() {
                     ...options,
                 }}>
                 <Tab.Screen name={MenuType.Home} component={HomeRouter} />
-                <Tab.Screen
-                    name={MenuType.Settings}
-                    component={SettingsRouter}
-                />
+                <Tab.Screen name={MenuType.Settings} component={SettingsRouter} />
                 <Tab.Screen name={MenuType.Search} component={SearchRouter} />
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
                 <Tab.Screen name={MenuType.Message} component={MessageRouter} />
