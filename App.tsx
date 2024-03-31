@@ -7,7 +7,7 @@ import { Router } from '@page/router';
 import { SafeAreaProvider, initialWindowMetrics, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Appearance, useColorScheme } from 'react-native';
-import { updateTheme } from '@store/themeSlice';
+import { ColorScheme, updateTheme } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { printException } from '@helper/log';
 import { Device } from '@helper/device';
@@ -29,7 +29,10 @@ function App() {
 
     const updateAppearance = () => {
         store.dispatch(updateTheme(theme => {
-            theme.isDarkMode = isDarkMode;
+            theme.isDarkMode = (
+                (theme.colorScheme === ColorScheme.Auto && isDarkMode) ||
+                theme.colorScheme === ColorScheme.Dark
+            );
             theme.fontColor = isDarkMode ? Colors.light : Colors.dark;
             theme.backgroundColor = isDarkMode ? Colors.darker : Colors.lighter;
             theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';

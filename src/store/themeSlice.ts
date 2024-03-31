@@ -6,9 +6,15 @@ import _, { get } from 'lodash';
 import { useMemo } from 'react';
 import { EdgeInsets } from 'react-native-safe-area-context';
 
+export enum ColorScheme {
+    Auto,
+    Light,
+    Dark
+}
 interface ThemeState {
     routeName: string;
     hideMenuBar: boolean;
+    colorScheme: ColorScheme;
     // menu bar padding bottom offset
     menuBarPaddingOffset: number;
     menuBarHeight?: number;
@@ -29,6 +35,7 @@ type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
 
 const initialState: ThemeState = {
     routeName: 'home',
+    colorScheme: ColorScheme.Auto,
     safeInsets: {
         top: 0,
         right: 0,

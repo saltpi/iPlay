@@ -21,13 +21,17 @@ import {
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuBar, MenuType} from '@view/menu/MenuBar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useAppDispatch, useAppSelector} from '@hook/store';
 import {
+    ColorScheme,
     selectScreenOptions,
     selectThemeBasicStyle,
     switchRoute,
+    updateTheme,
 } from '@store/themeSlice';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useColorScheme } from 'react-native';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -221,7 +225,9 @@ export function Router() {
     const dispatch = useAppDispatch();
     const options = useAppSelector(selectScreenOptions);
     const theme = useAppSelector(selectThemeBasicStyle);
+    const colorScheme = useAppSelector(state => state.theme.colorScheme);
     const isDarkMode = useAppSelector(state => state.theme.isDarkMode);
+    const isSysDarkMode = useColorScheme() === 'dark';
     // @ref https://reactnavigation.org/docs/themes/
     const pageTheme: Theme = {
         ...DefaultTheme,
@@ -232,6 +238,20 @@ export function Router() {
             background: theme.backgroundColor,
         },
     };
+
+    useEffect(() => {
+        dispatch(updateTheme(theme => {
+            const isDarkMode = (
+                (theme.colorScheme === ColorScheme.Auto && isSysDarkMode) ||
+                theme.colorScheme === ColorScheme.Dark
+            );
+            theme.fontColor = isDarkMode ? Colors.light : Colors.dark;
+            theme.backgroundColor = isDarkMode ? Colors.darker : Colors.lighter;
+            theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';
+            return theme
+        }))
+    }, [colorScheme])
+
     return (
         <NavigationContainer
             theme={pageTheme}
