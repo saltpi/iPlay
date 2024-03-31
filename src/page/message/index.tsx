@@ -1,6 +1,5 @@
 import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
-import { Episode } from "@model/Episode";
 import { Media } from "@model/Media";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { EpisodeCard } from "@view/EpisodeCard";

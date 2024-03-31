@@ -43,6 +43,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
 
     const updateTitleAlign = () => {
         dispatch(updateTheme(s => {
@@ -51,7 +52,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
         }));
     }
     return (
-        <View style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"

@@ -59,6 +59,7 @@ export function Page() {
     const dispatch = useAppDispatch()
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
@@ -105,7 +106,7 @@ export function Page() {
     }
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor}}>
+        <View style={{flex: 1, backgroundColor, paddingTop: pagePaddingTop}}>
             <View style={style.inputLine}>
                 <Text style={{...style.inputLabel, ...theme}}>服务器</Text>
                 <TextInput
@@ -150,6 +151,6 @@ export function Page() {
                         theme={theme} />
                 ))}
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }

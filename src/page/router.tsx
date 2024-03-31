@@ -8,7 +8,7 @@ import {Page as SeasonPage} from '@page/season/index.tsx';
 import {Page as SettingsPage} from '@page/settings/index.tsx';
 import {Page as StarPage} from '@page/star/index.tsx';
 import {Page as PlayerPage} from '@page/player/index.tsx';
-import {Page as ThemePage} from '@page/theme/index.tsx';
+import {Page as ThemePage} from '@page/settings/theme';
 import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
 import {Page as AboutPage} from '@page/settings/about/index.tsx';
