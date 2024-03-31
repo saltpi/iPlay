@@ -1,4 +1,5 @@
 import { PropsWithNavigation } from '@global';
+import { OSType, isIOS, isOS } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
@@ -31,9 +32,8 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const dispatch = useAppDispatch()
     const theme = useAppSelector(state => state.theme)
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
-    const statusBarHeight = useAppSelector(state => state.theme.statusBarHeight);
     const [etag, setEtag] = useState(Date.now().toString())
-    const headerHeight = 56
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -64,11 +64,10 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
 
     return (
         <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            style={{...style.page, backgroundColor, paddingTop: statusBarHeight + headerHeight}}>
+            style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
             <StatusBar />
             <View style={{marginBottom: theme.menuBarHeight}}>
             {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}

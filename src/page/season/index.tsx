@@ -39,18 +39,10 @@ export function Page({route, navigation}: SeasonPageProps) {
         });
     }
 
-    // useEffect(() => {
-    //     navigation.setOptions({
-    //         headerShown: false,
-    //         headerMode: "none"
-    //     })
-    // }, [])
-
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor}}>
             <StatusBar />
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1, backgroundColor}}>
@@ -63,6 +55,6 @@ export function Page({route, navigation}: SeasonPageProps) {
                         episode={episode} />
                 )}
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

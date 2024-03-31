@@ -54,12 +54,12 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="home"
                 component={HomePage as any}
-                options={{title: '主页'}}
+                options={{...fullscreenOptions, title: '主页'}}
             />
             <HomeStack.Screen
                 name="album"
                 component={AlbumPage as any}
-                options={defaultOptions}
+                options={fullscreenOptions}
             />
             <HomeStack.Screen
                 name="movie"

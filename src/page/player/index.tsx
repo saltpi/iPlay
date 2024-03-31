@@ -71,6 +71,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const videoRef = useRef<any>(null);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     const dispatch = useAppDispatch()
 
     const playEpisode = (episode: Episode) => {
@@ -127,7 +128,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     }, [])
 
     return (
-        <View style={style.root}>
+        <View style={{...style.root, paddingTop: pagePaddingTop}}>
         <View style={style.playerContainer}>
             {url ? <Video
                 source={{uri: url, title: episode.Name}}

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { printException } from "@helper/log";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Tag } from "./Tag";
 
 const style = StyleSheet.create({
     root: {
@@ -40,14 +41,19 @@ const style = StyleSheet.create({
         maxHeight: 100
     },
     No: {
-        color: "yellow",
+        overflow: "hidden",
         position: "absolute",
         right: 10,
         bottom: 10,
     },
+    icon: {
+        width: 32,
+    },
     favorite: {
         width: 32,
         height: 32,
+        flexShrink: 0,
+        flexGrow: 0,
     }
 });
 
@@ -89,6 +95,7 @@ export function EpisodeCard({style: extraStyle, emby, episode, onPress}: Episode
                     {episode.Overview}
                 </Text>
                 <TouchableOpacity activeOpacity={1.0} 
+                    style={style.icon}
                     onPress={() => markFavorite(Number(episode.Id ?? 0), !favorite)}>
                 {favorite ?
                 <FavoriteIconOff width={style.favorite.width}
@@ -98,7 +105,9 @@ export function EpisodeCard({style: extraStyle, emby, episode, onPress}: Episode
                 }
                 </TouchableOpacity>
             </View>
-            <Text style={style.No}>{episode.IndexNumber}</Text>
+            <Tag style={style.No} color="green">
+                {episode.IndexNumber}
+            </Tag>
         </View>
         </TouchableOpacity>
     )
