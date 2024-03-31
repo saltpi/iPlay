@@ -4,7 +4,7 @@ import { useAppSelector } from "@hook/store";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { Image } from "@view/Image";
 import { StatusBar } from "@view/StatusBar";
-import { Linking, SafeAreaView, ScrollView, StyleSheet, Text, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {

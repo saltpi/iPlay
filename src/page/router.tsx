@@ -84,7 +84,7 @@ const SettingsRouter = () => {
     return (
         <SettingsStack.Navigator
             initialRouteName="settings"
-            screenOptions={options}>
+            screenOptions={fullscreenOptions}>
             <SettingsStack.Screen
                 name="settings"
                 component={SettingsPage as any}
@@ -118,7 +118,7 @@ const SearchRouter = () => {
     return (
         <SearchStack.Navigator
             initialRouteName="search"
-            screenOptions={options}>
+            screenOptions={fullscreenOptions}>
             <SearchStack.Screen
                 name="search"
                 component={SearchPage}
@@ -147,7 +147,7 @@ const MessageRouter = () => {
     return (
         <MessageStack.Navigator
             initialRouteName="message"
-            screenOptions={options}>
+            screenOptions={fullscreenOptions}>
             <MessageStack.Screen
                 name="message"
                 component={MessagePage}
@@ -168,7 +168,8 @@ const MessageRouter = () => {
 const StarRouter = () => {
     const options = useAppSelector(selectScreenOptions)
     return (
-        <StarStack.Navigator initialRouteName="star" screenOptions={options}>
+        <StarStack.Navigator initialRouteName="star"
+            screenOptions={fullscreenOptions}>
             <StarStack.Screen
                 name="star"
                 component={StarPage as any}
@@ -235,10 +236,7 @@ export function Router() {
                     ...options
                 }}>
                 <Tab.Screen name={MenuType.Home} component={HomeRouter} />
-                <Tab.Screen
-                    name={MenuType.Settings}
-                    component={SettingsRouter}
-                />
+                <Tab.Screen name={MenuType.Settings} component={SettingsRouter} />
                 <Tab.Screen name={MenuType.Search} component={SearchRouter} />
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
                 <Tab.Screen name={MenuType.Message} component={MessageRouter} />
