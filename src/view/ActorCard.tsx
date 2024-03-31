@@ -9,27 +9,30 @@ const style = StyleSheet.create({
         margin: 5,
     },
     image: {
-        width: 120, 
+        width: 60, 
         aspectRatio: 0.66,
         borderRadius: 5
     },
     name: {
         textAlign: "center",
         overflow: "hidden",
-        width: 120,
+        width: 60,
+        fontSize: 12,
     },
     role: {
         textAlign: "center",
         overflow: "hidden",
-        width: 120,
+        fontSize: 10,
+        width: 60,
     }
 })
 
 export function ActorCard({actor, theme}: {actor: People, theme?: ThemeBasicStyle}) {
     const emby = useAppSelector(state => state.emby?.emby)
+    const avatorUrl = emby?.imageUrl?.(actor.Id, actor.PrimaryImageTag, "Primary")
     return (
         <View style={style.root}>
-            <Image style={style.image} source={{uri: emby?.imageUrl?.(actor.Id, actor.PrimaryImageTag, "Primary")}} />
+            <Image style={style.image} source={{uri: avatorUrl}} />
             <Text style={{...style.name, ...theme}}
                  numberOfLines={1} 
                  ellipsizeMode="tail">
