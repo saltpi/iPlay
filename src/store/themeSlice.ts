@@ -88,12 +88,12 @@ export const selectScreenOptions = createSelector([
     const options = {
         headerTitleAlign: headerTitleAlign,
         headerStyle: {
-            backgroundColor: "transparent"
+            backgroundColor: backgroundColor
         }, 
         headerTransparent: true,
         headerTintColor,
         contentStyle: {
-            backgroundColor: "transparent",
+            backgroundColor,
         },
     }
     return options as {};
