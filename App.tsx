@@ -36,6 +36,7 @@ function App() {
             if (insets) {
                 theme.statusBarHeight = insets.top;
                 theme.safeInsets = insets;
+                theme.pagePaddingTop = insets.top + 56;
             }
             return theme
         }))

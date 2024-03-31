@@ -189,7 +189,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView style={{backgroundColor}}
             showsVerticalScrollIndicator={false}>
-            <StatusBar backgroundColor={"transparent"} translucent={true} />
+            <StatusBar />
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}
@@ -197,7 +197,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             /> : null}
-            {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
+            {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 4/3}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
                 <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />

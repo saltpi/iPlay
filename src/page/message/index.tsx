@@ -31,6 +31,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
     const menuBarHeight = useAppSelector(state => state.theme.menuBarHeight)
     const theme = useAppSelector(selectThemeBasicStyle)
     const [refreshing, setRefreshing] = useState(false)
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     const onRefresh = () => {
         setRefreshing(true)
         emby?.getResume?.().then(res => {
@@ -51,7 +52,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
         })
     }, [emby])
     return (
-        <View style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor, padding: pagePaddingTop}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"

@@ -8,7 +8,8 @@ export function StatusBar(props: ComponentProps<typeof StatusBarOrigin>) {
     return (
         <StatusBarOrigin 
             barStyle={barStyle} 
-            backgroundColor={backgroundColor}
+            backgroundColor={"transparent"}
+            translucent
             {...props} />
     )
 }

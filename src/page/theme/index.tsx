@@ -51,8 +51,8 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
         }));
     }
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar translucent={false} />
+        <View style={{...style.page, backgroundColor}}>
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
@@ -77,6 +77,6 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                         onChange={updateTitleAlign} />
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

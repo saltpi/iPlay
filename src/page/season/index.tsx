@@ -48,7 +48,7 @@ export function Page({route, navigation}: SeasonPageProps) {
 
     return (
         <SafeAreaView style={{...style.page, backgroundColor}}>
-            <StatusBar backgroundColor={"transparent"} translucent />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

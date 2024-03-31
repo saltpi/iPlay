@@ -60,6 +60,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
     const insets = useSafeAreaInsets()
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const statusBarHeight = useAppSelector(state => state.theme.statusBarHeight);
     const onPress = (setting: SettingItemProps) => {
         if (setting.onPress) {
             setting.onPress.bind(null, setting, navigation)()
@@ -74,7 +75,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
         }
     }
     return (
-        <View style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor, paddingTop: statusBarHeight + 56}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"

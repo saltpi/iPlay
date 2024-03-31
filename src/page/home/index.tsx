@@ -33,6 +33,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const statusBarHeight = useAppSelector(state => state.theme.statusBarHeight);
     const [etag, setEtag] = useState(Date.now().toString())
+    const headerHeight = 56
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -67,8 +68,8 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            style={{...style.page, backgroundColor, paddingTop: statusBarHeight}}>
-            <StatusBar backgroundColor={"transparent"} translucent />
+            style={{...style.page, backgroundColor, paddingTop: statusBarHeight + headerHeight}}>
+            <StatusBar />
             <View style={{marginBottom: theme.menuBarHeight}}>
             {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
             </View>

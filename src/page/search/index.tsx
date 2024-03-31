@@ -53,6 +53,7 @@ export function Page() {
     const [searchKeyword, setSearchKeyword] = useState("")
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     useEffect(() => {
         setLoading(true)
         emby?.searchRecommend?.()
@@ -74,8 +75,8 @@ export function Page() {
             .catch(printException)
     }, [searchKeyword, emby])
     return (
-        <View style={{...style.page, ...theme}}>
-            <StatusBar backgroundColor={"transparent"} translucent />
+        <View style={{...style.page, ...theme, paddingTop: pagePaddingTop}}>
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

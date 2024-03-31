@@ -13,6 +13,7 @@ interface ThemeState {
     menuBarPaddingOffset: number;
     menuBarHeight?: number;
     statusBarHeight: number,
+    pagePaddingTop: number,
     safeInsets: EdgeInsets;
     showVideoLink?: boolean;
     isDarkMode: boolean;
@@ -40,6 +41,7 @@ const initialState: ThemeState = {
     showVideoLink: false,
     isDarkMode: false,
     headerTitleAlign: 'center',
+    pagePaddingTop: 56,
 };
 
 export const slice = createSlice({
@@ -85,10 +87,13 @@ export const selectScreenOptions = createSelector([
 ], (headerTintColor, backgroundColor, headerTitleAlign) => {
     const options = {
         headerTitleAlign: headerTitleAlign,
-        headerStyle: {backgroundColor}, 
+        headerStyle: {
+            backgroundColor: "transparent"
+        }, 
+        headerTransparent: true,
         headerTintColor,
         contentStyle: {
-            backgroundColor,
+            backgroundColor: "transparent",
         },
     }
     return options as {};

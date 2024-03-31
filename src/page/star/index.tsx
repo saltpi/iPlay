@@ -62,6 +62,7 @@ export function Page(props: PropsWithNavigation<"default">) {
         })
     }
 
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     const [refreshing, setRefreshing] = useState(false)
     const onRefresh = () => {
         setRefreshing(true)
@@ -74,7 +75,7 @@ export function Page(props: PropsWithNavigation<"default">) {
     }, [emby])
 
     return (
-        <View style={{...style.page, ...theme}}>
+        <View style={{...style.page, ...theme, paddingTop: pagePaddingTop}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
