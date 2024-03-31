@@ -9,6 +9,7 @@ import { EmbySite } from "@model/EmbySite";
 import { Device, Version } from "@helper/device";
 import { UserData } from "@model/UserData";
 import { PlaybackData, kPlayStopData, kPlaybackData } from "@model/PlaybackData";
+import { random } from "lodash";
 
 export const CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,

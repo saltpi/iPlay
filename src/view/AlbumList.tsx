@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Navigation, ThemeBasicStyle} from '@global';
 import { MediaCard } from './MediaCard';
 import { useAppDispatch, useAppSelector } from '@hook/store';
-import { fetchEmbyAlbumAsync } from '@store/embySlice';
+import { fetchEmbyAlbumAsync, fetchLatestMediaAsync } from '@store/embySlice';
 import { Spin } from './Spin';
 import { selectThemeBasicStyle } from '@store/themeSlice';
 import { ListView } from './ListView';
@@ -109,33 +109,21 @@ export interface SiteResourceProps {
 }
 
 export function SiteResource({etag}: SiteResourceProps) {
-    const [albums, setAlbums] = useState<ViewDetail[]>([]);
-    const [medias, setMedias] = useState<(Media[] | undefined)[]>([]);
+    const albums = useAppSelector(state => state.emby.source?.albums ?? [])
+    const medias = useAppSelector(state => state.emby.source?.latestMedias ?? [])
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const emby = useAppSelector(state => state.emby.emby)
     const theme = useAppSelector(selectThemeBasicStyle)
 
-    const getMediaContent = async (emby: Emby) => {
-        dispatch(fetchEmbyAlbumAsync()).then(data => {
-            if (typeof data.payload === "string") return
-            setAlbums(data.payload?.Items || [])
-        })
-    }
     useEffect(() => {
-        if (!emby) return
-        getMediaContent(emby)
-    }, [emby, etag]);
+        dispatch(fetchEmbyAlbumAsync())
+    }, []);
 
     useEffect(() => {
         const getMedia = async () => {
             setLoading(true);
-            const medias = await Promise.all(
-                albums.map(async album => {
-                    return await emby?.getLatestMedia?.(Number(album.Id));
-                }),
-            );
-            setMedias(medias);
+            await dispatch(fetchLatestMediaAsync())
             setTimeout(() => {
                 setLoading(false);
             }, 1000);

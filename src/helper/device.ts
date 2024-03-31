@@ -1,3 +1,4 @@
+import { random } from "lodash";
 import { Platform } from "react-native";
 import { Dimensions } from 'react-native';
 import DeviceInfo from "react-native-device-info";
@@ -52,16 +53,13 @@ export const Version = {
 
 export const Device = {
     name: "",
-    did: "",
+    did: random(1000000000000000, 9999999999999999).toString(),
     // safe area insets
     insets: { top: 0, right: 0, bottom: 0, left: 0 },
 
     init: async () => {
         Device.did = await DeviceInfo.getUniqueId();
         Device.name = await DeviceInfo.getDeviceName();
-        const insets = initialWindowMetrics ?.insets 
-        if (insets) {
-            Device.insets = insets
-        }
+        console.log("device info", Device.name, Device.did)
     }
 }

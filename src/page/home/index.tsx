@@ -31,10 +31,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     const emby = useAppSelector(state => state.emby?.emby)
     const dispatch = useAppDispatch()
-    const theme = useAppSelector(state => state.theme)
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const [etag, setEtag] = useState(Date.now().toString())
-    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     const pageStyle = useAppSelector(selectThemedPageStyle)
     useEffect(() => {
         if (!site?.server || !site?.user) {

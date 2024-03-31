@@ -6,14 +6,19 @@ import { StorageHelper } from '@helper/store';
 import { EmbySite } from '@model/EmbySite';
 import { EmbyConfig } from '@helper/env';
 import { Emby } from '@api/emby';
-import { View } from '@model/View';
+import { View, ViewDetail } from '@model/View';
 import { PlaybackInfo } from '@model/PlaybackInfo';
 import _ from 'lodash';
+import { Media } from '@model/Media';
 
 interface EmbyState {
     site: EmbySite|null;
     emby: Emby|null;
     sites?: EmbySite[];
+    source?: {
+        albums?: ViewDetail[]
+        latestMedias?: Media[][]
+    }
 }
 
 const initialState: EmbyState = {
@@ -47,7 +52,7 @@ export const restoreSiteAsync = createAppAsyncThunk<EmbySite|null, void>("emby/r
     return null
 });
 
-export const switchToSiteAsync = createAppAsyncThunk<EmbySite|null, string>("emby/switch", async (id, config) => {
+export const switchToSiteAsync = createAppAsyncThunk<EmbySite|undefined, string>("emby/switch", async (id, config) => {
     const state = config.getState().emby
     const site = state.sites?.filter(site => site.id === id)?.[0]
     if (site) {
@@ -78,6 +83,17 @@ export const fetchEmbyAlbumAsync = createAppAsyncThunk<View|undefined, void>("em
     return data
 })
 
+export const fetchLatestMediaAsync = createAppAsyncThunk<(Media[]|undefined)[]|undefined, void>("emby/latest", async (_, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const albums = state.emby.source?.albums ?? []
+    const medias = await Promise.all(
+        albums.map(async album => {
+            return await emby?.getLatestMedia?.(Number(album.Id));
+        }),
+    );
+    return medias
+})
 
 export const helloAsync = createAsyncThunk<string, string, any>("emby/site", async (content, _config) => {
     return content
@@ -138,10 +154,26 @@ export const slice = createSlice({
             state.emby = action.payload ? new Emby(action.payload) : null
         })
         .addCase(switchToSiteAsync.fulfilled, (state, action) => {
-            state.site = action.payload;
+            if (action.payload) state.site = action.payload
             state.emby = action.payload ? new Emby(action.payload) : null
         })
         .addCase(fetchEmbyAlbumAsync.fulfilled, (state, action) => {
+            if (state.source) {
+                state.source.albums = action.payload?.Items ?? []
+            } else {
+                state.source = {
+                    albums: action.payload?.Items ?? []
+                }
+            }
+        })
+        .addCase(fetchLatestMediaAsync.fulfilled, (state, action) => {
+            if (state.source) {
+                state.source.latestMedias = action.payload as Media[][]
+            } else {
+                state.source = {
+                    latestMedias: action.payload as Media[][]
+                }
+            }
         })
     },
 });

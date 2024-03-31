@@ -20,9 +20,9 @@ function App() {
     const insets = initialWindowMetrics?.insets
     const init = async () => {
         try {
+            await Device.init();
             console.log(`window insets: `, insets)
             store.dispatch(restoreSiteAsync());
-            await Device.init();
         } catch (e) {
             console.log(e);
         }
