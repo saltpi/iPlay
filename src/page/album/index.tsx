@@ -95,7 +95,7 @@ export function Page({route, navigation}: PropsWithNavigation<'album'>) {
         Math.floor((kFullScreenStyle.width - 20) / 120);
 
     return (
-        <View style={{...style.root, ...pageStyle}}>
+        <View style={{...style.root, paddingTop: pageStyle.paddingTop}}>
             {data && data.length > 0 ? (
                 <ListView
                     items={data}

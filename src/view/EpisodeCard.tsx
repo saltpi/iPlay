@@ -10,6 +10,8 @@ import { printException } from "@helper/log";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Tag } from "./Tag";
+import { Like } from "./like/Like";
+import { PlayCount } from "./counter/PlayCount";
 
 const style = StyleSheet.create({
     root: {
@@ -54,6 +56,11 @@ const style = StyleSheet.create({
         height: 32,
         flexShrink: 0,
         flexGrow: 0,
+    },
+    actionBar: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
     }
 });
 
@@ -94,16 +101,13 @@ export function EpisodeCard({style: extraStyle, emby, episode, onPress}: Episode
                     >
                     {episode.Overview}
                 </Text>
-                <TouchableOpacity activeOpacity={1.0} 
-                    style={style.icon}
-                    onPress={() => markFavorite(Number(episode.Id ?? 0), !favorite)}>
-                {favorite ?
-                <FavoriteIconOff width={style.favorite.width}
-                    style={style.favorite} /> :
-                <FavoriteIconOn width={style.favorite.width}
-                    style={style.favorite} />
-                }
-                </TouchableOpacity>
+                <View style={style.actionBar}>
+                <Like id={Number(episode.Id ?? 0)}
+                    emby={emby}
+                    isFavorite={episode.UserData.IsFavorite}
+                    />
+                <PlayCount count={episode?.UserData?.PlayCount ?? 0} />
+                </View>
             </View>
             <Tag style={style.No} color="green">
                 {episode.IndexNumber}

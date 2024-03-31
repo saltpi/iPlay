@@ -22,6 +22,8 @@ import { PlayEventType } from "@view/mpv/Player";
 import { PlaybackStateType } from "@view/mpv/type";
 import { fetchPlaybackAsync } from "@store/embySlice";
 import { StatusBar } from "@view/StatusBar";
+import { Like } from "@view/like/Like";
+import { PlayCount } from "@view/counter/PlayCount";
 
 const style = StyleSheet.create({
     overview: {
@@ -32,8 +34,15 @@ const style = StyleSheet.create({
         fontWeight: "600",
         fontSize: 20,
     },
+    logo: {
+        width: "50%", 
+        height: 28, 
+        marginTop: 10, 
+        marginBottom: 10
+    },
     tags: {
         flexDirection: "row",
+        flexWrap: "wrap",
         marginTop: 5,
         paddingLeft: 2.5,
         paddingRight: 2.5,
@@ -68,6 +77,12 @@ const style = StyleSheet.create({
     link: {
         textAlign: "center",
         color: "blue",
+    },
+    actionBar: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
     }
 })
 
@@ -178,7 +193,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             }))
         }
     }
-
+    const logoUrl = emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Logo")
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     const iconSize = preferedSize(24, 36, windowWidth/10)
     const playButtonStyle = {
@@ -209,6 +224,16 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
                 <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
             </TouchableOpacity> : null}
             {loading ? <Spin color={themeStyle.color} size="small" /> : null}
+            </View>
+            <View style={style.actionBar}>
+            <Image style={style.logo}
+                resizeMode="contain"
+                source={{uri: logoUrl}} />
+            <Like id={Number(movie.Id)}
+                emby={emby}
+                isFavorite={detail?.UserData?.IsFavorite ?? false}
+             />
+            <PlayCount count={detail?.UserData?.PlayCount ?? 0} />
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
