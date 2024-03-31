@@ -154,7 +154,7 @@ class PlayerView(
 
     override fun onDetachedFromWindow() {
         Log.d(TAG, "destroy player")
-        contentView.viewModel.stop()
+        contentView.viewModel.destroy()
         super.onDetachedFromWindow()
     }
 
