@@ -4,7 +4,7 @@ import {persistor, store} from '@store';
 import {Toast, toastConfig} from '@helper/toast';
 import {restoreSiteAsync} from '@store/embySlice';
 import { Router } from '@page/router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, initialWindowMetrics, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Appearance, useColorScheme } from 'react-native';
 import { updateTheme } from '@store/themeSlice';
@@ -16,8 +16,10 @@ import { PlayerMonitor } from '@view/PlayerMonitor';
 function App() {
     const [inited, setInited] = useState(false);
     const isDarkMode = useColorScheme() === 'dark';
+    const insets = initialWindowMetrics?.insets
     const init = async () => {
         try {
+            console.log(`window insets: `, insets)
             store.dispatch(restoreSiteAsync());
             await Device.init();
         } catch (e) {
@@ -31,6 +33,10 @@ function App() {
             theme.fontColor = isDarkMode ? Colors.light : Colors.dark;
             theme.backgroundColor = isDarkMode ? Colors.darker : Colors.lighter;
             theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';
+            if (insets) {
+                theme.statusBarHeight = insets.top;
+                theme.safeInsets = insets;
+            }
             return theme
         }))
     }

@@ -63,7 +63,7 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={fullscreenOptions}
+                options={defaultOptions}
             />
             <HomeStack.Screen
                 name="season"

@@ -4,6 +4,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
 import _, { get } from 'lodash';
 import { useMemo } from 'react';
+import { EdgeInsets } from 'react-native-safe-area-context';
 
 interface ThemeState {
     routeName: string;
@@ -11,6 +12,8 @@ interface ThemeState {
     // menu bar padding bottom offset
     menuBarPaddingOffset: number;
     menuBarHeight?: number;
+    statusBarHeight: number,
+    safeInsets: EdgeInsets;
     showVideoLink?: boolean;
     isDarkMode: boolean;
     fontColor?: string;
@@ -25,8 +28,15 @@ type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
 
 const initialState: ThemeState = {
     routeName: 'home',
+    safeInsets: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    },
     hideMenuBar: false,
     menuBarPaddingOffset: 0,
+    statusBarHeight: 0,
     showVideoLink: false,
     isDarkMode: false,
     headerTitleAlign: 'center',

@@ -71,7 +71,7 @@ const style = StyleSheet.create({
     }
 })
 
-export function Page({route}: PropsWithNavigation<"movie">) {
+export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const themeStyle = useAppSelector(selectThemeBasicStyle)
@@ -189,7 +189,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView style={{backgroundColor}}
             showsVerticalScrollIndicator={false}>
-            <StatusBar backgroundColor={"transparent"} translucent={true} />
+            {/* <StatusBar backgroundColor={"transparent"} translucent={true} /> */}
             <View>
             {url && isPlaying ? <Video
                 ref={videoRef}
