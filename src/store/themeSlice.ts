@@ -1,16 +1,24 @@
 import { ThemeBasicStyle } from '@global';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
-import _, { get } from 'lodash';
-import { useMemo } from 'react';
+import _ from 'lodash';
+import { EdgeInsets } from 'react-native-safe-area-context';
 
+export enum ColorScheme {
+    Auto,
+    Light,
+    Dark
+}
 interface ThemeState {
     routeName: string;
     hideMenuBar: boolean;
+    colorScheme: ColorScheme;
     // menu bar padding bottom offset
     menuBarPaddingOffset: number;
     menuBarHeight?: number;
+    statusBarHeight: number,
+    pagePaddingTop: number,
+    safeInsets: EdgeInsets;
     showVideoLink?: boolean;
     isDarkMode: boolean;
     fontColor?: string;
@@ -25,11 +33,20 @@ type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
 
 const initialState: ThemeState = {
     routeName: 'home',
+    colorScheme: ColorScheme.Auto,
+    safeInsets: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    },
     hideMenuBar: false,
     menuBarPaddingOffset: 0,
+    statusBarHeight: 0,
     showVideoLink: false,
     isDarkMode: false,
     headerTitleAlign: 'center',
+    pagePaddingTop: 56,
 };
 
 export const slice = createSlice({
@@ -67,6 +84,8 @@ export const slice = createSlice({
 const getHeaderTintColor = (state: RootState) => state.theme.fontColor;
 const getBackgroundColor = (state: RootState) => state.theme.backgroundColor;
 const getHeaderTitleAlign = (state: RootState) => state.theme.headerTitleAlign;
+const getPagePaddingTop = (state: RootState) => state.theme.pagePaddingTop;
+const getMenuBarHeight = (state: RootState) => state.theme.menuBarHeight;
 
 export const selectScreenOptions = createSelector([
     getHeaderTintColor,
@@ -75,7 +94,10 @@ export const selectScreenOptions = createSelector([
 ], (headerTintColor, backgroundColor, headerTitleAlign) => {
     const options = {
         headerTitleAlign: headerTitleAlign,
-        headerStyle: {backgroundColor}, 
+        headerStyle: {
+            backgroundColor: backgroundColor
+        }, 
+        headerTransparent: true,
         headerTintColor,
         contentStyle: {
             backgroundColor,
@@ -89,6 +111,20 @@ export const selectThemeBasicStyle = createSelector([
     getBackgroundColor
 ], (color, backgroundColor) => {
     return {color, backgroundColor} as ThemeBasicStyle;
+})
+
+export const selectThemedPageStyle = createSelector([
+    getHeaderTintColor,
+    getBackgroundColor,
+    getPagePaddingTop,
+    getMenuBarHeight
+], (color, backgroundColor, paddingTop, paddingBottom) => {
+    return {
+        color, 
+        backgroundColor,
+        paddingTop,
+        paddingBottom
+    };
 })
 
 export const { 

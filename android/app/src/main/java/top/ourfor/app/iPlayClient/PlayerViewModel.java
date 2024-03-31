@@ -99,7 +99,8 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void destroy() {
-        mpv.destroy();
+        mpv.command("stop");
+        mpv.command("quit");
     }
 
     public void watch() {
@@ -117,6 +118,8 @@ public class PlayerViewModel implements Player {
                     }
                     if (e.type == MPV_EVENT_SHUTDOWN) {
                         Log.d(TAG, "close mpv player");
+                        if (mpv != null) mpv.destroy();
+                        mpv = null;
                         break;
                     }
 

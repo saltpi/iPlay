@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { updateConfig } from "@store/configSlice";
-import { updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
+import { selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
 import { SafeAreaView, ScrollView, StyleSheet, Switch, SwitchChangeEvent, Text, TextInput, View } from "react-native";
 
@@ -38,8 +38,10 @@ const style = StyleSheet.create({
 export function Page() {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+    const theme = useAppSelector(selectThemeBasicStyle)
     const dispatch = useAppDispatch();
     const maxStreamingBitrate = useAppSelector((state) => state.config.video.MaxStreamingBitrate);
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     const updateMaxStreamingBitrate = (text: string) => {
         dispatch(updateConfig(s => {
             s.video.MaxStreamingBitrate = Number(text);
@@ -48,7 +50,7 @@ export function Page() {
     }
 
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
@@ -57,13 +59,15 @@ export function Page() {
                 style={{flex: 1, backgroundColor}}>
                 <View style={style.inline}>
                     <Text style={{...style.label, color}}>视频流比特率</Text>
-                    <TextInput style={{...style.input, color}}
+                    <TextInput style={{...style.input, ...theme}}
                         keyboardType="numeric"
+                        placeholderTextColor={color}
+                        placeholder={maxStreamingBitrate?.toString()}
                         value={maxStreamingBitrate?.toString()}
                         onChangeText={updateMaxStreamingBitrate}
                         />
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

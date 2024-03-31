@@ -15,12 +15,15 @@ import PlayIcon from "../../asset/play.svg"
 import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
-import { selectThemeBasicStyle } from "@store/themeSlice";
+import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 import { printException } from "@helper/log";
 import { updatePlayerState } from "@store/playerSlice";
 import { PlayEventType } from "@view/mpv/Player";
 import { PlaybackStateType } from "@view/mpv/type";
 import { fetchPlaybackAsync } from "@store/embySlice";
+import { StatusBar } from "@view/StatusBar";
+import { Like } from "@view/like/Like";
+import { PlayCount } from "@view/counter/PlayCount";
 
 const style = StyleSheet.create({
     overview: {
@@ -28,11 +31,19 @@ const style = StyleSheet.create({
     },
     actorSection: {
         marginTop: 5,
+        marginLeft: 5,
         fontWeight: "600",
-        fontSize: 20,
+        fontSize: 17,
+    },
+    logo: {
+        width: "50%", 
+        height: 28, 
+        marginTop: 10, 
+        marginBottom: 10
     },
     tags: {
         flexDirection: "row",
+        flexWrap: "wrap",
         marginTop: 5,
         paddingLeft: 2.5,
         paddingRight: 2.5,
@@ -67,10 +78,16 @@ const style = StyleSheet.create({
     link: {
         textAlign: "center",
         color: "blue",
+    },
+    actionBar: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
     }
 })
 
-export function Page({route}: PropsWithNavigation<"movie">) {
+export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const themeStyle = useAppSelector(selectThemeBasicStyle)
@@ -85,6 +102,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     const videoRef = useRef<any>()
     const [loading, setLoading] = useState(false)
     const [infoLoading, setInfoLoading] = useState(false)
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
@@ -176,7 +194,7 @@ export function Page({route}: PropsWithNavigation<"movie">) {
             }))
         }
     }
-
+    const logoUrl = emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Logo")
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     const iconSize = preferedSize(24, 36, windowWidth/10)
     const playButtonStyle = {
@@ -188,19 +206,37 @@ export function Page({route}: PropsWithNavigation<"movie">) {
     return (
         <ScrollView style={{backgroundColor}}
             showsVerticalScrollIndicator={false}>
+            <StatusBar />
             <View>
-            {url && isPlaying ? <Video
+            {url && isPlaying ? 
+            <>
+            <View style={{width: "100%", height: pageStyle.paddingTop}} />
+            <Video
                 ref={videoRef}
                 source={{uri: url, title: detail?.Name ?? ""}}
                 onPlaybackStateChanged={onPlaybackStateChanged}
-                style={style.player}
-            /> : null}
-            {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 16/9}} source={{ uri: poster}} />}
+                style={{...style.player}}
+            />
+            </>
+             : null}
+            {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 4/3}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
                 <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
             </TouchableOpacity> : null}
             {loading ? <Spin color={themeStyle.color} size="small" /> : null}
+            </View>
+            <View style={style.actionBar}>
+            <Image style={style.logo}
+                resizeMode="contain"
+                source={{uri: logoUrl}} />
+            <Like id={Number(movie.Id)}
+                emby={emby}
+                isFavorite={detail?.UserData?.IsFavorite ?? false}
+             />
+            <PlayCount 
+                style={{color: themeStyle.color}}
+                count={detail?.UserData?.PlayCount ?? 0} />
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
@@ -218,11 +254,18 @@ export function Page({route}: PropsWithNavigation<"movie">) {
                 {url}
             </Text> : null}
             {seasons ? <SeasonCardList seasons={seasons} /> : null}
-            {detail?.People.length ? <Text style={{...style.actorSection, ...themeStyle}}>
+            {detail?.People.length ? 
+            <Text style={{...style.actorSection, ...themeStyle}}>
                 演职人员
-            </Text> : null}
+            </Text> 
+            : null}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {detail?.People.map((actor, index) => <ActorCard key={index} theme={themeStyle} actor={actor} />)}
+            {detail?.People.map((actor, index) => 
+                <ActorCard key={index} 
+                    theme={themeStyle} 
+                    actor={actor}
+                    onPress={() => navigation.navigate("actor", {title: actor.Name, actor})}
+                />)}
             </ScrollView>
         </ScrollView>
     )

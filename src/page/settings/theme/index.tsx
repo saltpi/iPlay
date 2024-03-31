@@ -1,7 +1,9 @@
+import { PropsWithNavigation } from "@global";
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
+import { ColorScheme, selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
 import { StatusBar } from "@view/StatusBar";
-import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import { Tag } from "@view/Tag";
+import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -34,7 +36,7 @@ const style = StyleSheet.create({
     }
 });
 
-export function Page() {
+export function Page({navigation}: PropsWithNavigation<"theme">) {
     const dispatch = useAppDispatch();
     const menuBarPaddingOffset = useAppSelector((state) => state.theme.menuBarPaddingOffset);
     const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);
@@ -42,6 +44,8 @@ export function Page() {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const colorScheme = useAppSelector(state => state.theme.colorScheme)
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
 
     const updateTitleAlign = () => {
         dispatch(updateTheme(s => {
@@ -50,7 +54,7 @@ export function Page() {
         }));
     }
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
             <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
@@ -75,7 +79,22 @@ export function Page() {
                     <Switch value={headerTitleAlign === 'center'}
                         onChange={updateTitleAlign} />
                 </View>
+                <View style={style.inline}>
+                    <Text style={{...style.label, ...theme}}>显示模式</Text>
+                    <Tag color={colorScheme === ColorScheme.Auto ? "red" : "gold"}
+                        onPress={_ => dispatch(updateTheme({colorScheme: ColorScheme.Auto}))}>
+                        跟随系统
+                    </Tag>
+                    <Tag color={colorScheme === ColorScheme.Dark ? "red" : "gold"}
+                        onPress={_ => dispatch(updateTheme({colorScheme: ColorScheme.Dark}))} >
+                        深色模式
+                    </Tag>
+                    <Tag color={colorScheme === ColorScheme.Light ? "red" : "gold"}
+                        onPress={_ => dispatch(updateTheme({colorScheme: ColorScheme.Light}))}>
+                        浅色模式
+                    </Tag>
+                </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

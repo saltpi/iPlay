@@ -1,8 +1,10 @@
 import { PropsWithNavigation } from '@global';
+import { OSType, isIOS, isOS } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
-import { patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
-import {SiteResource} from '@view/AlbumList';
+import { fetchEmbyAlbumAsync, patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
+import { selectThemedPageStyle } from '@store/themeSlice';
+import { SiteResource } from '@view/SiteResource';
 import { StatusBar } from '@view/StatusBar';
 import { set } from 'lodash';
 import React, {useEffect, useState} from 'react';
@@ -29,9 +31,8 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     const emby = useAppSelector(state => state.emby?.emby)
     const dispatch = useAppDispatch()
-    const theme = useAppSelector(state => state.theme)
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const [etag, setEtag] = useState(Date.now().toString())
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -55,24 +56,22 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const onRefresh = () => {
         setRefreshing(true)
         setEtag(Date.now().toString())
-        setTimeout(() => {
-            setRefreshing(false)
-        }, 500)
+        dispatch(fetchEmbyAlbumAsync())
+            .then(() => {
+                setRefreshing(false)
+            })
     }
 
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, ...pageStyle}}>
             <StatusBar />
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={{flex: 1}}>
-                <View style={{marginBottom: theme.menuBarHeight}}>
-                {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
-                </View>
+                {site?.server && site?.user ? <SiteResource /> : <Button title="添加站点" onPress={goToLogin} />}
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }

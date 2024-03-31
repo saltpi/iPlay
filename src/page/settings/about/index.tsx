@@ -4,7 +4,7 @@ import { useAppSelector } from "@hook/store";
 import { selectThemeBasicStyle } from "@store/themeSlice";
 import { Image } from "@view/Image";
 import { StatusBar } from "@view/StatusBar";
-import { Linking, SafeAreaView, ScrollView, StyleSheet, Text, Touchable, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -42,8 +42,9 @@ const style = StyleSheet.create({
 export function Page(props: PropsWithNavigation<"default">) {
     const theme = useAppSelector(selectThemeBasicStyle)
     const url = "https://github.com/ourfor/iPlayClient"
+    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
     return (
-        <SafeAreaView style={{...style.page, ...theme}}>
+        <View style={{...style.page, ...theme, paddingTop: pagePaddingTop}}>
             <StatusBar />
             <Image style={style.logo} source={require("@asset/logo.png")} />
             <Text style={{...style.slogan, ...theme}}>
@@ -59,6 +60,6 @@ export function Page(props: PropsWithNavigation<"default">) {
                 onPress={() => Linking.openURL(url)}>
                 <Text style={{...style.link, ...theme}}>{url}</Text>
             </TouchableOpacity>
-        </SafeAreaView>
+        </View>
     )
 }

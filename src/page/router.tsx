@@ -8,17 +8,31 @@ import {Page as SeasonPage} from '@page/season/index.tsx';
 import {Page as SettingsPage} from '@page/settings/index.tsx';
 import {Page as StarPage} from '@page/star/index.tsx';
 import {Page as PlayerPage} from '@page/player/index.tsx';
-import {Page as ThemePage} from '@page/theme/index.tsx';
+import {Page as ThemePage} from '@page/settings/theme';
 import {Page as VideoConfigPage} from '@page/settings/video/index.tsx';
 import {Page as TestPage} from '@page/test/index.tsx';
+import {Page as ActorPage} from '@page/actor/index.tsx';
 import {Page as AboutPage} from '@page/settings/about/index.tsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {DefaultTheme, NavigationContainer, NavigationState, Theme} from '@react-navigation/native';
+import {
+    DefaultTheme,
+    NavigationContainer,
+    NavigationState,
+    Theme,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuBar, MenuType} from '@view/menu/MenuBar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useAppDispatch, useAppSelector} from '@hook/store';
-import {selectScreenOptions, selectThemeBasicStyle, switchRoute} from '@store/themeSlice';
+import {
+    ColorScheme,
+    selectScreenOptions,
+    selectThemeBasicStyle,
+    switchRoute,
+    updateTheme,
+} from '@store/themeSlice';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useColorScheme } from 'react-native';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -26,18 +40,22 @@ const SearchStack = createNativeStackNavigator();
 const StarStack = createNativeStackNavigator();
 const MessageStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const defaultOptions = (options: any) => {
-    return {
+
+const OptionWithTitle = (kv: any) => {
+    return (options: any) => ({
         title: (options.route.params as any)?.title ?? '',
-    };
-};
-const fullscreenOptions = (options: any) => {
-    return {
-        title: (options.route.params as any)?.title ?? '',
-    };
-};
+        ...kv
+    })
+}
+
+const immersiveOptions = (options: any) => ({
+    title: (options.route.params as any)?.title ?? '',
+    headerTransparent: true,
+    headerStyle: {backgroundColor: 'transparent'},
+});
+
 const HomeRouter = () => {
-    const options = useAppSelector(selectScreenOptions)
+    const options = useAppSelector(selectScreenOptions);
     return (
         <HomeStack.Navigator initialRouteName="home" screenOptions={options}>
             <HomeStack.Screen
@@ -53,28 +71,33 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="album"
                 component={AlbumPage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <HomeStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <HomeStack.Screen
                 name="season"
                 component={SeasonPage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <HomeStack.Screen
                 name="player"
                 component={PlayerPage as any}
-                options={fullscreenOptions}
+                options={options}
+            />
+            <HomeStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
         </HomeStack.Navigator>
     );
 };
 const SettingsRouter = () => {
-    const options = useAppSelector(selectScreenOptions)
+    const options = useAppSelector(selectScreenOptions);
     return (
         <SettingsStack.Navigator
             initialRouteName="settings"
@@ -108,7 +131,7 @@ const SettingsRouter = () => {
     );
 };
 const SearchRouter = () => {
-    const options = useAppSelector(selectScreenOptions)
+    const options = useAppSelector(selectScreenOptions);
     return (
         <SearchStack.Navigator
             initialRouteName="search"
@@ -118,26 +141,31 @@ const SearchRouter = () => {
                 component={SearchPage}
                 options={{title: '搜索'}}
             />
-            <HomeStack.Screen
+            <SearchStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <SearchStack.Screen
                 name="season"
                 component={SeasonPage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <SearchStack.Screen
                 name="player"
                 component={PlayerPage as any}
-                options={fullscreenOptions}
+                options={immersiveOptions}
+            />
+            <SearchStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
         </SearchStack.Navigator>
     );
 };
 const MessageRouter = () => {
-    const options = useAppSelector(selectScreenOptions)
+    const options = useAppSelector(selectScreenOptions);
     return (
         <MessageStack.Navigator
             initialRouteName="message"
@@ -150,19 +178,27 @@ const MessageRouter = () => {
             <MessageStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
+            />
+            <MessageStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
             <MessageStack.Screen
                 name="test"
                 component={TestPage as any}
-                options={{title: '测试'}} />
+                options={{title: '测试'}}
+            />
         </MessageStack.Navigator>
     );
 };
 const StarRouter = () => {
-    const options = useAppSelector(selectScreenOptions)
+    const options = useAppSelector(selectScreenOptions);
     return (
-        <StarStack.Navigator initialRouteName="star" screenOptions={options}>
+        <StarStack.Navigator
+            initialRouteName="star"
+            screenOptions={options}>
             <StarStack.Screen
                 name="star"
                 component={StarPage as any}
@@ -173,22 +209,27 @@ const StarRouter = () => {
             <StarStack.Screen
                 name="movie"
                 component={MoviePage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <StarStack.Screen
                 name="season"
                 component={SeasonPage as any}
-                options={defaultOptions}
+                options={immersiveOptions}
             />
             <StarStack.Screen
                 name="player"
                 component={PlayerPage as any}
-                options={fullscreenOptions}
+                options={immersiveOptions}
             />
             <StarStack.Screen
                 name="test"
                 component={TestPage}
                 options={{title: '测试'}}
+            />
+            <StarStack.Screen
+                name="actor"
+                component={ActorPage as any}
+                options={OptionWithTitle(options)}
             />
         </StarStack.Navigator>
     );
@@ -204,19 +245,35 @@ function getActiveRouteName(state: NavigationState) {
 
 export function Router() {
     const dispatch = useAppDispatch();
-    const options = useAppSelector(selectScreenOptions)
+    const options = useAppSelector(selectScreenOptions);
     const theme = useAppSelector(selectThemeBasicStyle);
+    const colorScheme = useAppSelector(state => state.theme.colorScheme);
     const isDarkMode = useAppSelector(state => state.theme.isDarkMode);
+    const isSysDarkMode = useColorScheme() === 'dark';
     // @ref https://reactnavigation.org/docs/themes/
     const pageTheme: Theme = {
-        ...DefaultTheme, 
-        dark: isDarkMode, 
+        ...DefaultTheme,
+        dark: isDarkMode,
         colors: {
             ...DefaultTheme.colors,
             text: theme.color ?? DefaultTheme.colors.text,
             background: theme.backgroundColor,
-        }
-    }
+        },
+    };
+
+    useEffect(() => {
+        dispatch(updateTheme(theme => {
+            const isDarkMode = (
+                (theme.colorScheme === ColorScheme.Auto && isSysDarkMode) ||
+                theme.colorScheme === ColorScheme.Dark
+            );
+            theme.fontColor = isDarkMode ? Colors.light : Colors.dark;
+            theme.backgroundColor = isDarkMode ? Colors.darker : Colors.lighter;
+            theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';
+            return theme
+        }))
+    }, [colorScheme])
+
     return (
         <NavigationContainer
             theme={pageTheme}
@@ -226,13 +283,10 @@ export function Router() {
                 tabBar={() => null}
                 screenOptions={{
                     headerShown: false,
-                    ...options
+                    ...options,
                 }}>
                 <Tab.Screen name={MenuType.Home} component={HomeRouter} />
-                <Tab.Screen
-                    name={MenuType.Settings}
-                    component={SettingsRouter}
-                />
+                <Tab.Screen name={MenuType.Settings} component={SettingsRouter} />
                 <Tab.Screen name={MenuType.Search} component={SearchRouter} />
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
                 <Tab.Screen name={MenuType.Message} component={MessageRouter} />

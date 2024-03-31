@@ -1,10 +1,11 @@
 import { Api } from '@api/emby';
-import { Navigation } from '@global';
+import { Navigation, ThemeBasicStyle } from '@global';
 import { useAppSelector } from '@hook/store';
 import {Season} from '@model/Season';
 import { useNavigation } from '@react-navigation/native';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { Image } from '@view/Image';
+import { selectThemeBasicStyle } from '@store/themeSlice';
 
 const style = StyleSheet.create({
     root: {
@@ -26,13 +27,13 @@ const style = StyleSheet.create({
         borderColor: 'transparent',
         color: 'white',
         fontWeight: '600',
-        fontSize: 12.5,
+        fontSize: 11.5,
         borderRadius: 10,
         borderWidth: 1,
         overflow: 'hidden',
-        minWidth: 20,
+        minWidth: 22,
         textAlign: 'center',
-        padding: 2.5,
+        padding: 1.5,
     },
     title: {
         textAlign: 'center',
@@ -41,10 +42,11 @@ const style = StyleSheet.create({
 
 export interface SeasonCardProps {
     season: Season;
+    theme?: ThemeBasicStyle;
     onPress?: (season: Season) => void;
 }
 
-export function SeasonCard({ season, onPress }: SeasonCardProps) {
+export function SeasonCard({ season, theme, onPress }: SeasonCardProps) {
     const emby = useAppSelector(state => state.emby?.emby);
     return (
         <View style={style.root}>
@@ -60,8 +62,8 @@ export function SeasonCard({ season, onPress }: SeasonCardProps) {
                 }}
             />
             </TouchableOpacity>
-            <Text style={style.number}>{season.UserData.UnplayedItemCount}</Text>
-            <Text style={style.title}>{season.Name}</Text>
+            <Text style={{...style.number}}>{season.UserData.UnplayedItemCount}</Text>
+            <Text style={{...style.title, ...theme}}>{season.Name}</Text>
         </View>
     );
 }
@@ -76,11 +78,13 @@ const listStyle = StyleSheet.create({
 
 export function SeasonCardList({seasons}: {seasons: Season[]}) {
     const navigation: Navigation = useNavigation()
+    const theme = useAppSelector(selectThemeBasicStyle)
     return (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={listStyle.root}>
                 {seasons.map(season => (
                     <SeasonCard key={season.Id} 
+                        theme={theme}
                         onPress={season => navigation.navigate('season', {title: season.Name, season})}
                         season={season} />
                 ))}

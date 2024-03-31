@@ -29,7 +29,7 @@ export function Page() {
 
     return (
         <SafeAreaView style={style.page}>
-            <StatusBar barStyle={barStyle} />
+            <StatusBar />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}

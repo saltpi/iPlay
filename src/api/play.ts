@@ -3,7 +3,7 @@ import { PlaybackInfo } from "../model/PlaybackInfo";
 import device from "./device.json"
 import { EmbySite } from "@model/EmbySite";
 import { MediaDetail } from "@model/MediaDetail";
-import { CLIENT_HEADERS } from "./view";
+import { EMBY_CLIENT_HEADERS } from "./view";
 
 export async function getPlaybackInfo(site: EmbySite, id: number, option?: {
     MaxStreamingBitrate?: number
@@ -20,7 +20,7 @@ export async function getPlaybackInfo(site: EmbySite, id: number, option?: {
     }
     const url = makeEmbyUrl(params, `emby/Items/${id}/PlaybackInfo`, site.server)
     const headers = {
-        ...CLIENT_HEADERS,
+        ...EMBY_CLIENT_HEADERS,
         "X-Emby-Token": site.user.AccessToken,
         "content-type": "text/plain"
     }

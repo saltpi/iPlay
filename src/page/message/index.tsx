@@ -1,8 +1,7 @@
 import { PropsWithNavigation } from "@global";
 import { useAppSelector } from "@hook/store";
-import { Episode } from "@model/Episode";
 import { Media } from "@model/Media";
-import { selectThemeBasicStyle } from "@store/themeSlice";
+import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 import { EpisodeCard } from "@view/EpisodeCard";
 import { MediaCard } from "@view/MediaCard";
 import { useEffect, useState } from "react";
@@ -18,6 +17,7 @@ const style = StyleSheet.create({
     watchList: {
         paddingLeft: 8,
         paddingRight: 8,
+        color: "green"
     },
     sectionTitle: {
         fontSize: 22,
@@ -25,11 +25,10 @@ const style = StyleSheet.create({
 });
 
 export function Page({navigation}: PropsWithNavigation<"default">) {
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const emby = useAppSelector(state => state.emby.emby)
     const [items, setItems] = useState<Media[]>([])
-    const menuBarHeight = useAppSelector(state => state.theme.menuBarHeight)
     const theme = useAppSelector(selectThemeBasicStyle)
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     const [refreshing, setRefreshing] = useState(false)
     const onRefresh = () => {
         setRefreshing(true)
@@ -51,19 +50,20 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
         })
     }, [emby])
     return (
-        <SafeAreaView style={{...style.page, backgroundColor}}>
+        <View style={{...style.page, ...pageStyle}}>
             <StatusBar />
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                style={{flex: 1, marginBottom: menuBarHeight}}>
+                refreshControl={<RefreshControl refreshing={refreshing} 
+                onRefresh={onRefresh} />}
+                style={{flex: 1}}>
             <View style={style.watchList}>
                 {items.length !== 0 ? <Text style={{...style.sectionTitle, ...theme}}>观看记录</Text> : null}
                 {items.map((item, idx) => (
                     item.Type === "Movie" ?
-                    <MediaCard key={idx} media={item} 
+                    <MediaCard key={idx} 
+                        media={item} 
                         theme={theme}
                         /> :
                     <EpisodeCard key={idx} emby={emby}
@@ -72,6 +72,6 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                 ))}
             </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }
