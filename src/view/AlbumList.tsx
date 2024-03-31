@@ -110,10 +110,11 @@ export function SiteResource() {
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const theme = useAppSelector(selectThemeBasicStyle)
+    const site = useAppSelector(state => state.emby.site)
 
     useEffect(() => {
         dispatch(fetchEmbyAlbumAsync())
-    }, []);
+    }, [site]);
 
     useEffect(() => {
         const getMedia = async () => {

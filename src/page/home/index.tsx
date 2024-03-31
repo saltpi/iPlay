@@ -2,7 +2,7 @@ import { PropsWithNavigation } from '@global';
 import { OSType, isIOS, isOS } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
-import { patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
+import { fetchEmbyAlbumAsync, patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
 import { selectThemedPageStyle } from '@store/themeSlice';
 import {SiteResource} from '@view/AlbumList';
 import { StatusBar } from '@view/StatusBar';
@@ -56,9 +56,10 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const onRefresh = () => {
         setRefreshing(true)
         setEtag(Date.now().toString())
-        setTimeout(() => {
-            setRefreshing(false)
-        }, 500)
+        dispatch(fetchEmbyAlbumAsync())
+            .then(() => {
+                setRefreshing(false)
+            })
     }
 
     return (
