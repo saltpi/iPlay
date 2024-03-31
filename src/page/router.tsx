@@ -69,7 +69,7 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="album"
                 component={AlbumPage as any}
-                options={{title: '专辑'}}
+                options={immersiveOptions}
             />
             <HomeStack.Screen
                 name="movie"

@@ -1,6 +1,5 @@
 import {Emby} from '@api/emby';
 import {ViewDetail} from '@model/View';
-import {useEffect, useState} from 'react';
 import {
     ScrollView,
     StyleSheet,
@@ -9,15 +8,9 @@ import {
     View,
 } from 'react-native';
 import { Image } from '@view/Image';
-import {Media} from '@model/Media';
 import {useNavigation} from '@react-navigation/native';
 import {Navigation, ThemeBasicStyle} from '@global';
-import { MediaCard } from './MediaCard';
-import { useAppDispatch, useAppSelector } from '@hook/store';
-import { fetchEmbyAlbumAsync, fetchLatestMediaAsync } from '@store/embySlice';
-import { Spin } from './Spin';
-import { selectThemeBasicStyle } from '@store/themeSlice';
-import { ListView } from './ListView';
+import { useAppSelector } from '@hook/store';
 
 export const style = StyleSheet.create({
     root: {
@@ -52,28 +45,6 @@ export const style = StyleSheet.create({
     }
 });
 
-export function AlbumCard({media, title, theme}: {media?: Media[]; title: string, theme?: ThemeBasicStyle}) {
-    if (!media || !media.length) return null;
-    return (
-        <View style={style.albumItem}>
-            <Text style={theme}>{title}</Text>
-            <ListView items={media} 
-                isHorizontal={true}
-                style={{width: "100%", height: 200}}
-                layoutForType={(i, dim) => {
-                    dim.width = 120;
-                    dim.height = 200;
-                }}
-                render={m => 
-                <MediaCard key={m.Id} 
-                    media={m} 
-                    theme={theme} />
-                }
-            />
-        </View>
-    );
-}
-
 export function AlbumCardList({albums, theme}: {albums: ViewDetail[], theme?: ThemeBasicStyle}) {
     const navigation: Navigation = useNavigation();
     const emby = useAppSelector(state => state.emby.emby)
@@ -101,44 +72,5 @@ export function AlbumCardList({albums, theme}: {albums: ViewDetail[], theme?: Th
             })}
         </View>
         </ScrollView>
-    );
-}
-
-export function SiteResource() {
-    const albums = useAppSelector(state => state.emby.source?.albums)
-    const medias = useAppSelector(state => state.emby.source?.latestMedias)
-    const [loading, setLoading] = useState(false);
-    const dispatch = useAppDispatch()
-    const theme = useAppSelector(selectThemeBasicStyle)
-    const site = useAppSelector(state => state.emby.site)
-
-    useEffect(() => {
-        dispatch(fetchEmbyAlbumAsync())
-    }, [site]);
-
-    useEffect(() => {
-        const getMedia = async () => {
-            setLoading(true);
-            await dispatch(fetchLatestMediaAsync())
-            setTimeout(() => {
-                setLoading(false);
-            }, 1000);
-        };
-        getMedia();
-    }, [albums]);
-
-    return (
-        <View style={{...style.root, ...theme}}>
-            {loading ?  <Spin color={theme.color} /> : null}
-            {albums ? <AlbumCardList albums={albums} theme={theme} /> : null}
-            {medias?.map((media, i) => (
-                <AlbumCard
-                    key={albums?.[i]?.Id ?? i}
-                    media={media}
-                    title={albums?.[i]?.Name ?? ""}
-                    theme={theme}
-                />
-            ))}
-        </View>
     );
 }
