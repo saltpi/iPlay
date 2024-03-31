@@ -3,6 +3,7 @@ import { OSType, isIOS, isOS } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
+import { selectThemedPageStyle } from '@store/themeSlice';
 import {SiteResource} from '@view/AlbumList';
 import { StatusBar } from '@view/StatusBar';
 import { set } from 'lodash';
@@ -34,6 +35,7 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const [etag, setEtag] = useState(Date.now().toString())
     const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     useEffect(() => {
         if (!site?.server || !site?.user) {
             return
@@ -63,15 +65,15 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     }
 
     return (
-        <ScrollView
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
+        <View style={{...style.page, ...pageStyle}}>
             <StatusBar />
-            <View style={{marginBottom: theme.menuBarHeight}}>
-            {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
-            </View>
-        </ScrollView>
+            <ScrollView
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                style={{flex: 1}}>
+                {site?.server && site?.user ? <SiteResource etag={etag} /> : <Button title="添加站点" onPress={goToLogin} />}
+            </ScrollView>
+        </View>
     );
 }

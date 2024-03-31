@@ -15,7 +15,7 @@ import PlayIcon from "../../asset/play.svg"
 import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
-import { selectThemeBasicStyle } from "@store/themeSlice";
+import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 import { printException } from "@helper/log";
 import { updatePlayerState } from "@store/playerSlice";
 import { PlayEventType } from "@view/mpv/Player";
@@ -86,6 +86,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     const videoRef = useRef<any>()
     const [loading, setLoading] = useState(false)
     const [infoLoading, setInfoLoading] = useState(false)
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
@@ -191,12 +192,17 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             showsVerticalScrollIndicator={false}>
             <StatusBar />
             <View>
-            {url && isPlaying ? <Video
+            {url && isPlaying ? 
+            <>
+            <View style={{width: "100%", height: pageStyle.paddingTop}} />
+            <Video
                 ref={videoRef}
                 source={{uri: url, title: detail?.Name ?? ""}}
                 onPlaybackStateChanged={onPlaybackStateChanged}
-                style={style.player}
-            /> : null}
+                style={{...style.player}}
+            />
+            </>
+             : null}
             {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 4/3}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>

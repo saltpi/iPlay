@@ -1,11 +1,11 @@
 import { SettingItem, SettingItemProps } from "@view/settings/SettingItem";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { Navigation, PropsWithNavigation } from "@global";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { PropsWithNavigation } from "@global";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "@view/StatusBar";
 import { useAppSelector } from "@hook/store";
-import { selectThemeBasicStyle } from "@store/themeSlice";
+import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 
 const style = StyleSheet.create({
     page: {
@@ -58,9 +58,8 @@ const settings: SettingItemProps[] = [
 
 export function Page({navigation}: PropsWithNavigation<"default">) {
     const insets = useSafeAreaInsets()
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
-    const statusBarHeight = useAppSelector(state => state.theme.statusBarHeight);
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     const onPress = (setting: SettingItemProps) => {
         if (setting.onPress) {
             setting.onPress.bind(null, setting, navigation)()
@@ -75,10 +74,9 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
         }
     }
     return (
-        <View style={{...style.page, backgroundColor, paddingTop: statusBarHeight + 56}}>
+        <View style={{...style.page, ...pageStyle}}>
             <StatusBar />
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>

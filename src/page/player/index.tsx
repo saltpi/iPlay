@@ -1,10 +1,9 @@
 import {PropsWithNavigation} from '@global';
 import { printException } from '@helper/log';
-import { Toast } from '@helper/toast';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { Episode } from "@model/Episode";
 import { updatePlayerState } from '@store/playerSlice';
-import { selectThemeBasicStyle } from '@store/themeSlice';
+import { selectThemeBasicStyle, selectThemedPageStyle } from '@store/themeSlice';
 import { EpisodeCard } from '@view/EpisodeCard';
 import { Spin } from '@view/Spin';
 import { Video } from '@view/Video';
@@ -13,7 +12,6 @@ import { PlaybackStateType } from '@view/mpv/type';
 import { ExternalPlayer } from '@view/player/ExternalPlayer';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Later on in your styles..
 const style = StyleSheet.create({
@@ -51,7 +49,6 @@ const style = StyleSheet.create({
     },
     playerContainer: {
         width: "100%",
-        aspectRatio: 16/9,
     },
     player: {
         width: "100%",
@@ -71,7 +68,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const videoRef = useRef<any>(null);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
-    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     const dispatch = useAppDispatch()
 
     const playEpisode = (episode: Episode) => {
@@ -128,14 +125,19 @@ export function Page({navigation, route}: PlayerPageProps) {
     }, [])
 
     return (
-        <View style={{...style.root, paddingTop: pagePaddingTop}}>
+        <View style={style.root}>
         <View style={style.playerContainer}>
-            {url ? <Video
+            {url ? 
+            <>
+            <View style={{width: "100%", height: pageStyle.paddingTop}} />
+            <Video
                 source={{uri: url, title: episode.Name}}
                 ref={videoRef}
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
-            /> : null}
+            />
+            </>
+             : null}
             {loading ? <Spin color={theme.color} /> : null}
         </View>
         <ScrollView style={{backgroundColor}}>

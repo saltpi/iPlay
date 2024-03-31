@@ -1,13 +1,13 @@
 import { printException } from "@helper/log";
 import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
-import { selectThemeBasicStyle } from "@store/themeSlice";
+import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 import { MediaCard } from "@view/MediaCard";
 import { Spin } from "@view/Spin";
 import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -53,7 +53,7 @@ export function Page() {
     const [searchKeyword, setSearchKeyword] = useState("")
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
-    const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
+    const pageStyle = useAppSelector(selectThemedPageStyle)
     useEffect(() => {
         setLoading(true)
         emby?.searchRecommend?.()
@@ -75,10 +75,9 @@ export function Page() {
             .catch(printException)
     }, [searchKeyword, emby])
     return (
-        <View style={{...style.page, ...theme, paddingTop: pagePaddingTop}}>
+        <View style={{...style.page, ...pageStyle}}>
             <StatusBar />
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1, backgroundColor}}>
