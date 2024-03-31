@@ -6,14 +6,14 @@ import { Season } from "@model/Season";
 import { EmbyResponse } from "@model/EmbyResponse";
 import { Episode } from "@model/Episode";
 import { EmbySite } from "@model/EmbySite";
-import { Device, Version } from "@helper/device";
+import { Version } from "@helper/device";
 import { UserData } from "@model/UserData";
 import { PlaybackData, kPlaybackData } from "@model/PlaybackData";
 
 export const EMBY_CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,
-    "X-Emby-Device-Name": Device.name,
-    "X-Emby-Device-Id": Device.did,
+    "X-Emby-Device-Name": "",
+    "X-Emby-Device-Id": "",
     "X-Emby-Client-Version": Version.versionCode, 
 } as any
 

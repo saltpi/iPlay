@@ -104,16 +104,11 @@ export function AlbumCardList({albums, theme}: {albums: ViewDetail[], theme?: Th
     );
 }
 
-export interface SiteResourceProps {
-    etag: string;
-}
-
-export function SiteResource({etag}: SiteResourceProps) {
-    const albums = useAppSelector(state => state.emby.source?.albums ?? [])
-    const medias = useAppSelector(state => state.emby.source?.latestMedias ?? [])
+export function SiteResource() {
+    const albums = useAppSelector(state => state.emby.source?.albums)
+    const medias = useAppSelector(state => state.emby.source?.latestMedias)
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
-    const emby = useAppSelector(state => state.emby.emby)
     const theme = useAppSelector(selectThemeBasicStyle)
 
     useEffect(() => {
@@ -129,17 +124,17 @@ export function SiteResource({etag}: SiteResourceProps) {
             }, 1000);
         };
         getMedia();
-    }, [albums, emby]);
+    }, [albums]);
 
     return (
         <View style={{...style.root, ...theme}}>
             {loading ?  <Spin color={theme.color} /> : null}
-            <AlbumCardList albums={albums} theme={theme} />
-            {medias.map((media, i) => (
+            {albums ? <AlbumCardList albums={albums} theme={theme} /> : null}
+            {medias?.map((media, i) => (
                 <AlbumCard
-                    key={albums[i]?.Id ?? i}
+                    key={albums?.[i]?.Id ?? i}
                     media={media}
-                    title={albums[i]?.Name}
+                    title={albums?.[i]?.Name ?? ""}
                     theme={theme}
                 />
             ))}
