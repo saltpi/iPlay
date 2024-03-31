@@ -1,10 +1,10 @@
 import { User } from "../model/User";
 import { EmbyConfig, makeEmbyUrl } from "./config";
-import { CLIENT_HEADERS } from "./view";
+import { EMBY_CLIENT_HEADERS } from "./view";
 
 export async function login(username: string, password: string, endpoint: EmbyConfig) {
   const params = {
-    ...CLIENT_HEADERS,
+    ...EMBY_CLIENT_HEADERS,
     "X-Emby-Language": "zh-cn"
   }
   const url = makeEmbyUrl(params, `emby/Users/authenticatebyname`, endpoint)
@@ -21,7 +21,7 @@ export async function login(username: string, password: string, endpoint: EmbyCo
     })
     const text = await response.text()
     console.log(`login response`, text)
-    console.log(`headers`, CLIENT_HEADERS)
+    console.log(`headers`, EMBY_CLIENT_HEADERS)
     const data = JSON.parse(text) as User
     return data
   } catch (e) {

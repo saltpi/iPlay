@@ -8,10 +8,9 @@ import { Episode } from "@model/Episode";
 import { EmbySite } from "@model/EmbySite";
 import { Device, Version } from "@helper/device";
 import { UserData } from "@model/UserData";
-import { PlaybackData, kPlayStopData, kPlaybackData } from "@model/PlaybackData";
-import { random } from "lodash";
+import { PlaybackData, kPlaybackData } from "@model/PlaybackData";
 
-export const CLIENT_HEADERS = {
+export const EMBY_CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,
     "X-Emby-Device-Name": Device.name,
     "X-Emby-Device-Id": Device.did,
@@ -27,7 +26,7 @@ export async function getView(site: EmbySite) {
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Views`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": token,
         }
     });
@@ -48,7 +47,7 @@ export async function getLatestMedia(site: EmbySite, parentId: number) {
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Items/Latest`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -58,7 +57,7 @@ export async function getLatestMedia(site: EmbySite, parentId: number) {
 
 export async function getMedia(site: EmbySite, id: number) {
     const params = {
-        ...CLIENT_HEADERS,
+        ...EMBY_CLIENT_HEADERS,
         "X-Emby-Token": site.user.AccessToken,
         "X-Emby-Language": "zh-cn"
     }
@@ -83,7 +82,7 @@ export async function getResume(site: EmbySite, type: "Video"|"Audio" = "Video")
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Items/Resume`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -99,7 +98,7 @@ export async function getRecommendations(site: EmbySite) {
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Suggestions`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -117,7 +116,7 @@ export async function getSeasons(site: EmbySite, id: number) {
     const url = makeEmbyUrl(params, `emby/Shows/${id}/Seasons`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -136,7 +135,7 @@ export async function getEpisodes(site: EmbySite, vid: number, sid: number) {
     const url = makeEmbyUrl(params, `emby/Shows/${vid}/Episodes`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -170,7 +169,7 @@ export async function getItem(site: EmbySite, options: ItemOptions) {
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Items`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -205,7 +204,7 @@ export async function getCollection(site: EmbySite, cid: number, type: "Series"|
     const url = makeEmbyUrl(params, `emby/Users/${uid}/Items`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -227,7 +226,7 @@ export async function searchRecommend(site: EmbySite) {
     const url = makeEmbyUrl(params, `/emby/Items`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -252,7 +251,7 @@ export async function lookupItem(site: EmbySite, title: string) {
     const url = makeEmbyUrl(params, `/emby/Items`, site.server)
     const response = await fetch(url, {
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -271,7 +270,7 @@ export async function markFavorite(site: EmbySite, id: number, favorite: boolean
     const response = await fetch(url, {
         method: "POST",
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "X-Emby-Token": site.user.AccessToken,
         }
     })
@@ -292,7 +291,7 @@ export async function play(site: EmbySite,
     const response = await fetch(url, {
         method: "POST",
         headers: {
-            ...CLIENT_HEADERS,
+            ...EMBY_CLIENT_HEADERS,
             "Content-Type": "application/json",
             "X-Emby-Token": site.user.AccessToken,
             reqformat: "json"
