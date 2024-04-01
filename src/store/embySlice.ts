@@ -12,6 +12,7 @@ import _ from 'lodash';
 import { Media } from '@model/Media';
 import { Map } from '@model/Map';
 import { Actor } from '@model/Actor';
+import { logger } from '@helper/log';
 
 interface EmbyState {
     site: EmbySite|null;
@@ -21,6 +22,7 @@ interface EmbyState {
         albums?: ViewDetail[]
         latestMedias?: Media[][]
         actors?: Map<string, Actor>
+        albumMedia?: Map<string, Media[]>
     }
 }
 
@@ -119,6 +121,37 @@ export const fetchLatestMediaAsync = createAppAsyncThunk<(Media[]|undefined)[]|u
     return medias
 })
 
+export const fetchAlbumMediaAsync = createAppAsyncThunk("emby/album/media", async (id: string, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const album = await emby?.getMedia?.(Number(id));
+    const type = album?.CollectionType === 'tvshows' ? 'Series' : 'Movie';
+    let startIdx = 0
+    const data = await emby?.getCollection?.(Number(id), type, {
+        StartIndex: startIdx,
+    });
+    const total = data?.TotalRecordCount;
+    if (!total) return null
+    const items: Media[] = [];
+    items.push(...data.Items)
+    startIdx += data.Items.length
+    while (startIdx < total) {
+        try {
+            const data = await emby?.getCollection?.(Number(id), type, { StartIndex: startIdx, })
+            if (!data) return null
+            items.push(...data.Items)
+            startIdx += data.Items.length
+        } catch(e) {
+            logger.error(e)
+            return null
+        }
+    }
+    return {
+        id,
+        items
+    }
+})
+
 export const helloAsync = createAsyncThunk<string, string, any>("emby/site", async (content, _config) => {
     return content
 })
@@ -208,6 +241,19 @@ export const slice = createSlice({
                 }
             } else if (state.source?.actors) {
                 state.source.actors[actor.id] = actor
+            }
+        })
+        .addCase(fetchAlbumMediaAsync.fulfilled, (state, action) => {
+            const album = action.payload
+            if (!album) return
+            if (state.source?.albumMedia) {
+                state.source.albumMedia[album.id] = album.items
+            } else {
+                state.source = {
+                    albumMedia: {
+                        [album.id]: album.items
+                    }
+                }
             }
         })
     },

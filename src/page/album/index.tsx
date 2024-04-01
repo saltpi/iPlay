@@ -1,8 +1,7 @@
-import {Emby} from '@api/emby';
 import {PropsWithNavigation} from '@global';
 import {printException} from '@helper/log';
-import {useAppSelector} from '@hook/store';
-import {Media} from '@model/Media';
+import {useAppDispatch, useAppSelector} from '@hook/store';
+import { fetchAlbumMediaAsync } from '@store/embySlice';
 import {selectThemeBasicStyle, selectThemedPageStyle} from '@store/themeSlice';
 import {ListView, kFullScreenStyle} from '@view/ListView';
 import {MediaCard} from '@view/MediaCard';
@@ -21,71 +20,26 @@ const style = StyleSheet.create({
     },
 });
 
-async function getAlbum(emby: Emby, id: number, startIdx: number = 0) {
-    const album = await emby?.getMedia?.(id);
-    const type = album?.CollectionType === 'tvshows' ? 'Series' : 'Movie';
-    const data = await emby?.getCollection?.(id, type, {
-        StartIndex: startIdx,
-    });
-    return {album, data};
-}
 
-export function Page({route, navigation}: PropsWithNavigation<'album'>) {
-    const emby = useAppSelector(state => state.emby?.emby);
-    const [data, setData] = useState<Media[]>();
-    const [totalCount, setTotalCount] = useState(0);
+export function Page({route}: PropsWithNavigation<'album'>) {
+    const data = useAppSelector(state => state.emby?.source?.albumMedia?.[route.params.albumId]);
     const [loading, setLoading] = useState(true);
     const theme = useAppSelector(selectThemeBasicStyle);
     const pageStyle = useAppSelector(selectThemedPageStyle);
+    const dispatch = useAppDispatch()
+    const cached = data?.length ?? 0 > 0
     useEffect(() => {
-        if (!emby) return;
-        setLoading(true);
-        getAlbum(emby, Number(route.params.albumId), 0)
-            .then(res => {
-                const total = res.data?.TotalRecordCount;
-                if (!total) return;
-                const newItems = res.data?.Items ?? [];
-                setTotalCount(total ?? 0);
-                const items: Media[] = [];
-                for (let i = 0; i < total; i++) {
-                    items.push({
-                        Id: i.toString(),
-                        Name: 'Loading',
-                    } as any);
-                }
-                for (let i = 0; i < newItems.length; i++) {
-                    items[i] = newItems[i];
-                }
-                setData(data => items);
+        setLoading(!cached);
+        const id = route.params.albumId;
+        dispatch(fetchAlbumMediaAsync(id))
+            .then(() => {
+                setLoading(false)
             })
             .catch(printException)
             .finally(() => setLoading(false));
-    }, [route.params.albumId, emby]);
-
-    useEffect(() => {
-        if (!emby) return;
-        for (let i = 0; i < totalCount; i += 50) {
-            getAlbum(emby, Number(route.params.albumId), i)
-                .then(res => {
-                    const newItems = res.data?.Items;
-                    if (!newItems) return;
-                    setData(data => {
-                        const items = data ?? [];
-                        const start = i,
-                            end = i + newItems.length;
-                        for (let j = start; j < end; j++) {
-                            items[j] = newItems[j - start];
-                        }
-                        return items;
-                    });
-                })
-                .catch(printException);
-        }
-    }, [totalCount]);
-
-    const onVisibleIndicesChanged = (indices: number[]) => {
-        const min = indices?.[0];
-        const max = indices?.[indices.length - 1];
+    }, [route.params.albumId]);
+    
+    const onVisibleIndicesChanged = () => {
     };
 
     const onEndReached = () => {};
