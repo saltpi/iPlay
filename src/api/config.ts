@@ -36,7 +36,7 @@ export interface ImageProps {
 export function imageUrl(site: EmbySite, id: string|number, options: string|Partial<ImageProps>|null, type: "Primary"|string = "Primary") {
     const endpoint = site.server!
     if (typeof options === "string") {
-        return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Items/${id}/Images/${type}?maxHeight=338&maxWidth=600&tag=${options}&quality=90`
+        return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Items/${id}/Images/${type}?tag=${options}&quality=90`
     } else {
         const url = new URL(`${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Items/${id}/Images/${type}`)
         options && Object.entries(options).forEach(([key, value]) => {
