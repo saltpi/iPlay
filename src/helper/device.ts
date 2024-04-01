@@ -2,7 +2,7 @@ import { EMBY_CLIENT_HEADERS } from "@api/view";
 import { random } from "lodash";
 import { Platform } from "react-native";
 import { Dimensions } from 'react-native';
-import DeviceInfo from "react-native-device-info";
+import DeviceInfo, { isTablet } from "react-native-device-info";
 
 export enum OSType {
     Web = "web",
@@ -56,6 +56,7 @@ export const Device = {
     did: random(1000, 9999).toString(),
     // safe area insets
     insets: { top: 0, right: 0, bottom: 0, left: 0 },
+    isTablet: isTablet() || windowWidth > windowHeight,
 
     init: async () => {
         Device.did = await DeviceInfo.getUniqueId();

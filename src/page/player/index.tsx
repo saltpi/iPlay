@@ -1,4 +1,5 @@
 import {PropsWithNavigation} from '@global';
+import { Device } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { Episode } from "@model/Episode";
@@ -10,17 +11,13 @@ import { Video } from '@view/Video';
 import { PlayEventType } from '@view/mpv/Player';
 import { PlaybackStateType } from '@view/mpv/type';
 import { ExternalPlayer } from '@view/player/ExternalPlayer';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 // Later on in your styles..
 const style = StyleSheet.create({
     root: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        flex: 1
     },
     playing: {
         borderColor: "red",
@@ -50,10 +47,19 @@ const style = StyleSheet.create({
     playerContainer: {
         width: "100%",
     },
+    padRoot: {
+        flexDirection: "row"
+    },
+    padContainer: {
+        width: "60%"
+    },
     player: {
         width: "100%",
         aspectRatio: 16/9,
     },
+    overview: {
+        padding: 10,
+    }
 });
 
 export type PlayerPageProps = PropsWithNavigation<'player'>;
@@ -70,6 +76,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const theme = useAppSelector(selectThemeBasicStyle)
     const pageStyle = useAppSelector(selectThemedPageStyle)
     const dispatch = useAppDispatch()
+    const isTablet = Device.isTablet
 
     const playEpisode = (episode: Episode) => {
         setLoading(true)
@@ -124,9 +131,29 @@ export function Page({navigation, route}: PlayerPageProps) {
         }
     }, [])
 
+    const layout = useMemo(() => ({
+        page: {
+            ...style.root, 
+            ...(isTablet ? style.padRoot : {})
+        },
+        player: {
+            ...style.playerContainer, 
+            ...(isTablet ? style.padContainer : {})
+        },
+        playlist: {
+            backgroundColor: theme.backgroundColor, 
+            marginTop: isTablet ? pageStyle.paddingTop : 0,
+        },
+        overview: {
+            ...style.overview,
+            ...theme
+        }
+    }), [isTablet, theme, pageStyle])
+
+
     return (
-        <View style={style.root}>
-        <View style={style.playerContainer}>
+        <View style={layout.page}>
+        <View style={layout.player}>
             {url ? 
             <>
             <View style={{width: "100%", height: pageStyle.paddingTop}} />
@@ -139,9 +166,12 @@ export function Page({navigation, route}: PlayerPageProps) {
             </>
              : null}
             {loading ? <Spin color={theme.color} /> : null}
+            {isTablet && url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
+            {isTablet ? <Text style={layout.overview}>{episode.Overview}</Text> : null}
         </View>
-        <ScrollView style={{backgroundColor}}>
-        {url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
+        <ScrollView style={layout.playlist}
+            showsVerticalScrollIndicator={false}>
+        {!isTablet && url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
         {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
             style={e === episode ? style.playing : style.inactive}
