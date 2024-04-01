@@ -29,7 +29,7 @@ public class PlayerViewManager extends SimpleViewManager<View> {
     @NonNull
     @Override
     public String getName() {
-        return "PlayerViewManager";
+        return "PlayerView";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

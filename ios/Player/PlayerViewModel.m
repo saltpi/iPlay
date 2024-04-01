@@ -37,6 +37,7 @@ static dispatch_queue_t mpvEventRunloop = nil;
 
 @interface PlayerViewModel ()
 @property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
+@property (nonatomic, strong) NSString *subtitleFontName;
 @end
 
 @implementation PlayerViewModel
@@ -68,6 +69,10 @@ static dispatch_queue_t mpvEventRunloop = nil;
         mpv_set_option_string(mpv, "vo", "gpu-next");
         mpv_set_option_string(mpv, "gpu-api", "vulkan");
         mpv_set_option_string(mpv, "hwdec", "videotoolbox");
+        if (self.subtitleFontName) {
+            const char *cFontName = [self.subtitleFontName cStringUsingEncoding:NSUTF8StringEncoding];
+            mpv_set_option_string(self.mpv, "sub-font", cFontName);
+        }
         mpv_initialize(mpv);
         self.mpv = mpv;
 
@@ -174,6 +179,13 @@ static dispatch_queue_t mpvEventRunloop = nil;
     if (!self.mpv) return;
     const char *cmd[] = {"cycle", "pause", NULL};
     mpv_command(self.mpv, cmd);
+}
+
+- (void)setSubtitleFont:(NSString *)fontName {
+    _subtitleFontName = fontName;
+    if (!self.mpv) return;
+    const char *cFontName = [fontName cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_option_string(self.mpv, "sub-font", cFontName);
 }
 
 - (void)resume {

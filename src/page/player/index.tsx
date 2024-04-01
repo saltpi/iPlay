@@ -158,8 +158,9 @@ export function Page({navigation, route}: PlayerPageProps) {
             <>
             <View style={{width: "100%", height: pageStyle.paddingTop}} />
             <Video
-                source={{uri: url, title: episode.Name}}
                 ref={videoRef}
+                source={{uri: url, title: episode.Name}}
+                subtitleFontName="LXGWWenKai-Bold"
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             />

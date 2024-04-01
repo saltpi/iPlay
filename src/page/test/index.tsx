@@ -1,9 +1,7 @@
 import { StatusBar } from "@view/StatusBar";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { iOSMPVPlayer, Video } from "@view/Video";
 import { useEffect, useRef } from "react";
 import { useAppSelector } from "@hook/store";
-import { MPVPlayer, AndroidMPVPlayerView, DemoView } from "@view/mpv/AndroidMPVPlayer";
 
 const style = StyleSheet.create({
     page: {
@@ -37,7 +35,6 @@ export function Page() {
                 style={{flex: 1}}>
                 <View>
                     {/* <Video style={style.video} source={{uri: url, title: "ABC"}} /> */}
-                    <DemoView ref={videoRef} style={{width: "100%", aspectRatio: 16/9, backgroundColor: "red"}} />
                 </View>
             </ScrollView>
         </SafeAreaView>
