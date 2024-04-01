@@ -25,9 +25,12 @@
    <td><img src="./doc/image/Screen-20240319@2x2.png" /></td>
 </tr>
 <tr>
-   <td><img src="./doc/image/Screen-20240327@2x.png" /></td>
-   <td><img src="./doc/image/Screen-20240327@2x1.png" /></td>
-   <td><img src="./doc/image/Screen-20240327@2x2.png" /></td>
+   <td><img src="./doc/image/Screenshot_2024-04-01-15-33-47-550.jpg" /></td>
+   <td><img src="./doc/image/Screenshot_2024-04-01-15-34-35-022.jpg" /></td>
+   <td><img src="./doc/image/Screenshot_2024-04-01-15-33-17-258.jpg" /></td>
+   <td><img src="./doc/image/Screenshot_2024-04-01-15-30-58-457.jpg" /></td>
+   <td><img src="./doc/image/Screenshot_2024-04-01-15-32-39-223.jpg" /></td>
+   <td><img src="./doc/image/Screenshot_2024-04-01-15-33-54-903.jpg" /></td>
 </tr>
 </table>
 
