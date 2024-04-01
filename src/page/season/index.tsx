@@ -55,7 +55,8 @@ export function Page({route, navigation}: SeasonPageProps) {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1, backgroundColor}}>
                 <View>
-                    <Image style={{...style.cover, aspectRatio: season.PrimaryImageAspectRatio}} source={{uri: emby?.imageUrl?.(season.Id, season.BackdropImageTags[0])}} />
+                    <Image style={coverStyle} 
+                        source={{uri: coverUrl}} />
                 </View>
                 {episodes?.map(episode => 
                     <EpisodeCard key={episode.Id} emby={emby}
