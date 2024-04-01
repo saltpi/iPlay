@@ -4,6 +4,7 @@ import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.res.AssetManager
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -22,6 +23,8 @@ import com.facebook.react.uimanager.events.RCTEventEmitter
 import top.ourfor.app.iPlayClient.Player.PlayEventType
 import top.ourfor.lib.mpv.TrackItem
 import top.ourfor.lib.mpv.TrackItem.SubtitleTrackName
+import java.io.File
+import java.io.FileOutputStream
 import java.time.Duration
 
 
@@ -63,6 +66,7 @@ class PlayerView(
         contentLayoutParams.rightToRight = LayoutParams.PARENT_ID;
         addView(contentView, contentLayoutParams)
 
+        copySubtitleFont(context.filesDir.path)
         player?.initialize(context.filesDir.path, context.cacheDir.path)
         val viewModel = player?.viewModel
         viewModel?.setDelegate(this)
@@ -159,6 +163,18 @@ class PlayerView(
         } else {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+    }
+
+    fun copySubtitleFont(configDir: String) {
+        var ins = context.assets.open("subfont.ttf", AssetManager.ACCESS_STREAMING)
+        val outFile = File("$configDir/subfont.ttf")
+        val out = FileOutputStream(outFile)
+        if (outFile.length() == ins.available().toLong()) {
+            return
+        }
+        ins.copyTo(out)
+        ins.close()
+        out.close()
     }
 
     override fun onDetachedFromWindow() {
