@@ -33,6 +33,7 @@ public class MPV {
     public native long getLongProperty(String key);
     public native int setLongProperty(String key, long value);
     public native double getDoubleProperty(String key);
+    public native String getStringProperty(String key);
     public native int setDoubleProperty(String key, double value);
 
     public native int setStringProperty(String key, String value);

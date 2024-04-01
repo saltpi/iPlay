@@ -2,6 +2,8 @@ package top.ourfor.app.iPlayClient;
 
 import android.view.SurfaceHolder;
 
+import java.util.List;
+
 public interface Player {
     default void setDelegate(PlayerEventListener delegate) {}
 
@@ -18,7 +20,10 @@ public interface Player {
     default void seek(long timeInSeconds) {}
     default void stop() {}
     default void resize(String newSize) {}
+    default List subtitles() { return null; }
     default void destroy() {}
+
+    void useSubtitle(int id);
 
 
     enum PlayEventType {

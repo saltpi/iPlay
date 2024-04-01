@@ -238,3 +238,13 @@ Java_top_ourfor_lib_mpv_MPV_setStringProperty(JNIEnv *env, jobject thiz, jstring
     env->ReleaseStringUTFChars(value, data);
     return state;
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_top_ourfor_lib_mpv_MPV_getStringProperty(JNIEnv *env, jobject thiz, jstring key) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return nullptr;
+    const char *prop = env->GetStringUTFChars(key, NULL);
+    const char *value = mpv_get_property_string(ctx, prop);
+    env->ReleaseStringUTFChars(key, prop);
+    return env->NewStringUTF(value);
+}

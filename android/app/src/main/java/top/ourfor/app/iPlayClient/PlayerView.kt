@@ -20,6 +20,8 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import top.ourfor.app.iPlayClient.Player.PlayEventType
+import top.ourfor.lib.mpv.TrackItem
+import top.ourfor.lib.mpv.TrackItem.SubtitleTrackName
 import java.time.Duration
 
 
@@ -85,7 +87,14 @@ class PlayerView(
         this.controlView?.post {
             this.controlView?.onPropertyChange(name, value)
         }
-        if (value == null) return
+        if (value == null) {
+            if (name.equals("track-list")) {
+                Log.d(TAG, "load track list")
+//                contentView.viewModel.subtitles()
+//                contentView.viewModel.useSubtitle(1)
+            }
+            return
+        }
         
         if (name.equals("time-pos") ||
             name.equals("pause") ||
