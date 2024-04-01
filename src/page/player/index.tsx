@@ -76,7 +76,7 @@ export function Page({navigation, route}: PlayerPageProps) {
     const theme = useAppSelector(selectThemeBasicStyle)
     const pageStyle = useAppSelector(selectThemedPageStyle)
     const dispatch = useAppDispatch()
-    const isTablet = Device.isTablet || true
+    const isTablet = Device.isTablet
 
     const playEpisode = (episode: Episode) => {
         setLoading(true)
