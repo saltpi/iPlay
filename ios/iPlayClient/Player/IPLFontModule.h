@@ -7,10 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface IPLFontModule : NSObject<RCTBridgeModule>
+@interface IPLFontModule : RCTEventEmitter<RCTBridgeModule>
 + (NSArray<NSString *> *)installedFontName;
 + (NSArray<NSString *> *)installedFontFamilyName;
 @end

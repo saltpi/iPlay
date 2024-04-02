@@ -1,4 +1,5 @@
 import { PropsWithNavigation } from "@global";
+import { OSType, isOS } from "@helper/device";
 import { FontModule } from "@helper/font";
 import { logger } from "@helper/log";
 import { useAppDispatch, useAppSelector } from "@hook/store";
@@ -6,8 +7,9 @@ import { ColorScheme, selectThemeBasicStyle, updateMenuBarPaddingOffset, updateS
 import { SelectView } from "@view/SelectView";
 import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
+import { update } from "lodash";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
+import { Button, NativeEventEmitter, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -26,6 +28,10 @@ const style = StyleSheet.create({
     label: {
         fontSize: 16,
         flex: 1,
+    },
+    browser: {
+        fontSize: 16,
+        marginRight: 10,
     },
     input: {
         fontSize: 16,
@@ -62,7 +68,17 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                 const items = fontNames.sort().map(f => ({label: f, value: f}))
                 setFontList(items)
             })
+        const listener = new NativeEventEmitter(FontModule).addListener("onSelectFontChange", (fontFamily: string) => {
+            dispatch(updateTheme({fontFamily}))
+        })
+        return () => {
+            listener.remove()
+        }
     }, [])
+
+    const onBrowseFont = () => {
+        FontModule.showFontPicker()
+    }
 
     const updateTitleAlign = () => {
         dispatch(updateTheme(s => {
@@ -114,6 +130,13 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                 </View>
                 <View style={style.inline}>
                     <Text style={{...style.label, ...theme}}>字体配置</Text>
+                    {isOS(OSType.iOS) || isOS(OSType.macOS) ?
+                    <Pressable onPress={onBrowseFont}>
+                    <Text style={{...style.browser, ...theme}}>
+                        浏览
+                    </Text>
+                    </Pressable>
+                    : null}
                     <SelectView
                         style={{inputAndroid: {minWidth: "50%"}}}
                         value={fontName}
