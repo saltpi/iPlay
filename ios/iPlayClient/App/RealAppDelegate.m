@@ -6,6 +6,7 @@
 //
 
 #import "RealAppDelegate.h"
+#import "Router.h"
 
 @implementation RealAppDelegate
 
@@ -22,6 +23,7 @@
     window.backgroundColor = UIColor.clearColor;
     [window makeKeyAndVisible];
     self.window = window;
+    XSET(Router, navigation);
     return YES;
 }
 

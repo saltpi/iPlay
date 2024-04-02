@@ -29,6 +29,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 #import "Masonry.h"
 #import <ReactiveObjC/ReactiveObjC.h>
+#import "BeanContainer.h"
 
 
 #define BLOCK_INVOKE(block, ...) (block ? block(__VA_ARGS__) : nil)
