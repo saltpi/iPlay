@@ -59,7 +59,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
     useEffect(() => {
         FontModule.fontFamilyListAsync()
             .then(fontNames => {
-                const items = fontNames.map(f => ({label: f, value: f}))
+                const items = fontNames.sort().map(f => ({label: f, value: f}))
                 setFontList(items)
             })
     }, [])
