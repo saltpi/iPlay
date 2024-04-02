@@ -17,6 +17,7 @@ import top.ourfor.lib.mpv.TrackItem;
 
 public class PlayerViewModel implements Player {
     public PlayerEventListener delegate;
+    public String subtitleFontName;
     public Thread eventLoop;
     public double _duration;
 
@@ -41,6 +42,9 @@ public class PlayerViewModel implements Player {
         mpv.setOptionString("slang", "zh,chi,chs,sc,zh-hans,en,eng");
         mpv.setOptionString("subs-match-os-language", "yes");
         mpv.setOptionString("subs-fallback", "yes");
+        if (subtitleFontName != null) {
+            mpv.setOptionString("sub-font", subtitleFontName);
+        }
         mpv.init();
 
         watch();
@@ -110,6 +114,13 @@ public class PlayerViewModel implements Player {
     public void useSubtitle(int id) {
         Log.d(TAG, "use subtitle " + id);
 //        mpv.setOptionString("sid", String.valueOf(id));
+    }
+
+    @Override
+    public void setSubtitleFontName(String subtitleFontName) {
+        this.subtitleFontName = subtitleFontName;
+        if (subtitleFontName == null) return;
+        mpv.setOptionString("sub-font", subtitleFontName);
     }
 
     @Override

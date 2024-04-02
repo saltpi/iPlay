@@ -34,6 +34,7 @@ class PlayerView(
     context: Context,
     url: String?
 ) : ConstraintLayout(context), PlayerEventListener {
+    var subtitleFontName: String? = null
     private var controlView: PlayerControlView?
     private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null

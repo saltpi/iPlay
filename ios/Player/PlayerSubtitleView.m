@@ -9,13 +9,4 @@
 
 @implementation PlayerSubtitleView
 
-+ (NSArray<NSString *> *)installedFontName {
-    NSMutableArray<NSString *> *allFontNames = @[].mutableCopy;
-    NSArray<NSString *> *familyNames = [UIFont familyNames];
-    for (NSString *familyName in familyNames) {
-        NSArray<NSString *> *fontNames = [UIFont fontNamesForFamilyName:familyName];
-        [allFontNames addObjectsFromArray:fontNames];
-    }
-    return allFontNames;
-}
 @end

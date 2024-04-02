@@ -103,6 +103,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     const [loading, setLoading] = useState(false)
     const [infoLoading, setInfoLoading] = useState(false)
     const pageStyle = useAppSelector(selectThemedPageStyle)
+    const subtitleFontName = useAppSelector(s => s.player.fontFamily)
     const poster = type==="Episode" ?
         emby?.imageUrl?.(movie.Id, null) :
         emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Backdrop/0")
@@ -213,7 +214,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             <View style={{width: "100%", height: pageStyle.paddingTop}} />
             <Video
                 ref={videoRef}
-                subtitleFontName="LXGWWenKai-Bold"
+                subtitleFontName={subtitleFontName}
                 source={{uri: url, title: detail?.Name ?? ""}}
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={{...style.player}}

@@ -51,6 +51,7 @@ type TabStackParamList = {
 type ThemeBasicStyle = {
   backgroundColor: string,
   color?: string,
+  fontFamily?: string
 }
 
 type Navigation = NavigationProp<RootStackParamList>;

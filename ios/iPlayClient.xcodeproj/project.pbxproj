@@ -15,6 +15,7 @@
 		7699B88040F8A987B510C191 /* libPods-iPlayClient-iPlayClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-iPlayClient-iPlayClientTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		881EF51F2BBB0858004C53C3 /* PlayerSubtitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 881EF51E2BBB0858004C53C3 /* PlayerSubtitleView.m */; };
+		881EF5222BBB8900004C53C3 /* IPLFontModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 881EF5212BBB8900004C53C3 /* IPLFontModule.m */; };
 		886BA4152BB7825900BEAAA3 /* PlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 886BA4142BB7825900BEAAA3 /* PlayerControlView.m */; };
 		888CB5762BB11E22009E89E9 /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 888CB5752BB11E22009E89E9 /* MPVKit */; };
 		888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888CB5822BB13C08009E89E9 /* CoreAudio.framework */; };
@@ -57,6 +58,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = iPlayClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		881EF51D2BBB0858004C53C3 /* PlayerSubtitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerSubtitleView.h; sourceTree = "<group>"; };
 		881EF51E2BBB0858004C53C3 /* PlayerSubtitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerSubtitleView.m; sourceTree = "<group>"; };
+		881EF5202BBB8900004C53C3 /* IPLFontModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPLFontModule.h; sourceTree = "<group>"; };
+		881EF5212BBB8900004C53C3 /* IPLFontModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPLFontModule.m; sourceTree = "<group>"; };
 		886BA4132BB7825900BEAAA3 /* PlayerControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerControlView.h; sourceTree = "<group>"; };
 		886BA4142BB7825900BEAAA3 /* PlayerControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerControlView.m; sourceTree = "<group>"; };
 		888CB5822BB13C08009E89E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -208,6 +211,8 @@
 				888CB5BB2BB14579009E89E9 /* RootViewController.m */,
 				881EF51D2BBB0858004C53C3 /* PlayerSubtitleView.h */,
 				881EF51E2BBB0858004C53C3 /* PlayerSubtitleView.m */,
+				881EF5202BBB8900004C53C3 /* IPLFontModule.h */,
+				881EF5212BBB8900004C53C3 /* IPLFontModule.m */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -298,7 +303,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */,
+				888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit.git" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -483,6 +488,7 @@
 				88AD4B992BAA9CF40065E8D9 /* PlayerManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				881EF51F2BBB0858004C53C3 /* PlayerSubtitleView.m in Sources */,
+				881EF5222BBB8900004C53C3 /* IPLFontModule.m in Sources */,
 				88DC7F5D2BAB238500728201 /* PlayerEventView.m in Sources */,
 				888CB5B92BB14548009E89E9 /* PlayerViewModel.m in Sources */,
 				88DC7F5A2BAAE9D500728201 /* PlayerView.m in Sources */,
@@ -690,7 +696,10 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -758,7 +767,10 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -799,7 +811,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */ = {
+		888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/cxfksword/MPVKit.git";
 			requirement = {
@@ -812,7 +824,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		888CB5752BB11E22009E89E9 /* MPVKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit" */;
+			package = 888CB5742BB11E22009E89E9 /* XCRemoteSwiftPackageReference "MPVKit.git" */;
 			productName = MPVKit;
 		};
 /* End XCSwiftPackageProductDependency section */

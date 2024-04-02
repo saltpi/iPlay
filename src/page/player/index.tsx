@@ -72,9 +72,9 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [episode, setEpisode] = useState(route.params.episode)
     const [loading, setLoading] = useState(true)
     const videoRef = useRef<any>(null);
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     const pageStyle = useAppSelector(selectThemedPageStyle)
+    const subtitleFontName = useAppSelector(s => s.player.fontFamily)
     const dispatch = useAppDispatch()
     const isTablet = Device.isTablet
 
@@ -160,7 +160,7 @@ export function Page({navigation, route}: PlayerPageProps) {
             <Video
                 ref={videoRef}
                 source={{uri: url, title: episode.Name}}
-                subtitleFontName="LXGWWenKai-Bold"
+                subtitleFontName={subtitleFontName}
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             />

@@ -75,6 +75,12 @@ public class PlayerViewManager extends SimpleViewManager<View> {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @ReactProp(name = "subtitleFontName")
+    public void setSubtitleFontName(PlayerView view, String fontName) {
+        view.setSubtitleFontName(fontName);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @ReactProp(name = "url")
     public void setUrl(PlayerView view, String url) {
         view.setUrl(url);
