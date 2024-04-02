@@ -175,6 +175,7 @@ export function Page({navigation, route}: PlayerPageProps) {
         {!isTablet && url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
         {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
+            theme={theme}
             style={e === episode ? style.playing : style.inactive}
             onPress={playEpisode}
             episode={e} />)}
