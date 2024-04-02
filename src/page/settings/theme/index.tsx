@@ -1,4 +1,5 @@
 import { PropsWithNavigation } from "@global";
+import { OSType, isOS } from "@helper/device";
 import { FontModule } from "@helper/font";
 import { logger } from "@helper/log";
 import { useAppDispatch, useAppSelector } from "@hook/store";
@@ -129,11 +130,13 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                 </View>
                 <View style={style.inline}>
                     <Text style={{...style.label, ...theme}}>字体配置</Text>
+                    {isOS(OSType.iOS) || isOS(OSType.macOS) ?
                     <Pressable onPress={onBrowseFont}>
                     <Text style={{...style.browser, ...theme}}>
                         浏览
                     </Text>
                     </Pressable>
+                    : null}
                     <SelectView
                         style={{inputAndroid: {minWidth: "50%"}}}
                         value={fontName}
