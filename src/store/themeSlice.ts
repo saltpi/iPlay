@@ -82,7 +82,7 @@ export const slice = createSlice({
 });
 
 const getHeaderTintColor = (state: RootState) => state.theme.fontColor;
-const getFontName = (state: RootState) => state.theme.fontFamily;
+const getFontFamily = (state: RootState) => state.theme.fontFamily;
 const getBackgroundColor = (state: RootState) => state.theme.backgroundColor;
 const getHeaderTitleAlign = (state: RootState) => state.theme.headerTitleAlign;
 const getPagePaddingTop = (state: RootState) => state.theme.pagePaddingTop;
@@ -110,7 +110,7 @@ export const selectScreenOptions = createSelector([
 export const selectThemeBasicStyle = createSelector([
     getHeaderTintColor,
     getBackgroundColor,
-    getFontName
+    getFontFamily
 ], (color, backgroundColor, fontFamily) => {
     return {color, backgroundColor, fontFamily} as ThemeBasicStyle;
 })
@@ -119,13 +119,15 @@ export const selectThemedPageStyle = createSelector([
     getHeaderTintColor,
     getBackgroundColor,
     getPagePaddingTop,
-    getMenuBarHeight
-], (color, backgroundColor, paddingTop, paddingBottom) => {
+    getMenuBarHeight,
+    getFontFamily
+], (color, backgroundColor, paddingTop, paddingBottom, fontFamily) => {
     return {
         color, 
         backgroundColor,
         paddingTop,
-        paddingBottom
+        paddingBottom,
+        fontFamily
     };
 })
 

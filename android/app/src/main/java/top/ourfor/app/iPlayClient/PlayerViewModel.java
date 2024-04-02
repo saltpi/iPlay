@@ -24,7 +24,7 @@ public class PlayerViewModel implements Player {
 
     public String url = null;
     private MPV mpv;
-    public PlayerViewModel(String configDir, String cacheDir) {
+    public PlayerViewModel(String configDir, String cacheDir, String fontDir) {
         mpv = new MPV();
         mpv.create();
 //        mpv.setOptionString("profile", "fast");
@@ -43,12 +43,9 @@ public class PlayerViewModel implements Player {
         mpv.setOptionString("slang", "zh,chi,chs,sc,zh-hans,en,eng");
         mpv.setOptionString("subs-match-os-language", "yes");
         mpv.setOptionString("subs-fallback", "yes");
-        if (subtitleFontDirectory != null) {
-            mpv.setOptionString("sub-font", subtitleFontName);
-        }
-        if (subtitleFontName != null) {
-            mpv.setOptionString("sub-fonts-dir", subtitleFontName);
-        }
+        subtitleFontDirectory = fontDir;
+        setSubtitleFontDirectory(fontDir);
+        setSubtitleFontName(subtitleFontName);
         mpv.init();
 
         watch();
@@ -125,6 +122,7 @@ public class PlayerViewModel implements Player {
         this.subtitleFontName = subtitleFontName;
         if (subtitleFontName == null) return;
         mpv.setOptionString("sub-font", subtitleFontName);
+        Log.d(TAG, "use sub font " + subtitleFontName);
     }
 
     @Override
@@ -132,6 +130,7 @@ public class PlayerViewModel implements Player {
         this.subtitleFontDirectory = directory;
         if (subtitleFontDirectory == null) return;
         mpv.setOptionString("sub-fonts-dir", subtitleFontDirectory);
+        Log.d(TAG, "use sub font dir " + subtitleFontDirectory);
     }
 
     @Override

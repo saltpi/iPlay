@@ -204,7 +204,16 @@ export const slice = createSlice({
             if (!site) return
             state.site = site;
             state.emby = new Emby(site)
-            state.sites = [...(state.sites ?? []), site]
+            const exist = state.sites?.some(old => old.id === site.id)
+            if (exist) {
+                for (let i = 0; i < state.sites!.length; i++) {
+                    if (state.sites![i].id === site.id) {
+                        state.sites![i] = site
+                    }
+                }
+            } else {
+                state.sites = [...(state.sites ?? []), site]
+            }
         })
         .addCase(restoreSiteAsync.fulfilled, (state, action) => {
             state.site = action.payload;

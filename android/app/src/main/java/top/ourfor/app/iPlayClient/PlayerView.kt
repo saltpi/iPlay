@@ -72,9 +72,9 @@ class PlayerView(
         addView(contentView, contentLayoutParams)
 
         copySubtitleFont(context.filesDir.path)
-        player?.initialize(context.filesDir.path, context.cacheDir.path)
+
+        player?.initialize(context.filesDir.path, context.cacheDir.path, FontModule.getFontPath(context))
         val viewModel = player?.viewModel
-        viewModel?.setSubtitleFontDirectory(FontModule.getFontPath(context))
         if (subtitleFontName != null) {
             viewModel?.setSubtitleFontName(subtitleFontName)
         }
