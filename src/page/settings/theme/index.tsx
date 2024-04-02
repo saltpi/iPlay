@@ -37,6 +37,9 @@ const style = StyleSheet.create({
         borderRadius: 5,
         marginLeft: 10,
         minWidth: 50,
+    },
+    selector: {
+        flex: 2
     }
 });
 
@@ -56,7 +59,6 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
     useEffect(() => {
         FontModule.fontFamilyListAsync()
             .then(fontNames => {
-                logger.info("system installed font: ", fontNames)
                 const items = fontNames.map(f => ({label: f, value: f}))
                 setFontList(items)
             })
@@ -68,6 +70,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
             return s
         }));
     }
+
     return (
         <View style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
             <StatusBar />
@@ -112,6 +115,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                 <View style={style.inline}>
                     <Text style={{...style.label, ...theme}}>字体配置</Text>
                     <SelectView
+                        style={{inputAndroid: {minWidth: "50%"}}}
                         value={fontName}
                         items={fontList}
                         onValueChange={(font) => dispatch(updateTheme({fontFamily: font}))} />

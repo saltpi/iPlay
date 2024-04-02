@@ -35,6 +35,10 @@ class PlayerView(
     url: String?
 ) : ConstraintLayout(context), PlayerEventListener {
     var subtitleFontName: String? = null
+        set(value) {
+            contentView.viewModel.setSubtitleFontName(value)
+        }
+
     private var controlView: PlayerControlView?
     private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
@@ -70,6 +74,10 @@ class PlayerView(
         copySubtitleFont(context.filesDir.path)
         player?.initialize(context.filesDir.path, context.cacheDir.path)
         val viewModel = player?.viewModel
+        viewModel?.setSubtitleFontDirectory(FontModule.getFontPath(context))
+        if (subtitleFontName != null) {
+            viewModel?.setSubtitleFontName(subtitleFontName)
+        }
         viewModel?.setDelegate(this)
         if (url != null) player?.playFile(url)
 

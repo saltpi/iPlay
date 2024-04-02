@@ -22,6 +22,7 @@ public interface Player {
     default void resize(String newSize) {}
     default List subtitles() { return null; }
     default void setSubtitleFontName(String subtitleFontName) {}
+    default void setSubtitleFontDirectory(String directory) {}
     default void destroy() {}
 
     void useSubtitle(int id);

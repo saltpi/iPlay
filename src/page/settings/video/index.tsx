@@ -85,6 +85,7 @@ export function Page() {
                 <View style={style.inline}>
                     <Text style={{...style.label, ...theme}}>字幕字体</Text>
                     <SelectView
+                        style={{inputAndroid: {minWidth: "50%"}}}
                         value={fontName}
                         items={fontList}
                         onValueChange={(font) => dispatch(updatePlayerState({fontFamily: font}))} />

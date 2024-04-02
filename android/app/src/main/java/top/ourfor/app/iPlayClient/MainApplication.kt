@@ -2,6 +2,7 @@ package top.ourfor.app.iPlayClient
 
 import android.app.Application
 import android.content.Context
+import android.os.Build
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
@@ -40,6 +41,10 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
     BeanManager.set(Application::class.java, this)
     BeanManager.set(Context::class.java, this.applicationContext)
+    FontModule.obtainSystemFont()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+      FontModule.scanExternalFont(this.applicationContext)
+    }
     SoLoader.init(this, false)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
