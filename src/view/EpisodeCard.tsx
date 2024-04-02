@@ -6,6 +6,7 @@ import { useAppSelector } from "@hook/store";
 import { Tag } from "./Tag";
 import { Like } from "./like/Like";
 import { PlayCount } from "./counter/PlayCount";
+import { ThemeBasicStyle } from "@global";
 
 const DEFULT_OVERVIEW = `数据源中缺少相关描述
 Data source lacks relevant description`
@@ -66,22 +67,21 @@ export interface EpisodeCardProps {
     emby?: Emby|null;
     episode: Episode;
     onPress?: (episode: Episode) => void;
+    theme?: ThemeBasicStyle
 }
 
-export function EpisodeCard({style: extraStyle, emby, episode, onPress}: EpisodeCardProps) {
-    const color = useAppSelector(state => state.theme.fontColor);
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
+export function EpisodeCard({style: extraStyle, theme, emby, episode, onPress}: EpisodeCardProps) {
     const thumbUrl = emby?.imageUrl?.(episode.Id, episode.ImageTags.Primary)
     const posterUrl = emby?.imageUrl?.(episode.SeasonId, episode.ImageTags.Primary)
     return (
         <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(episode)}>
-        <View style={{...style.basic, backgroundColor, ...extraStyle}}>
+        <View style={{...style.basic, ...theme, ...extraStyle}}>
             <Image style={{...style.cover, aspectRatio: episode.PrimaryImageAspectRatio}}
                 fallbackImages={[posterUrl ?? ""]}
                 source={{uri: thumbUrl}} />
-            <View style={{...style.text, backgroundColor}}>
-                <Text style={{...style.title, color}}>{episode.Name}</Text>
-                <Text style={{...style.overview, color}}
+            <View style={{...style.text, ...theme}}>
+                <Text style={{...style.title, ...theme}}>{episode.Name}</Text>
+                <Text style={{...style.overview, ...theme}}
                     numberOfLines={10} 
                     ellipsizeMode="tail"
                     >
@@ -93,7 +93,7 @@ export function EpisodeCard({style: extraStyle, emby, episode, onPress}: Episode
                     isFavorite={episode.UserData.IsFavorite}
                     />
                 <PlayCount 
-                    style={{color}}
+                    style={theme}
                     count={episode?.UserData?.PlayCount ?? 0} />
                 </View>
             </View>

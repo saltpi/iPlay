@@ -91,7 +91,8 @@ const Players = {
         action: (url: string, title: string = new URL(url).pathname, config?: PlayerPerference) => {
             if (isOS(OSType.Android)) {
                 const urlWithoutScheme = url.replace(/^[a-z]+:\/\//, "")
-                const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=https;end;`
+                const protocol = url.startsWith("https") ? "https" : "http"
+                const deepLink = `intent://${encodeURI(urlWithoutScheme)}#Intent;type=video/any;package=is.xyz.mpv;scheme=${protocol};end;`
                 console.log(deepLink)
                 IntentModule.openUrl(deepLink)
             }

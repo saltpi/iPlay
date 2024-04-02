@@ -1,5 +1,4 @@
 import {OSType, isOS} from '@helper/device';
-import { AndroidMPVPlayerView } from './mpv/AndroidMPVPlayer';
-import { iOSMPVPlayer } from './mpv/iOSMPVPlayer';
+import { MPVPlayer } from './mpv/PlayerView';
 
-export const Video = isOS(OSType.Android) ? AndroidMPVPlayerView : iOSMPVPlayer;
+export const Video = MPVPlayer;

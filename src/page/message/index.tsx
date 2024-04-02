@@ -67,6 +67,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                         theme={theme}
                         /> :
                     <EpisodeCard key={idx} emby={emby}
+                        theme={theme}
                         onPress={() => onPress(item)} 
                         episode={item as any} />
                 ))}

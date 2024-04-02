@@ -4,6 +4,7 @@ import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.res.AssetManager
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -20,6 +21,10 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import top.ourfor.app.iPlayClient.Player.PlayEventType
+import top.ourfor.lib.mpv.TrackItem
+import top.ourfor.lib.mpv.TrackItem.SubtitleTrackName
+import java.io.File
+import java.io.FileOutputStream
 import java.time.Duration
 
 
@@ -29,6 +34,11 @@ class PlayerView(
     context: Context,
     url: String?
 ) : ConstraintLayout(context), PlayerEventListener {
+    var subtitleFontName: String? = null
+        set(value) {
+            contentView.viewModel.setSubtitleFontName(value)
+        }
+
     private var controlView: PlayerControlView?
     private var contentView: PlayerContentView
     private var fullscreenView: PlayerFullscreenView? = null
@@ -61,8 +71,13 @@ class PlayerView(
         contentLayoutParams.rightToRight = LayoutParams.PARENT_ID;
         addView(contentView, contentLayoutParams)
 
-        player?.initialize(context.filesDir.path, context.cacheDir.path)
+        copySubtitleFont(context.filesDir.path)
+
+        player?.initialize(context.filesDir.path, context.cacheDir.path, FontModule.getFontPath(context))
         val viewModel = player?.viewModel
+        if (subtitleFontName != null) {
+            viewModel?.setSubtitleFontName(subtitleFontName)
+        }
         viewModel?.setDelegate(this)
         if (url != null) player?.playFile(url)
 
@@ -85,7 +100,14 @@ class PlayerView(
         this.controlView?.post {
             this.controlView?.onPropertyChange(name, value)
         }
-        if (value == null) return
+        if (value == null) {
+            if (name.equals("track-list")) {
+                Log.d(TAG, "load track list")
+//                contentView.viewModel.subtitles()
+//                contentView.viewModel.useSubtitle(1)
+            }
+            return
+        }
         
         if (name.equals("time-pos") ||
             name.equals("pause") ||
@@ -150,6 +172,18 @@ class PlayerView(
         } else {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+    }
+
+    fun copySubtitleFont(configDir: String) {
+        var ins = context.assets.open("subfont.ttf", AssetManager.ACCESS_STREAMING)
+        val outFile = File("$configDir/subfont.ttf")
+        val out = FileOutputStream(outFile)
+        if (outFile.length() == ins.available().toLong()) {
+            return
+        }
+        ins.copyTo(out)
+        ins.close()
+        out.close()
     }
 
     override fun onDetachedFromWindow() {

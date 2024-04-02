@@ -1,8 +1,12 @@
 import { PropsWithNavigation } from "@global";
+import { FontModule } from "@helper/font";
+import { logger } from "@helper/log";
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { ColorScheme, selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
+import { SelectView } from "@view/SelectView";
 import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
+import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
 
 const style = StyleSheet.create({
@@ -33,6 +37,9 @@ const style = StyleSheet.create({
         borderRadius: 5,
         marginLeft: 10,
         minWidth: 50,
+    },
+    selector: {
+        flex: 2
     }
 });
 
@@ -42,10 +49,20 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
     const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);
     const headerTitleAlign = useAppSelector((state) => state.theme.headerTitleAlign);
     const color = useAppSelector(state => state.theme.fontColor);
+    const fontName = useAppSelector(state => state.theme.fontFamily)
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     const colorScheme = useAppSelector(state => state.theme.colorScheme)
     const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
+    const [fontList, setFontList] = useState<{label: string, value: string}[]>([])
+
+    useEffect(() => {
+        FontModule.fontFamilyListAsync()
+            .then(fontNames => {
+                const items = fontNames.sort().map(f => ({label: f, value: f}))
+                setFontList(items)
+            })
+    }, [])
 
     const updateTitleAlign = () => {
         dispatch(updateTheme(s => {
@@ -53,6 +70,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
             return s
         }));
     }
+
     return (
         <View style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
             <StatusBar />
@@ -93,6 +111,14 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                         onPress={_ => dispatch(updateTheme({colorScheme: ColorScheme.Light}))}>
                         浅色模式
                     </Tag>
+                </View>
+                <View style={style.inline}>
+                    <Text style={{...style.label, ...theme}}>字体配置</Text>
+                    <SelectView
+                        style={{inputAndroid: {minWidth: "50%"}}}
+                        value={fontName}
+                        items={fontList}
+                        onValueChange={(font) => dispatch(updateTheme({fontFamily: font}))} />
                 </View>
             </ScrollView>
         </View>

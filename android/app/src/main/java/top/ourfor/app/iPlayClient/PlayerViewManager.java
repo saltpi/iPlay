@@ -29,7 +29,7 @@ public class PlayerViewManager extends SimpleViewManager<View> {
     @NonNull
     @Override
     public String getName() {
-        return "PlayerViewManager";
+        return "PlayerView";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -72,6 +72,12 @@ public class PlayerViewManager extends SimpleViewManager<View> {
     @ReactProp(name = "title")
     public void setTitle(PlayerView view, String title) {
         view.setTitle(title);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @ReactProp(name = "subtitleFontName")
+    public void setSubtitleFontName(PlayerView view, String fontName) {
+        view.setSubtitleFontName(fontName);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

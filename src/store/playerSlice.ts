@@ -27,6 +27,10 @@ interface PlayerState {
     subtitleStreamIndex?: number;
     audioStreamIndex?: number;
     maxStreamingBitrate?: number;
+
+
+    // UI
+    fontFamily?: string
 }
 
 const initialState: PlayerState = {

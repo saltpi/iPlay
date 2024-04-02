@@ -223,6 +223,12 @@
     [super removeFromSuperview];
 }
 
+#pragma mark - Setter
+- (void)setSubtitleFontName:(NSString *)subtitleFontName {
+    _subtitleFontName = subtitleFontName;
+    [self.player setSubtitleFont:subtitleFontName];
+}
+
 #pragma mark - Getter
 - (id<VideoPlayer>)player {
     if (!_player) {

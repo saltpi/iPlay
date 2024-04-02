@@ -72,9 +72,9 @@ export function Page({navigation, route}: PlayerPageProps) {
     const [episode, setEpisode] = useState(route.params.episode)
     const [loading, setLoading] = useState(true)
     const videoRef = useRef<any>(null);
-    const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     const pageStyle = useAppSelector(selectThemedPageStyle)
+    const subtitleFontName = useAppSelector(s => s.player.fontFamily)
     const dispatch = useAppDispatch()
     const isTablet = Device.isTablet
 
@@ -158,8 +158,9 @@ export function Page({navigation, route}: PlayerPageProps) {
             <>
             <View style={{width: "100%", height: pageStyle.paddingTop}} />
             <Video
-                source={{uri: url, title: episode.Name}}
                 ref={videoRef}
+                source={{uri: url, title: episode.Name}}
+                subtitleFontName={subtitleFontName}
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             />
@@ -174,6 +175,7 @@ export function Page({navigation, route}: PlayerPageProps) {
         {!isTablet && url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
         {episodes?.map((e, idx) => <EpisodeCard key={idx} 
             emby={emby} 
+            theme={theme}
             style={e === episode ? style.playing : style.inactive}
             onPress={playEpisode}
             episode={e} />)}

@@ -16,6 +16,7 @@ class ModuleManager : ReactPackage {
     override fun createNativeModules(
         reactContext: ReactApplicationContext
     ): MutableList<NativeModule> = listOf(
-        IntentModule(reactContext)
+        IntentModule(reactContext),
+        FontModule(reactContext)
     ).toMutableList()
 }

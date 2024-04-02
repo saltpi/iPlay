@@ -4,33 +4,48 @@ import static top.ourfor.lib.mpv.MPV.MPV_EVENT_PROPERTY_CHANGE;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_SHUTDOWN;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_DOUBLE;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_FLAG;
+import static top.ourfor.lib.mpv.TrackItem.SubtitleTrackName;
 
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import top.ourfor.lib.mpv.MPV;
+import top.ourfor.lib.mpv.TrackItem;
 
 public class PlayerViewModel implements Player {
     public PlayerEventListener delegate;
+    public String subtitleFontName;
+    public String subtitleFontDirectory;
     public Thread eventLoop;
     public double _duration;
 
     public String url = null;
     private MPV mpv;
-    public PlayerViewModel(String configDir, String cacheDir) {
+    public PlayerViewModel(String configDir, String cacheDir, String fontDir) {
         mpv = new MPV();
         mpv.create();
-        mpv.setOptionString("profile", "fast");
-        mpv.setOptionString("vo", "gpu-next");
+//        mpv.setOptionString("profile", "fast");
+        mpv.setOptionString("vo", "gpu");
         mpv.setOptionString("gpu-context", "android");
         mpv.setOptionString("opengl-es", "yes");
         mpv.setOptionString("hwdec", "auto");
         mpv.setOptionString("hwdec-codecs", "h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1");
         mpv.setOptionString("ao", "audiotrack,opensles");
         mpv.setOptionString("config", "yes");
+        mpv.setOptionString("force-window", "no");
         mpv.setOptionString("config-dir", configDir);
         mpv.setOptionString("gpu-shader-cache-dir", cacheDir);
         mpv.setOptionString("icc-cache-dir", cacheDir);
+        mpv.setOptionString("track-auto-selection", "yes");
+        mpv.setOptionString("slang", "zh,chi,chs,sc,zh-hans,en,eng");
+        mpv.setOptionString("subs-match-os-language", "yes");
+        mpv.setOptionString("subs-fallback", "yes");
+        subtitleFontDirectory = fontDir;
+        setSubtitleFontDirectory(fontDir);
+        setSubtitleFontName(subtitleFontName);
         mpv.init();
 
         watch();
@@ -53,12 +68,13 @@ public class PlayerViewModel implements Player {
 
     public void attach(SurfaceHolder holder) {
         mpv.setDrawable(holder.getSurface());
+//        mpv.setOptionString("force-window", "yes");
     }
 
     @Override
     public void detach() {
         mpv.setStringProperty("vo", "null");
-        mpv.setOptionString("force-window", "no");
+//        mpv.setOptionString("force-window", "no");
         mpv.setDrawable(null);
     }
 
@@ -70,6 +86,51 @@ public class PlayerViewModel implements Player {
     @Override
     public void resize(String newSize) {
         mpv.setStringProperty("android-surface-size", newSize);
+    }
+
+    @Override
+    public List<TrackItem> subtitles() {
+        // video/audio/sub
+        Log.d(TAG, "obtain track list");
+        Long subtitleCount = mpv.getLongProperty("track-list/count");
+        ArrayList<TrackItem> trackItems = new ArrayList<>();
+        for (long i = 0; i < subtitleCount; i++) {
+            String type = mpv.getStringProperty(String.format("track-list/%d/type", i));
+            if (!type.equals(SubtitleTrackName)) continue;
+            Long id = mpv.getLongProperty(String.format("track-list/%d/id", i));
+            String lang = mpv.getStringProperty(String.format("track-list/%d/lang", i));
+            String title = mpv.getStringProperty(String.format("track-list/%d/title", i));
+            Log.d(TAG, "id: " + id + "\ntype: " + type + "\nlang: " + lang + "\ntitle: " + title);
+            TrackItem trackItem = new TrackItem();
+            trackItem.id = Math.toIntExact(id);
+            trackItem.type = SubtitleTrackName;
+            trackItem.title = title;
+            trackItem.lang = lang;
+            trackItems.add(trackItem);
+        }
+        return trackItems;
+    }
+
+    @Override
+    public void useSubtitle(int id) {
+        Log.d(TAG, "use subtitle " + id);
+//        mpv.setOptionString("sid", String.valueOf(id));
+    }
+
+    @Override
+    public void setSubtitleFontName(String subtitleFontName) {
+        this.subtitleFontName = subtitleFontName;
+        if (subtitleFontName == null) return;
+        mpv.setOptionString("sub-font", subtitleFontName);
+        Log.d(TAG, "use sub font " + subtitleFontName);
+    }
+
+    @Override
+    public void setSubtitleFontDirectory(String directory) {
+        this.subtitleFontDirectory = directory;
+        if (subtitleFontDirectory == null) return;
+        mpv.setOptionString("sub-fonts-dir", subtitleFontDirectory);
+        Log.d(TAG, "use sub font dir " + subtitleFontDirectory);
     }
 
     @Override
@@ -109,6 +170,7 @@ public class PlayerViewModel implements Player {
             mpv.observeProperty(0, "duration", MPV.MPV_FORMAT_DOUBLE);
             mpv.observeProperty(0, "paused-for-cache", MPV.MPV_FORMAT_FLAG);
             mpv.observeProperty(0, "pause", MPV.MPV_FORMAT_FLAG);
+            mpv.observeProperty(0, "track-list", MPV.MPV_FORMAT_NONE);
             eventLoop = new Thread(() -> {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);
@@ -137,12 +199,6 @@ public class PlayerViewModel implements Player {
             });
         }
         eventLoop.start();
-    }
-
-    public void unwatch() {
-        if (eventLoop != null) {
-            eventLoop.stop();
-        }
     }
 
     static String TAG = "PlayerViewModel";

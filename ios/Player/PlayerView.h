@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) id<VideoPlayer> player;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) NSUInteger iconSize;
+@property (nonatomic, strong) NSString *subtitleFontName;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, strong) PlayerContentView *contentView;
 @property (nonatomic, strong) PlayerControlView *controlView;

@@ -7,8 +7,8 @@ import android.view.SurfaceView
 
 class PlayerContentView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     public lateinit var viewModel: Player
-    fun initialize(configDir: String, cacheDir: String) {
-        viewModel = PlayerViewModel(configDir, cacheDir)
+    fun initialize(configDir: String, cacheDir: String, fontDir: String?) {
+        viewModel = PlayerViewModel(configDir, cacheDir, fontDir)
         // we need to call write-watch-later manually
         holder.addCallback(this)
     }

@@ -29,7 +29,7 @@ const style = StyleSheet.create({
     },
 });
 
-export const iOSMPVPlayer = forwardRef<PlayerRef, VideoProps>(
+export const MPVPlayer = forwardRef<PlayerRef, VideoProps>(
     (props, ref) => {
         const nativeRef = useRef(null);
         const {uri, title} = props.source as any;
@@ -62,6 +62,7 @@ export const iOSMPVPlayer = forwardRef<PlayerRef, VideoProps>(
                 iconSize={preferedSize(25, 48, windowWidth/10)}
                 ref={nativeRef}
                 title={title}
+                subtitleFontName={props.subtitleFontName}
                 onPlayStateChange={onPlayStateChange}
                 url={uri}
             />

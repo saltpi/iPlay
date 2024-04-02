@@ -13,6 +13,7 @@ export enum PlayEventType {
 
 export interface PlayerViewProps extends ViewProps {
     title?: string
+    subtitleFontName?: string
     onPlayStateChange?: (state: PlaybackStateType) => void
     url: string
     iconSize?: number

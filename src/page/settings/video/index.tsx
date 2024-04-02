@@ -1,7 +1,11 @@
+import { FontModule } from "@helper/font";
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { updateConfig } from "@store/configSlice";
+import { updatePlayerState } from "@store/playerSlice";
 import { selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
+import { SelectView } from "@view/SelectView";
 import { StatusBar } from "@view/StatusBar";
+import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Switch, SwitchChangeEvent, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
@@ -39,15 +43,26 @@ export function Page() {
     const color = useAppSelector(state => state.theme.fontColor);
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
+    const fontName = useAppSelector(state => state.player.fontFamily)
     const dispatch = useAppDispatch();
     const maxStreamingBitrate = useAppSelector((state) => state.config.video.MaxStreamingBitrate);
     const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
+    const [fontList, setFontList] = useState<{label: string, value: string}[]>([])
+    
     const updateMaxStreamingBitrate = (text: string) => {
         dispatch(updateConfig(s => {
             s.video.MaxStreamingBitrate = Number(text);
             return s
         }))
     }
+
+    useEffect(() => {
+        FontModule.fontFamilyListAsync()
+            .then(fontNames => {
+                const items = fontNames.sort().map(f => ({label: f, value: f}))
+                setFontList(items)
+            })
+    }, [])
 
     return (
         <View style={{...style.page, backgroundColor, paddingTop: pagePaddingTop}}>
@@ -66,6 +81,14 @@ export function Page() {
                         value={maxStreamingBitrate?.toString()}
                         onChangeText={updateMaxStreamingBitrate}
                         />
+                </View>
+                <View style={style.inline}>
+                    <Text style={{...style.label, ...theme}}>字幕字体</Text>
+                    <SelectView
+                        style={{inputAndroid: {minWidth: "50%"}}}
+                        value={fontName}
+                        items={fontList}
+                        onValueChange={(font) => dispatch(updatePlayerState({fontFamily: font}))} />
                 </View>
             </ScrollView>
         </View>
