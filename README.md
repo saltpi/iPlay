@@ -23,6 +23,7 @@
    <td><img src="./doc/image/Screen-20240319@2x1.png" /></td>
    <td><img src="./doc/image/Screen-20240319@2x.png" /></td>
    <td><img src="./doc/image/Screen-20240319@2x2.png" /></td>
+   <td colspan="3"><img src="./doc/image/IMG_0130.png" /></td>
 </tr>
 <tr>
    <td><img src="./doc/image/Screenshot_2024-04-01-15-33-47-550.jpg" /></td>
