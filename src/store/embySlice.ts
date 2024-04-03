@@ -222,6 +222,7 @@ export const slice = createSlice({
         .addCase(switchToSiteAsync.fulfilled, (state, action) => {
             if (action.payload) state.site = action.payload
             state.emby = action.payload ? new Emby(action.payload) : null
+            state.source = {}
         })
         .addCase(fetchEmbyAlbumAsync.fulfilled, (state, action) => {
             if (state.source) {
