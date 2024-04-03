@@ -3,7 +3,7 @@ import { toggleSwitchSiteDialog } from '@store/menuSlice';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import Dialog from 'react-native-dialog';
 import { Site } from './Site';
-import { switchToSiteAsync } from '@store/embySlice';
+import { removeSite, switchToSiteAsync } from '@store/embySlice';
 import { selectThemeBasicStyle } from '@store/themeSlice';
 import { windowHeight } from '@helper/device';
 
@@ -34,6 +34,7 @@ export function SwitchSiteDialog() {
                     <Site key={`${s.id}:${i}`} site={s}
                         active={s.id === site?.id}
                         onPress={() => dispatch(switchToSiteAsync(s.id))}
+                        onDelete={() => dispatch(removeSite(s.id))}
                         theme={theme} />
                 ))}
             </ScrollView>
