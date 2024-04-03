@@ -1,8 +1,8 @@
 import {TabNavigation} from '@global';
 import {useAppDispatch, useAppSelector} from '@hook/store';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {getActiveMenu, switchToMenu} from '@store/menuSlice';
-import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {getActiveMenu, switchToMenu, toggleSwitchSiteDialog} from '@store/menuSlice';
+import {Animated, Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {OSType, isOS} from '@helper/device';
 import {useEffect, useMemo, useRef} from 'react';
 import {switchRoute, updateMenuBarHeight} from '@store/themeSlice';
@@ -12,6 +12,8 @@ import SearchIcon from '@asset/search.svg';
 import StarIcon from '@asset/star.svg';
 import SettingsIcon from '@asset/setting.svg';
 import MessageIcon from '@asset/message.svg';
+import { SvgProps } from 'react-native-svg';
+import { AppDispatch } from '@store';
 
 export enum MenuType {
     Home = 'HomeTab',
@@ -56,12 +58,43 @@ const style = StyleSheet.create({
     },
 });
 
-const menu = [
-    {icon: SearchIcon, name: 'Search', type: MenuType.Search},
-    {icon: StarIcon, name: 'Star', type: MenuType.Star},
-    {icon: HomeIcon, name: 'Home', type: MenuType.Home},
-    {icon: MessageIcon, name: 'Message', type: MenuType.Message},
-    {icon: SettingsIcon, name: 'Settings', type: MenuType.Settings},
+export interface MenuProps {
+    icon: React.FC<SvgProps>;
+    name: string;
+    type: MenuType;
+    onLongPress?: (dispatch: AppDispatch) => void;
+}
+
+const menu: MenuProps[] = [
+    {
+        icon: SearchIcon, 
+        name: 'Search', 
+        type: MenuType.Search
+    },
+    {
+        icon: StarIcon, 
+        name: 'Star', 
+        type: MenuType.Star
+    },
+    {
+        icon: HomeIcon, 
+        name: 'Home', 
+        type: MenuType.Home,
+        onLongPress: (dispatch) => {
+            dispatch(toggleSwitchSiteDialog())
+            console.log('Home long press')
+        }
+    },
+    {
+        icon: MessageIcon, 
+        name: 'Message', 
+        type: MenuType.Message
+    },
+    {
+        icon: SettingsIcon, 
+        name: 'Settings', 
+        type: MenuType.Settings
+    },
 ];
 
 export function RouteMenuBar() {
@@ -126,15 +159,15 @@ export function MenuBar() {
 
     const menuItems = useMemo(() => 
         menu.map((item, i) => (
-            <TouchableOpacity
-                activeOpacity={1.0}
+            <Pressable
                 key={i}
                 style={style.menuItem}
+                onLongPress={() => item?.onLongPress?.(dispatch)}
                 onPress={() => onActive(item.type)}>
                 <View>
                     {<item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />}
                 </View>
-            </TouchableOpacity>
+            </Pressable>
         ))
     , [menu, active])
 

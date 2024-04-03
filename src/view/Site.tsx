@@ -33,11 +33,18 @@ const style = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10,
     }, 
+    name: {
+        width: 50,
+        overflow: 'hidden',
+    },
     avator: {
         width: 48,
         height: 48,
         borderRadius: 24,
         marginBottom: 4,
+    },
+    serverName: {
+        maxWidth: "50%"
     }
 })
 
@@ -55,10 +62,18 @@ export function Site({site, theme, onPress, onDelete, active = false}: SiteProps
         <View style={{...style.card, ...theme, borderColor: active ? 'green' : 'lightgray'}}>
             <View style={style.user}>
                 <Image style={style.avator} source={{uri: avatorUrl(site)}} />
-                <Text style={{...theme}}>{site.user.User.Name}</Text>
+                <Text style={{...style.name, ...theme}}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}>
+                    {site.user.User.Name}
+                </Text>
             </View>
             <View style={style.server}>
-                <Text style={{...theme}}>{site.name}</Text>
+                <Text style={{...style.serverName,...theme}}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}>
+                    {site.name}
+                </Text>
                 <Tag color="green">{site.version}</Tag>
                 <Tag color="magenta">{site.server.host}</Tag>
             </View>
