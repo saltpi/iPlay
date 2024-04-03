@@ -138,7 +138,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                     </Pressable>
                     : null}
                     <SelectView
-                        style={{inputAndroid: {minWidth: "50%"}}}
+                        style={{inputAndroid: {minWidth: "50%", ...theme}, inputIOS: {...theme}}}
                         value={fontName}
                         items={fontList}
                         onValueChange={(font) => dispatch(updateTheme({fontFamily: font}))} />
