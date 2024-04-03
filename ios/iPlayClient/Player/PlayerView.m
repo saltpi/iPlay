@@ -119,6 +119,8 @@
     } else {
         [self.player volumeDown:0.05];
     }
+    self.controlView.volumeValue = self.player.volume;
+    [self.controlView showVolumeIndicator:YES];
 }
 
 - (void)adjustBrightnessWithDirection:(UISwipeGestureRecognizerDirection)direction {
@@ -128,6 +130,8 @@
     } else {
         [UIScreen mainScreen].brightness -= delta;
     }
+    self.controlView.brightnessValue = UIScreen.mainScreen.brightness;
+    [self.controlView showBrightnessIndicator:YES];
 }
 
 #pragma mark - VideoPlayerDelegate
@@ -240,7 +244,7 @@
 - (PlayerContentView *)contentView {
     if (!_contentView) {
         PlayerContentView *view = [PlayerContentView new];
-        view.backgroundColor = UIColor.clearColor;
+        view.backgroundColor = UIColor.blackColor;
         _contentView = view;
     }
     return _contentView;

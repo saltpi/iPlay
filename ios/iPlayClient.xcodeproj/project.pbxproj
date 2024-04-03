@@ -28,6 +28,7 @@
 		8856A4E82BBC191B00CC1136 /* IPLFontModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */; };
 		8856A4E92BBC191B00CC1136 /* PlayerSubtitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4DD2BBC191B00CC1136 /* PlayerSubtitleView.m */; };
 		8856A4EA2BBC191B00CC1136 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4DE2BBC191B00CC1136 /* RootViewController.m */; };
+		8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */; };
 		888CB5762BB11E22009E89E9 /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 888CB5752BB11E22009E89E9 /* MPVKit */; };
 		888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888CB5822BB13C08009E89E9 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
@@ -90,6 +91,8 @@
 		8856A4DE2BBC191B00CC1136 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootViewController.m; path = Player/RootViewController.m; sourceTree = "<group>"; };
 		8856A4DF2BBC191B00CC1136 /* PlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerManager.h; path = Player/PlayerManager.h; sourceTree = "<group>"; };
 		8856A4EB2BBC1AE300CC1136 /* iPlayClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iPlayClient.entitlements; path = iPlayClient/iPlayClient.entitlements; sourceTree = "<group>"; };
+		8883B8AE2BBDA24A00688761 /* PlayerNumberValueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerNumberValueView.h; path = Player/PlayerNumberValueView.h; sourceTree = "<group>"; };
+		8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerNumberValueView.m; path = Player/PlayerNumberValueView.m; sourceTree = "<group>"; };
 		888CB5822BB13C08009E89E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -224,6 +227,8 @@
 			children = (
 				8856A4D52BBC191A00CC1136 /* IPLFontModule.h */,
 				8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */,
+				8883B8AE2BBDA24A00688761 /* PlayerNumberValueView.h */,
+				8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */,
 				8856A4DB2BBC191B00CC1136 /* PlayerContentView.h */,
 				8856A4D82BBC191B00CC1136 /* PlayerContentView.m */,
 				8856A4D42BBC191A00CC1136 /* PlayerControlView.h */,
@@ -517,6 +522,7 @@
 				8856A4E62BBC191B00CC1136 /* PlayerContentView.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				8856A4BF2BBC18D400CC1136 /* BeanProxy.m in Sources */,
+				8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */,
 				8856A4C82BBC18E300CC1136 /* RealAppDelegate.m in Sources */,
 				8856A4E12BBC191B00CC1136 /* PlayerManager.m in Sources */,
 				8856A4E92BBC191B00CC1136 /* PlayerSubtitleView.m in Sources */,
@@ -606,7 +612,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UT5Z8LSD88;
+				DEVELOPMENT_TEAM = SNZWBGWPDW;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/prefix.pch";
@@ -644,7 +650,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UT5Z8LSD88;
+				DEVELOPMENT_TEAM = SNZWBGWPDW;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/prefix.pch";
 				INFOPLIST_FILE = iPlayClient/Info.plist;

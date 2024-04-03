@@ -37,6 +37,7 @@ static NSUInteger const kIconSize = 48;
     [self addSubview:self.durationLabel];
     [self addSubview:self.titleLabel];
     [self addSubview:self.indicator];
+    [self addSubview:self.numberValueView];
 }
 
 - (void)_layout {
@@ -98,6 +99,13 @@ static NSUInteger const kIconSize = 48;
         @strongify(self);
         make.center.equalTo(self);
     }];
+    
+    [self.numberValueView remakeConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        make.centerX.equalTo(self);
+        make.top.equalTo(self.fullscreenButton.bottom).with.offset(10);
+        make.width.greaterThanOrEqualTo(200);
+    }];
 }
 
 - (void)_bind {
@@ -116,7 +124,7 @@ static NSUInteger const kIconSize = 48;
     @weakify(self);
     [RACObserve(self, isFullscreen) subscribeNext:^(id  _Nullable x) {
         @strongify(self);
-        NSString *iconName = self.isFullscreen ? @"arrow.up.right.and.arrow.down.left" : @"viewfinder";
+        NSString *iconName = self.isFullscreen ? @"player/fullscreen_exit" : @"player/fullscreen";
         [self _updateIcon:self.fullscreenButton icon:iconName];
     }];
     
@@ -171,14 +179,33 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)_changePlayButtonIcon:(BOOL)isPlaying {
-    NSString *imageName = isPlaying ? @"play" : @"pause";
+    NSString *imageName = isPlaying ? @"player/play" : @"player/pause";
     [self _updateIcon:self.playButton icon:imageName];
+}
+
+- (void)showNumberValueIndicator:(BOOL)visible {
+    [UIView animateWithDuration:0.5
+                     animations:^{
+        self.numberValueView.alpha = visible ? 1.0 : 0;
+    } completion:^(BOOL finished) {
+        self.numberValueView.hidden = !visible;
+    }];
+}
+
+- (void)showBrightnessIndicator:(BOOL)visible {
+    self.numberValueView.iconName = @"player/brightness";
+    [self showNumberValueIndicator:visible];
+}
+
+- (void)showVolumeIndicator:(BOOL)visible {
+    self.numberValueView.iconName = @"player/volume";
+    [self showNumberValueIndicator:visible];
 }
 
 #pragma mark - Getter
 - (UIView *)playButton {
     if (!_playButton) {
-        UIView *view = [self _makeControlView:@"pause"];
+        UIView *view = [self _makeControlView:@"player/pause"];
         _playButton = view;
     }
     return _playButton;
@@ -186,7 +213,7 @@ static NSUInteger const kIconSize = 48;
 
 - (UIView *)fullscreenButton {
     if (!_fullscreenButton) {
-        UIView *view = [self _makeControlView:@"viewfinder"];
+        UIView *view = [self _makeControlView:@"player/fullscreen"];
         _fullscreenButton = view;
     }
     return _fullscreenButton;
@@ -194,7 +221,7 @@ static NSUInteger const kIconSize = 48;
 
 - (UIView *)captionButton {
     if (!_captionButton) {
-        UIView *view = [self _makeControlView:@"captions.bubble"];
+        UIView *view = [self _makeControlView:@"player/caption"];
         _captionButton = view;
     }
     return _captionButton;
@@ -202,7 +229,7 @@ static NSUInteger const kIconSize = 48;
 
 - (UIView *)settingButton {
     if (!_settingButton) {
-        _settingButton = [self _makeControlView:@"gear"];
+        _settingButton = [self _makeControlView:@"player/setting"];
     }
     return _settingButton;
 }
@@ -268,13 +295,7 @@ static NSUInteger const kIconSize = 48;
 
 - (UIView *)_makeControlView:(NSString *)iconName {
     UIImage *icon = nil;
-    if (@available(iOS 15.0, *)) {
-        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithHierarchicalColor:UIColor.whiteColor];
-        icon = [UIImage systemImageNamed:iconName withConfiguration:config];
-    } else {
-        icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
-    }
-    icon = [icon imageWithTintColor:UIColor.whiteColor];
+    icon = [[UIImage imageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:icon];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
 
@@ -297,17 +318,11 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)_updateIcon:(UIView *)view icon:(NSString *)iconName {
-    UIImageView *imageView = ( UIImageView *)view.subviews.firstObject;
+    UIImageView *imageView = (UIImageView *)view.subviews.firstObject;
     if (![imageView isKindOfClass:UIImageView.class]) {
         return;
     }
-    UIImage *icon = nil;
-    if (@available(iOS 15.0, *)) {
-        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithHierarchicalColor:UIColor.whiteColor];
-        icon = [UIImage systemImageNamed:iconName withConfiguration:config];
-    } else {
-        icon = [[UIImage systemImageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
-    }
+    UIImage *icon = [[UIImage imageNamed:iconName] imageWithTintColor:UIColor.whiteColor renderingMode:UIImageRenderingModeAutomatic];
     imageView.image = icon;
 }
 
@@ -319,6 +334,17 @@ static NSUInteger const kIconSize = 48;
         _timeFormatter = dateComponentsFormatter;
     }
     return _timeFormatter;
+}
+
+- (PlayerNumberValueView *)numberValueView {
+    if (!_numberValueView) {
+        _numberValueView = [PlayerNumberValueView new];
+        _numberValueView.maxValue = 100;
+        _numberValueView.minValue = 0;
+        _numberValueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        _numberValueView.layer.borderWidth = 3;
+    }
+    return _numberValueView;
 }
 
 
@@ -336,6 +362,16 @@ static NSUInteger const kIconSize = 48;
         view.layer.cornerRadius = iconSize / 2;
     }
     [self _layout];
+}
+
+- (void)setBrightnessValue:(NSUInteger)brightnessValue {
+    _brightnessValue = brightnessValue;
+    self.numberValueView.progress = brightnessValue;
+}
+
+- (void)setVolumeValue:(NSUInteger)volumeValue {
+    _volumeValue = volumeValue;
+    self.numberValueView.progress = volumeValue;
 }
 
 @end

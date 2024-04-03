@@ -154,6 +154,13 @@ static dispatch_queue_t mpvEventRunloop = nil;
     mpv_set_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
 }
 
+- (CGFloat)volume {
+    if (!self.mpv) return 0.f;
+    double volume;
+    mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+    return volume;
+}
+
 - (void)jumpBackward:(NSUInteger)seconds {
     if (!self.mpv) return;
     const char* pos = [@(-seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
