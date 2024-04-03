@@ -15,12 +15,17 @@ const style = StyleSheet.create({
 
     },
     watchList: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "space-around",
         paddingLeft: 8,
         paddingRight: 8,
         color: "green"
     },
     sectionTitle: {
         fontSize: 22,
+        marginLeft: 8,
     }
 });
 
@@ -58,8 +63,8 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                 refreshControl={<RefreshControl refreshing={refreshing} 
                 onRefresh={onRefresh} />}
                 style={{flex: 1}}>
+            {items.length !== 0 ? <Text style={{...style.sectionTitle, ...theme}}>观看记录</Text> : null}
             <View style={style.watchList}>
-                {items.length !== 0 ? <Text style={{...style.sectionTitle, ...theme}}>观看记录</Text> : null}
                 {items.map((item, idx) => (
                     item.Type === "Movie" ?
                     <MediaCard key={idx} 
@@ -67,6 +72,7 @@ export function Page({navigation}: PropsWithNavigation<"default">) {
                         theme={theme}
                         /> :
                     <EpisodeCard key={idx} emby={emby}
+                        style={{minWidth: "100%", maxWidth: "100%"}}
                         theme={theme}
                         onPress={() => onPress(item)} 
                         episode={item as any} />

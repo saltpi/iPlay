@@ -2,11 +2,11 @@ import { FontModule } from "@helper/font";
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { updateConfig } from "@store/configSlice";
 import { updatePlayerState } from "@store/playerSlice";
-import { selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink } from "@store/themeSlice";
+import { selectThemeBasicStyle } from "@store/themeSlice";
 import { SelectView } from "@view/SelectView";
 import { StatusBar } from "@view/StatusBar";
 import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Switch, SwitchChangeEvent, Text, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -85,7 +85,7 @@ export function Page() {
                 <View style={style.inline}>
                     <Text style={{...style.label, ...theme}}>字幕字体</Text>
                     <SelectView
-                        style={{inputAndroid: {minWidth: "50%"}}}
+                        style={{inputAndroid: {minWidth: "50%", ...theme}, inputIOS: {...theme}}}
                         value={fontName}
                         items={fontList}
                         onValueChange={(font) => dispatch(updatePlayerState({fontFamily: font}))} />

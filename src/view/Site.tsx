@@ -12,17 +12,17 @@ export function avatorUrl(site: EmbySite, type: "Primary" = "Primary") {
 const style = StyleSheet.create({
     card: {
         flexDirection: 'row',
-        // justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 5,
         borderColor: 'lightgray',
-        borderWidth: 1,
+        borderWidth: 2,
         padding: 10,
         margin: 10,
     },
     server: {
         flexDirection: 'column',
+        flex: 1,
         paddingLeft: 10,
         paddingRight: 10,
     },
@@ -33,10 +33,18 @@ const style = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10,
     }, 
+    name: {
+        width: 50,
+        overflow: 'hidden',
+    },
     avator: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        marginBottom: 4,
+    },
+    serverName: {
+        maxWidth: "50%"
     }
 })
 
@@ -51,20 +59,27 @@ export interface SiteProps {
 export function Site({site, theme, onPress, onDelete, active = false}: SiteProps) {
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
-        <View style={{...style.card, ...theme, borderColor: active ? 'blue' : 'lightgray'}}>
+        <View style={{...style.card, ...theme, borderColor: active ? 'green' : 'lightgray'}}>
             <View style={style.user}>
-            <Image style={style.avator} source={{uri: avatorUrl(site)}} />
-            <Text style={{...theme}}>{site.user.User.Name}</Text>
+                <Image style={style.avator} source={{uri: avatorUrl(site)}} />
+                <Text style={{...style.name, ...theme}}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}>
+                    {site.user.User.Name}
+                </Text>
             </View>
             <View style={style.server}>
-            <Text style={{...theme}}>{site.name}</Text>
-            <Tag color="green">{site.version}</Tag>
-            <Tag color="magenta">{site.server.host}</Tag>
-            <Text style={{...theme}}>{site.status}</Text>
+                <Text style={{...style.serverName,...theme}}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}>
+                    {site.name}
+                </Text>
+                <Tag color="green">{site.version}</Tag>
+                <Tag color="magenta">{site.server.host}</Tag>
+            </View>
             <Button title="删除" 
                 disabled={active}
                 onPress={() => onDelete?.(site.id)} />
-            </View>
         </View>
         </TouchableOpacity>
     )

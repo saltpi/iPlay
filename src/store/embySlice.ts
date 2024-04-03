@@ -18,7 +18,7 @@ interface EmbyState {
     site: EmbySite|null;
     emby: Emby|null;
     sites?: EmbySite[];
-    source?: {
+    source: {
         albums?: ViewDetail[]
         latestMedias?: Media[][]
         actors?: Map<string, Actor>
@@ -30,6 +30,7 @@ const initialState: EmbyState = {
     site: null,
     emby: null,
     sites: [],
+    source: {}
 };
 
 type Authentication = {
@@ -222,6 +223,7 @@ export const slice = createSlice({
         .addCase(switchToSiteAsync.fulfilled, (state, action) => {
             if (action.payload) state.site = action.payload
             state.emby = action.payload ? new Emby(action.payload) : null
+            state.source = {}
         })
         .addCase(fetchEmbyAlbumAsync.fulfilled, (state, action) => {
             if (state.source) {
@@ -233,18 +235,12 @@ export const slice = createSlice({
             }
         })
         .addCase(fetchLatestMediaAsync.fulfilled, (state, action) => {
-            if (state.source) {
-                state.source.latestMedias = action.payload as Media[][]
-            } else {
-                state.source = {
-                    latestMedias: action.payload as Media[][]
-                }
-            }
+            state.source.latestMedias = action.payload as Media[][]
         })
         .addCase(fetchEmbyActorAsync.fulfilled, (state, action) => {
             const actor = action.payload
             if (!actor) return
-            if (state.source && !state.source?.actors) {
+            if (!state.source.actors) {
                 state.source.actors = {
                     [actor.id]: actor
                 }
@@ -255,13 +251,11 @@ export const slice = createSlice({
         .addCase(fetchAlbumMediaAsync.fulfilled, (state, action) => {
             const album = action.payload
             if (!album) return
-            if (state.source?.albumMedia) {
+            if (state.source.albumMedia) {
                 state.source.albumMedia[album.id] = album.items
             } else {
-                state.source = {
-                    albumMedia: {
-                        [album.id]: album.items
-                    }
+                state.source.albumMedia = {
+                    [album.id]: album.items
                 }
             }
         })

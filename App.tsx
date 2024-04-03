@@ -13,6 +13,7 @@ import { printException } from '@helper/log';
 import { Device } from '@helper/device';
 import { PlayerMonitor } from '@view/PlayerMonitor';
 import { StatusBarHeight } from '@view/StatusBar';
+import { SwitchSiteDialog } from '@view/SwitchSiteDialog';
 
 function App() {
     const [inited, setInited] = useState(false);
@@ -67,6 +68,7 @@ function App() {
                 <Router />
                 </SafeAreaProvider>
                 <Toast config={toastConfig} />
+                <SwitchSiteDialog />
                 <PlayerMonitor />
                 </PersistGate>
             </Provider>

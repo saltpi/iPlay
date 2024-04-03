@@ -4,10 +4,12 @@ import { MenuType } from '@view/menu/MenuBar';
 
 interface MenuState {
     value: MenuType;
+    showSwitchSiteDialog?: boolean;
 }
 
 const initialState: MenuState = {
     value: MenuType.Home,
+    showSwitchSiteDialog: false
 };
 
 export const slice = createSlice({
@@ -18,12 +20,15 @@ export const slice = createSlice({
         switchToMenu: (state, action: PayloadAction<MenuType>) => {
             state.value = action.payload;
         },
+        toggleSwitchSiteDialog: (state) => {
+            state.showSwitchSiteDialog = !state.showSwitchSiteDialog;
+        }
     },
     extraReducers: builder => {
     },
 });
 
-export const { switchToMenu } = slice.actions;
+export const { switchToMenu, toggleSwitchSiteDialog } = slice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

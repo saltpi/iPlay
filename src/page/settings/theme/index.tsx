@@ -68,6 +68,9 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                 const items = fontNames.sort().map(f => ({label: f, value: f}))
                 setFontList(items)
             })
+        if (isOS(OSType.Android)) {
+            return
+        }
         const listener = new NativeEventEmitter(FontModule).addListener("onSelectFontChange", (fontFamily: string) => {
             dispatch(updateTheme({fontFamily}))
         })
@@ -138,7 +141,7 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                     </Pressable>
                     : null}
                     <SelectView
-                        style={{inputAndroid: {minWidth: "50%"}}}
+                        style={{inputAndroid: {minWidth: "50%", ...theme}, inputIOS: {...theme}}}
                         value={fontName}
                         items={fontList}
                         onValueChange={(font) => dispatch(updateTheme({fontFamily: font}))} />
