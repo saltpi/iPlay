@@ -12,12 +12,11 @@ export function avatorUrl(site: EmbySite, type: "Primary" = "Primary") {
 const style = StyleSheet.create({
     card: {
         flexDirection: 'row',
-        // justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 5,
         borderColor: 'lightgray',
-        borderWidth: 1,
+        borderWidth: 2,
         padding: 10,
         margin: 10,
     },
@@ -51,7 +50,7 @@ export interface SiteProps {
 export function Site({site, theme, onPress, onDelete, active = false}: SiteProps) {
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
-        <View style={{...style.card, ...theme, borderColor: active ? 'blue' : 'lightgray'}}>
+        <View style={{...style.card, ...theme, borderColor: active ? 'green' : 'lightgray'}}>
             <View style={style.user}>
             <Image style={style.avator} source={{uri: avatorUrl(site)}} />
             <Text style={{...theme}}>{site.user.User.Name}</Text>

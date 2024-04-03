@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { loginToSiteAsync, removeSite, switchToSiteAsync } from '@store/embySlice';
 import { selectThemeBasicStyle } from '@store/themeSlice';
 import { Site } from '@view/Site';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Button, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -28,10 +28,10 @@ const style = StyleSheet.create({
         flex: 1,
         height: 40,
         margin: 12,
-        fontSize: 16,
         borderWidth: 1,
         borderRadius: 5,
-        padding: 2.5,
+        paddingLeft: 8,
+        paddingRight: 8,
         backgroundColor: "#f0f0f0",
         borderColor: "#e0e0e0",
     },
@@ -51,15 +51,16 @@ export function Page() {
     const navigation: Navigation = useNavigation()
     const insets = useSafeAreaInsets()
     const sites = useAppSelector(state => state.emby.sites)
-    const emby = useAppSelector(state => state.emby.site)
-    const [server, onChangeServer] = useState(embyUrl(emby) ?? '');
-    const [username, onChangeUsername] = useState(emby?.user.User.Name ?? '');
+    const site = useAppSelector(state => state.emby.site)
+    const [server, onChangeServer] = useState(embyUrl(site) ?? '');
+    const [username, onChangeUsername] = useState(site?.user.User.Name ?? '');
     const [password, onChangePassword] = useState('');
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch()
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     const pagePaddingTop = useAppSelector(state => state.theme.pagePaddingTop)
+
     const onLoginPress = async () => {
         const regex = /(?<protocol>http|https):\/\/(?<host>[^\/\:]+):?(?<port>\d+)?(?<path>\/?.*)/
         const groups = server.match(regex)?.groups
@@ -105,6 +106,11 @@ export function Page() {
         }))
     }
 
+    useEffect(() => {
+        onChangeServer(embyUrl(site) ?? '')
+        onChangeUsername(site?.user.User.Name ?? '')
+    }, [site])
+
     return (
         <View style={{flex: 1, backgroundColor, paddingTop: pagePaddingTop}}>
             <View style={style.inputLine}>
@@ -132,7 +138,8 @@ export function Page() {
                 <TextInput
                     placeholder="password"
                     style={{...style.input, ...theme}}
-                    placeholderTextColor={theme.color}
+                    secureTextEntry={true}
+                    placeholderTextColor={"red"}
                     onChangeText={onChangePassword}
                     value={password}
                 />
@@ -143,10 +150,10 @@ export function Page() {
                     onPress={onLoginPress} />
             </View>
             <ScrollView>
-                {sites?.map((site, index) => (
-                    <Site key={index} site={site}
-                        active={site.id === emby?.id}
-                        onPress={() => dispatch(switchToSiteAsync(site.id))}
+                {sites?.map((s, i) => (
+                    <Site key={`${s.id}:${i}`} site={s}
+                        active={s.id === site?.id}
+                        onPress={() => dispatch(switchToSiteAsync(s.id))}
                         onDelete={(id) => dispatch(removeSite(id))}
                         theme={theme} />
                 ))}
