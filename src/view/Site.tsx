@@ -1,6 +1,6 @@
 import { ThemeBasicStyle } from "@global";
 import { EmbySite } from "@model/EmbySite";
-import { Button, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Image } from "./Image";
 import { Tag } from "./Tag";
 
@@ -51,15 +51,16 @@ const style = StyleSheet.create({
 export interface SiteProps {
     site: EmbySite;
     active?: boolean;
-    theme?: ThemeBasicStyle,
+    theme?: ThemeBasicStyle;
+    style?: Partial<ViewStyle>;
     onPress?: () => void;
     onDelete?: (id: string) => void;
 }
 
-export function Site({site, theme, onPress, onDelete, active = false}: SiteProps) {
+export function Site({style: extraStyle, site, theme, onPress, onDelete, active = false}: SiteProps) {
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
-        <View style={{...style.card, ...theme, borderColor: active ? 'green' : 'lightgray'}}>
+        <View style={{...style.card, ...theme, ...extraStyle, borderColor: active ? 'green' : 'lightgray'}}>
             <View style={style.user}>
                 <Image style={style.avator} source={{uri: avatorUrl(site)}} />
                 <Text style={{...style.name, ...theme}}
