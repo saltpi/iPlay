@@ -22,6 +22,7 @@ const style = StyleSheet.create({
     },
     server: {
         flexDirection: 'column',
+        flex: 1,
         paddingLeft: 10,
         paddingRight: 10,
     },
@@ -33,9 +34,10 @@ const style = StyleSheet.create({
         marginTop: 10,
     }, 
     avator: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        marginBottom: 4,
     }
 })
 
@@ -52,18 +54,17 @@ export function Site({site, theme, onPress, onDelete, active = false}: SiteProps
         <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
         <View style={{...style.card, ...theme, borderColor: active ? 'green' : 'lightgray'}}>
             <View style={style.user}>
-            <Image style={style.avator} source={{uri: avatorUrl(site)}} />
-            <Text style={{...theme}}>{site.user.User.Name}</Text>
+                <Image style={style.avator} source={{uri: avatorUrl(site)}} />
+                <Text style={{...theme}}>{site.user.User.Name}</Text>
             </View>
             <View style={style.server}>
-            <Text style={{...theme}}>{site.name}</Text>
-            <Tag color="green">{site.version}</Tag>
-            <Tag color="magenta">{site.server.host}</Tag>
-            <Text style={{...theme}}>{site.status}</Text>
+                <Text style={{...theme}}>{site.name}</Text>
+                <Tag color="green">{site.version}</Tag>
+                <Tag color="magenta">{site.server.host}</Tag>
+            </View>
             <Button title="删除" 
                 disabled={active}
                 onPress={() => onDelete?.(site.id)} />
-            </View>
         </View>
         </TouchableOpacity>
     )
