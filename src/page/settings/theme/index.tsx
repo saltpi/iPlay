@@ -68,6 +68,9 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
                 const items = fontNames.sort().map(f => ({label: f, value: f}))
                 setFontList(items)
             })
+        if (isOS(OSType.Android)) {
+            return
+        }
         const listener = new NativeEventEmitter(FontModule).addListener("onSelectFontChange", (fontFamily: string) => {
             dispatch(updateTheme({fontFamily}))
         })

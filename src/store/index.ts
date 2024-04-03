@@ -7,15 +7,16 @@ import playerReducer from './playerSlice';
 import { listener } from "./middleware/Listener";
 import { thunk } from 'redux-thunk';
 import { Api } from '@api/emby';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
+import { reduxStorage } from '@helper/storage';
+
 
 const Env = {
   name: "development",
   storeKey: "dev"
 }
 
-const storage = AsyncStorage
+const storage = reduxStorage
 
 const persistConfig = {
   key: [Env.storeKey, "root"].join("/"),
