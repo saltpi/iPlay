@@ -95,13 +95,11 @@
             }
         }
     } else if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {
-        // TODO
-    }
-    
-    if (self.controlView.isControlsVisible) {
-        [self.controlView hideControls];
-    } else {
-        [self.controlView showControls];
+        if (self.controlView.isControlsVisible) {
+            [self.controlView hideControls];
+        } else {
+            [self.controlView showControls];
+        }
     }
 }
 
@@ -130,7 +128,7 @@
     } else {
         [UIScreen mainScreen].brightness -= delta;
     }
-    self.controlView.brightnessValue = UIScreen.mainScreen.brightness;
+    self.controlView.brightnessValue = UIScreen.mainScreen.brightness * 100;
     [self.controlView showBrightnessIndicator:YES];
 }
 
