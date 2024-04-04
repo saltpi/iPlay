@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/endeny/MPVKit",
       "state" : {
-        "revision" : "246edf539c83999189d2c9e4e6c3096831b0068e",
-        "version" : "0.37.1"
+        "revision" : "46172a334bd5ec9bd53c03ecee4cc2609d5e5b12",
+        "version" : "0.37.2"
       }
     }
   ],
