@@ -31,6 +31,7 @@
 		8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */; };
 		888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888CB5822BB13C08009E89E9 /* CoreAudio.framework */; };
 		88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */; };
+		88B833C02BBEA5040099D4CB /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 88B833BF2BBEA5040099D4CB /* MPVKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
