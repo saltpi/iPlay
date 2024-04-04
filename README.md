@@ -41,6 +41,8 @@ Supports Android and iOS
 
 - [x] Support Emby
 - [x] Internal mpv player
+- [x] Multi-site switch
+- [x] Use other font
 - [ ] Download video and audio
 - [ ] Audio player
 - [ ] Support subscribe movie and series
