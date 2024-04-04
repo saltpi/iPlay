@@ -386,6 +386,7 @@ static NSUInteger const kIconSize = 48;
     if (!_volumeView) {
         _volumeView = [[MPVolumeView alloc] initWithFrame:CGRectZero];
         // hide system volume indicator
+        _volumeView.alpha = 0.00001;
         _volumeView.hidden = NO;
     }
     return _volumeView;

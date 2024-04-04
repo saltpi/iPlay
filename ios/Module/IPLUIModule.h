@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface IPLUIModule : NSObject<RCTBridgeModule>
-
++ (CGSize)windowSize;
 @end
 
 NS_ASSUME_NONNULL_END

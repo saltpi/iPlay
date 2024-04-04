@@ -11,6 +11,7 @@
 #import "UIView+FindViewController.h"
 #import <AVFoundation/AVAudioSession.h>
 #import "PlayerContentView.h"
+#import "IPLUIModule.h"
 
 typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     PlayerGestureTypeNone,
@@ -147,8 +148,9 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         UIPanGestureRecognizer *gesture = (UIPanGestureRecognizer *)sender;
         CGPoint position = [gesture locationInView:self.eventsView];
         CGPoint velocity = [gesture velocityInView:self.eventsView];
-        BOOL isLeftSide = position.x < self.bounds.size.width / 3;
-        BOOL isRightSide = position.x > self.bounds.size.width * 2 / 3;
+        CGFloat windowWidth = IPLUIModule.windowSize.width;
+        BOOL isLeftSide = position.x < windowWidth / 3;
+        BOOL isRightSide = position.x > windowWidth * 2 / 3;
         BOOL isVerticalDirection = ABS(velocity.y) > ABS(velocity.x);
         if (isVerticalDirection && isLeftSide) {
             return PlayerGestureTypeBrightness;
@@ -198,6 +200,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     NSDictionary *payload = nil;
     switch (event) {
         case PlayEventTypeDuration: {
+            [UIApplication sharedApplication].idleTimerDisabled = NO;
             break;
         }
         case PlayEventTypeOnProgress: {
@@ -277,6 +280,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
 - (void)removeFromSuperview {
     [self.player stop];
     [self.player quit];
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     [super removeFromSuperview];
 }
 

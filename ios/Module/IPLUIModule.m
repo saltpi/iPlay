@@ -17,4 +17,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(statusBarHeight) {
     return @(statusBarHeight);
 }
 
++ (CGSize)windowSize {
+    return [UIApplication sharedApplication].windows.firstObject.bounds.size;
+}
 @end
