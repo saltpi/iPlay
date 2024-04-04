@@ -878,7 +878,7 @@
 			repositoryURL = "https://github.com/endeny/MPVKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.37.1;
+				minimumVersion = 0.37.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
