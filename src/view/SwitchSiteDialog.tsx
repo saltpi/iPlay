@@ -5,7 +5,7 @@ import Dialog from 'react-native-dialog';
 import { Site } from './Site';
 import { removeSite, switchToSiteAsync } from '@store/embySlice';
 import { selectThemeBasicStyle } from '@store/themeSlice';
-import { OSType, isOS, screenWidth, windowHeight } from '@helper/device';
+import { Device, OSType, isOS, screenWidth, windowHeight } from '@helper/device';
 
 const style = StyleSheet.create({
     container: {
@@ -13,6 +13,7 @@ const style = StyleSheet.create({
         maxWidth: "95%",
     },
     list: {
+        width: "100%",
         flex: 1,
     }
 })
@@ -26,14 +27,15 @@ export function SwitchSiteDialog() {
     const maxHeight = windowHeight * 0.65
     const layout = {
         container: {
-            minWidth: isOS(OSType.Android) ? null : screenWidth * 0.5 + 60,
+            minWidth: isOS(OSType.Android) ? null : screenWidth * (Device.isTablet ? 0.5 : 0.75) + 60,
             padding: 0, 
             ...theme
         },
         siteList: {
+            minWidth: isOS(OSType.Android) ? null : screenWidth * (Device.isTablet ? 0.5 : 0.75) + 60,
             ...style.list,
             ...theme,
-            maxHeight
+            maxHeight,
         },
         site: {
             minWidth: isOS(OSType.Android) ? null : screenWidth * 0.5
@@ -41,6 +43,7 @@ export function SwitchSiteDialog() {
     }
     return (
         <Dialog.Container visible={visible}
+            blurStyle={theme}
             contentStyle={layout.container} 
             onBackdropPress={() => dispatch(toggleSwitchSiteDialog())}>
             <Dialog.Description>
