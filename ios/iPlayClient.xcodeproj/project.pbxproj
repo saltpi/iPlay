@@ -31,7 +31,8 @@
 		8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */; };
 		888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888CB5822BB13C08009E89E9 /* CoreAudio.framework */; };
 		88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */; };
-		88B833C02BBEA5040099D4CB /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 88B833BF2BBEA5040099D4CB /* MPVKit */; };
+		88B833C62BBEC1E00099D4CB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 88B833C52BBEC1E00099D4CB /* PrivacyInfo.xcprivacy */; };
+		88B833C92BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88B833C82BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,12 +81,12 @@
 		8856A4D22BBC191A00CC1136 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerView.m; path = Player/PlayerView.m; sourceTree = "<group>"; };
 		8856A4D32BBC191A00CC1136 /* PlayerViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewModel.h; path = Player/PlayerViewModel.h; sourceTree = "<group>"; };
 		8856A4D42BBC191A00CC1136 /* PlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerControlView.h; path = Player/PlayerControlView.h; sourceTree = "<group>"; };
-		8856A4D52BBC191A00CC1136 /* IPLFontModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IPLFontModule.h; path = Player/IPLFontModule.h; sourceTree = "<group>"; };
+		8856A4D52BBC191A00CC1136 /* IPLFontModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPLFontModule.h; sourceTree = "<group>"; };
 		8856A4D62BBC191B00CC1136 /* PlayerEventView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerEventView.m; path = Player/PlayerEventView.m; sourceTree = "<group>"; };
 		8856A4D72BBC191B00CC1136 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewController.m; path = Player/PlayerViewController.m; sourceTree = "<group>"; };
 		8856A4D82BBC191B00CC1136 /* PlayerContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerContentView.m; path = Player/PlayerContentView.m; sourceTree = "<group>"; };
 		8856A4D92BBC191B00CC1136 /* PlayerViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewModel.m; path = Player/PlayerViewModel.m; sourceTree = "<group>"; };
-		8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IPLFontModule.m; path = Player/IPLFontModule.m; sourceTree = "<group>"; };
+		8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPLFontModule.m; sourceTree = "<group>"; };
 		8856A4DB2BBC191B00CC1136 /* PlayerContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerContentView.h; path = Player/PlayerContentView.h; sourceTree = "<group>"; };
 		8856A4DC2BBC191B00CC1136 /* VideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPlayer.h; path = Player/VideoPlayer.h; sourceTree = "<group>"; };
 		8856A4DD2BBC191B00CC1136 /* PlayerSubtitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerSubtitleView.m; path = Player/PlayerSubtitleView.m; sourceTree = "<group>"; };
@@ -98,6 +99,8 @@
 		88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
 		88B833C22BBEBB2E0099D4CB /* IPLUIModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPLUIModule.h; sourceTree = "<group>"; };
 		88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPLUIModule.m; sourceTree = "<group>"; };
+		88B833C52BBEC1E00099D4CB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		88B833C82BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LXGWWenKaiLite-Regular.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -144,6 +147,7 @@
 		13B07FAE1A68108700A75B9A /* iPlayClient */ = {
 			isa = PBXGroup;
 			children = (
+				88B833C72BBEC3F10099D4CB /* Resource */,
 				8856A4EB2BBC1AE300CC1136 /* iPlayClient.entitlements */,
 				8856A4B82BBC175200CC1136 /* App */,
 				8856A4B02BBC16C400CC1136 /* Bean */,
@@ -153,6 +157,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */,
+				88B833C52BBEC1E00099D4CB /* PrivacyInfo.xcprivacy */,
 			);
 			name = iPlayClient;
 			sourceTree = "<group>";
@@ -229,17 +234,25 @@
 		88B833C12BBEBB060099D4CB /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				8856A4D52BBC191A00CC1136 /* IPLFontModule.h */,
+				8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */,
 				88B833C22BBEBB2E0099D4CB /* IPLUIModule.h */,
 				88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */,
 			);
 			path = Module;
 			sourceTree = "<group>";
 		};
+		88B833C72BBEC3F10099D4CB /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				88B833C82BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		88DC7F5E2BAB2E9600728201 /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				8856A4D52BBC191A00CC1136 /* IPLFontModule.h */,
-				8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */,
 				8883B8AE2BBDA24A00688761 /* PlayerNumberValueView.h */,
 				8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */,
 				8856A4DB2BBC191B00CC1136 /* PlayerContentView.h */,
@@ -378,6 +391,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88B833C62BBEC1E00099D4CB /* PrivacyInfo.xcprivacy in Resources */,
+				88B833C92BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf in Resources */,
 				8856A4C72BBC18E300CC1136 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
