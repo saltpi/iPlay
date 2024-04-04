@@ -168,11 +168,12 @@ const MessageRouter = () => {
     const options = useAppSelector(selectScreenOptions);
     return (
         <MessageStack.Navigator
-            initialRouteName="message"
+            // initialRouteName="message"
+            initialRouteName="test"
             screenOptions={options}>
             <MessageStack.Screen
                 name="message"
-                component={MessagePage}
+                component={MessagePage as any}
                 options={{title: '消息'}}
             />
             <MessageStack.Screen
