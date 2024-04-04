@@ -58,6 +58,7 @@ jobs:
           scheme: ${{ 'default' }}
           DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
         run: |
+          rm -rf ios/iPlayClient.xcworkspace/xcshareddata/swiftpm/Package.resolved
           make all
 
       - name: ⬆️ Upload Build Artifact
