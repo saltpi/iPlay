@@ -11,6 +11,7 @@
 static NSUInteger const kIconSize = 48;
 
 @interface PlayerControlView ()
+@property (nonatomic, strong) MPVolumeView *volumeView;
 @end
 
 @implementation PlayerControlView
@@ -20,6 +21,8 @@ static NSUInteger const kIconSize = 48;
     if (self) {
         _isControlsVisible = YES;
         _iconSize = kIconSize;
+        _volumeValue = AVAudioSession.sharedInstance.outputVolume;
+        _brightnessValue = UIScreen.mainScreen.brightness;
         [self _setupUI];
         [self _layout];
         [self _bind];
@@ -38,6 +41,7 @@ static NSUInteger const kIconSize = 48;
     [self addSubview:self.titleLabel];
     [self addSubview:self.indicator];
     [self addSubview:self.numberValueView];
+    [self addSubview:self.volumeView];
 }
 
 - (void)_layout {
@@ -106,6 +110,14 @@ static NSUInteger const kIconSize = 48;
         make.top.equalTo(self.fullscreenButton.bottom).with.offset(10);
         make.width.greaterThanOrEqualTo(200);
     }];
+    
+    [self.volumeView remakeConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        make.bottom.equalTo(self.top).with.offset(-40);
+        make.centerX.equalTo(self);
+        make.height.equalTo(@0);
+        make.width.equalTo(@0);
+    }];
 }
 
 - (void)_bind {
@@ -132,6 +144,18 @@ static NSUInteger const kIconSize = 48;
         @strongify(self);
         self.titleLabel.text = self.title;
     }];
+    
+    [RACObserve(self, brightnessValue) subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        UIScreen.mainScreen.brightness = self.brightnessValue;
+        self.numberValueView.progress = self.brightnessValue * 100;
+    }];
+    
+    [RACObserve(self, volumeValue) subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        [self updateVolume:self.volumeValue];
+        self.numberValueView.progress = self.volumeValue * 100;
+    }];
 }
 
 - (void)showControls {
@@ -152,6 +176,13 @@ static NSUInteger const kIconSize = 48;
         self.hidden = YES;
     }];
     self.isControlsVisible = NO;
+}
+
+- (void)updateVolume:(CGFloat)volume {
+    UIView *view = self.volumeView.subviews.firstObject;
+    if (![view isKindOfClass:UISlider.class]) return;
+    UISlider *slider = (UISlider *)view;
+    slider.value = volume;
 }
 
 - (void)onPlayTap:(id)sender {
@@ -184,7 +215,7 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)showNumberValueIndicator:(BOOL)visible {
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:visible ? 0.15 : 0.25
                      animations:^{
         self.numberValueView.alpha = visible ? 1.0 : 0;
     } completion:^(BOOL finished) {
@@ -284,8 +315,6 @@ static NSUInteger const kIconSize = 48;
     return _titleLabel;
 }
 
-
-
 - (UIActivityIndicatorView *)indicator {
     if (!_indicator) {
         _indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
@@ -339,14 +368,28 @@ static NSUInteger const kIconSize = 48;
 - (PlayerNumberValueView *)numberValueView {
     if (!_numberValueView) {
         _numberValueView = [PlayerNumberValueView new];
-        _numberValueView.maxValue = 100;
-        _numberValueView.minValue = 0;
-        _numberValueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        _numberValueView.layer.borderWidth = 3;
+        _numberValueView.maxValue = 100.f;
+        _numberValueView.minValue = 0.f;
+        _numberValueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+        _numberValueView.layer.borderWidth = 1;
+        _numberValueView.layer.cornerRadius = 7;
+        _numberValueView.layer.masksToBounds = YES;
+        _numberValueView.sliderBar.enabled = NO;
+        _numberValueView.clipsToBounds = YES;
+        _numberValueView.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
+        _numberValueView.hidden = YES;
     }
     return _numberValueView;
 }
 
+- (MPVolumeView *)volumeView {
+    if (!_volumeView) {
+        _volumeView = [[MPVolumeView alloc] initWithFrame:CGRectZero];
+        // hide system volume indicator
+        _volumeView.hidden = NO;
+    }
+    return _volumeView;
+}
 
 #pragma mark - Setter
 
@@ -362,16 +405,6 @@ static NSUInteger const kIconSize = 48;
         view.layer.cornerRadius = iconSize / 2;
     }
     [self _layout];
-}
-
-- (void)setBrightnessValue:(NSUInteger)brightnessValue {
-    _brightnessValue = brightnessValue;
-    self.numberValueView.progress = brightnessValue;
-}
-
-- (void)setVolumeValue:(NSUInteger)volumeValue {
-    _volumeValue = volumeValue;
-    self.numberValueView.progress = volumeValue;
 }
 
 @end

@@ -26,23 +26,9 @@
 
 - (void)_setupEvent {
     self.userInteractionEnabled = YES;
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    swipeLeft.delegate = self;
-    [self addGestureRecognizer:swipeLeft];
-
-    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-    swipeRight.delegate = self;
-    [self addGestureRecognizer:swipeRight];
-
-    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-    swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
-    [self addGestureRecognizer:swipeUp];
-
-    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
-    swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
-    [self addGestureRecognizer:swipeDown];
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_handleSwipe:)];
+    panRecognizer.delegate = self;
+    [self addGestureRecognizer:panRecognizer];
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
     [self addGestureRecognizer:tapRecognizer];
@@ -51,15 +37,13 @@
 - (void)_handleTap:(UITapGestureRecognizer *)gesture {
     // ignore areas
     if (self.eventDelegate) {
-        CGPoint location = [gesture locationInView:self];
-        [self.eventDelegate playerGestureEvent:gesture location:location];
+        [self.eventDelegate playerGestureEvent:gesture location:CGPointZero];
     }
 }
 
-- (void)_handleSwipe:(UISwipeGestureRecognizer *)gesture {
+- (void)_handleSwipe:(UIPanGestureRecognizer *)gesture {
     if (self.eventDelegate) {
-        CGPoint location = [gesture locationInView:self];
-        [self.eventDelegate playerGestureEvent:gesture location:location];
+        [self.eventDelegate playerGestureEvent:gesture location:CGPointZero];
     }
 }
 

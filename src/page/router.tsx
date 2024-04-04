@@ -168,8 +168,7 @@ const MessageRouter = () => {
     const options = useAppSelector(selectScreenOptions);
     return (
         <MessageStack.Navigator
-            // initialRouteName="message"
-            initialRouteName="test"
+            initialRouteName="message"
             screenOptions={options}>
             <MessageStack.Screen
                 name="message"

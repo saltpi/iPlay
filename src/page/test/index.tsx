@@ -18,7 +18,7 @@ export function Page() {
     const ref= useRef<any>(null);
     const videoRef = useRef<any>(null);
     const barStyle = useAppSelector(state => state.theme.barStyle);
-    const url = "https://drive.endemy.me/breaking-bad.mp4"
+    // const url = ""
     useEffect(() => {
         return () => {
             console.log(`unmount`, ref.current)
@@ -34,9 +34,9 @@ export function Page() {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
-                <View>
+                {/* <View>
                     <Video style={style.video} source={{uri: url, title: "Breaking Bad"}} />
-                </View>
+                </View> */}
             </ScrollView>
         </SafeAreaView>
     )

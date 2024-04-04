@@ -28,16 +28,16 @@
     @weakify(self);
     [self.iconView remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.left.equalTo(self).with.offset(10);
-        make.top.equalTo(self).with.offset(10);
-        make.bottom.equalTo(self).with.offset(-10);
-        make.size.equalTo(@48);
+        make.left.equalTo(self).with.offset(6);
+        make.top.equalTo(self).with.offset(6);
+        make.bottom.equalTo(self).with.offset(-8);
+        make.size.equalTo(@24);
     }];
     
     [self.sliderBar remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.left.equalTo(self.iconView.right).with.offset(10);
-        make.right.equalTo(self).with.offset(-10);
+        make.left.equalTo(self.iconView.right).with.offset(8);
+        make.right.equalTo(self).with.offset(-8);
         make.centerY.equalTo(self);
     }];
 }
@@ -59,7 +59,7 @@
         self.sliderBar.minimumValue = self.minValue;
     }];
     
-    [[RACObserve(self, progress) deliverOnMainThread] subscribeNext:^(id  _Nullable x) {
+    [RACObserve(self, progress) subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         self.sliderBar.value = self.progress;
     }];
@@ -70,9 +70,10 @@
 #pragma mark - Getter
 - (UISlider *)sliderBar {
     if (!_sliderBar) {
-        _sliderBar = [[UISlider alloc] init];
-        _sliderBar.tintColor = UIColor.whiteColor;
-        _sliderBar.continuous = NO;
+        UISlider *sliderBar = [[UISlider alloc] init];
+        sliderBar.tintColor = UIColor.whiteColor;
+        sliderBar.continuous = YES;
+        _sliderBar = sliderBar;
     }
     return _sliderBar;
 }
