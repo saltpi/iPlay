@@ -31,6 +31,7 @@
 		8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */; };
 		888CB5762BB11E22009E89E9 /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 888CB5752BB11E22009E89E9 /* MPVKit */; };
 		888CB5832BB13C08009E89E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 888CB5822BB13C08009E89E9 /* CoreAudio.framework */; };
+		88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,8 @@
 		8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerNumberValueView.m; path = Player/PlayerNumberValueView.m; sourceTree = "<group>"; };
 		888CB5822BB13C08009E89E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
+		88B833C22BBEBB2E0099D4CB /* IPLUIModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPLUIModule.h; sourceTree = "<group>"; };
+		88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPLUIModule.m; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -144,6 +147,7 @@
 				8856A4EB2BBC1AE300CC1136 /* iPlayClient.entitlements */,
 				8856A4B82BBC175200CC1136 /* App */,
 				8856A4B02BBC16C400CC1136 /* Bean */,
+				88B833C12BBEBB060099D4CB /* Module */,
 				88DC7F5E2BAB2E9600728201 /* Player */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -220,6 +224,15 @@
 			);
 			name = App;
 			path = iPlayClient;
+			sourceTree = "<group>";
+		};
+		88B833C12BBEBB060099D4CB /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				88B833C22BBEBB2E0099D4CB /* IPLUIModule.h */,
+				88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */,
+			);
+			path = Module;
 			sourceTree = "<group>";
 		};
 		88DC7F5E2BAB2E9600728201 /* Player */ = {
@@ -523,6 +536,7 @@
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				8856A4BF2BBC18D400CC1136 /* BeanProxy.m in Sources */,
 				8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */,
+				88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */,
 				8856A4C82BBC18E300CC1136 /* RealAppDelegate.m in Sources */,
 				8856A4E12BBC191B00CC1136 /* PlayerManager.m in Sources */,
 				8856A4E92BBC191B00CC1136 /* PlayerSubtitleView.m in Sources */,
