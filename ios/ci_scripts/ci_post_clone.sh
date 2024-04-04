@@ -15,8 +15,7 @@ ln -s $(which node) /usr/local/bin/node
 
 brew install cocoapods
 
-npm config set maxsockets 3
 # Install JS dependencies
-cd /Volumes/workspace/repository && npm ci
+cd /Volumes/workspace/repository && yarn
 # Install pods under the ios folder of your react native project
 cd /Volumes/workspace/repository/ios && pod install
