@@ -7,6 +7,8 @@
 
 #import <UIKit/UIKit.h>
 #import "VideoPlayer.h"
+#import "PlayerNumberValueView.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,9 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDateComponentsFormatter *timeFormatter;
 @property (nonatomic, assign) BOOL isControlsVisible;
 @property (nonatomic, assign) BOOL isFullscreen;
+@property (nonatomic, strong) PlayerNumberValueView *numberValueView;
+@property (nonatomic, assign) CGFloat volumeValue;
+@property (nonatomic, assign) CGFloat brightnessValue;
 
 - (void)hideControls;
 - (void)showControls;
+- (void)showBrightnessIndicator:(BOOL)visible;
+- (void)showVolumeIndicator:(BOOL)visible;
+- (void)updateVolume:(CGFloat)volume;
 @end
 
 NS_ASSUME_NONNULL_END

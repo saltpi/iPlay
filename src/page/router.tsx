@@ -172,7 +172,7 @@ const MessageRouter = () => {
             screenOptions={options}>
             <MessageStack.Screen
                 name="message"
-                component={MessagePage}
+                component={MessagePage as any}
                 options={{title: '消息'}}
             />
             <MessageStack.Screen

@@ -31,8 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadVideo:(NSString *)url;
 - (void)jumpBackward:(NSUInteger)seconds;
 - (void)jumpForward:(NSUInteger)seconds;
+- (CGFloat)volume;
+- (NSInteger)brightness;
 - (void)volumeUp:(CGFloat)percent;
 - (void)volumeDown:(CGFloat)percent;
+- (void)brightnessUp:(NSInteger)delta;
+- (void)brightnessDown:(NSInteger)delta;
 - (void)play;
 - (void)resume;
 - (void)pause;

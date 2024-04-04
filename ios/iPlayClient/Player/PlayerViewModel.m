@@ -154,6 +154,38 @@ static dispatch_queue_t mpvEventRunloop = nil;
     mpv_set_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
 }
 
+- (CGFloat)volume {
+    if (!self.mpv) return 0.f;
+    double volume;
+    mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
+    return volume;
+}
+
+- (NSInteger)brightness {
+    if (!self.mpv) return 0.f;
+    NSInteger brightness;
+    mpv_get_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
+    return brightness;
+}
+
+- (void)brightnessUp:(NSInteger)delta {
+    [self _updateBrightness:delta];
+}
+
+- (void)brightnessDown:(NSInteger)delta {
+    [self _updateBrightness:-delta];
+}
+
+- (void)_updateBrightness:(NSInteger)delta {
+    if (!self.mpv) return;
+    NSInteger brightness;
+    mpv_get_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
+    brightness += delta;
+    if (brightness >= 100) brightness = 100;
+    if (brightness <= 0) brightness = 0;
+    mpv_set_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
+}
+
 - (void)jumpBackward:(NSUInteger)seconds {
     if (!self.mpv) return;
     const char* pos = [@(-seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];

@@ -12,6 +12,14 @@
 #import <AVFoundation/AVAudioSession.h>
 #import "PlayerContentView.h"
 
+typedef NS_ENUM(NSUInteger, PlayerGestureType) {
+    PlayerGestureTypeNone,
+    PlayerGestureTypeHideControl,
+    PlayerGestureTypeSeek,
+    PlayerGestureTypeVolume,
+    PlayerGestureTypeBrightness,
+};
+
 
 @interface PlayerView () <PlayerEventDelegate, VideoPlayerDelegate>
 @property (nonatomic, assign) BOOL isFullscreen;
@@ -68,41 +76,93 @@
 
 
 #pragma mark - Volume and Brightness
-- (void)playerGestureEvent:(UIGestureRecognizer *)gesture location:(CGPoint)location {
-    if ([gesture isKindOfClass:UISwipeGestureRecognizer.class]) {
-        UISwipeGestureRecognizer *swipe = (UISwipeGestureRecognizer *)gesture;
-        UISwipeGestureRecognizerDirection direction = swipe.direction;
-        BOOL isLeftSide = location.x < self.bounds.size.width / 2;
-        if (isLeftSide) {
-              NSLog(@"Left side swipe up detected");
+- (void)playerGestureEvent:(UIGestureRecognizer *)sender location:(CGPoint)location {
+    PlayerGestureType type = [self gestureType:sender];
+    switch (type) {
+        case PlayerGestureTypeVolume: {
+            if (sender.state == UIGestureRecognizerStateChanged ||
+                sender.state == UIGestureRecognizerStateEnded) {
+                CGFloat delta = [self deltaYForGesture:(UIPanGestureRecognizer *)sender];
+                [self adjustVolumeWithDelta:-delta];
+            }
+            
+            if (sender.state == UIGestureRecognizerStateBegan) {
+                [self.controlView showVolumeIndicator:YES];
+            } else if (sender.state == UIGestureRecognizerStateEnded) {
+                [self.controlView showVolumeIndicator:NO];
+            }
+            break;
+        }
+        case PlayerGestureTypeBrightness: {
+            if (sender.state == UIGestureRecognizerStateChanged ||
+                sender.state == UIGestureRecognizerStateEnded) {
+                CGFloat delta = [self deltaYForGesture:(UIPanGestureRecognizer *)sender];
+                [self adjustBrightnessWithDelta:-delta];
+            }
+            
+            if (sender.state == UIGestureRecognizerStateBegan) {
+                [self.controlView showBrightnessIndicator:YES];
+            } else if (sender.state == UIGestureRecognizerStateEnded) {
+                [self.controlView showBrightnessIndicator:NO];
+            }
+            break;
+        }
+        case PlayerGestureTypeHideControl: {
+            if (self.controlView.isControlsVisible) {
+                [self.controlView hideControls];
+            } else {
+                [self.controlView showControls];
+            }
+            break;
+        }
+        case PlayerGestureTypeSeek: {
+            CGFloat delta = [self deltaXForGesture:(UIPanGestureRecognizer *)sender];
+            if (sender.state == UIGestureRecognizerStateEnded) {
+                UISwipeGestureRecognizerDirection direction = delta > 0 ?
+                UISwipeGestureRecognizerDirectionRight : UISwipeGestureRecognizerDirectionLeft;
+                [self adjustPorgressWithDirection:direction];
+            }
+        }
+        default:
+            break;
+    }
+}
+
+- (CGFloat)deltaYForGesture:(UIPanGestureRecognizer *)gesture {
+    CGPoint velocity = [gesture velocityInView:self.eventsView];
+    CGFloat speed = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad ? 1.0 / 70000 : 1.0 / 20000;
+    CGFloat delta = velocity.y * speed;
+    return delta;
+}
+
+- (CGFloat)deltaXForGesture:(UIPanGestureRecognizer *)gesture {
+    CGPoint velocity = [gesture velocityInView:self.eventsView];
+    CGFloat speed = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad ? 1.0 / 70000 : 1.0 / 20000;
+    CGFloat delta = velocity.x * speed;
+    return delta;
+}
+
+- (PlayerGestureType)gestureType:(UIGestureRecognizer *)sender {
+    if ([sender isKindOfClass:UIPanGestureRecognizer.class]) {
+        UIPanGestureRecognizer *gesture = (UIPanGestureRecognizer *)sender;
+        CGPoint position = [gesture locationInView:self.eventsView];
+        CGPoint velocity = [gesture velocityInView:self.eventsView];
+        BOOL isLeftSide = position.x < self.bounds.size.width / 3;
+        BOOL isRightSide = position.x > self.bounds.size.width * 2 / 3;
+        BOOL isVerticalDirection = ABS(velocity.y) > ABS(velocity.x);
+        if (isVerticalDirection && isLeftSide) {
+            return PlayerGestureTypeBrightness;
+        } else if (isVerticalDirection && isRightSide) {
+            return PlayerGestureTypeVolume;
+        } else if (isVerticalDirection) {
+            return PlayerGestureTypeNone;
         } else {
-              NSLog(@"Right side swipe up detected");
+            return PlayerGestureTypeSeek;
         }
-        if (direction == UISwipeGestureRecognizerDirectionLeft ||
-            direction == UISwipeGestureRecognizerDirectionRight) {
-            [self adjustPorgressWithDirection:direction];
-        } else if (direction == UISwipeGestureRecognizerDirectionUp) {
-            if (isLeftSide) {
-              [self adjustBrightnessWithDirection:direction];
-            } else {
-              [self adjustVolumeWithDirection:direction];
-            }
-        } else if (direction == UISwipeGestureRecognizerDirectionDown) {
-            if (isLeftSide) {
-              [self adjustBrightnessWithDirection:direction];
-            } else {
-              [self adjustVolumeWithDirection:direction];
-            }
-        }
-    } else if ([gesture isKindOfClass:UITapGestureRecognizer.class]) {
-        // TODO
+    } else if ([sender isKindOfClass:UITapGestureRecognizer.class]) {
+        return PlayerGestureTypeHideControl;
     }
-    
-    if (self.controlView.isControlsVisible) {
-        [self.controlView hideControls];
-    } else {
-        [self.controlView showControls];
-    }
+    return PlayerGestureTypeNone;
 }
 
 - (void)adjustPorgressWithDirection:(UISwipeGestureRecognizerDirection)direction {
@@ -113,21 +173,18 @@
     }
 }
 
-- (void)adjustVolumeWithDirection:(UISwipeGestureRecognizerDirection)direction {
-    if (direction == UISwipeGestureRecognizerDirectionUp) {
-        [self.player volumeUp:0.05];
-    } else {
-        [self.player volumeDown:0.05];
-    }
+- (void)adjustVolumeWithDelta:(CGFloat)delta {
+    CGFloat oldValue = self.controlView.volumeValue;
+    CGFloat newValue = oldValue + delta;
+    newValue = MIN(MAX(newValue, 0.f), 1.f);
+    self.controlView.volumeValue = newValue;
 }
 
-- (void)adjustBrightnessWithDirection:(UISwipeGestureRecognizerDirection)direction {
-    CGFloat delta = 0.05;
-    if (direction == UISwipeGestureRecognizerDirectionUp) {
-        [UIScreen mainScreen].brightness += delta;
-    } else {
-        [UIScreen mainScreen].brightness -= delta;
-    }
+- (void)adjustBrightnessWithDelta:(CGFloat)delta {
+    CGFloat oldValue = self.controlView.brightnessValue;
+    CGFloat newValue = oldValue + delta;
+    newValue = MIN(MAX(newValue, 0.f), 1.f);
+    self.controlView.brightnessValue = newValue;
 }
 
 #pragma mark - VideoPlayerDelegate
@@ -240,7 +297,7 @@
 - (PlayerContentView *)contentView {
     if (!_contentView) {
         PlayerContentView *view = [PlayerContentView new];
-        view.backgroundColor = UIColor.clearColor;
+        view.backgroundColor = UIColor.blackColor;
         _contentView = view;
     }
     return _contentView;

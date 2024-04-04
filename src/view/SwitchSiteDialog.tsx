@@ -32,6 +32,7 @@ export function SwitchSiteDialog() {
         },
         siteList: {
             ...style.list,
+            ...theme,
             maxHeight
         },
         site: {
