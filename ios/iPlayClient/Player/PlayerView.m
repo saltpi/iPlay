@@ -241,6 +241,10 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
             }
             break;
         }
+        case PlayEventTypeEnd: {
+            [self.controlView updatePlayState:[data[@"state"] isEqual:@(0)]];
+            break;
+        }
         default:
             break;
     }

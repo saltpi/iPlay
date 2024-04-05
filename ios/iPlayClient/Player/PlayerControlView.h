@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showBrightnessIndicator:(BOOL)visible;
 - (void)showVolumeIndicator:(BOOL)visible;
 - (void)updateVolume:(CGFloat)volume;
+- (void)updatePlayState:(BOOL)isPlaying;
 @end
 
 NS_ASSUME_NONNULL_END
