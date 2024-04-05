@@ -59,8 +59,7 @@ It is developed in my free time
 - [Android](https://drive.endemy.me/od_bot/build/iPlay/latest/iPlay.apk)
 - [iOS](https://drive.endemy.me/od_bot/build/iPlay/latest/iPlay.ipa)
 
-Download the development package
-![](doc/image/20240319_213840.png)
+- [Testflight](https://testflight.apple.com/join/73NHMoP6)
 
 ## Third-party Dependencies
 
@@ -79,4 +78,4 @@ Download the development package
 
 * [iPlay product discussion group](https://t.me/iPlayClient)
 
-* [Bug a report](https://365.kdocs.cn/l/cile26Rklddg?from=docs&reqtype=kdocs&startTime=1711105971325)
+* Bug a report
