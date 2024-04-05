@@ -69,6 +69,7 @@ static dispatch_queue_t mpvEventRunloop = nil;
         mpv_set_option_string(mpv, "vo", "gpu-next");
         mpv_set_option_string(mpv, "gpu-api", "vulkan");
         mpv_set_option_string(mpv, "hwdec", "videotoolbox");
+        mpv_set_option_string(mpv, "keep-open", "yes");
         if (self.subtitleFontName) {
             const char *cFontName = [self.subtitleFontName cStringUsingEncoding:NSUTF8StringEncoding];
             mpv_set_option_string(self.mpv, "sub-font", cFontName);
@@ -186,17 +187,19 @@ static dispatch_queue_t mpvEventRunloop = nil;
     mpv_set_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
 }
 
-- (void)jumpBackward:(NSUInteger)seconds {
-    if (!self.mpv) return;
-    const char* pos = [@(-seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
-    const char *cmd[] = {"seek", pos, "relative", NULL};
-    mpv_command(self.mpv, cmd);
+- (void)jumpBackward:(NSInteger)seconds {
+    [self seekRelative:-seconds];
 }
 
-- (void)jumpForward:(NSUInteger)seconds {
+- (void)jumpForward:(NSInteger)seconds {
+    [self seekRelative:seconds];
+}
+
+- (void)seekRelative:(NSInteger)seconds {
     if (!self.mpv) return;
     const char* pos = [@(seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
-    const char *cmd[] = {"seek", pos, "relative", NULL};
+    NSLog(@"seek relative %s", pos);
+    const char *cmd[] = {"seek", pos, "relative+exact", NULL};
     mpv_command(self.mpv, cmd);
 }
 
