@@ -186,7 +186,7 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)onPlayTap:(id)sender {
-    [self _changePlayButtonIcon:self.player.isPlaying];
+    [self _changePlayButtonIcon:!self.player.isPlaying];
     if (self.player.isPlaying) {
         [self.player pause];
     } else {
@@ -209,8 +209,12 @@ static NSUInteger const kIconSize = 48;
     }
 }
 
+- (void)updatePlayState:(BOOL)isPlaying {
+    [self _changePlayButtonIcon:isPlaying];
+}
+
 - (void)_changePlayButtonIcon:(BOOL)isPlaying {
-    NSString *imageName = isPlaying ? @"player/play" : @"player/pause";
+    NSString *imageName = isPlaying ? @"player/pause" : @"player/play";
     [self _updateIcon:self.playButton icon:imageName];
 }
 

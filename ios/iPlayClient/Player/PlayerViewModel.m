@@ -82,6 +82,7 @@ static dispatch_queue_t mpvEventRunloop = nil;
         mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
+        mpv_observe_property(self.mpv, 0, "eof-reached", MPV_FORMAT_FLAG);
 //        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
         @weakify(self);
         dispatch_async(mpvEventRunloop, ^{
@@ -265,7 +266,6 @@ static dispatch_queue_t mpvEventRunloop = nil;
 
 - (void)onPlaystateUpdate:(PlayEventType)type
                     state:(int)state {
-    self.isPlaying = state == 0;
     [self.delegate onPlayEvent:type data:@{
         @"state": @(state)
     }];
@@ -284,11 +284,21 @@ static dispatch_queue_t mpvEventRunloop = nil;
             }
         } else if (strcmp(prop->name, "pause") == 0) {
             if (prop->format == MPV_FORMAT_FLAG) {
-                [self onPlaystateUpdate:PlayEventTypeOnPause state:*(int *)prop->data];
+                int value = *(int *)prop->data;
+                self.isPlaying = value == 0;
+                [self onPlaystateUpdate:PlayEventTypeOnPause state:value];
             }
         } else if (strcmp(prop->name, "paused-for-cache") == 0) {
             if (prop->format == MPV_FORMAT_FLAG) {
                 [self onPlaystateUpdate:PlayEventTypeOnPauseForCache state:*(int *)prop->data];
+            }
+        } else if (strcmp(prop->name, "eof-reached") == 0) {
+            if (prop->format == MPV_FORMAT_FLAG) {
+                int value = *(int *)prop->data;
+                if (value == 1) {
+                    self.isPlaying = NO;
+                    [self onPlaystateUpdate:PlayEventTypeEnd state:value];
+                }
             }
         }
     }
