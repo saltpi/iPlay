@@ -4,9 +4,9 @@ import {persistor, store} from '@store';
 import {Toast, toastConfig} from '@helper/toast';
 import {restoreSiteAsync} from '@store/embySlice';
 import { Router } from '@page/router';
-import { SafeAreaProvider, initialWindowMetrics, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Appearance, useColorScheme } from 'react-native';
+import { Appearance, NativeModules, useColorScheme } from 'react-native';
 import { ColorScheme, updateTheme } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { printException } from '@helper/log';
@@ -14,6 +14,8 @@ import { Device } from '@helper/device';
 import { PlayerMonitor } from '@view/PlayerMonitor';
 import { StatusBarHeight } from '@view/StatusBar';
 import { SwitchSiteDialog } from '@view/SwitchSiteDialog';
+
+NativeModules.DevSettings.setIsDebuggingRemotely(false);
 
 function App() {
     const [inited, setInited] = useState(false);

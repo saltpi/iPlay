@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useAppSelector } from "@hook/store";
 import { Video } from "@view/Video";
 import { selectThemedPageStyle } from "@store/themeSlice";
+import { Dev } from "@helper/dev";
 
 const style = StyleSheet.create({
     page: {
@@ -19,7 +20,8 @@ export function Page() {
     const ref= useRef<any>(null);
     const videoRef = useRef<any>(null);
     const pageStyle = useAppSelector(selectThemedPageStyle)
-    // const url = Environment.testVideoUrl;
+    const url = Dev.videoUrl
+    
     useEffect(() => {
         return () => {
             console.log(`unmount`, ref.current)
@@ -35,9 +37,9 @@ export function Page() {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1}}>
-                {/* <View>
+                <View>
                     <Video style={style.video} source={{uri: url, title: "Breaking Bad"}} />
-                </View> */}
+                </View>
             </ScrollView>
         </View>
     )

@@ -33,6 +33,7 @@ import {
 } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useColorScheme } from 'react-native';
+import { Dev } from '@helper/dev';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -168,7 +169,7 @@ const MessageRouter = () => {
     const options = useAppSelector(selectScreenOptions);
     return (
         <MessageStack.Navigator
-            initialRouteName="message"
+            initialRouteName={Dev.mode == "development" ? "test" : "message"}
             screenOptions={options}>
             <MessageStack.Screen
                 name="message"
