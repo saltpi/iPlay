@@ -18,6 +18,8 @@ public interface Player {
     default void resume() {}
     default void pause() {}
     default void seek(long timeInSeconds) {}
+    default void jumpBackward(int seconds) {}
+    default void jumpForward(int seconds) {}
     default void stop() {}
     default void resize(String newSize) {}
     default List subtitles() { return null; }

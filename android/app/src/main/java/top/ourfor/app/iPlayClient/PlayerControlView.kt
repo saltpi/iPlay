@@ -1,5 +1,6 @@
 package top.ourfor.app.iPlayClient
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -43,7 +44,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         DateTimeFormatter.ofPattern("HH:mm:ss")
     }
 
-    private var playButton: View = run {
+    var playButton: View = run {
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
         icon.tag = ICON_TAG
@@ -69,7 +70,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         params
     }
 
-    private var fullscreenButton = run {
+    var fullscreenButton = run {
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
         icon.tag = ICON_TAG
@@ -95,7 +96,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         params
     }
 
-    private var progressBar = run {
+    var progressBar = run {
         val slide = SeekBar(context)
         val color = Color.WHITE
         val colorStateList = ColorStateList.valueOf(color)
@@ -155,6 +156,21 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         params
     }
 
+    var numberValueView = run {
+        val view = PlayerNumberValueView(context);
+        view.id = resId.getAndIncrement()
+        view
+    }
+
+    private var numberValueLayout = run {
+        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        params.leftToLeft = LayoutParams.PARENT_ID;
+        params.topToTop = LayoutParams.PARENT_ID;
+        params.rightToRight = LayoutParams.PARENT_ID;
+        params.topMargin = 100
+        params
+    }
+
 
     init {
         setupUI()
@@ -167,6 +183,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         addView(progressBar, progressBarLayout)
         addView(durationLabel, durationLayout)
         addView(titleLabel, titleLayout)
+        addView(numberValueView, numberValueLayout)
     }
 
     private fun bind() {
@@ -199,13 +216,13 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         fullscreenButton.setOnClickListener {
             delegate?.onWindowSizeChange()
         }
+    }
 
-        setOnClickListener {
-            animate()
-                .alpha(1.0f - alpha)
-                .setDuration(800)
-                .start()
-        }
+    fun toggleVisible() {
+        animate()
+            .alpha(1.0f - alpha)
+            .setDuration(800)
+            .start()
     }
 
     private fun updateIcon(view: View, resId: Int) {

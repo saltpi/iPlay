@@ -1,13 +1,13 @@
 package top.ourfor.app.iPlayClient
 
-import android.R
+import android.R as GlobalR
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.AssetManager
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.media.AudioManager
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
@@ -15,17 +15,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.events.RCTEventEmitter
 import top.ourfor.app.iPlayClient.Player.PlayEventType
-import top.ourfor.lib.mpv.TrackItem
-import top.ourfor.lib.mpv.TrackItem.SubtitleTrackName
 import java.io.File
 import java.io.FileOutputStream
-import java.time.Duration
+import kotlin.math.max
+import kotlin.math.min
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -33,7 +28,7 @@ import java.time.Duration
 class PlayerView(
     context: Context,
     url: String?
-) : ConstraintLayout(context), PlayerEventListener {
+) : ConstraintLayout(context), PlayerEventListener, PlayerEventDelegate {
     var subtitleFontName: String? = null
         set(value) {
             contentView.viewModel.setSubtitleFontName(value)
@@ -41,10 +36,14 @@ class PlayerView(
 
     private var controlView: PlayerControlView?
     private var contentView: PlayerContentView
+    private var eventView: PlayerEventView
     private var fullscreenView: PlayerFullscreenView? = null
     private var isFullscreen = false
     private var duration: Double = 0.0
     private var position: Double = 0.0
+    private var brightnessValue = 0
+    private var volumeValue = 0;
+    private var progressValue = 0;
     var themedReactContext: ThemedReactContext? = null
     var onPlayStateChange: (data: HashMap<String, Any>) -> Unit  = {}
     var url: String? = null
@@ -92,8 +91,24 @@ class PlayerView(
         addView(controlView, controlLayoutParams)
         this.controlView = controlView;
 
-        fullscreenView = PlayerFullscreenView(context, contentView, controlView)
-        fullscreenView?.getWindow()?.setWindowAnimations(R.style.Animation_Dialog)
+        eventView = PlayerEventView(context);
+        eventView.ignoreAreas = listOf(
+            controlView.playButton,
+            controlView.fullscreenButton,
+            controlView.progressBar
+        )
+        eventView.delegate = this
+        val eventLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        eventLayoutParams.topToTop = LayoutParams.PARENT_ID;
+        eventLayoutParams.bottomToBottom = LayoutParams.PARENT_ID;
+        eventLayoutParams.leftToLeft = LayoutParams.PARENT_ID;
+        eventLayoutParams.rightToRight = LayoutParams.PARENT_ID;
+        addView(eventView, eventLayoutParams)
+
+        fullscreenView = PlayerFullscreenView(context, contentView, controlView, eventView)
+        fullscreenView?.getWindow()?.setWindowAnimations(GlobalR.style.Animation_Dialog)
+
+        keepScreenOn = true
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {
@@ -187,9 +202,73 @@ class PlayerView(
     }
 
     override fun onDetachedFromWindow() {
+        keepScreenOn = false
         Log.d(TAG, "destroy player")
         contentView.viewModel.destroy()
         super.onDetachedFromWindow()
+    }
+
+    override fun onEvent(type: PlayerGestureType?, value: Any) {
+        when(type) {
+            PlayerGestureType.None -> {
+                brightnessValue = getBrightnessValue();
+                volumeValue = getVolumeValue()
+                val targetType = value as PlayerGestureType
+                if (targetType == PlayerGestureType.Brightness) {
+                    controlView?.numberValueView?.updateIcon(R.drawable.lightbulb_min)
+                } else if (targetType == PlayerGestureType.Volume) {
+                    controlView?.numberValueView?.updateIcon(R.drawable.waveform)
+                }
+            }
+            PlayerGestureType.HideControl -> {
+                controlView?.toggleVisible()
+            }
+            PlayerGestureType.Seek -> {
+                var delta = 10;
+                if ((value as Float) > 0) {
+                    contentView.viewModel.jumpForward(delta);
+                } else {
+                    contentView.viewModel.jumpBackward(delta)
+                }
+            }
+            PlayerGestureType.Volume -> {
+                var delta = (value as Float).toInt()
+                setVolumeValue(volumeValue + delta);
+                controlView?.numberValueView?.setProgress(volumeValue + delta);
+            }
+            PlayerGestureType.Brightness -> {
+                var delta = (value as Float).toInt()
+                setBrightnessValue(brightnessValue + delta);
+                controlView?.numberValueView?.setProgress(brightnessValue + delta);
+            }
+            null -> {}
+        }
+    }
+
+    fun getBrightnessValue(): Int {
+        val defVal = 50;
+        var value = Settings.System.getInt(context.contentResolver,
+            Settings.System.SCREEN_BRIGHTNESS, defVal);
+        return (value * 100.0 / 255).toInt();
+    }
+
+    fun setBrightnessValue(value: Int) {
+        val newValue = min(max(0, (value * 255 / 100.0).toInt()), 255)
+        Settings.System.putInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS, newValue);
+    }
+
+    fun getVolumeValue(): Int {
+        var audioService = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        var maxValue = audioService.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        val value = audioService.getStreamVolume(AudioManager.STREAM_MUSIC)
+        return (value * 100.0 / maxValue).toInt();
+    }
+
+    fun setVolumeValue(value: Int) {
+        var audioService = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        var maxValue = audioService.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        val newValue = min(max(0, (value * maxValue / 100.0).toInt()), maxValue)
+        audioService.setStreamVolume(AudioManager.STREAM_MUSIC, value, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE)
     }
 
     companion object {

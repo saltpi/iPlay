@@ -40,6 +40,7 @@ public class PlayerViewModel implements Player {
         mpv.setOptionString("gpu-shader-cache-dir", cacheDir);
         mpv.setOptionString("icc-cache-dir", cacheDir);
         mpv.setOptionString("track-auto-selection", "yes");
+        mpv.setOptionString("keep-open", "yes");
         mpv.setOptionString("slang", "zh,chi,chs,sc,zh-hans,en,eng");
         mpv.setOptionString("subs-match-os-language", "yes");
         mpv.setOptionString("subs-fallback", "yes");
@@ -135,6 +136,7 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void seek(long timeInSeconds) {
+        if (mpv == null) return;
         mpv.command("seek", String.valueOf(timeInSeconds), "absolute+keyframes");
     }
 
@@ -155,11 +157,28 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void stop() {
+        if (mpv == null) return;
         mpv.command("stop");
     }
 
     @Override
+    public void jumpBackward(int seconds) {
+        seekRelative(-seconds);
+    }
+
+    @Override
+    public void jumpForward(int seconds) {
+        seekRelative(seconds);
+    }
+
+    public void seekRelative(int seconds) {
+        if (mpv == null) return;
+        mpv.command("seek", String.valueOf(seconds), "relative+exact");
+    }
+
+    @Override
     public void destroy() {
+        if (mpv == null) return;
         mpv.command("stop");
         mpv.command("quit");
     }
