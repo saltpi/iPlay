@@ -1,6 +1,5 @@
 package top.ourfor.app.iPlayClient
 
-import android.R as GlobalR
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
@@ -9,6 +8,8 @@ import android.media.AudioManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +22,7 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
 import kotlin.math.min
+import android.R as GlobalR
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -253,18 +255,23 @@ class PlayerView(
 
     fun getBrightnessValue(): Int {
         val defVal = 50;
-        var value = Settings.System.getInt(context.contentResolver,
-            Settings.System.SCREEN_BRIGHTNESS, defVal);
-        return value
+        val value = getWindow(this)?.attributes?.screenBrightness
+        if (value != null) return (value * 100).toInt()
+        return defVal
     }
 
     fun setBrightnessValue(value: Int) {
-        val newValue = min(max(0, value), 255)
-        Settings.System.putInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS, newValue);
+        val newValue = min(max(0, value), 100)
+        var window = getWindow(this)
+        var attributes = window?.attributes
+        if (attributes != null) {
+            attributes.screenBrightness = (newValue / 100.0).toFloat();
+            window?.setAttributes(attributes)
+        }
     }
 
     fun getBrightnessMaxValue(): Int {
-        return 255;
+        return 100;
     }
 
     fun getVolumeMaxValue(): Int {
@@ -283,6 +290,11 @@ class PlayerView(
         var maxValue = audioService.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         val newValue = min(max(0, value), maxValue)
         audioService.setStreamVolume(AudioManager.STREAM_MUSIC, newValue, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE)
+    }
+
+    fun getWindow(view: View): Window? {
+        val activity = themedReactContext?.currentActivity ?: return null
+        return activity.window
     }
 
     companion object {
