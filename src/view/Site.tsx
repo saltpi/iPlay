@@ -3,6 +3,7 @@ import { EmbySite } from "@model/EmbySite";
 import { Button, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Image } from "./Image";
 import { Tag } from "./Tag";
+import { DEFAULT_AVATOR_URL } from "@helper/image";
 
 export function avatorUrl(site: EmbySite, type: "Primary" = "Primary") {
     const { server: endpoint, user: {User: {Id: id}}} = site
@@ -35,13 +36,17 @@ const style = StyleSheet.create({
     }, 
     name: {
         width: 50,
+        textAlign: 'center',
         overflow: 'hidden',
+        fontWeight: 'bold',
     },
     avator: {
         width: 48,
         height: 48,
-        borderRadius: 24,
         marginBottom: 4,
+        borderWidth: 2,
+        borderRadius: 24,
+        borderColor: 'lightgray',
     },
     serverName: {
         maxWidth: "50%"
@@ -62,7 +67,9 @@ export function Site({style: extraStyle, site, theme, onPress, onDelete, active 
         <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
         <View style={{...style.card, ...theme, ...extraStyle, borderColor: active ? 'green' : 'lightgray'}}>
             <View style={style.user}>
-                <Image style={style.avator} source={{uri: avatorUrl(site)}} />
+                <Image style={style.avator} 
+                    source={{uri: avatorUrl(site)}}
+                    fallbackImages={[DEFAULT_AVATOR_URL]} />
                 <Text style={{...style.name, ...theme}}
                     ellipsizeMode="tail"
                     numberOfLines={1}>

@@ -1,0 +1,1 @@
+export const DEFAULT_AVATOR_URL = "https://www.gravatar.com/avatar"
