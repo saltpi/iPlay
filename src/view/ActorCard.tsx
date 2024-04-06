@@ -1,7 +1,9 @@
 import { ThemeBasicStyle } from "@global";
 import { useAppSelector } from "@hook/store";
 import { People } from "@model/MediaDetail";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "./Image";
+import { DEFAULT_ACTOR_AVATOR_URL } from "@helper/image";
 
 const style = StyleSheet.create({
     root: {
@@ -38,7 +40,11 @@ export function ActorCard({actor, theme, onPress}: ActorCardProps) {
     return (
         <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(actor)}>
         <View style={style.root}>
-            <Image style={style.image} source={{uri: avatorUrl}} />
+            <Image style={style.image}
+                resizeMode="cover"
+                source={{uri: avatorUrl}}
+                fallbackImages={[DEFAULT_ACTOR_AVATOR_URL]}
+            />
             <Text style={{...style.name, ...theme}}
                  numberOfLines={1} 
                  ellipsizeMode="tail">

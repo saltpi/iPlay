@@ -19,14 +19,15 @@ const style = StyleSheet.create({
 });
 
 export interface PlayCountProps {
+    width?: number;
     count: number;
     style?: TextStyle;
 }
 
-export function PlayCount({count, style: extraStyle}: PlayCountProps) {
+export function PlayCount({count, width = style.icon.width, style: extraStyle}: PlayCountProps) {
     return (
         <View style={{...style.root, height: style.icon.height}}>
-            <ViewShowIcon width={style.icon.width} 
+            <ViewShowIcon width={width} 
                 style={style.icon} />
             <Text style={{color: extraStyle?.color}}>{count}</Text>
         </View>

@@ -1,6 +1,14 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
+    ["dotenv-import", {
+      "moduleName": "@env",
+      "path": ".env.local",
+      "blocklist": null,
+      "allowlist": null,
+      "safe": false,
+      "allowUndefined": true
+    }],
     [
       'module-resolver', 
       {

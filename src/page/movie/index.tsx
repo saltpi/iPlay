@@ -84,6 +84,9 @@ const style = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+    },
+    icon: {
+        width: 24,
     }
 })
 
@@ -232,13 +235,19 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             <Image style={style.logo}
                 resizeMode="contain"
                 source={{uri: logoUrl}} />
+            {detail ?
+            <>
             <Like id={Number(movie.Id)}
+                width={style.icon.width}
                 emby={emby}
                 isFavorite={detail?.UserData?.IsFavorite ?? false}
              />
-            <PlayCount 
+            <PlayCount
+                width={style.icon.width + 5}
                 style={{color: themeStyle.color}}
                 count={detail?.UserData?.PlayCount ?? 0} />
+            </>
+            : null }
             </View>
             <View style={style.tags}>
                 {detail?.Genres.map((genre, index) => <Tag key={index}>{genre}</Tag>)}
