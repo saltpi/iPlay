@@ -63,8 +63,8 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         @strongify(self);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.top.equalTo(self.top).with.offset(100);
-        make.bottom.equalTo(self.bottom).with.offset(-100);
+        make.top.equalTo(self.top);
+        make.bottom.equalTo(self.bottom);
     }];
 }
 
@@ -153,7 +153,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         UIPanGestureRecognizer *gesture = (UIPanGestureRecognizer *)sender;
         CGPoint position = [gesture locationInView:self.eventsView];
         CGPoint velocity = [gesture velocityInView:self.eventsView];
-        CGFloat windowWidth = self.frame.size.width;
+        CGFloat windowWidth = self.eventsView.frame.size.width;
         BOOL isLeftSide = position.x < windowWidth / 3;
         BOOL isRightSide = position.x > windowWidth * 2 / 3;
         BOOL isVerticalDirection = ABS(velocity.y) > ABS(velocity.x);

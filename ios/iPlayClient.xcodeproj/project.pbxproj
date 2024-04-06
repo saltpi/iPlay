@@ -59,6 +59,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-iPlayClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient/Pods-iPlayClient.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-iPlayClient-iPlayClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-iPlayClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iPlayClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSystemVolumeView.h; path = Bean/PlayerSystemVolumeView.h; sourceTree = "<group>"; };
 		8856A4B92BBC18D400CC1136 /* Router.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Router.h; sourceTree = "<group>"; };
 		8856A4BA2BBC18D400CC1136 /* BeanContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeanContainer.h; sourceTree = "<group>"; };
 		8856A4BB2BBC18D400CC1136 /* BeanContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeanContainer.m; sourceTree = "<group>"; };
@@ -213,6 +214,7 @@
 				8856A4BD2BBC18D400CC1136 /* BeanProxy.h */,
 				8856A4BC2BBC18D400CC1136 /* BeanProxy.m */,
 				8856A4B92BBC18D400CC1136 /* Router.h */,
+				883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */,
 			);
 			name = Bean;
 			path = iPlayClient;
@@ -781,10 +783,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -852,10 +851,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

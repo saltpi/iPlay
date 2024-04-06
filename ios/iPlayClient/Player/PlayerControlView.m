@@ -7,11 +7,12 @@
 
 #import "PlayerControlView.h"
 #import "UIView+FindViewController.h"
+#import "PlayerSystemVolumeView.h"
 
 static NSUInteger const kIconSize = 48;
 
 @interface PlayerControlView ()
-@property (nonatomic, strong) MPVolumeView *volumeView;
+@property (nonatomic, strong) MPVolumeView<PlayerSystemVolumeView> *volumeView;
 @end
 
 @implementation PlayerControlView
@@ -21,7 +22,6 @@ static NSUInteger const kIconSize = 48;
     if (self) {
         _isControlsVisible = YES;
         _iconSize = kIconSize;
-        _volumeValue = AVAudioSession.sharedInstance.outputVolume;
         _brightnessValue = UIScreen.mainScreen.brightness;
         [self _setupUI];
         [self _layout];
@@ -105,14 +105,13 @@ static NSUInteger const kIconSize = 48;
     
     [self.volumeView remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.bottom.equalTo(self.top).with.offset(-40);
+        make.top.equalTo(self.top);
         make.centerX.equalTo(self);
-        make.height.equalTo(@0);
-        make.width.equalTo(@0);
     }];
 }
 
 - (void)_bind {
+    self.volumeValue = self.defaultVolumeValue;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPlayTap:)];
     self.playButton.userInteractionEnabled = YES;
     [self.playButton addGestureRecognizer:tap];
@@ -142,7 +141,7 @@ static NSUInteger const kIconSize = 48;
         UIScreen.mainScreen.brightness = self.brightnessValue;
     }];
     
-    [[RACObserve(self, volumeValue) deliverOnMainThread] subscribeNext:^(id  _Nullable x) {
+    [[[RACObserve(self, volumeValue) deliverOnMainThread] skip:1] subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         [self updateVolume:self.volumeValue];
     }];
@@ -169,10 +168,22 @@ static NSUInteger const kIconSize = 48;
 }
 
 - (void)updateVolume:(CGFloat)volume {
-    UIView *view = self.volumeView.subviews.firstObject;
-    if (![view isKindOfClass:UISlider.class]) return;
-    UISlider *slider = (UISlider *)view;
+    UISlider *slider = nil;
+    if ([self.volumeView respondsToSelector:@selector(volumeSlider)]) {
+        slider = self.volumeView.volumeSlider;
+    } else {
+        UIView *view = self.volumeView.subviews.firstObject;
+        if (![view isKindOfClass:UISlider.class]) return;
+        slider = (UISlider *)view;
+    }
     slider.value = volume;
+}
+
+- (CGFloat)defaultVolumeValue {
+    UIView *view = self.volumeView.subviews.firstObject;
+    if (![view isKindOfClass:UISlider.class]) return AVAudioSession.sharedInstance.outputVolume;
+    UISlider *slider = (UISlider *)view;
+    return slider.value;
 }
 
 - (void)onPlayTap:(id)sender {
@@ -341,12 +352,11 @@ static NSUInteger const kIconSize = 48;
     return _timeFormatter;
 }
 
-- (MPVolumeView *)volumeView {
+- (MPVolumeView<PlayerSystemVolumeView> *)volumeView {
     if (!_volumeView) {
-        _volumeView = [[MPVolumeView alloc] initWithFrame:CGRectZero];
+        _volumeView = (MPVolumeView<PlayerSystemVolumeView> *)[[MPVolumeView alloc] init];
         // hide system volume indicator
         _volumeView.alpha = 0.00001;
-        _volumeView.hidden = NO;
     }
     return _volumeView;
 }
