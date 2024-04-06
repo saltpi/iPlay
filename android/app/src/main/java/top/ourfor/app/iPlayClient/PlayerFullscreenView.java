@@ -17,16 +17,19 @@ public class PlayerFullscreenView extends Dialog {
     private ConstraintLayout containerView;
     private View contentView;
     public ViewGroup controlView;
+    public ViewGroup eventView;
     private ViewGroup superview;
     public PlayerFullscreenView(
             Context context,
             View contentView,
-            ViewGroup controlView) {
+            ViewGroup controlView,
+            ViewGroup eventView) {
         super(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         ConstraintLayout layout = new ConstraintLayout(context);
         setContentView(layout);
         this.controlView = controlView;
         this.contentView = contentView;
+        this.eventView = eventView;
         this.containerView = layout;
     }
 
@@ -42,6 +45,11 @@ public class PlayerFullscreenView extends Dialog {
             superview.removeView(controlView);
             containerView.addView(controlView, layoutParams);
         }
+
+        if (eventView != null) {
+            superview.removeView(eventView);
+            containerView.addView(eventView, layoutParams);
+        }
         super.onStart();
     }
 
@@ -55,6 +63,10 @@ public class PlayerFullscreenView extends Dialog {
         if (contentView != null) {
             containerView.removeView(controlView);
             superview.addView(controlView, layoutParams);
+        }
+        if (eventView != null) {
+            containerView.removeView(eventView);
+            superview.addView(eventView, layoutParams);
         }
         superview = null;
         super.onStop();

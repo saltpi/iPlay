@@ -3,6 +3,7 @@ package top.ourfor.app.iPlayClient
 import android.app.Application
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
@@ -13,6 +14,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
+
 
 class MainApplication : Application(), ReactApplication {
 
@@ -37,6 +39,7 @@ class MainApplication : Application(), ReactApplication {
   override val reactHost: ReactHost
     get() = getDefaultReactHost(this.applicationContext, reactNativeHost)
 
+  @RequiresApi(Build.VERSION_CODES.M)
   override fun onCreate() {
     super.onCreate()
     BeanManager.set(Application::class.java, this)
