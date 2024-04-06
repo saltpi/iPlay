@@ -38,7 +38,7 @@ const style = StyleSheet.create({
     },
     overview: {
         color: "gray",
-        maxHeight: 100
+        maxHeight: 128
     },
     No: {
         overflow: "hidden",
@@ -47,13 +47,7 @@ const style = StyleSheet.create({
         bottom: 10,
     },
     icon: {
-        width: 32,
-    },
-    favorite: {
-        width: 32,
-        height: 32,
-        flexShrink: 0,
-        flexGrow: 0,
+        width: 24,
     },
     actionBar: {
         flexDirection: "row",
@@ -82,17 +76,18 @@ export function EpisodeCard({style: extraStyle, theme, emby, episode, onPress}: 
             <View style={{...style.text, ...theme}}>
                 <Text style={{...style.title, ...theme}}>{episode.Name}</Text>
                 <Text style={{...style.overview, ...theme}}
-                    numberOfLines={10} 
-                    ellipsizeMode="tail"
-                    >
+                    numberOfLines={6} 
+                    ellipsizeMode="tail">
                     {episode.Overview ?? DEFULT_OVERVIEW}
                 </Text>
                 <View style={style.actionBar}>
                 <Like id={Number(episode.Id ?? 0)}
+                    width={style.icon.width}
                     emby={emby}
                     isFavorite={episode.UserData.IsFavorite}
                     />
                 <PlayCount 
+                    width={style.icon.width + 6}
                     style={theme}
                     count={episode?.UserData?.PlayCount ?? 0} />
                 </View>

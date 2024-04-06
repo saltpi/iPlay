@@ -15,8 +15,6 @@ import { PlayerMonitor } from '@view/PlayerMonitor';
 import { StatusBarHeight } from '@view/StatusBar';
 import { SwitchSiteDialog } from '@view/SwitchSiteDialog';
 
-NativeModules.DevSettings.setIsDebuggingRemotely(false);
-
 function App() {
     const [inited, setInited] = useState(false);
     const isDarkMode = useColorScheme() === 'dark';

@@ -21,12 +21,13 @@ const style = StyleSheet.create({
 
 export interface LikeProps {
     id: number;
+    width?: number;
     isFavorite: boolean;
     emby?: Emby|null;
     style?: Partial<ViewStyle>;
 }
 
-export function Like({id, isFavorite, emby, style: extStyle}: LikeProps) {
+export function Like({id, width = style.favorite.width, isFavorite, emby, style: extStyle}: LikeProps) {
     const [favorite, setFavorite] = useState(isFavorite);
     const inset = useSafeAreaInsets();
     const markFavorite = (id: number, favorite: boolean) => {
@@ -48,12 +49,12 @@ export function Like({id, isFavorite, emby, style: extStyle}: LikeProps) {
             onPress={() => markFavorite(Number(id ?? 0), !favorite)}>
             {favorite ? (
                 <FavoriteIconOff
-                    width={style.favorite.width}
+                    width={width}
                     style={style.favorite}
                 />
             ) : (
                 <FavoriteIconOn
-                    width={style.favorite.width}
+                    width={width}
                     style={style.favorite}
                 />
             )}
