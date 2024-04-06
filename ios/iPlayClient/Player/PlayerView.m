@@ -63,8 +63,8 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         @strongify(self);
         make.left.equalTo(self);
         make.right.equalTo(self);
-        make.top.equalTo(self.top).with.offset(100);
-        make.bottom.equalTo(self.bottom).with.offset(-100);
+        make.top.equalTo(self.top);
+        make.bottom.equalTo(self.bottom);
     }];
 }
 
