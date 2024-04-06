@@ -40,7 +40,6 @@ static NSUInteger const kIconSize = 48;
     [self addSubview:self.durationLabel];
     [self addSubview:self.titleLabel];
     [self addSubview:self.indicator];
-    [self addSubview:self.numberValueView];
     [self addSubview:self.volumeView];
 }
 
@@ -104,13 +103,6 @@ static NSUInteger const kIconSize = 48;
         make.center.equalTo(self);
     }];
     
-    [self.numberValueView remakeConstraints:^(MASConstraintMaker *make) {
-        @strongify(self);
-        make.centerX.equalTo(self);
-        make.top.equalTo(self.fullscreenButton.bottom).with.offset(10);
-        make.width.greaterThanOrEqualTo(200);
-    }];
-    
     [self.volumeView remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         make.bottom.equalTo(self.top).with.offset(-40);
@@ -145,16 +137,14 @@ static NSUInteger const kIconSize = 48;
         self.titleLabel.text = self.title;
     }];
     
-    [RACObserve(self, brightnessValue) subscribeNext:^(id  _Nullable x) {
+    [[RACObserve(self, brightnessValue) deliverOnMainThread] subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         UIScreen.mainScreen.brightness = self.brightnessValue;
-        self.numberValueView.progress = self.brightnessValue * 100;
     }];
     
-    [RACObserve(self, volumeValue) subscribeNext:^(id  _Nullable x) {
+    [[RACObserve(self, volumeValue) deliverOnMainThread] subscribeNext:^(id  _Nullable x) {
         @strongify(self);
         [self updateVolume:self.volumeValue];
-        self.numberValueView.progress = self.volumeValue * 100;
     }];
 }
 
@@ -218,24 +208,6 @@ static NSUInteger const kIconSize = 48;
     [self _updateIcon:self.playButton icon:imageName];
 }
 
-- (void)showNumberValueIndicator:(BOOL)visible {
-    [UIView animateWithDuration:visible ? 0.15 : 0.25
-                     animations:^{
-        self.numberValueView.alpha = visible ? 1.0 : 0;
-    } completion:^(BOOL finished) {
-        self.numberValueView.hidden = !visible;
-    }];
-}
-
-- (void)showBrightnessIndicator:(BOOL)visible {
-    self.numberValueView.iconName = @"player/brightness";
-    [self showNumberValueIndicator:visible];
-}
-
-- (void)showVolumeIndicator:(BOOL)visible {
-    self.numberValueView.iconName = @"player/volume";
-    [self showNumberValueIndicator:visible];
-}
 
 #pragma mark - Getter
 - (UIView *)playButton {
@@ -367,23 +339,6 @@ static NSUInteger const kIconSize = 48;
         _timeFormatter = dateComponentsFormatter;
     }
     return _timeFormatter;
-}
-
-- (PlayerNumberValueView *)numberValueView {
-    if (!_numberValueView) {
-        _numberValueView = [PlayerNumberValueView new];
-        _numberValueView.maxValue = 100.f;
-        _numberValueView.minValue = 0.f;
-        _numberValueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
-        _numberValueView.layer.borderWidth = 1;
-        _numberValueView.layer.cornerRadius = 7;
-        _numberValueView.layer.masksToBounds = YES;
-        _numberValueView.sliderBar.enabled = NO;
-        _numberValueView.clipsToBounds = YES;
-        _numberValueView.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
-        _numberValueView.hidden = YES;
-    }
-    return _numberValueView;
 }
 
 - (MPVolumeView *)volumeView {

@@ -88,9 +88,9 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
             }
             
             if (sender.state == UIGestureRecognizerStateBegan) {
-                [self.controlView showVolumeIndicator:YES];
+                [self.eventsView showVolumeIndicator:YES];
             } else if (sender.state == UIGestureRecognizerStateEnded) {
-                [self.controlView showVolumeIndicator:NO];
+                [self.eventsView showVolumeIndicator:NO];
             }
             break;
         }
@@ -102,9 +102,9 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
             }
             
             if (sender.state == UIGestureRecognizerStateBegan) {
-                [self.controlView showBrightnessIndicator:YES];
+                [self.eventsView showBrightnessIndicator:YES];
             } else if (sender.state == UIGestureRecognizerStateEnded) {
-                [self.controlView showBrightnessIndicator:NO];
+                [self.eventsView showBrightnessIndicator:NO];
             }
             break;
         }
@@ -122,7 +122,12 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
                 UISwipeGestureRecognizerDirection direction = delta > 0 ?
                 UISwipeGestureRecognizerDirectionRight : UISwipeGestureRecognizerDirectionLeft;
                 [self adjustPorgressWithDirection:direction];
+                [self.eventsView showVolumeIndicator:NO];
+                [self.eventsView showBrightnessIndicator:NO];
             }
+        }
+        case PlayerGestureTypeNone: {
+            break;
         }
         default:
             break;
@@ -148,7 +153,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         UIPanGestureRecognizer *gesture = (UIPanGestureRecognizer *)sender;
         CGPoint position = [gesture locationInView:self.eventsView];
         CGPoint velocity = [gesture velocityInView:self.eventsView];
-        CGFloat windowWidth = IPLUIModule.windowSize.width;
+        CGFloat windowWidth = self.frame.size.width;
         BOOL isLeftSide = position.x < windowWidth / 3;
         BOOL isRightSide = position.x > windowWidth * 2 / 3;
         BOOL isVerticalDirection = ABS(velocity.y) > ABS(velocity.x);
@@ -156,10 +161,10 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
             return PlayerGestureTypeBrightness;
         } else if (isVerticalDirection && isRightSide) {
             return PlayerGestureTypeVolume;
-        } else if (isVerticalDirection) {
-            return PlayerGestureTypeNone;
-        } else {
+        } else if (!isLeftSide && !isRightSide && !isVerticalDirection) {
             return PlayerGestureTypeSeek;
+        } else {
+            return PlayerGestureTypeNone;
         }
     } else if ([sender isKindOfClass:UITapGestureRecognizer.class]) {
         return PlayerGestureTypeHideControl;
@@ -180,6 +185,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     CGFloat newValue = oldValue + delta;
     newValue = MIN(MAX(newValue, 0.f), 1.f);
     self.controlView.volumeValue = newValue;
+    self.eventsView.numberValueView.progress = newValue * 100;
 }
 
 - (void)adjustBrightnessWithDelta:(CGFloat)delta {
@@ -187,6 +193,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     CGFloat newValue = oldValue + delta;
     newValue = MIN(MAX(newValue, 0.f), 1.f);
     self.controlView.brightnessValue = newValue;
+    self.eventsView.numberValueView.progress = newValue * 100;
 }
 
 #pragma mark - VideoPlayerDelegate

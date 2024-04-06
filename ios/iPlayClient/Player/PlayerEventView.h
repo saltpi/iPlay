@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PlayerNumberValueView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,8 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface PlayerEventView : UIView
+@property (nonatomic, strong) PlayerNumberValueView *numberValueView;
 @property (nonatomic, copy) NSArray<UIView *> *ignoreViews;
 @property (nonatomic, weak) id<PlayerEventDelegate> eventDelegate;
+
+- (void)showBrightnessIndicator:(BOOL)visible;
+- (void)showVolumeIndicator:(BOOL)visible;
 @end
 
 NS_ASSUME_NONNULL_END
