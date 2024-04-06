@@ -156,22 +156,6 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         params
     }
 
-    var numberValueView = run {
-        val view = PlayerNumberValueView(context);
-        view.id = resId.getAndIncrement()
-        view
-    }
-
-    private var numberValueLayout = run {
-        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        params.leftToLeft = LayoutParams.PARENT_ID;
-        params.topToTop = LayoutParams.PARENT_ID;
-        params.rightToRight = LayoutParams.PARENT_ID;
-        params.topMargin = 100
-        params
-    }
-
-
     init {
         setupUI()
         bind()
@@ -183,7 +167,6 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         addView(progressBar, progressBarLayout)
         addView(durationLabel, durationLayout)
         addView(titleLabel, titleLayout)
-        addView(numberValueView, numberValueLayout)
     }
 
     private fun bind() {

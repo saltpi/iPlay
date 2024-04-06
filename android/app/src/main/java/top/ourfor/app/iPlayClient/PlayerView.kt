@@ -215,12 +215,18 @@ class PlayerView(
                 volumeValue = getVolumeValue()
                 val targetType = value as PlayerGestureType
                 if (targetType == PlayerGestureType.Brightness) {
-                    controlView?.numberValueView?.updateIcon(R.drawable.lightbulb_min)
+                    eventView?.numberValueView?.setMaxValue(getBrightnessMaxValue())
+                    eventView?.numberValueView?.updateIcon(R.drawable.lightbulb_min)
+                    eventView?.numberValueView?.show()
                 } else if (targetType == PlayerGestureType.Volume) {
-                    controlView?.numberValueView?.updateIcon(R.drawable.waveform)
+                    eventView?.numberValueView?.setMaxValue(getVolumeMaxValue())
+                    eventView?.numberValueView?.updateIcon(R.drawable.waveform)
+                    eventView?.numberValueView?.show()
                 }
             }
             PlayerGestureType.HideControl -> {
+                Log.d(TAG, "hide control view")
+                eventView?.numberValueView?.hide();
                 controlView?.toggleVisible()
             }
             PlayerGestureType.Seek -> {
@@ -234,12 +240,12 @@ class PlayerView(
             PlayerGestureType.Volume -> {
                 var delta = (value as Float).toInt()
                 setVolumeValue(volumeValue + delta);
-                controlView?.numberValueView?.setProgress(volumeValue + delta);
+                eventView?.numberValueView?.setProgress(volumeValue + delta);
             }
             PlayerGestureType.Brightness -> {
                 var delta = (value as Float).toInt()
                 setBrightnessValue(brightnessValue + delta);
-                controlView?.numberValueView?.setProgress(brightnessValue + delta);
+                eventView?.numberValueView?.setProgress(brightnessValue + delta);
             }
             null -> {}
         }
@@ -249,26 +255,34 @@ class PlayerView(
         val defVal = 50;
         var value = Settings.System.getInt(context.contentResolver,
             Settings.System.SCREEN_BRIGHTNESS, defVal);
-        return (value * 100.0 / 255).toInt();
+        return value
     }
 
     fun setBrightnessValue(value: Int) {
-        val newValue = min(max(0, (value * 255 / 100.0).toInt()), 255)
+        val newValue = min(max(0, value), 255)
         Settings.System.putInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS, newValue);
     }
 
-    fun getVolumeValue(): Int {
+    fun getBrightnessMaxValue(): Int {
+        return 255;
+    }
+
+    fun getVolumeMaxValue(): Int {
         var audioService = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         var maxValue = audioService.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        return maxValue;
+    }
+    fun getVolumeValue(): Int {
+        var audioService = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val value = audioService.getStreamVolume(AudioManager.STREAM_MUSIC)
-        return (value * 100.0 / maxValue).toInt();
+        return value;
     }
 
     fun setVolumeValue(value: Int) {
         var audioService = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         var maxValue = audioService.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        val newValue = min(max(0, (value * maxValue / 100.0).toInt()), maxValue)
-        audioService.setStreamVolume(AudioManager.STREAM_MUSIC, value, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE)
+        val newValue = min(max(0, value), maxValue)
+        audioService.setStreamVolume(AudioManager.STREAM_MUSIC, newValue, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE)
     }
 
     companion object {

@@ -58,6 +58,12 @@ public class PlayerNumberValueView extends ConstraintLayout {
         });
     }
 
+    public void setMaxValue(int value) {
+        post(() -> {
+            seekBar.setMax(value);
+        });
+    }
+
     public void updateIcon(int icon) {
         post(() -> {
             iconView.setImageResource(icon);
@@ -67,5 +73,18 @@ public class PlayerNumberValueView extends ConstraintLayout {
 
     public int getProgress() {
         return seekBar.getProgress();
+    }
+
+    public void show() {
+        animate().alpha(1)
+                .setDuration(150)
+                .start();
+    }
+
+    public void hide() {
+        animate().alpha(0)
+                .setStartDelay(300)
+                .setDuration(200)
+                .start();
     }
 }

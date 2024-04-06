@@ -23,6 +23,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
     private long lastSeekTime = 0;
     private PlayerGestureType gestureType;
     public PlayerEventDelegate delegate;
+    public PlayerNumberValueView numberValueView;
 
     public PlayerEventView(@NonNull Context context) {
         super(context);
@@ -32,6 +33,16 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
     private void setupUI(Context context) {
         detector = new GestureDetector(context, this);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+
+        numberValueView = new PlayerNumberValueView(context);
+        numberValueView.setAlpha(0);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.leftToLeft = LayoutParams.PARENT_ID;
+        params.topToTop = LayoutParams.PARENT_ID;
+        params.rightToRight = LayoutParams.PARENT_ID;
+        params.topMargin = 100;
+
+        addView(numberValueView, params);
     }
 
     @Override
@@ -107,6 +118,10 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            Log.d(TAG, "action up");
+            numberValueView.hide();
+        }
         return detector.onTouchEvent(event);
     }
 
