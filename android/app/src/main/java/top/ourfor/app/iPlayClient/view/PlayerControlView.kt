@@ -33,9 +33,9 @@ class PlayerControlView(context: Context) : ConstraintLayout(context),
 
     fun updateFullscreenStyle(isFullscreen: Boolean) {
         if (isFullscreen) {
-            updateIcon(fullscreenButton, androidx.media3.ui.R.drawable.exo_icon_fullscreen_exit)
+            updateIcon(fullscreenButton, R.drawable.arrow_up_right_and_arrow_down_left)
         } else {
-            updateIcon(fullscreenButton, androidx.media3.ui.R.drawable.exo_icon_fullscreen_enter)
+            updateIcon(fullscreenButton, R.drawable.viewfinder)
         }
     }
 
