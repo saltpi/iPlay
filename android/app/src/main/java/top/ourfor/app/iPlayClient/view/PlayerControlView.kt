@@ -275,6 +275,17 @@ class PlayerControlView(context: Context) : ConstraintLayout(context),
             .start()
     }
 
+    fun updateControlVisible(visible: Boolean) {
+        var newAlpha = 0.0
+        if (visible) newAlpha = 1.0
+        if (newAlpha.toFloat() == alpha) return
+
+        animate()
+            .alpha(newAlpha.toFloat())
+            .setDuration(800)
+            .start()
+    }
+
     private fun updateIcon(view: View, resId: Int) {
         val imageView = view.findViewWithTag<ImageView?>(ICON_TAG)
         if (imageView !is ImageView) return

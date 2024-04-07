@@ -3,6 +3,7 @@ package top.ourfor.app.iPlayClient.view;
 import static java.lang.Math.abs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -156,22 +157,28 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
                 .collect(Collectors.toList());
         selectView = new PlayerSelectView(context, subtitles);
         selectView.setDelegate(this);
-        LayoutParams params = new LayoutParams(0, 0);
-        params.leftToLeft = LayoutParams.PARENT_ID;
-        params.topToTop = LayoutParams.PARENT_ID;
-        params.rightToRight = LayoutParams.PARENT_ID;
-        params.bottomToBottom = LayoutParams.PARENT_ID;
-        params.matchConstraintPercentHeight = 0.75f;
-        params.matchConstraintMaxHeight = 600;
-        params.matchConstraintPercentWidth = 0.5f;
-        params.matchConstraintMaxWidth = 600;
-        addView(selectView, params);
+        LayoutParams layout = new LayoutParams(0, 0);
+        layout.leftToLeft = LayoutParams.PARENT_ID;
+        layout.topToTop = LayoutParams.PARENT_ID;
+        layout.rightToRight = LayoutParams.PARENT_ID;
+        layout.bottomToBottom = LayoutParams.PARENT_ID;
+        layout.matchConstraintPercentHeight = 0.75f;
+        layout.matchConstraintMaxHeight = 600;
+        layout.matchConstraintPercentWidth = 0.5f;
+        layout.matchConstraintMaxWidth = 600;
+        post(() -> {
+            addView(selectView, layout);
+            requestLayout();
+        });
+        Log.d(TAG, "add select view");
     }
 
     public void closeSelectView() {
         if (selectView != null) {
             removeView(selectView);
             selectView = null;
+            requestLayout();
+            Log.d(TAG, "remove select view");
         }
     }
 
@@ -191,4 +198,17 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
     public void onClose() {
         closeSelectView();
     }
+
+
+    @Override
+    public void requestLayout() {
+        super.requestLayout();
+        post(measureAndLayout);
+    }
+
+    private final Runnable measureAndLayout = () -> {
+        measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+        layout(getLeft(), getTop(), getRight(), getBottom());
+    };
 }

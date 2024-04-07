@@ -21,7 +21,7 @@ import lombok.Setter;
 import top.ourfor.app.iPlayClient.R;
 
 public class PlayerSelectView<T> extends ConstraintLayout implements PlayerSelectDelegate<PlayerSelectModel<T>> {
-    private static int CLOSE_ICON_SIZE = 48;
+    private static int CLOSE_ICON_SIZE = 56;
 
     private RecyclerView listView;
     private PlayerSelectAdapter listViewModel;
@@ -96,4 +96,5 @@ public class PlayerSelectView<T> extends ConstraintLayout implements PlayerSelec
         params.topMargin = 12;
         return params;
     }
+
 }

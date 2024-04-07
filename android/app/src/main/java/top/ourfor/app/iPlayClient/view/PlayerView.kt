@@ -170,7 +170,7 @@ class PlayerView(
         var player = contentView.viewModel
         var currentSubtitleId = player.currentSubtitleId()
         var subtitles = player.subtitles() as List<TrackItem>
-        controlView?.toggleVisible()
+        controlView?.updateControlVisible(false)
         eventView.showSelectView(subtitles, currentSubtitleId)
     }
 
@@ -179,7 +179,7 @@ class PlayerView(
         var player = contentView.viewModel
         var currentAudioId = player.currentAudioId()
         var audios = player.audios() as List<TrackItem>
-        controlView?.toggleVisible()
+        controlView?.updateControlVisible(false)
         eventView.showSelectView(audios, currentAudioId)
     }
 

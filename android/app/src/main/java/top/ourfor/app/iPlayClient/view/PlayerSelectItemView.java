@@ -47,7 +47,7 @@ public class PlayerSelectItemView extends ConstraintLayout {
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = 5;
         params.bottomMargin = 5;
-        params.leftMargin = iconSize + 10;
+        params.leftMargin = iconSize + 30;
         params.topToTop = LayoutParams.PARENT_ID;
         params.bottomToBottom = LayoutParams.PARENT_ID;
         return params;
@@ -58,6 +58,7 @@ public class PlayerSelectItemView extends ConstraintLayout {
         params.topMargin = 5;
         params.bottomMargin = 5;
         params.topToTop = LayoutParams.PARENT_ID;
+        params.leftMargin = 20;
         params.bottomToBottom = LayoutParams.PARENT_ID;
         return params;
     }
