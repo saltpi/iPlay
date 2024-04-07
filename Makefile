@@ -24,6 +24,25 @@ ipa:
 		-archivePath $(BUILD_DIR)/iPlay \
 		-configuration Release \
 		-scheme iPlayClient \
+		-sdk iphoneos \
+		-workspace iPlayClient.xcworkspace \
+		-allowProvisioningUpdates \
+		CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO MARKETING_VERSION=$(VERSION_NAME) | xcpretty
+	mkdir -p $(BUILD_DIR)/Release/Payload
+	cp -r $(BUILD_DIR)/iPlay.xcarchive/Products/Applications/iPlayClient.app $(BUILD_DIR)/Release/Payload
+	cp -r $(BUILD_DIR)/iPlay.xcarchive/dSYMs $(BUILD_DIR)/Release/dSYMs
+	cd $(BUILD_DIR)/Release && zip -r $(APP_NAME).ipa Payload
+	cd $(BUILD_DIR)/Release && zip -r $(APP_NAME).dSYMs.zip dSYMs 
+	mv $(BUILD_DIR)/Release/$(APP_NAME).ipa $(BUILD_DIR)/$(APP_NAME).ipa
+	mv $(BUILD_DIR)/Release/$(APP_NAME).dSYMs.zip $(BUILD_DIR)/$(APP_NAME).dSYMs.zip
+
+dmg:
+	@echo "📦 ipa $(VERSION_NAME)"
+	cd $(IOS_DIR) && xcodebuild archive \
+		-archivePath $(BUILD_DIR)/iPlay \
+		-configuration Release \
+		-scheme iPlayClient \
+		-sdk macosx \
 		-workspace iPlayClient.xcworkspace \
 		-allowProvisioningUpdates \
 		CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO MARKETING_VERSION=$(VERSION_NAME) | xcpretty
