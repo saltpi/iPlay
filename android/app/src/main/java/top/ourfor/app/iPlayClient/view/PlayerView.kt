@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient
+package top.ourfor.app.iPlayClient.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo
 import android.content.res.AssetManager
 import android.media.AudioManager
 import android.os.Build
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -17,9 +16,15 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.facebook.react.uimanager.ThemedReactContext
-import top.ourfor.app.iPlayClient.Player.PlayEventType
+import top.ourfor.app.iPlayClient.R
+import top.ourfor.app.iPlayClient.module.FontModule
+import top.ourfor.app.iPlayClient.view.Player.PlayEventType
+import top.ourfor.lib.mpv.TrackItem
+import top.ourfor.lib.mpv.TrackItem.AudioTrackName
+import top.ourfor.lib.mpv.TrackItem.SubtitleTrackName
 import java.io.File
 import java.io.FileOutputStream
+import java.util.stream.Collectors
 import kotlin.math.max
 import kotlin.math.min
 import android.R as GlobalR
@@ -30,7 +35,9 @@ import android.R as GlobalR
 class PlayerView(
     context: Context,
     url: String?
-) : ConstraintLayout(context), PlayerEventListener, PlayerEventDelegate {
+) : ConstraintLayout(context),
+    PlayerEventListener,
+    PlayerEventDelegate, PlayerSelectDelegate<PlayerSelectModel<TrackItem>> {
     var subtitleFontName: String? = null
         set(value) {
             contentView.viewModel.setSubtitleFontName(value)
@@ -45,7 +52,6 @@ class PlayerView(
     private var position: Double = 0.0
     private var brightnessValue = 0
     private var volumeValue = 0;
-    private var progressValue = 0;
     var themedReactContext: ThemedReactContext? = null
     var onPlayStateChange: (data: HashMap<String, Any>) -> Unit  = {}
     var url: String? = null
@@ -74,7 +80,9 @@ class PlayerView(
 
         copySubtitleFont(context.filesDir.path)
 
-        player?.initialize(context.filesDir.path, context.cacheDir.path, FontModule.getFontPath(context))
+        player?.initialize(context.filesDir.path, context.cacheDir.path,
+            FontModule.getFontPath(context)
+        )
         val viewModel = player?.viewModel
         if (subtitleFontName != null) {
             viewModel?.setSubtitleFontName(subtitleFontName)
@@ -97,9 +105,12 @@ class PlayerView(
         eventView.ignoreAreas = listOf(
             controlView.playButton,
             controlView.fullscreenButton,
-            controlView.progressBar
+            controlView.progressBar,
+            controlView.subtitleButton,
+            controlView.audioButton
         )
         eventView.delegate = this
+        eventView.trackSelectDelegate = this
         val eventLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         eventLayoutParams.topToTop = LayoutParams.PARENT_ID;
         eventLayoutParams.bottomToBottom = LayoutParams.PARENT_ID;
@@ -107,7 +118,12 @@ class PlayerView(
         eventLayoutParams.rightToRight = LayoutParams.PARENT_ID;
         addView(eventView, eventLayoutParams)
 
-        fullscreenView = PlayerFullscreenView(context, contentView, controlView, eventView)
+        fullscreenView = PlayerFullscreenView(
+            context,
+            contentView,
+            controlView,
+            eventView
+        )
         fullscreenView?.getWindow()?.setWindowAnimations(GlobalR.style.Animation_Dialog)
 
         keepScreenOn = true
@@ -120,8 +136,6 @@ class PlayerView(
         if (value == null) {
             if (name.equals("track-list")) {
                 Log.d(TAG, "load track list")
-//                contentView.viewModel.subtitles()
-//                contentView.viewModel.useSubtitle(1)
             }
             return
         }
@@ -149,6 +163,24 @@ class PlayerView(
         } else if (name.equals("duration")) {
             duration = value as Double
         }
+    }
+
+    override fun onSelectSubtitle() {
+        Log.d(TAG, "open subtitle select view")
+        var player = contentView.viewModel
+        var currentSubtitleId = player.currentSubtitleId()
+        var subtitles = player.subtitles() as List<TrackItem>
+        controlView?.updateControlVisible(false)
+        eventView.showSelectView(subtitles, currentSubtitleId)
+    }
+
+    override fun onSelectAudio() {
+        Log.d(TAG, "open audio select view")
+        var player = contentView.viewModel
+        var currentAudioId = player.currentAudioId()
+        var audios = player.audios() as List<TrackItem>
+        controlView?.updateControlVisible(false)
+        eventView.showSelectView(audios, currentAudioId)
     }
 
     override fun onWindowSizeChange() {
@@ -189,6 +221,21 @@ class PlayerView(
         } else {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+    }
+
+    override fun onSelect(data: PlayerSelectModel<TrackItem>?) {
+        var item: TrackItem? = data?.item ?: return
+        if (item == null) return
+        if (item.type.equals(SubtitleTrackName)) {
+            Log.d(TAG, "use subtitle id ${item.id}")
+            contentView.viewModel.useSubtitle(item.id)
+        } else if (item.type.equals(AudioTrackName)) {
+            Log.d(TAG, "use audio id ${item.id}")
+            contentView.viewModel.useAudio(item.id)
+        }
+    }
+
+    override fun onDeselect(data: PlayerSelectModel<TrackItem>?) {
     }
 
     fun copySubtitleFont(configDir: String) {

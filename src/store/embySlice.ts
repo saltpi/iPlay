@@ -13,6 +13,7 @@ import { Media } from '@model/Media';
 import { Map } from '@model/Map';
 import { Actor } from '@model/Actor';
 import { logger } from '@helper/log';
+import { CollectionOptions } from '@api/view';
 
 interface EmbyState {
     site: EmbySite|null;
@@ -122,14 +123,21 @@ export const fetchLatestMediaAsync = createAppAsyncThunk<(Media[]|undefined)[]|u
     return medias
 })
 
-export const fetchAlbumMediaAsync = createAppAsyncThunk("emby/album/media", async (id: string, config) => {
+export interface AlbumQueryParams {
+    id: string,
+    options?: CollectionOptions
+}
+
+export const fetchAlbumMediaAsync = createAppAsyncThunk("emby/album/media", async (params: string|AlbumQueryParams, config) => {
     const state = await config.getState()
     const emby = state.emby.emby
+    const id = typeof params === 'string' ? params : params.id
     const album = await emby?.getMedia?.(Number(id));
     const type = album?.CollectionType === 'tvshows' ? 'Series' : 'Movie';
     let startIdx = 0
     const data = await emby?.getCollection?.(Number(id), type, {
         StartIndex: startIdx,
+        ...(typeof params === 'object' ? params.options : {})
     });
     const total = data?.TotalRecordCount;
     if (!total) return null
@@ -148,7 +156,7 @@ export const fetchAlbumMediaAsync = createAppAsyncThunk("emby/album/media", asyn
         }
     }
     return {
-        id,
+        id: album?.Id ?? id,
         items
     }
 })

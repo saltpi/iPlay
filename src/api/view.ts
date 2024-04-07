@@ -185,19 +185,21 @@ export const kEmbyItemPageSize = 50
 export type CollectionOptions = {
     StartIndex?: number
     Limit?: number
+    SortBy?: string
 }
 export async function getCollection(site: EmbySite, cid: number, type: "Series"|"Movie" = "Series", {
     StartIndex = 0,
-    Limit = kEmbyItemPageSize
+    Limit = kEmbyItemPageSize,
+    SortBy = "DateCreated,SortName"
 }: CollectionOptions) {
     const uid = site.user.User.Id
     const params = {
         UserId: site.user.User.Id,
-        SortBy: "SortName",
+        SortBy,
         SortOrder: "Ascending",
         IncludeItemTypes: type,
         Recursive: true,
-        Fields: "BasicSyncInfo,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
+        Fields: "BasicSyncInfo,Overview,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
         ParentId: cid,
         EnableImageTypes: "Primary,Backdrop,Thumb",
         ImageTypeLimit: 1,

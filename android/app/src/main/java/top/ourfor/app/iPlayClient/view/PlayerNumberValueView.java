@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import top.ourfor.app.iPlayClient.R;
 
 public class PlayerNumberValueView extends ConstraintLayout {
     private ImageView iconView;

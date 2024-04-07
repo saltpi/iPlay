@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient
+package top.ourfor.app.iPlayClient.view
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,11 @@ import android.view.SurfaceView
 class PlayerContentView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     public lateinit var viewModel: Player
     fun initialize(configDir: String, cacheDir: String, fontDir: String?) {
-        viewModel = PlayerViewModel(configDir, cacheDir, fontDir)
+        viewModel = PlayerViewModel(
+            configDir,
+            cacheDir,
+            fontDir
+        )
         // we need to call write-watch-later manually
         holder.addCallback(this)
     }

@@ -1,29 +1,40 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.view;
 
 import static java.lang.Math.abs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class PlayerEventView extends ConstraintLayout implements GestureDetector.OnGestureListener {
+import lombok.Getter;
+import lombok.Setter;
+import top.ourfor.lib.mpv.TrackItem;
+
+public class PlayerEventView extends ConstraintLayout implements GestureDetector.OnGestureListener, PlayerSelectDelegate<PlayerSelectModel<Object>> {
     protected static final String TAG = "PlayerEventView";
     private GestureDetector detector;
     public List<View> ignoreAreas;
     private long lastSeekTime = 0;
     private PlayerGestureType gestureType;
     public PlayerEventDelegate delegate;
+    public PlayerSelectDelegate trackSelectDelegate;
     public PlayerNumberValueView numberValueView;
+    private PlayerSelectView selectView;
 
     public PlayerEventView(@NonNull Context context) {
         super(context);
@@ -32,7 +43,6 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
 
     private void setupUI(Context context) {
         detector = new GestureDetector(context, this);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
         numberValueView = new PlayerNumberValueView(context);
         numberValueView.setAlpha(0);
@@ -84,12 +94,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
                     delegate.onEvent(PlayerGestureType.None, gestureType);
                 }
             }
-            case Volume -> {
-                if (delegate != null) {
-                    delegate.onEvent(gestureType, deltaY);
-                }
-            }
-            case Brightness -> {
+            case Volume, Brightness -> {
                 if (delegate != null) {
                     delegate.onEvent(gestureType, deltaY);
                 }
@@ -138,4 +143,72 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void showSelectView(List<TrackItem> items) {
+        showSelectView(items, "no");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void showSelectView(List<TrackItem> items, String currentId) {
+        if (selectView != null) return;
+        Context context = getContext();
+        List<PlayerSelectModel> subtitles = items.stream()
+                .map(item -> new PlayerSelectModel(item, String.valueOf(item.id).equals(currentId)))
+                .collect(Collectors.toList());
+        selectView = new PlayerSelectView(context, subtitles);
+        selectView.setDelegate(this);
+        LayoutParams layout = new LayoutParams(0, 0);
+        layout.leftToLeft = LayoutParams.PARENT_ID;
+        layout.topToTop = LayoutParams.PARENT_ID;
+        layout.rightToRight = LayoutParams.PARENT_ID;
+        layout.bottomToBottom = LayoutParams.PARENT_ID;
+        layout.matchConstraintPercentHeight = 0.75f;
+        layout.matchConstraintMaxHeight = 640;
+        layout.matchConstraintPercentWidth = 0.5f;
+        layout.matchConstraintMaxWidth = 800;
+        post(() -> {
+            addView(selectView, layout);
+            requestLayout();
+        });
+        Log.d(TAG, "add select view");
+    }
+
+    public void closeSelectView() {
+        if (selectView != null) {
+            removeView(selectView);
+            selectView = null;
+            requestLayout();
+            Log.d(TAG, "remove select view");
+        }
+    }
+
+    @Override
+    public void onSelect(PlayerSelectModel<Object> data) {
+        if (trackSelectDelegate == null) return;
+        trackSelectDelegate.onSelect(data);
+    }
+
+    @Override
+    public void onDeselect(PlayerSelectModel<Object> data) {
+        if (trackSelectDelegate == null) return;
+        trackSelectDelegate.onDeselect(data);
+    }
+
+    @Override
+    public void onClose() {
+        closeSelectView();
+    }
+
+
+    @Override
+    public void requestLayout() {
+        super.requestLayout();
+        post(measureAndLayout);
+    }
+
+    private final Runnable measureAndLayout = () -> {
+        measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+        layout(getLeft(), getTop(), getRight(), getBottom());
+    };
 }
