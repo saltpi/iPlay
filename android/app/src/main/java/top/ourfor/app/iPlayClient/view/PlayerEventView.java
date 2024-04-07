@@ -163,9 +163,9 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
         layout.rightToRight = LayoutParams.PARENT_ID;
         layout.bottomToBottom = LayoutParams.PARENT_ID;
         layout.matchConstraintPercentHeight = 0.75f;
-        layout.matchConstraintMaxHeight = 600;
+        layout.matchConstraintMaxHeight = 640;
         layout.matchConstraintPercentWidth = 0.5f;
-        layout.matchConstraintMaxWidth = 600;
+        layout.matchConstraintMaxWidth = 800;
         post(() -> {
             addView(selectView, layout);
             requestLayout();
