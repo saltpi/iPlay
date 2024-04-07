@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.view;
 
 import android.content.Context;
 import android.util.Log;

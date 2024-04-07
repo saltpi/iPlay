@@ -14,6 +14,9 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
+import top.ourfor.app.iPlayClient.module.BeanManager
+import top.ourfor.app.iPlayClient.module.FontModule
+import top.ourfor.app.iPlayClient.module.ModuleManager
 
 
 class MainApplication : Application(), ReactApplication {

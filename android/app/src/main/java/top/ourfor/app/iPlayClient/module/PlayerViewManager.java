@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.module;
 
 import android.os.Build;
 import android.view.View;
@@ -15,9 +15,10 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.facebook.react.uimanager.events.RCTModernEventEmitter;
 
 import java.util.Map;
+
+import top.ourfor.app.iPlayClient.view.PlayerView;
 
 public class PlayerViewManager extends SimpleViewManager<View> {
     ReactApplicationContext mCallerContext;

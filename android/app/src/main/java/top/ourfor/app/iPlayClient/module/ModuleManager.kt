@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient
+package top.ourfor.app.iPlayClient.module
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

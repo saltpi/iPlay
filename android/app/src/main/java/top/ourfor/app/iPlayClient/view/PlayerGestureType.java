@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.view;
 
 public enum PlayerGestureType {
     None,

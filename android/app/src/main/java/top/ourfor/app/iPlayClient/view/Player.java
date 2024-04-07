@@ -1,4 +1,4 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.view;
 
 import android.view.SurfaceHolder;
 
@@ -22,12 +22,16 @@ public interface Player {
     default void jumpForward(int seconds) {}
     default void stop() {}
     default void resize(String newSize) {}
+    default List audios() { return null; }
     default List subtitles() { return null; }
+    default String currentSubtitleId() { return "no"; }
+    default String currentAudioId() { return "no"; }
     default void setSubtitleFontName(String subtitleFontName) {}
     default void setSubtitleFontDirectory(String directory) {}
     default void destroy() {}
 
     void useSubtitle(int id);
+    void useAudio(int id);
 
 
     enum PlayEventType {

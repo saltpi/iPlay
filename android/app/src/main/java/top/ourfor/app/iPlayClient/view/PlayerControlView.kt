@@ -1,6 +1,5 @@
-package top.ourfor.app.iPlayClient
+package top.ourfor.app.iPlayClient.view
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -8,12 +7,12 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import top.ourfor.app.iPlayClient.R
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -21,7 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEventListener {
+class PlayerControlView(context: Context) : ConstraintLayout(context),
+    PlayerEventListener {
     public var delegate: PlayerEventListener? = null;
     private var shouldUpdateProgress = true;
     var player: Player? = null
@@ -48,7 +48,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
         icon.tag = ICON_TAG
-        icon.setImageResource(androidx.media3.ui.R.drawable.exo_icon_pause)
+        icon.setImageResource(R.drawable.pause)
+        icon.setImageTintList(ColorStateList.valueOf(Color.WHITE))
         val iconLayout = centerLayout()
         iconLayout.width = ICON_SIZE
         iconLayout.height = ICON_SIZE
@@ -74,7 +75,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val layout = ConstraintLayout(context)
         val icon = ImageView(context)
         icon.tag = ICON_TAG
-        icon.setImageResource(androidx.media3.ui.R.drawable.exo_icon_fullscreen_enter)
+        icon.setImageResource(R.drawable.viewfinder)
+        icon.imageTintList = ColorStateList.valueOf(Color.WHITE)
         val iconLayout = LayoutParams(centerLayout())
         iconLayout.width = ICON_SMALL_SIZE
         iconLayout.height = ICON_SMALL_SIZE
@@ -95,6 +97,61 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         params.rightMargin = 48
         params
     }
+
+    var subtitleButton = run {
+        val layout = ConstraintLayout(context)
+        val icon = ImageView(context)
+        icon.tag = ICON_TAG
+        icon.setImageResource(R.drawable.captions_bubble)
+        icon.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        val iconLayout = LayoutParams(centerLayout())
+        iconLayout.width = ICON_SMALL_SIZE
+        iconLayout.height = ICON_SMALL_SIZE
+        layout.addView(icon, iconLayout)
+        val gradientDrawable = GradientDrawable()
+        gradientDrawable.setColor(Color.argb(50, 0, 0, 0))
+        gradientDrawable.cornerRadius = ICON_SMALL_SIZE + 0f
+        layout.background = gradientDrawable
+        layout.rootView.id = resId.getAndIncrement()
+        layout.rootView
+    }
+
+    private var subtitleButtonLayout = run {
+        val params = LayoutParams(ICON_SMALL_SIZE * 2, ICON_SMALL_SIZE * 2)
+        params.topToTop = LayoutParams.PARENT_ID
+        params.rightToLeft = fullscreenButton.id
+        params.topMargin = 48
+        params.rightMargin = 48
+        params
+    }
+
+    var audioButton = run {
+        val layout = ConstraintLayout(context)
+        val icon = ImageView(context)
+        icon.tag = ICON_TAG
+        icon.setImageResource(R.drawable.waveform)
+        icon.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        val iconLayout = LayoutParams(centerLayout())
+        iconLayout.width = ICON_SMALL_SIZE
+        iconLayout.height = ICON_SMALL_SIZE
+        layout.addView(icon, iconLayout)
+        val gradientDrawable = GradientDrawable()
+        gradientDrawable.setColor(Color.argb(50, 0, 0, 0))
+        gradientDrawable.cornerRadius = ICON_SMALL_SIZE + 0f
+        layout.background = gradientDrawable
+        layout.rootView.id = resId.getAndIncrement()
+        layout.rootView
+    }
+
+    private var audioButtonLayout = run {
+        val params = LayoutParams(ICON_SMALL_SIZE * 2, ICON_SMALL_SIZE * 2)
+        params.topToTop = LayoutParams.PARENT_ID
+        params.rightToLeft = subtitleButton.id
+        params.topMargin = 48
+        params.rightMargin = 48
+        params
+    }
+
 
     var progressBar = run {
         val slide = SeekBar(context)
@@ -164,6 +221,8 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
     private fun setupUI() {
         addView(playButton, playButtonLayout)
         addView(fullscreenButton, fullscreenLayout)
+        addView(subtitleButton, subtitleButtonLayout)
+        addView(audioButton, audioButtonLayout)
         addView(progressBar, progressBarLayout)
         addView(durationLabel, durationLayout)
         addView(titleLabel, titleLayout)
@@ -173,7 +232,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         playButton.setOnClickListener {
             Log.d(TAG, "play")
             val isPlaying = player?.isPlaying == true
-            var resId = if (isPlaying) androidx.media3.ui.R.drawable.exo_icon_play else androidx.media3.ui.R.drawable.exo_icon_pause
+            var resId = if (isPlaying) R.drawable.play else R.drawable.pause
             post {
                 updateIcon(playButton, resId)
             }
@@ -199,6 +258,14 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         fullscreenButton.setOnClickListener {
             delegate?.onWindowSizeChange()
         }
+
+        subtitleButton.setOnClickListener {
+            delegate?.onSelectSubtitle()
+        }
+
+        audioButton.setOnClickListener {
+            delegate?.onSelectAudio()
+        }
     }
 
     fun toggleVisible() {
@@ -212,6 +279,7 @@ class PlayerControlView(context: Context) : ConstraintLayout(context), PlayerEve
         val imageView = view.findViewWithTag<ImageView?>(ICON_TAG)
         if (imageView !is ImageView) return
         imageView?.setImageResource(resId)
+        imageView?.setImageTintList(ColorStateList.valueOf(Color.WHITE))
     }
 
     override fun onPropertyChange(name: String?, value: Any?) {

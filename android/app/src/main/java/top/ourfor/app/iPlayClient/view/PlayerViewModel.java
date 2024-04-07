@@ -1,9 +1,10 @@
-package top.ourfor.app.iPlayClient;
+package top.ourfor.app.iPlayClient.view;
 
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_PROPERTY_CHANGE;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_SHUTDOWN;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_DOUBLE;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_FLAG;
+import static top.ourfor.lib.mpv.TrackItem.AudioTrackName;
 import static top.ourfor.lib.mpv.TrackItem.SubtitleTrackName;
 
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.view.SurfaceHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import top.ourfor.app.iPlayClient.view.Player;
+import top.ourfor.app.iPlayClient.view.PlayerEventListener;
 import top.ourfor.lib.mpv.MPV;
 import top.ourfor.lib.mpv.TrackItem;
 
@@ -89,22 +92,20 @@ public class PlayerViewModel implements Player {
         mpv.setStringProperty("android-surface-size", newSize);
     }
 
-    @Override
-    public List<TrackItem> subtitles() {
-        // video/audio/sub
+    public List<TrackItem> trackList(String trackType) {
         Log.d(TAG, "obtain track list");
         Long subtitleCount = mpv.getLongProperty("track-list/count");
         ArrayList<TrackItem> trackItems = new ArrayList<>();
         for (long i = 0; i < subtitleCount; i++) {
             String type = mpv.getStringProperty(String.format("track-list/%d/type", i));
-            if (!type.equals(SubtitleTrackName)) continue;
+            if (!type.equals(trackType)) continue;
             Long id = mpv.getLongProperty(String.format("track-list/%d/id", i));
             String lang = mpv.getStringProperty(String.format("track-list/%d/lang", i));
             String title = mpv.getStringProperty(String.format("track-list/%d/title", i));
             Log.d(TAG, "id: " + id + "\ntype: " + type + "\nlang: " + lang + "\ntitle: " + title);
             TrackItem trackItem = new TrackItem();
             trackItem.id = Math.toIntExact(id);
-            trackItem.type = SubtitleTrackName;
+            trackItem.type = type;
             trackItem.title = title;
             trackItem.lang = lang;
             trackItems.add(trackItem);
@@ -113,9 +114,38 @@ public class PlayerViewModel implements Player {
     }
 
     @Override
+    public List<TrackItem> subtitles() {
+        // video/audio/sub
+        return trackList(SubtitleTrackName);
+    }
+
+    @Override
+    public List audios() {
+        return trackList(AudioTrackName);
+    }
+
+    @Override
+    public String currentAudioId() {
+        if (mpv == null) return "no";
+        return mpv.getStringProperty("aid");
+    }
+
+    @Override
+    public String currentSubtitleId() {
+        if (mpv == null) return "no";
+        return mpv.getStringProperty("sid");
+    }
+
+    @Override
     public void useSubtitle(int id) {
         Log.d(TAG, "use subtitle " + id);
-//        mpv.setOptionString("sid", String.valueOf(id));
+        mpv.setOptionString("sid", String.valueOf(id));
+    }
+
+    @Override
+    public void useAudio(int id) {
+        Log.d(TAG, "use audio " + id);
+        mpv.setOptionString("aid", String.valueOf(id));
     }
 
     @Override
