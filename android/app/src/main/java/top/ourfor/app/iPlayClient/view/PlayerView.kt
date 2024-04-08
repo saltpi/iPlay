@@ -24,7 +24,6 @@ import top.ourfor.lib.mpv.TrackItem.AudioTrackName
 import top.ourfor.lib.mpv.TrackItem.SubtitleTrackName
 import java.io.File
 import java.io.FileOutputStream
-import java.util.stream.Collectors
 import kotlin.math.max
 import kotlin.math.min
 import android.R as GlobalR
@@ -342,6 +341,19 @@ class PlayerView(
     fun getWindow(view: View): Window? {
         val activity = themedReactContext?.currentActivity ?: return null
         return activity.window
+    }
+
+    override fun requestLayout() {
+        super.requestLayout()
+        post(measureAndLayout)
+    }
+
+    private val measureAndLayout = Runnable {
+        measure(
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+        )
+        layout(left, top, right, bottom)
     }
 
     companion object {
