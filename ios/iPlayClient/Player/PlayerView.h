@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <React/RCTViewManager.h>
+#import <React/RCTInvalidating.h>
 #import "PlayerEventView.h"
 #import "PlayerControlView.h"
 #import "PlayerContentView.h"
@@ -14,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PlayerView : UIView
+@interface PlayerView : UIView<RCTInvalidating>
 @property (nonatomic, strong) id<VideoPlayer> player;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) NSUInteger iconSize;
