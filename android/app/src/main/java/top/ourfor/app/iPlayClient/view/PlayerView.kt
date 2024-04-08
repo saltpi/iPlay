@@ -8,6 +8,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
@@ -377,6 +378,6 @@ class PlayerView(
         (context as ReactContext).removeLifecycleEventListener(this)
         keepScreenOn = false
         contentView.viewModel.destroy()
-        super.onDetachedFromWindow()
+        (parent as ViewGroup).removeView(this)
     }
 }
