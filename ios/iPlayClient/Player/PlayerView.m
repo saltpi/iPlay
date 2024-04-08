@@ -288,11 +288,24 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     [self.player keepaspect];
 }
 
-- (void)removeFromSuperview {
+- (void)clean {
     [self.player stop];
     [self.player quit];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+}
+
+- (void)invalidate {
+    [self clean];
+    [self removeFromSuperview];
+}
+
+- (void)removeFromSuperview {
+    [self clean];
     [super removeFromSuperview];
+}
+
+- (void)dealloc {
+    [self clean];
 }
 
 #pragma mark - Setter

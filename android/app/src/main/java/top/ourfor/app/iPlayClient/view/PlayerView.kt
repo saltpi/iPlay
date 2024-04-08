@@ -8,6 +8,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
@@ -15,6 +16,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.facebook.react.bridge.LifecycleEventListener
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
 import top.ourfor.app.iPlayClient.R
 import top.ourfor.app.iPlayClient.module.FontModule
@@ -35,8 +38,10 @@ class PlayerView(
     context: Context,
     url: String?
 ) : ConstraintLayout(context),
+    LifecycleEventListener,
     PlayerEventListener,
-    PlayerEventDelegate, PlayerSelectDelegate<PlayerSelectModel<TrackItem>> {
+    PlayerEventDelegate,
+    PlayerSelectDelegate<PlayerSelectModel<TrackItem>> {
     var subtitleFontName: String? = null
         set(value) {
             contentView.viewModel.setSubtitleFontName(value)
@@ -68,6 +73,8 @@ class PlayerView(
             controlView!!.videoTitle = title
         }
     init {
+        (context as ReactContext).addLifecycleEventListener(this)
+
         contentView = PlayerContentView(context)
         val player = contentView
         val contentLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -358,5 +365,19 @@ class PlayerView(
 
     companion object {
         val TAG = "PlayerView"
+    }
+
+    override fun onHostResume() {
+    }
+
+    override fun onHostPause() {
+    }
+
+    override fun onHostDestroy() {
+        Log.d(TAG, "destroy player")
+        (context as ReactContext).removeLifecycleEventListener(this)
+        keepScreenOn = false
+        contentView.viewModel.destroy()
+        (parent as ViewGroup).removeView(this)
     }
 }
