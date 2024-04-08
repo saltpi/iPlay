@@ -299,11 +299,6 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     [self removeFromSuperview];
 }
 
-- (void)removeFromSuperview {
-    [self clean];
-    [super removeFromSuperview];
-}
-
 - (void)dealloc {
     [self clean];
 }
