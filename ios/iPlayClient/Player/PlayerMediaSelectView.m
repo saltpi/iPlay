@@ -9,10 +9,10 @@
 #import "PlayerMediaSelectItemView.h"
 #import "PlayerMediaSelectItemModel.h"
 
+
 @interface PlayerMediaSelectView ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIImageView *closeButton;
-@property (nonatomic, copy) NSArray<PlayerMediaSelectItemModel *> *datasource;
 @end
 
 @implementation PlayerMediaSelectView
@@ -73,6 +73,10 @@
     [self.closeButton addGestureRecognizer:tap];
 }
 
+- (void)reloadData {
+    [self.tableView reloadData];
+}
+
 - (void)dismiss {
     [self removeFromSuperview];
 }
@@ -100,6 +104,7 @@
     }
     PlayerMediaSelectItemModel *model = self.datasource[indexPath.item];
     model.isSelected = !model.isSelected;
+    BLOCK_INVOKE(self.onSelectCallback, model);
     [tableView reloadData];
 }
 
@@ -126,6 +131,7 @@
         tableView.allowsSelection = YES;
         tableView.allowsMultipleSelection = NO;
         tableView.showsVerticalScrollIndicator = NO;
+        tableView.userInteractionEnabled = YES;
         _tableView = tableView;
     }
     return _tableView;

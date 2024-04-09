@@ -250,10 +250,10 @@ static dispatch_queue_t mpvEventRunloop = nil;
         key = [[NSString stringWithFormat:@"track-list/%d/lang", i] cStringUsingEncoding:NSUTF8StringEncoding];
         NSString *lang = @(mpv_get_property_string(self.mpv, key));
         key = [[NSString stringWithFormat:@"track-list/%d/title", i] cStringUsingEncoding:NSUTF8StringEncoding];
-        NSString *title = @(mpv_get_property_string(self.mpv, key));
+        NSString *title = @(mpv_get_property_string(self.mpv, key) ?: "");
         PlayerTrackModel *model = [PlayerTrackModel new];
         model.title = title;
-        model.ID = ID;
+        model.ID = @(ID).stringValue;
         model.lang = lang;
         if ([type isEqual:@"sub"]) {
             model.type = PlayerTrackTypeSubtitle;
@@ -289,6 +289,39 @@ static dispatch_queue_t mpvEventRunloop = nil;
         return obj.type == PlayerTrackTypeVideo;
     }]];
     return videos;
+}
+
+- (NSString *)currentAudioID {
+    if (!self.mpv) return nil;
+    return @(mpv_get_property_string(self.mpv, "aid"));
+}
+
+- (NSString *)currentVideoID {
+    if (!self.mpv) return nil;
+    return @(mpv_get_property_string(self.mpv, "vid"));
+}
+
+- (NSString *)currentSubtitleID {
+    if (!self.mpv) return nil;
+    return @(mpv_get_property_string(self.mpv, "sid"));
+}
+
+- (void)useSubtitle:(NSString *)ID {
+    if (!self.mpv) return;
+    const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_property_string(self.mpv, "sid", value);
+}
+
+- (void)useAudio:(NSString *)ID {
+    if (!self.mpv) return;
+    const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_property_string(self.mpv, "aid", value);
+}
+
+- (void)useVideo:(NSString *)ID {
+    if (!self.mpv) return;
+    const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_property_string(self.mpv, "vid", value);
 }
 
 - (void)quit {

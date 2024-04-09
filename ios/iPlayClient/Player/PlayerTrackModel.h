@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, PlayerTrackType) {
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PlayerTrackModel : NSObject
-@property (nonatomic) NSInteger ID;
+@property (nonatomic) NSString *ID;
 @property (nonatomic) NSString *lang;
 @property (nonatomic) NSString *title;
 @property (nonatomic) PlayerTrackType type;

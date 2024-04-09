@@ -52,9 +52,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<PlayerTrackModel *> *)audios;
 - (NSArray<PlayerTrackModel *> *)videos;
 - (NSArray<PlayerTrackModel *> *)tracks;
-- (void)useSubtitle:(NSInteger)ID;
-- (void)useAudio:(NSInteger)ID;
-- (void)useVideo:(NSInteger)ID;
+- (NSString *)currentSubtitleID;
+- (NSString *)currentAudioID;
+- (NSString *)currentVideoID;
+- (void)useSubtitle:(NSString *)ID;
+- (void)useAudio:(NSString *)ID;
+- (void)useVideo:(NSString *)ID;
 - (void)useTrack:(PlayerTrackModel *)model;
 
 @optional

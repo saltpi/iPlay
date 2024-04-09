@@ -288,6 +288,26 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     [self.player keepaspect];
 }
 
+- (void)onSelectAudioTap:(id)sender {
+    [self.controlView hideControls];
+    @weakify(self);
+    self.eventsView.selectView.onSelectCallback = ^(PlayerMediaSelectItemModel<PlayerTrackModel *> * _Nullable model) {
+        @strongify(self);
+        [self.player useAudio:model.item.ID];
+    };
+    [self.eventsView showMediaSelectView:self.player.audios currentID:self.player.currentAudioID];
+}
+
+- (void)onSelectCaptionTap:(id)sender {
+    [self.controlView hideControls];
+    @weakify(self);
+    self.eventsView.selectView.onSelectCallback = ^(PlayerMediaSelectItemModel<PlayerTrackModel *> * _Nullable model) {
+        @strongify(self);
+        [self.player useSubtitle:model.item.ID];
+    };
+    [self.eventsView showMediaSelectView:self.player.subtitles currentID:self.player.currentSubtitleID];
+}
+
 - (void)clean {
     [self.player stop];
     [self.player quit];
@@ -341,7 +361,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
             self.controlView.playButton,
             self.controlView.fullscreenButton,
             self.controlView.captionButton,
-            self.controlView.settingButton,
+            self.controlView.audioButton,
             self.controlView.sliderBar
         ];
         _eventsView = view;

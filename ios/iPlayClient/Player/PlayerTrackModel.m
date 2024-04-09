@@ -10,7 +10,7 @@
 @implementation PlayerTrackModel
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%ld %@ %@", self.ID, self.lang, self.title];
+    return [NSString stringWithFormat:@"%@ %@ %@", self.ID, self.lang, self.title];
 }
 
 @end

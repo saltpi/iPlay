@@ -14,7 +14,7 @@
     // Override point for customization after application launch.
     CGRect screenSize = UIScreen.mainScreen.bounds;
     UIWindow *window = [[UIWindow alloc] initWithFrame:screenSize];
-    BOOL isPreviewMode = [NSProcessInfo.processInfo.environment[@"XCODE_RUNNING_FOR_PREVIEWS"] isEqual:@"1"] || YES;
+    BOOL isPreviewMode = [NSProcessInfo.processInfo.environment[@"XCODE_RUNNING_FOR_PREVIEWS"] isEqual:@"1"];
     Class clazz = NSClassFromString(
         isPreviewMode ? @"PreviewViewController" : @"RootViewController"
     );
