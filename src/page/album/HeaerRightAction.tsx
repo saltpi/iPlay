@@ -3,7 +3,7 @@ import LayoutDrawerIcon from "@asset/layout_drawer.svg"
 import LayoutBurgerIcon from "@asset/layout_burger.svg"
 import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { LayoutType, selectThemeBasicStyle, updateTheme } from "@store/themeSlice";
+import { LayoutType, selectThemeBasicStyle, updateTheme, updateToNextAlbumLayoutType } from "@store/themeSlice";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
@@ -16,7 +16,6 @@ export function HeaderRightAction() {
     const dispatch = useAppDispatch()
     const insets = useSafeAreaInsets()
     const updateSortType = useCallback(() => {
-        console.log(`sort type: ${sortType}`)
         const newSortType = sortType ? (sortType + 1)%4 : SortType.NameAsc
         let newSortTypeName = ""
         switch(newSortType) {
@@ -59,13 +58,13 @@ export function HeaderRightAction() {
             />
             {layoutType === LayoutType.Line ?
             <LayoutDrawerIcon
-                onPress={() => dispatch(updateTheme({albumLayoutType: LayoutType.Card}))}
+                onPress={() => dispatch(updateToNextAlbumLayoutType())}
                 width={22}
                 style={{marginRight: 10, ...theme}}
             />
             :
             <LayoutBurgerIcon
-                onPress={() => dispatch(updateTheme({albumLayoutType: LayoutType.Line}))}
+                onPress={() => dispatch(updateToNextAlbumLayoutType())}
                 width={22}
                 style={{marginRight: 10, ...theme}}
             />

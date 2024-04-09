@@ -84,6 +84,9 @@ export const slice = createSlice({
             } else {
                 _.merge(state, action.payload)
             }
+        },
+        updateToNextAlbumLayoutType: (state) => {
+            state.albumLayoutType = state.albumLayoutType === LayoutType.Card ? LayoutType.Line : LayoutType.Card;
         }
     },
 });
@@ -143,7 +146,8 @@ export const {
     updateMenuBarPaddingOffset, 
     updateMenuBarHeight,
     updateShowVideoLink,
-    updateTheme
+    updateTheme,
+    updateToNextAlbumLayoutType
 } = slice.actions;
 
 export default slice.reducer;

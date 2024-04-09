@@ -297,7 +297,6 @@ export const slice = createSlice({
             if (!album) return
             if (state.source.albumMedia) {
                 state.source.albumMedia[album.id] = album.items
-                logger.info("media ", album.items[0])
             } else {
                 state.source.albumMedia = {
                     [album.id]: album.items
