@@ -19,6 +19,8 @@
 		8835136D2BC4262E0012C230 /* PreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8835136C2BC4262E0012C230 /* PreviewViewController.m */; };
 		883513702BC437D10012C230 /* PlayerMediaSelectItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */; };
 		883513732BC446230012C230 /* PlayerTrackModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513722BC446230012C230 /* PlayerTrackModel.m */; };
+		883513762BC562070012C230 /* PlayerSeekableModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513752BC562070012C230 /* PlayerSeekableModel.m */; };
+		883513792BC569720012C230 /* PlayerSeekableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513782BC569720012C230 /* PlayerSeekableImageView.m */; };
 		8856A4BE2BBC18D400CC1136 /* BeanContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4BB2BBC18D400CC1136 /* BeanContainer.m */; };
 		8856A4BF2BBC18D400CC1136 /* BeanProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4BC2BBC18D400CC1136 /* BeanProxy.m */; };
 		8856A4C62BBC18E300CC1136 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4C12BBC18E300CC1136 /* AppDelegate.mm */; };
@@ -77,6 +79,10 @@
 		8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectItemModel.m; path = Player/PlayerMediaSelectItemModel.m; sourceTree = "<group>"; };
 		883513712BC446230012C230 /* PlayerTrackModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerTrackModel.h; path = Player/PlayerTrackModel.h; sourceTree = "<group>"; };
 		883513722BC446230012C230 /* PlayerTrackModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerTrackModel.m; path = Player/PlayerTrackModel.m; sourceTree = "<group>"; };
+		883513742BC562070012C230 /* PlayerSeekableModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSeekableModel.h; path = Player/PlayerSeekableModel.h; sourceTree = "<group>"; };
+		883513752BC562070012C230 /* PlayerSeekableModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerSeekableModel.m; path = Player/PlayerSeekableModel.m; sourceTree = "<group>"; };
+		883513772BC569720012C230 /* PlayerSeekableImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSeekableImageView.h; path = Player/PlayerSeekableImageView.h; sourceTree = "<group>"; };
+		883513782BC569720012C230 /* PlayerSeekableImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerSeekableImageView.m; path = Player/PlayerSeekableImageView.m; sourceTree = "<group>"; };
 		8856A4B92BBC18D400CC1136 /* Router.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Router.h; sourceTree = "<group>"; };
 		8856A4BA2BBC18D400CC1136 /* BeanContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeanContainer.h; sourceTree = "<group>"; };
 		8856A4BB2BBC18D400CC1136 /* BeanContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeanContainer.m; sourceTree = "<group>"; };
@@ -315,6 +321,10 @@
 				8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */,
 				883513712BC446230012C230 /* PlayerTrackModel.h */,
 				883513722BC446230012C230 /* PlayerTrackModel.m */,
+				883513742BC562070012C230 /* PlayerSeekableModel.h */,
+				883513752BC562070012C230 /* PlayerSeekableModel.m */,
+				883513772BC569720012C230 /* PlayerSeekableImageView.h */,
+				883513782BC569720012C230 /* PlayerSeekableImageView.m */,
 			);
 			name = Player;
 			path = iPlayClient;
@@ -592,6 +602,7 @@
 				8835136A2BC422300012C230 /* Preview.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				8856A4BF2BBC18D400CC1136 /* BeanProxy.m in Sources */,
+				883513792BC569720012C230 /* PlayerSeekableImageView.m in Sources */,
 				8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */,
 				883513642BC40BB60012C230 /* PlayerMediaSelectView.m in Sources */,
 				88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */,
@@ -607,6 +618,7 @@
 				8856A4E42BBC191B00CC1136 /* PlayerEventView.m in Sources */,
 				8856A4E52BBC191B00CC1136 /* PlayerViewController.m in Sources */,
 				8856A4E22BBC191B00CC1136 /* PlayerControlView.m in Sources */,
+				883513762BC562070012C230 /* PlayerSeekableModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
