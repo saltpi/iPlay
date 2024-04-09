@@ -56,7 +56,7 @@ public class PlayerContentView extends SurfaceView implements SurfaceHolder.Call
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-        viewModel.resize("${width}x$height");
+        viewModel.resize(width+"x"+height);
     }
 
     @Override
