@@ -248,7 +248,7 @@ static dispatch_queue_t mpvEventRunloop = nil;
         long ID = 0;
         mpv_get_property(self.mpv, key, MPV_FORMAT_INT64, &ID);
         key = [[NSString stringWithFormat:@"track-list/%d/lang", i] cStringUsingEncoding:NSUTF8StringEncoding];
-        NSString *lang = @(mpv_get_property_string(self.mpv, key));
+        NSString *lang = @(mpv_get_property_string(self.mpv, key) ?: "");
         key = [[NSString stringWithFormat:@"track-list/%d/title", i] cStringUsingEncoding:NSUTF8StringEncoding];
         NSString *title = @(mpv_get_property_string(self.mpv, key) ?: "");
         PlayerTrackModel *model = [PlayerTrackModel new];
