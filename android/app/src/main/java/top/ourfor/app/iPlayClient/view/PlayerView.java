@@ -170,7 +170,11 @@ public class PlayerView extends ConstraintLayout
                 break;
             case HideControl:
                 eventView.numberValueView.hide();
-                controlView.toggleVisible();
+                if (eventView.isSelectViewPresent()) {
+                    eventView.closeSelectView();
+                } else {
+                    controlView.toggleVisible();
+                }
                 break;
             case Seek:
                 int delta = 10;

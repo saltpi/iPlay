@@ -170,6 +170,10 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
         Log.d(TAG, "add select view");
     }
 
+    public boolean isSelectViewPresent() {
+        return selectView != null && selectView.getParent() != null;
+    }
+
     public void closeSelectView() {
         if (selectView != null) {
             removeView(selectView);
