@@ -4,6 +4,7 @@ import static top.ourfor.lib.mpv.MPV.MPV_EVENT_PROPERTY_CHANGE;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_SHUTDOWN;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_DOUBLE;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_FLAG;
+import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_NODE;
 import static top.ourfor.lib.mpv.TrackItem.AudioTrackName;
 import static top.ourfor.lib.mpv.TrackItem.SubtitleTrackName;
 
@@ -220,6 +221,7 @@ public class PlayerViewModel implements Player {
             mpv.observeProperty(0, "paused-for-cache", MPV.MPV_FORMAT_FLAG);
             mpv.observeProperty(0, "pause", MPV.MPV_FORMAT_FLAG);
             mpv.observeProperty(0, "track-list", MPV.MPV_FORMAT_NONE);
+            mpv.observeProperty(PlayerPropertyType.DemuxerCacheState.ordinal(), "demuxer-cache-state", MPV_FORMAT_NODE);
             eventLoop = new Thread(() -> {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);
@@ -241,6 +243,8 @@ public class PlayerViewModel implements Player {
                             value = mpv.getDoubleProperty(e.prop);
                         } else if (e.format == MPV_FORMAT_FLAG) {
                             value = mpv.getBoolProperty(e.prop);
+                        } else if (e.format == MPV_FORMAT_NODE && e.prop.equals("demuxer-cache-state")) {
+                            value = mpv.seekableRanges();
                         }
                         delegate.onPropertyChange(e.prop, value);
                     }

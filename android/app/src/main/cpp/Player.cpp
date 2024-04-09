@@ -204,9 +204,11 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
     jfieldID typeFieldID = env->GetFieldID(cls, "type", "I");
     jfieldID propFieldID = env->GetFieldID(cls, "prop", "Ljava/lang/String;");
     jfieldID formatFieldID = env->GetFieldID(cls, "format", "I");
+    jfieldID replyFieldID = env->GetFieldID(cls, "reply", "I");
     if (typeFieldID == nullptr ||
         propFieldID == nullptr ||
-        formatFieldID == nullptr) {
+        formatFieldID == nullptr ||
+        replyFieldID == nullptr) {
         return nullptr; // field not found
     }
 
@@ -216,6 +218,7 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
     }
 
     env->SetIntField(obj, typeFieldID, reinterpret_cast<int>(event->event_id));
+    env->SetIntField(obj, replyFieldID, static_cast<int>(event->reply_userdata));
     if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
         mpv_event_property *data = static_cast<mpv_event_property *>(event->data);
         env->SetIntField(obj, formatFieldID, reinterpret_cast<int>(data->format));
@@ -247,4 +250,60 @@ Java_top_ourfor_lib_mpv_MPV_getStringProperty(JNIEnv *env, jobject thiz, jstring
     const char *value = mpv_get_property_string(ctx, prop);
     env->ReleaseStringUTFChars(key, prop);
     return env->NewStringUTF(value);
+}
+extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
+    mpv_handle *ctx = get_attached_mpv(env, thiz);
+    if (ctx == nullptr) return nullptr;
+
+    jclass cls = env->FindClass("top/ourfor/lib/mpv/SeekableRange");
+    if (cls == nullptr) {
+        return nullptr; // class not found
+    }
+    jfieldID startFieldID = env->GetFieldID(cls, "start", "D");
+    jfieldID endFieldID = env->GetFieldID(cls, "end", "D");
+    if (startFieldID == nullptr ||
+        endFieldID == nullptr) {
+        return nullptr; // field not found
+    }
+
+    mpv_node node;
+    mpv_get_property(ctx, "demuxer-cache-state", MPV_FORMAT_NODE, &node);
+    for (int i = 0; i < node.u.list->num; i++) {
+        if (strcmp(node.u.list->keys[i], "seekable-ranges") != 0) {
+            continue;
+        }
+
+        if (node.u.list->values[i].format == MPV_FORMAT_NODE_ARRAY) {
+            mpv_node_list seekable_ranges = *(node.u.list->values[i].u.list);
+            auto array = env->NewObjectArray(seekable_ranges.num, cls, NULL);
+
+            for (int j = 0; j < seekable_ranges.num; j++) {
+                mpv_node range = seekable_ranges.values[j];
+
+                jobject seekable = env->NewObject(cls, env->GetMethodID(cls, "<init>", "()V"));
+                if (seekable == nullptr) {
+                    return nullptr; // object not created
+                }
+
+                for (int k = 0; k < range.u.list->num; k++) {
+                    char *key = range.u.list->keys[k];
+                    if (range.u.list->values[k].format != MPV_FORMAT_DOUBLE) continue;
+                    double value = range.u.list->values[k].u.double_;
+                    if (strcmp(key, "start") == 0) {
+                        env->SetDoubleField(seekable, startFieldID, value);
+                    } else if (strcmp(key, "end") == 0) {
+                        env->SetDoubleField(seekable, endFieldID, value);
+                    }
+                }
+
+                env->SetObjectArrayElement(array, j, seekable);
+            }
+
+            return array;
+        }
+    }
+
+    return nullptr;
 }
