@@ -9,6 +9,7 @@ import { EmbySite } from "@model/EmbySite";
 import { Version } from "@helper/device";
 import { UserData } from "@model/UserData";
 import { PlaybackData, kPlaybackData } from "@model/PlaybackData";
+import { logger } from "@helper/log";
 
 export const EMBY_CLIENT_HEADERS = {
     "X-Emby-Client": Version.displayName,
@@ -199,7 +200,7 @@ export async function getCollection(site: EmbySite, cid: number, type: "Series"|
         SortOrder: "Ascending",
         IncludeItemTypes: type,
         Recursive: true,
-        Fields: "BasicSyncInfo,Overview,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
+        Fields: "BasicSyncInfo,SortName,Overview,CanDelete,Container,PrimaryImageAspectRatio,Prefix,DateCreated",
         ParentId: cid,
         EnableImageTypes: "Primary,Backdrop,Thumb",
         ImageTypeLimit: 1,

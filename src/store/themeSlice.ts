@@ -9,6 +9,12 @@ export enum ColorScheme {
     Light,
     Dark
 }
+
+export enum LayoutType {
+    Card,
+    Line,
+}
+
 interface ThemeState {
     routeName: string;
     hideMenuBar: boolean;
@@ -27,6 +33,7 @@ interface ThemeState {
     backgroundColor?: string;
     barStyle?: 'default' | 'light-content' | 'dark-content';
     headerTitleAlign?: 'left' | 'center';
+    albumLayoutType?: LayoutType;
 }
 
 type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
