@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PlayerTrackModel.h"
+#import "PlayerSeekableModel.h"
 
 typedef enum : NSUInteger {
     PlayEventTypeOnProgress,
@@ -14,6 +15,7 @@ typedef enum : NSUInteger {
     PlayEventTypeOnPauseForCache,
     PlayEventTypeDuration,
     PlayEventTypeEnd,
+    PlayEventTypeOnSeekableRanges,
 } PlayEventType;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -59,6 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)useAudio:(NSString *)ID;
 - (void)useVideo:(NSString *)ID;
 - (void)useTrack:(PlayerTrackModel *)model;
+
+- (NSArray<PlayerSeekableModel *> *)seekableRanges;
 
 @optional
 - (void)setDrawable:(id)view;

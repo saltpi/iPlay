@@ -39,7 +39,8 @@ public interface Player {
         PlayEventTypeOnPause(1),
         PlayEventTypeOnPauseForCache(2),
         PlayEventTypeDuration(3),
-        PlayEventTypeEnd(4);
+        PlayEventTypeEnd(4),
+        PlayEventTypeDemuxerCacheState(5);
 
         int value;
 

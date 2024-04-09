@@ -12,6 +12,7 @@
 #import <AVFoundation/AVAudioSession.h>
 #import "PlayerContentView.h"
 #import "IPLUIModule.h"
+#import "PlayerSeekableImageView.h"
 
 typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     PlayerGestureTypeNone,
@@ -250,6 +251,12 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         }
         case PlayEventTypeEnd: {
             [self.controlView updatePlayState:[data[@"state"] isEqual:@(0)]];
+            break;
+        }
+        case PlayEventTypeOnSeekableRanges: {
+            NSArray<PlayerSeekableModel *> *ranges = self.player.seekableRanges;
+            UIImage *image = [PlayerSeekableImageView seekableImage:ranges maxValue:self.player.duration];
+            self.controlView.cachedRangeView.image = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
             break;
         }
         default:

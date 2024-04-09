@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIProgressView *progressBar;
 @property (nonatomic, strong) NSProgress *progress;
 @property (nonatomic, strong) UISlider *sliderBar;
+@property (nonatomic, strong) UIImageView *cachedRangeView;
 @property (nonatomic, strong) UILabel *durationLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;

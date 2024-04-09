@@ -36,6 +36,7 @@ static NSUInteger const kIconSize = 48;
     [self addSubview:self.captionButton];
     [self addSubview:self.audioButton];
     [self addSubview:self.progressBar];
+    [self addSubview:self.cachedRangeView];
     [self addSubview:self.sliderBar];
     [self addSubview:self.durationLabel];
     [self addSubview:self.titleLabel];
@@ -57,6 +58,15 @@ static NSUInteger const kIconSize = 48;
         @strongify(self);
         make.width.equalTo(self.progressBar);
         make.center.equalTo(self.progressBar);
+    }];
+    
+    [self.cachedRangeView remakeConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        CGRect rect = [self.sliderBar trackRectForBounds:self.sliderBar.bounds];
+        make.width.equalTo(self.sliderBar);
+        make.height.equalTo(rect.size.height);
+        make.centerX.equalTo(self.sliderBar);
+        make.centerY.equalTo(self.sliderBar).with.offset(0.5);
     }];
   
     [self.durationLabel remakeConstraints:^(MASConstraintMaker *make) {
@@ -394,6 +404,14 @@ static NSUInteger const kIconSize = 48;
         view.layer.cornerRadius = iconSize / 2;
     }
     [self _layout];
+}
+
+- (UIImageView *)cachedRangeView {
+    if (!_cachedRangeView) {
+        _cachedRangeView = [UIImageView new];
+        _cachedRangeView.contentMode = UIViewContentModeScaleToFill;
+    }
+    return _cachedRangeView;
 }
 
 @end

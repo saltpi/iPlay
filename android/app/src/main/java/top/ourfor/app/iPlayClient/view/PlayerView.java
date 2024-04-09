@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.graphics.drawable.LayerDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.view.ViewGroup;
@@ -32,12 +33,16 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import top.ourfor.app.iPlayClient.R;
 import top.ourfor.app.iPlayClient.module.FontModule;
 import top.ourfor.app.iPlayClient.view.Player.PlayEventType;
+import top.ourfor.lib.mpv.SeekableRange;
 import top.ourfor.lib.mpv.TrackItem;
 
+
+@Slf4j
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class PlayerView extends ConstraintLayout
         implements LifecycleEventListener,
@@ -234,6 +239,16 @@ public class PlayerView extends ConstraintLayout
             }
         } else if ("duration".equals(name)) {
             duration = (Double) value;
+        } else if ("demuxer-cache-state".equals(name)) {
+            if (!(value instanceof SeekableRange[])) {
+                return;
+            }
+            val ranges = (SeekableRange[])value;
+            double maxValue = duration;
+            log.info("seekable ranges {}, {}", value, maxValue);
+            post(() -> {
+                controlView.cachedView.setSegmentPart(List.of(ranges), maxValue);
+            });
         }
     }
 

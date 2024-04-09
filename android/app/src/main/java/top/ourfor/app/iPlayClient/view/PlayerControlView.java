@@ -192,6 +192,8 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
         }
     };
 
+    public PlayerCachedView cachedView = new PlayerCachedView(getContext());
+
     private LayoutParams progressBarLayout = new LayoutParams(0, 60) {
         {
             matchConstraintPercentWidth = 0.9f;
@@ -199,6 +201,16 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
             bottomMargin = 100;
             leftToLeft = LayoutParams.PARENT_ID;
             rightToRight = LayoutParams.PARENT_ID;
+        }
+    };
+
+    private LayoutParams cachedViewLayout = new LayoutParams(0, 5) {
+        {
+            matchConstraintPercentWidth = 0.9f;
+            bottomToBottom = progressBar.getId();
+            topToTop = progressBar.getId();
+            leftToLeft = progressBar.getId();
+            rightToRight = progressBar.getId();
         }
     };
 
@@ -242,6 +254,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
         addView(fullscreenButton, fullscreenLayout);
         addView(subtitleButton, subtitleButtonLayout);
         addView(audioButton, audioButtonLayout);
+        addView(cachedView, cachedViewLayout);
         addView(progressBar, progressBarLayout);
         addView(durationLabel, durationLayout);
         addView(titleLabel, titleLayout);

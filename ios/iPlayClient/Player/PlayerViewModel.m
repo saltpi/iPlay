@@ -5,7 +5,13 @@
 //  Created by 赫拉 on 2024/3/25.
 //
 
+#import "PlayerSeekableModel.h"
 #import "PlayerViewModel.h"
+
+typedef NS_ENUM(NSUInteger, IPLPlayerPropertyType) {
+    IPLPlayerPropertyTypeNone,
+    IPLPlayerPropertyTypeDemuxerCacheState,
+};
 
 static dispatch_queue_t mpvEventRunloop = nil;
 
@@ -38,12 +44,14 @@ static dispatch_queue_t mpvEventRunloop = nil;
 @interface PlayerViewModel ()
 @property (nonatomic, weak) id<VideoPlayerDelegate> delegate;
 @property (nonatomic, strong) NSString *subtitleFontName;
+@property (nonatomic, copy) NSArray<PlayerSeekableModel *> *seekableRanges;
 @end
 
 @implementation PlayerViewModel
 
 + (void)load {
     static dispatch_once_t onceToken;
+
     dispatch_once(&onceToken, ^{
         dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_USER_INITIATED, -1);
         dispatch_queue_t queue = dispatch_queue_create_with_target("mpv-player-queue", attr, NULL);
@@ -53,9 +61,11 @@ static dispatch_queue_t mpvEventRunloop = nil;
 
 - (instancetype)initWithLayer:(CAMetalLayer *)layer {
     self = [self init];
+
     if (self) {
         self.drawable = layer;
     }
+
     return self;
 }
 
@@ -70,10 +80,12 @@ static dispatch_queue_t mpvEventRunloop = nil;
         mpv_set_option_string(mpv, "gpu-api", "vulkan");
         mpv_set_option_string(mpv, "hwdec", "videotoolbox");
         mpv_set_option_string(mpv, "keep-open", "yes");
+
         if (self.subtitleFontName) {
             const char *cFontName = [self.subtitleFontName cStringUsingEncoding:NSUTF8StringEncoding];
             mpv_set_option_string(self.mpv, "sub-font", cFontName);
         }
+
         mpv_initialize(mpv);
         self.mpv = mpv;
 
@@ -83,19 +95,25 @@ static dispatch_queue_t mpvEventRunloop = nil;
         mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, 0, "eof-reached", MPV_FORMAT_FLAG);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypeDemuxerCacheState, "demuxer-cache-state", MPV_FORMAT_NODE);
 //        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
         @weakify(self);
         dispatch_async(mpvEventRunloop, ^{
             while (1) {
                 @strongify(self);
                 mpv_handle *ctx = self.mpv;
-                if (!ctx) break;
+
+                if (!ctx) {
+                    break;
+                }
+
                 mpv_event *event = mpv_wait_event(ctx, 1);
+
                 if (event->event_id == MPV_EVENT_SHUTDOWN) {
                     [self destroy];
                     break;
                 }
-                
+
                 if (ctx) {
                     [self handleEvent:event];
                 } else {
@@ -103,15 +121,19 @@ static dispatch_queue_t mpvEventRunloop = nil;
                 }
             }
         });
-        
     } else {
         NSLog(@"view is not kind of CAMetalLayer");
     }
 }
 
 - (void)loadVideo:(NSString *)url {
-    if (!self.mpv) return;
-    const char *cmd[] = {"loadfile", [url cStringUsingEncoding:NSUTF8StringEncoding], "replace", NULL};
+    if (!self.mpv) {
+        return;
+    }
+
+    const char *cmd[] = {
+        "loadfile", [url cStringUsingEncoding:NSUTF8StringEncoding], "replace", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
@@ -127,44 +149,74 @@ static dispatch_queue_t mpvEventRunloop = nil;
 }
 
 - (void)play {
-    if (!self.mpv) return;
-    const char *cmd[] = {"play", NULL};
+    if (!self.mpv) {
+        return;
+    }
+
+    const char *cmd[] = {
+        "play", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
 - (void)stop {
-    if (!self.mpv) return;
-    const char *cmd[] = {"stop", NULL};
+    if (!self.mpv) {
+        return;
+    }
+
+    const char *cmd[] = {
+        "stop", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
 - (void)volumeUp:(CGFloat)percent {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     double volume;
     mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
     volume += 100 * percent;
-    if (volume > 100) return;
+
+    if (volume > 100) {
+        return;
+    }
+
     mpv_set_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
 }
 
 - (void)volumeDown:(CGFloat)percent {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     double volume;
     mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
     volume -= 100 * percent;
-    if (volume > 100) return;
+
+    if (volume > 100) {
+        return;
+    }
+
     mpv_set_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
 }
 
 - (CGFloat)volume {
-    if (!self.mpv) return 0.f;
+    if (!self.mpv) {
+        return 0.f;
+    }
+
     double volume;
     mpv_get_property(self.mpv, "volume", MPV_FORMAT_DOUBLE, &volume);
     return volume;
 }
 
 - (NSInteger)brightness {
-    if (!self.mpv) return 0.f;
+    if (!self.mpv) {
+        return 0.f;
+    }
+
     NSInteger brightness;
     mpv_get_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
     return brightness;
@@ -179,12 +231,22 @@ static dispatch_queue_t mpvEventRunloop = nil;
 }
 
 - (void)_updateBrightness:(NSInteger)delta {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     NSInteger brightness;
     mpv_get_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
     brightness += delta;
-    if (brightness >= 100) brightness = 100;
-    if (brightness <= 0) brightness = 0;
+
+    if (brightness >= 100) {
+        brightness = 100;
+    }
+
+    if (brightness <= 0) {
+        brightness = 0;
+    }
+
     mpv_set_property(self.mpv, "brightness", MPV_FORMAT_INT64, &brightness);
 }
 
@@ -197,50 +259,79 @@ static dispatch_queue_t mpvEventRunloop = nil;
 }
 
 - (void)seekRelative:(NSInteger)seconds {
-    if (!self.mpv) return;
-    const char* pos = [@(seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
+    if (!self.mpv) {
+        return;
+    }
+
+    const char *pos = [@(seconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"seek relative %s", pos);
-    const char *cmd[] = {"seek", pos, "relative+exact", NULL};
+    const char *cmd[] = {
+        "seek", pos, "relative+exact", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
 - (void)seek:(NSUInteger)timeSeconds {
-    if (!self.mpv) return;
-    const char* pos = [@(timeSeconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
-    const char *cmd[] = {"seek", pos, "absolute+keyframes", NULL};
+    if (!self.mpv) {
+        return;
+    }
+
+    const char *pos = [@(timeSeconds).stringValue cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cmd[] = {
+        "seek", pos, "absolute+keyframes", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
 - (void)pause {
-    if (!self.mpv) return;
-    const char *cmd[] = {"cycle", "pause", NULL};
+    if (!self.mpv) {
+        return;
+    }
+
+    const char *cmd[] = {
+        "cycle", "pause", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
 - (void)setSubtitleFont:(NSString *)fontName {
     _subtitleFontName = fontName;
-    if (!self.mpv) return;
+
+    if (!self.mpv) {
+        return;
+    }
+
     const char *cFontName = [fontName cStringUsingEncoding:NSUTF8StringEncoding];
     mpv_set_option_string(self.mpv, "sub-font", cFontName);
 }
 
 - (void)resume {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     int flag = 0;
     mpv_set_property(self.mpv, "pause", MPV_FORMAT_FLAG, &flag);
 }
 
 - (void)keepaspect {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     int flag = -1;
     mpv_set_property(self.mpv, "keepaspect", MPV_FORMAT_FLAG, &flag);
 }
 
 - (NSArray<PlayerTrackModel *> *)tracks {
-    if (!self.mpv) return nil;
+    if (!self.mpv) {
+        return nil;
+    }
+
     NSMutableArray<PlayerTrackModel *> *tracks = [NSMutableArray new];
     long count = 0;
     mpv_get_property(self.mpv, "track-list/count", MPV_FORMAT_INT64, &count);
+
     for (int i = 0; i < count; i++) {
         const char *key = [[NSString stringWithFormat:@"track-list/%d/type", i] cStringUsingEncoding:NSUTF8StringEncoding];
         NSString *type = @(mpv_get_property_string(self.mpv, key));
@@ -248,13 +339,14 @@ static dispatch_queue_t mpvEventRunloop = nil;
         long ID = 0;
         mpv_get_property(self.mpv, key, MPV_FORMAT_INT64, &ID);
         key = [[NSString stringWithFormat:@"track-list/%d/lang", i] cStringUsingEncoding:NSUTF8StringEncoding];
-        NSString *lang = @(mpv_get_property_string(self.mpv, key) ?: "");
+        NSString *lang = @(mpv_get_property_string(self.mpv, key) ? : "");
         key = [[NSString stringWithFormat:@"track-list/%d/title", i] cStringUsingEncoding:NSUTF8StringEncoding];
-        NSString *title = @(mpv_get_property_string(self.mpv, key) ?: "");
+        NSString *title = @(mpv_get_property_string(self.mpv, key) ? : "");
         PlayerTrackModel *model = [PlayerTrackModel new];
         model.title = title;
         model.ID = @(ID).stringValue;
         model.lang = lang;
+
         if ([type isEqual:@"sub"]) {
             model.type = PlayerTrackTypeSubtitle;
         } else if ([type isEqual:@"audio"]) {
@@ -262,72 +354,100 @@ static dispatch_queue_t mpvEventRunloop = nil;
         } else {
             model.type = PlayerTrackTypeVideo;
         }
+
         [tracks addObject:model];
     }
+
     return tracks;
 }
 
 - (NSArray<PlayerTrackModel *> *)audios {
     NSArray<PlayerTrackModel *> *tracks = [self tracks];
-    NSArray<PlayerTrackModel *> *audios = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PlayerTrackModel *obj, NSDictionary<NSString *,id> * _Nullable bindings) {
+    NSArray<PlayerTrackModel *> *audios = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL (PlayerTrackModel *obj, NSDictionary<NSString *, id> *_Nullable bindings) {
         return obj.type == PlayerTrackTypeAudio;
     }]];
+
     return audios;
 }
 
 - (NSArray<PlayerTrackModel *> *)subtitles {
     NSArray<PlayerTrackModel *> *tracks = [self tracks];
-    NSArray<PlayerTrackModel *> *subtitles = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PlayerTrackModel *obj, NSDictionary<NSString *,id> * _Nullable bindings) {
+    NSArray<PlayerTrackModel *> *subtitles = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL (PlayerTrackModel *obj, NSDictionary<NSString *, id> *_Nullable bindings) {
         return obj.type == PlayerTrackTypeSubtitle;
     }]];
+
     return subtitles;
 }
 
 - (NSArray<PlayerTrackModel *> *)videos {
     NSArray<PlayerTrackModel *> *tracks = [self tracks];
-    NSArray<PlayerTrackModel *> *videos = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PlayerTrackModel *obj, NSDictionary<NSString *,id> * _Nullable bindings) {
+    NSArray<PlayerTrackModel *> *videos = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL (PlayerTrackModel *obj, NSDictionary<NSString *, id> *_Nullable bindings) {
         return obj.type == PlayerTrackTypeVideo;
     }]];
+
     return videos;
 }
 
 - (NSString *)currentAudioID {
-    if (!self.mpv) return nil;
+    if (!self.mpv) {
+        return nil;
+    }
+
     return @(mpv_get_property_string(self.mpv, "aid"));
 }
 
 - (NSString *)currentVideoID {
-    if (!self.mpv) return nil;
+    if (!self.mpv) {
+        return nil;
+    }
+
     return @(mpv_get_property_string(self.mpv, "vid"));
 }
 
 - (NSString *)currentSubtitleID {
-    if (!self.mpv) return nil;
+    if (!self.mpv) {
+        return nil;
+    }
+
     return @(mpv_get_property_string(self.mpv, "sid"));
 }
 
 - (void)useSubtitle:(NSString *)ID {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
     mpv_set_property_string(self.mpv, "sid", value);
 }
 
 - (void)useAudio:(NSString *)ID {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
     mpv_set_property_string(self.mpv, "aid", value);
 }
 
 - (void)useVideo:(NSString *)ID {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
     mpv_set_property_string(self.mpv, "vid", value);
 }
 
 - (void)quit {
-    if (!self.mpv) return;
+    if (!self.mpv) {
+        return;
+    }
+
     mpv_unobserve_property(self.mpv, 0);
-    const char *cmd[] = {"quit", NULL};
+    const char *cmd[] = {
+        "quit", NULL
+    };
     mpv_command(self.mpv, cmd);
 }
 
@@ -340,28 +460,69 @@ static dispatch_queue_t mpvEventRunloop = nil;
 }
 
 - (void)onProgressUpdate:(double)time {
-    [self.delegate onPlayEvent:PlayEventTypeOnProgress data:@{
-        @"time": @(time)
+    [self.delegate onPlayEvent:PlayEventTypeOnProgress
+                          data:@{
+         @"time": @(time)
     }];
 }
 
 - (void)onDurationUpdate:(double)time {
     self.duration = time;
-    [self.delegate onPlayEvent:PlayEventTypeDuration data:@{
-        @"duration": @(time)
+    [self.delegate onPlayEvent:PlayEventTypeDuration
+                          data:@{
+         @"duration": @(time)
     }];
 }
 
 - (void)onPlaystateUpdate:(PlayEventType)type
                     state:(int)state {
-    [self.delegate onPlayEvent:type data:@{
-        @"state": @(state)
+    [self.delegate onPlayEvent:type
+                          data:@{
+         @"state": @(state)
     }];
+}
+
+- (void)updateSeekableRanges:(mpv_node *)data {
+    NSMutableArray<PlayerSeekableModel *> *seekables = @[].mutableCopy;
+    mpv_node node = *data;
+
+    for (int i = 0; i < node.u.list->num; i++) {
+        if (strcmp(node.u.list->keys[i], "seekable-ranges") != 0) {
+            continue;
+        }
+
+        if (node.u.list->values[i].format == MPV_FORMAT_NODE_ARRAY) {
+            mpv_node_list seekable_ranges = *(node.u.list->values[i].u.list);
+
+            for (int j = 0; j < seekable_ranges.num; j++) {
+                mpv_node range = seekable_ranges.values[j];
+                PlayerSeekableModel *seekable = [PlayerSeekableModel new];
+
+                for (int k = 0; k < range.u.list->num; k++) {
+                    char *key = range.u.list->keys[k];
+                    if (range.u.list->values[k].format != MPV_FORMAT_DOUBLE) continue;
+                    double value = range.u.list->values[k].u.double_;
+                    if (strcmp(key, "start") == 0) {
+                        seekable.start = value;
+                    } else if (strcmp(key, "end") == 0) {
+                        seekable.end = value;
+                    }
+                }
+
+                [seekables addObject:seekable];
+            }
+            break;
+        }
+    }
+
+    self.seekableRanges = seekables;
+    [self onPlaystateUpdate:PlayEventTypeOnSeekableRanges state:1];
 }
 
 - (void)handleEvent:(mpv_event *)event {
     if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
         mpv_event_property *prop = event->data;
+
         if (strcmp(prop->name, "time-pos") == 0) {
             if (prop->format == MPV_FORMAT_DOUBLE) {
                 [self onProgressUpdate:*(double *)prop->data];
@@ -383,11 +544,28 @@ static dispatch_queue_t mpvEventRunloop = nil;
         } else if (strcmp(prop->name, "eof-reached") == 0) {
             if (prop->format == MPV_FORMAT_FLAG) {
                 int value = *(int *)prop->data;
+
                 if (value == 1) {
                     self.isPlaying = NO;
                     [self onPlaystateUpdate:PlayEventTypeEnd state:value];
                 }
             }
+        }
+
+        IPLPlayerPropertyType type = event->reply_userdata;
+        switch (type) {
+            case IPLPlayerPropertyTypeDemuxerCacheState: {
+                if (prop->format != MPV_FORMAT_NODE) {
+                    return;
+                }
+                
+                [self updateSeekableRanges:(mpv_node *)prop->data];
+
+                break;
+            }
+
+            default:
+                break;
         }
     }
 }
