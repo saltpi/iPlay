@@ -70,7 +70,7 @@ class PlayerView(
         set(value) {
             field = value
             if (controlView == null) return
-            controlView!!.videoTitle = title
+            controlView?.setVideoTitle(title)
         }
     init {
         (context as ReactContext).addLifecycleEventListener(this)
@@ -145,7 +145,7 @@ class PlayerView(
             }
             return
         }
-        
+
         if (name.equals("time-pos") ||
             name.equals("pause") ||
             name.equals("paused-for-cache")) {

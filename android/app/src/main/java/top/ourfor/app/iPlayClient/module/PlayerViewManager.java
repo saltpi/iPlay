@@ -39,7 +39,7 @@ public class PlayerViewManager extends SimpleViewManager<View> {
     protected View createViewInstance(@NonNull ThemedReactContext themedReactContext) {
         PlayerView playerView = new PlayerView(themedReactContext, "");
         playerView.setThemedReactContext(themedReactContext);
-        playerView.setOnPlayStateChange((state) -> {
+        playerView.setOnPlayStateChange(state -> {
             WritableMap event = Arguments.createMap();
             state.forEach((k, v) -> {
                 if (v instanceof Double) {

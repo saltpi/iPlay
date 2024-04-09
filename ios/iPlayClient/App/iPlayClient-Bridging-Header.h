@@ -4,3 +4,5 @@
 
 
 #import "PlayerView.h"
+#import "PlayerMediaSelectView.h"
+#import "PreviewViewController.h"

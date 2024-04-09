@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PlayerTrackModel.h"
 
 typedef enum : NSUInteger {
     PlayEventTypeOnProgress,
@@ -45,6 +46,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)resize:(CGSize)size;
 - (void)setSubtitleFont:(NSString *)fontName;
 - (void)quit;
+
+@optional
+- (NSArray<PlayerTrackModel *> *)subtitles;
+- (NSArray<PlayerTrackModel *> *)audios;
+- (NSArray<PlayerTrackModel *> *)videos;
+- (NSArray<PlayerTrackModel *> *)tracks;
+- (void)useSubtitle:(NSInteger)ID;
+- (void)useAudio:(NSInteger)ID;
+- (void)useVideo:(NSInteger)ID;
+- (void)useTrack:(PlayerTrackModel *)model;
 
 @optional
 - (void)setDrawable:(id)view;

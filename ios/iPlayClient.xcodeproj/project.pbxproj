@@ -13,6 +13,12 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-iPlayClient-iPlayClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-iPlayClient-iPlayClientTests.a */; };
 		8835135E2BC126E20012C230 /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 88B833BF2BBEA5040099D4CB /* MPVKit */; };
+		883513642BC40BB60012C230 /* PlayerMediaSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513632BC40BB60012C230 /* PlayerMediaSelectView.m */; };
+		883513672BC414860012C230 /* PlayerMediaSelectItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513662BC414860012C230 /* PlayerMediaSelectItemView.m */; };
+		8835136A2BC422300012C230 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883513692BC422300012C230 /* Preview.swift */; };
+		8835136D2BC4262E0012C230 /* PreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8835136C2BC4262E0012C230 /* PreviewViewController.m */; };
+		883513702BC437D10012C230 /* PlayerMediaSelectItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */; };
+		883513732BC446230012C230 /* PlayerTrackModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513722BC446230012C230 /* PlayerTrackModel.m */; };
 		8856A4BE2BBC18D400CC1136 /* BeanContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4BB2BBC18D400CC1136 /* BeanContainer.m */; };
 		8856A4BF2BBC18D400CC1136 /* BeanProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4BC2BBC18D400CC1136 /* BeanProxy.m */; };
 		8856A4C62BBC18E300CC1136 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8856A4C12BBC18E300CC1136 /* AppDelegate.mm */; };
@@ -60,6 +66,17 @@
 		5B7EB9410499542E8C5724F5 /* Pods-iPlayClient-iPlayClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-iPlayClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iPlayClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSystemVolumeView.h; path = Bean/PlayerSystemVolumeView.h; sourceTree = "<group>"; };
+		883513622BC40BB60012C230 /* PlayerMediaSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectView.h; path = Player/PlayerMediaSelectView.h; sourceTree = "<group>"; };
+		883513632BC40BB60012C230 /* PlayerMediaSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectView.m; path = Player/PlayerMediaSelectView.m; sourceTree = "<group>"; };
+		883513652BC414860012C230 /* PlayerMediaSelectItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectItemView.h; path = Player/PlayerMediaSelectItemView.h; sourceTree = "<group>"; };
+		883513662BC414860012C230 /* PlayerMediaSelectItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectItemView.m; path = Player/PlayerMediaSelectItemView.m; sourceTree = "<group>"; };
+		883513692BC422300012C230 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		8835136B2BC4262E0012C230 /* PreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
+		8835136C2BC4262E0012C230 /* PreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreviewViewController.m; sourceTree = "<group>"; };
+		8835136E2BC437D10012C230 /* PlayerMediaSelectItemModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectItemModel.h; path = Player/PlayerMediaSelectItemModel.h; sourceTree = "<group>"; };
+		8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectItemModel.m; path = Player/PlayerMediaSelectItemModel.m; sourceTree = "<group>"; };
+		883513712BC446230012C230 /* PlayerTrackModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerTrackModel.h; path = Player/PlayerTrackModel.h; sourceTree = "<group>"; };
+		883513722BC446230012C230 /* PlayerTrackModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerTrackModel.m; path = Player/PlayerTrackModel.m; sourceTree = "<group>"; };
 		8856A4B92BBC18D400CC1136 /* Router.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Router.h; sourceTree = "<group>"; };
 		8856A4BA2BBC18D400CC1136 /* BeanContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeanContainer.h; sourceTree = "<group>"; };
 		8856A4BB2BBC18D400CC1136 /* BeanContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeanContainer.m; sourceTree = "<group>"; };
@@ -149,6 +166,7 @@
 		13B07FAE1A68108700A75B9A /* iPlayClient */ = {
 			isa = PBXGroup;
 			children = (
+				883513682BC421FE0012C230 /* Preview */,
 				88B833C72BBEC3F10099D4CB /* Resource */,
 				8856A4EB2BBC1AE300CC1136 /* iPlayClient.entitlements */,
 				8856A4B82BBC175200CC1136 /* App */,
@@ -204,6 +222,16 @@
 				00E356EE1AD99517003FC87E /* iPlayClientTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		883513682BC421FE0012C230 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				883513692BC422300012C230 /* Preview.swift */,
+				8835136B2BC4262E0012C230 /* PreviewViewController.h */,
+				8835136C2BC4262E0012C230 /* PreviewViewController.m */,
+			);
+			path = Preview;
 			sourceTree = "<group>";
 		};
 		8856A4B02BBC16C400CC1136 /* Bean */ = {
@@ -279,6 +307,14 @@
 				8856A4D02BBC191A00CC1136 /* UIView+FindViewController.h */,
 				8856A4CA2BBC191A00CC1136 /* UIView+FindViewController.m */,
 				8856A4DC2BBC191B00CC1136 /* VideoPlayer.h */,
+				883513622BC40BB60012C230 /* PlayerMediaSelectView.h */,
+				883513632BC40BB60012C230 /* PlayerMediaSelectView.m */,
+				883513652BC414860012C230 /* PlayerMediaSelectItemView.h */,
+				883513662BC414860012C230 /* PlayerMediaSelectItemView.m */,
+				8835136E2BC437D10012C230 /* PlayerMediaSelectItemModel.h */,
+				8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */,
+				883513712BC446230012C230 /* PlayerTrackModel.h */,
+				883513722BC446230012C230 /* PlayerTrackModel.m */,
 			);
 			name = Player;
 			path = iPlayClient;
@@ -547,18 +583,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				883513732BC446230012C230 /* PlayerTrackModel.m in Sources */,
 				8856A4E02BBC191B00CC1136 /* UIView+FindViewController.m in Sources */,
 				8856A4E72BBC191B00CC1136 /* PlayerViewModel.m in Sources */,
 				8856A4EA2BBC191B00CC1136 /* RootViewController.m in Sources */,
+				883513702BC437D10012C230 /* PlayerMediaSelectItemModel.m in Sources */,
 				8856A4E62BBC191B00CC1136 /* PlayerContentView.m in Sources */,
+				8835136A2BC422300012C230 /* Preview.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				8856A4BF2BBC18D400CC1136 /* BeanProxy.m in Sources */,
 				8883B8B02BBDA24A00688761 /* PlayerNumberValueView.m in Sources */,
+				883513642BC40BB60012C230 /* PlayerMediaSelectView.m in Sources */,
 				88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */,
+				883513672BC414860012C230 /* PlayerMediaSelectItemView.m in Sources */,
 				8856A4C82BBC18E300CC1136 /* RealAppDelegate.m in Sources */,
 				8856A4E12BBC191B00CC1136 /* PlayerManager.m in Sources */,
 				8856A4E92BBC191B00CC1136 /* PlayerSubtitleView.m in Sources */,
 				8856A4BE2BBC18D400CC1136 /* BeanContainer.m in Sources */,
+				8835136D2BC4262E0012C230 /* PreviewViewController.m in Sources */,
 				8856A4C62BBC18E300CC1136 /* AppDelegate.mm in Sources */,
 				8856A4E32BBC191B00CC1136 /* PlayerView.m in Sources */,
 				8856A4E82BBC191B00CC1136 /* IPLFontModule.m in Sources */,
@@ -583,6 +625,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-iPlayClient-iPlayClientTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEVELOPMENT_TEAM = UT5Z8LSD88;
@@ -612,6 +655,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COPY_PHASE_STRIP = NO;
@@ -667,7 +711,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/iPlayClient-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/iPlayClient/App/iPlayClient-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -707,7 +751,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/iPlayClient-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/iPlayClient/App/iPlayClient-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

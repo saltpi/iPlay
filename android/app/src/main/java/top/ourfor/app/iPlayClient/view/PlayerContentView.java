@@ -4,12 +4,15 @@ import android.content.Context;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
+
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Getter
 public class PlayerContentView extends SurfaceView implements SurfaceHolder.Callback {
     public Player viewModel;
-    private String filePath = null;
+    public String filePath = null;
 
     public PlayerContentView(Context context) {
         super(context);
