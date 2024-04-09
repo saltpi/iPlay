@@ -34,7 +34,7 @@ static NSUInteger const kIconSize = 48;
     [self addSubview:self.playButton];
     [self addSubview:self.fullscreenButton];
     [self addSubview:self.captionButton];
-    [self addSubview:self.settingButton];
+    [self addSubview:self.audioButton];
     [self addSubview:self.progressBar];
     [self addSubview:self.sliderBar];
     [self addSubview:self.durationLabel];
@@ -76,19 +76,12 @@ static NSUInteger const kIconSize = 48;
         make.center.equalTo(self);
         make.size.equalTo(@(self.iconSize));
     }];
-
-    [self.settingButton remakeConstraints:^(MASConstraintMaker *make) {
-        @strongify(self);
-        make.size.equalTo(@(self.iconSize));
-        make.top.equalTo(self).with.offset(insets.top ?: 24);
-        make.right.equalTo(self.progressBar);
-    }];
     
     [self.fullscreenButton remakeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         make.size.equalTo(@(self.iconSize));
-        make.centerY.equalTo(self.settingButton);
-        make.right.equalTo(self.settingButton.left).with.offset(-10);
+        make.top.equalTo(self).with.offset(insets.top ?: 24);
+        make.right.equalTo(self.progressBar);
     }];
   
     [self.captionButton remakeConstraints:^(MASConstraintMaker *make) {
@@ -96,6 +89,13 @@ static NSUInteger const kIconSize = 48;
         make.size.equalTo(@(self.iconSize));
         make.centerY.equalTo(self.fullscreenButton);
         make.right.equalTo(self.fullscreenButton.left).with.offset(-10);
+    }];
+    
+    [self.audioButton remakeConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        make.size.equalTo(@(self.iconSize));
+        make.centerY.equalTo(self.fullscreenButton);
+        make.right.equalTo(self.captionButton.left).with.offset(-10);
     }];
 
     [self.indicator remakeConstraints:^(MASConstraintMaker *make) {
@@ -120,6 +120,13 @@ static NSUInteger const kIconSize = 48;
     self.fullscreenButton.userInteractionEnabled = YES;
     [self.fullscreenButton addGestureRecognizer:fullscreenTap];
   
+    UITapGestureRecognizer *audioTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectAudioTap:)];
+    self.audioButton.userInteractionEnabled = YES;
+    [self.audioButton addGestureRecognizer:audioTap];
+    
+    UITapGestureRecognizer *captionTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectCaptionTap:)];
+    self.captionButton.userInteractionEnabled = YES;
+    [self.captionButton addGestureRecognizer:captionTap];
 
     self.progressBar.observedProgress = self.progress;
     [self.sliderBar addTarget:self action:@selector(_seekToPlay:) forControlEvents:UIControlEventValueChanged];
@@ -210,6 +217,18 @@ static NSUInteger const kIconSize = 48;
     }
 }
 
+- (void)onSelectAudioTap:(id)sender {
+    if ([self.parentView respondsToSelector:@selector(onSelectAudioTap:)]) {
+        [self.parentView performSelector:@selector(onSelectAudioTap:) withObject:sender];
+    }
+}
+
+- (void)onSelectCaptionTap:(id)sender {
+    if ([self.parentView respondsToSelector:@selector(onSelectCaptionTap:)]) {
+        [self.parentView performSelector:@selector(onSelectCaptionTap:) withObject:sender];
+    }
+}
+
 - (void)updatePlayState:(BOOL)isPlaying {
     [self _changePlayButtonIcon:isPlaying];
 }
@@ -245,11 +264,11 @@ static NSUInteger const kIconSize = 48;
     return _captionButton;
 }
 
-- (UIView *)settingButton {
-    if (!_settingButton) {
-        _settingButton = [self _makeControlView:@"player/setting"];
+- (UIView *)audioButton {
+    if (!_audioButton) {
+        _audioButton = [self _makeControlView:@"player/volume"];
     }
-    return _settingButton;
+    return _audioButton;
 }
 
 - (UIProgressView *)progressBar {
@@ -369,7 +388,7 @@ static NSUInteger const kIconSize = 48;
         self.playButton,
         self.fullscreenButton,
         self.captionButton,
-        self.settingButton,
+        self.audioButton,
     ];
     for (UIView *view in views) {
         view.layer.cornerRadius = iconSize / 2;

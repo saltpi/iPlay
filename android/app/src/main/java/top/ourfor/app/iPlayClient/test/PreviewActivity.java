@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -13,11 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Constraints;
 
-import java.util.List;
-
+import lombok.SneakyThrows;
 import top.ourfor.app.iPlayClient.view.PlayerSelectDelegate;
 import top.ourfor.app.iPlayClient.view.PlayerSelectModel;
-import top.ourfor.app.iPlayClient.view.PlayerSelectView;
 import top.ourfor.app.iPlayClient.view.PlayerView;
 
 public class PreviewActivity extends AppCompatActivity implements PlayerSelectDelegate<PlayerSelectModel<Object>> {
@@ -25,7 +22,8 @@ public class PreviewActivity extends AppCompatActivity implements PlayerSelectDe
     private ConstraintLayout rootView;
     private View playerSelectView;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SneakyThrows
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         String url = "https://test.mkv";

@@ -18,6 +18,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.Map;
 
+import lombok.SneakyThrows;
 import top.ourfor.app.iPlayClient.view.PlayerView;
 
 public class PlayerViewManager extends SimpleViewManager<View> {
@@ -33,13 +34,14 @@ public class PlayerViewManager extends SimpleViewManager<View> {
         return "PlayerView";
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @SneakyThrows
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @NonNull
     @Override
     protected View createViewInstance(@NonNull ThemedReactContext themedReactContext) {
         PlayerView playerView = new PlayerView(themedReactContext, "");
         playerView.setThemedReactContext(themedReactContext);
-        playerView.setOnPlayStateChange((state) -> {
+        playerView.setOnPlayStateChange(state -> {
             WritableMap event = Arguments.createMap();
             state.forEach((k, v) -> {
                 if (v instanceof Double) {
@@ -53,7 +55,6 @@ public class PlayerViewManager extends SimpleViewManager<View> {
             ReactContext context = themedReactContext;
             context.getJSModule(RCTEventEmitter.class)
                     .receiveEvent(playerView.getId(), "onPlayStateChange", event);
-            return null;
         });
         return playerView;
     }

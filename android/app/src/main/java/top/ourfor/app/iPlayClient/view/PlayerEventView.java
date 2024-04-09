@@ -18,8 +18,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.Setter;
 import top.ourfor.lib.mpv.TrackItem;
 
+@Setter
 public class PlayerEventView extends ConstraintLayout implements GestureDetector.OnGestureListener, PlayerSelectDelegate<PlayerSelectModel<Object>> {
     protected static final String TAG = "PlayerEventView";
     private GestureDetector detector;

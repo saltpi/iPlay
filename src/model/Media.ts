@@ -1,6 +1,8 @@
 import { UserData } from "./UserData"
 
 export interface Media {
+    SortName: String
+    DateCreated: String
     AirDays: string[]
     BackdropImageTags: string[]
     CanDelete: boolean

@@ -4,12 +4,15 @@ import android.content.Context;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
+
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Getter
 public class PlayerContentView extends SurfaceView implements SurfaceHolder.Callback {
     public Player viewModel;
-    private String filePath = null;
+    public String filePath = null;
 
     public PlayerContentView(Context context) {
         super(context);
@@ -53,7 +56,7 @@ public class PlayerContentView extends SurfaceView implements SurfaceHolder.Call
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-        viewModel.resize("${width}x$height");
+        viewModel.resize(width+"x"+height);
     }
 
     @Override

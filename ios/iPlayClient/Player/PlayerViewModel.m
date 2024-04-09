@@ -236,6 +236,94 @@ static dispatch_queue_t mpvEventRunloop = nil;
     mpv_set_property(self.mpv, "keepaspect", MPV_FORMAT_FLAG, &flag);
 }
 
+- (NSArray<PlayerTrackModel *> *)tracks {
+    if (!self.mpv) return nil;
+    NSMutableArray<PlayerTrackModel *> *tracks = [NSMutableArray new];
+    long count = 0;
+    mpv_get_property(self.mpv, "track-list/count", MPV_FORMAT_INT64, &count);
+    for (int i = 0; i < count; i++) {
+        const char *key = [[NSString stringWithFormat:@"track-list/%d/type", i] cStringUsingEncoding:NSUTF8StringEncoding];
+        NSString *type = @(mpv_get_property_string(self.mpv, key));
+        key = [[NSString stringWithFormat:@"track-list/%d/id", i] cStringUsingEncoding:NSUTF8StringEncoding];
+        long ID = 0;
+        mpv_get_property(self.mpv, key, MPV_FORMAT_INT64, &ID);
+        key = [[NSString stringWithFormat:@"track-list/%d/lang", i] cStringUsingEncoding:NSUTF8StringEncoding];
+        NSString *lang = @(mpv_get_property_string(self.mpv, key));
+        key = [[NSString stringWithFormat:@"track-list/%d/title", i] cStringUsingEncoding:NSUTF8StringEncoding];
+        NSString *title = @(mpv_get_property_string(self.mpv, key) ?: "");
+        PlayerTrackModel *model = [PlayerTrackModel new];
+        model.title = title;
+        model.ID = @(ID).stringValue;
+        model.lang = lang;
+        if ([type isEqual:@"sub"]) {
+            model.type = PlayerTrackTypeSubtitle;
+        } else if ([type isEqual:@"audio"]) {
+            model.type = PlayerTrackTypeAudio;
+        } else {
+            model.type = PlayerTrackTypeVideo;
+        }
+        [tracks addObject:model];
+    }
+    return tracks;
+}
+
+- (NSArray<PlayerTrackModel *> *)audios {
+    NSArray<PlayerTrackModel *> *tracks = [self tracks];
+    NSArray<PlayerTrackModel *> *audios = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PlayerTrackModel *obj, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return obj.type == PlayerTrackTypeAudio;
+    }]];
+    return audios;
+}
+
+- (NSArray<PlayerTrackModel *> *)subtitles {
+    NSArray<PlayerTrackModel *> *tracks = [self tracks];
+    NSArray<PlayerTrackModel *> *subtitles = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PlayerTrackModel *obj, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return obj.type == PlayerTrackTypeSubtitle;
+    }]];
+    return subtitles;
+}
+
+- (NSArray<PlayerTrackModel *> *)videos {
+    NSArray<PlayerTrackModel *> *tracks = [self tracks];
+    NSArray<PlayerTrackModel *> *videos = [tracks filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PlayerTrackModel *obj, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return obj.type == PlayerTrackTypeVideo;
+    }]];
+    return videos;
+}
+
+- (NSString *)currentAudioID {
+    if (!self.mpv) return nil;
+    return @(mpv_get_property_string(self.mpv, "aid"));
+}
+
+- (NSString *)currentVideoID {
+    if (!self.mpv) return nil;
+    return @(mpv_get_property_string(self.mpv, "vid"));
+}
+
+- (NSString *)currentSubtitleID {
+    if (!self.mpv) return nil;
+    return @(mpv_get_property_string(self.mpv, "sid"));
+}
+
+- (void)useSubtitle:(NSString *)ID {
+    if (!self.mpv) return;
+    const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_property_string(self.mpv, "sid", value);
+}
+
+- (void)useAudio:(NSString *)ID {
+    if (!self.mpv) return;
+    const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_property_string(self.mpv, "aid", value);
+}
+
+- (void)useVideo:(NSString *)ID {
+    if (!self.mpv) return;
+    const char *value = [ID cStringUsingEncoding:NSUTF8StringEncoding];
+    mpv_set_property_string(self.mpv, "vid", value);
+}
+
 - (void)quit {
     if (!self.mpv) return;
     mpv_unobserve_property(self.mpv, 0);

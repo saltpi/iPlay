@@ -8,12 +8,19 @@ import { EmbyConfig } from '@helper/env';
 import { Emby } from '@api/emby';
 import { View, ViewDetail } from '@model/View';
 import { PlaybackInfo } from '@model/PlaybackInfo';
-import _ from 'lodash';
+import _, { Many } from 'lodash';
 import { Media } from '@model/Media';
 import { Map } from '@model/Map';
 import { Actor } from '@model/Actor';
 import { logger } from '@helper/log';
 import { CollectionOptions } from '@api/view';
+
+export enum SortType {
+    NameAsc,
+    NameDesc,
+    AddedDateAsc,
+    AddedDateDesc,
+}
 
 interface EmbyState {
     site: EmbySite|null;
@@ -25,6 +32,7 @@ interface EmbyState {
         actors?: Map<string, Actor>
         albumMedia?: Map<string, Media[]>
     }
+    sortType?: SortType
 }
 
 const initialState: EmbyState = {
@@ -202,7 +210,35 @@ export const slice = createSlice({
         removeSite: (state, action: PayloadAction<string>) => {
             const id = action.payload
             state.sites = state.sites?.filter(site => site.id !== id)
-        }
+        },
+        updateAlbumSortType: (state, action: PayloadAction<SortType>) => {
+            const sortType = action.payload
+            state.sortType = sortType
+            const albums = state.source.albumMedia
+            if (!albums) return
+            const keywords = sortType == SortType.NameAsc ? ["SortName"] : ["DateCreated", "SortName"]
+            Object.entries(albums).forEach(([key, medias]) => {
+                if (!medias) return
+                const sortedMedias = _.sortBy(medias, keywords)
+                albums[key] = sortedMedias
+            })
+            state.source.albumMedia = albums
+        },
+        updateToNextAlbumSortType: (state) => {
+            const sortType = state.sortType
+            const newSortType = ((sortType ?? 0) + 1)%4
+            state.sortType = newSortType
+            const albums = state.source.albumMedia
+            if (!albums) return
+            const keywords = newSortType == SortType.NameAsc ? ["SortName"] : ["DateCreated", "SortName"]
+            const order: Many<'asc'|'desc'> = newSortType % 2 == 0 ? ['asc', 'asc'] : ['desc', 'desc']
+            Object.entries(albums).forEach(([key, medias]) => {
+                if (!medias) return
+                const sortedMedias = _.orderBy(medias, keywords, order)
+                albums[key] = sortedMedias
+            })
+            state.source.albumMedia = albums
+        },
     },
     extraReducers: builder => {
         builder.addCase(loginToSiteAsync.pending, state => {
@@ -270,7 +306,13 @@ export const slice = createSlice({
     },
 });
 
-export const { switchToSite, removeSite, updateCurrentEmbySite, patchCurrentEmbySite } = slice.actions;
+export const { 
+    switchToSite, removeSite,
+    updateCurrentEmbySite, 
+    patchCurrentEmbySite,
+    updateAlbumSortType,
+    updateToNextAlbumSortType
+} = slice.actions;
 export const getActiveEmbySite = (state: RootState) => state.emby;
 
 

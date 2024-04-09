@@ -9,6 +9,12 @@ export enum ColorScheme {
     Light,
     Dark
 }
+
+export enum LayoutType {
+    Card,
+    Line,
+}
+
 interface ThemeState {
     routeName: string;
     hideMenuBar: boolean;
@@ -27,6 +33,7 @@ interface ThemeState {
     backgroundColor?: string;
     barStyle?: 'default' | 'light-content' | 'dark-content';
     headerTitleAlign?: 'left' | 'center';
+    albumLayoutType?: LayoutType;
 }
 
 type ThemeUpdateFunction = (state: ThemeState) => ThemeState;
@@ -77,6 +84,9 @@ export const slice = createSlice({
             } else {
                 _.merge(state, action.payload)
             }
+        },
+        updateToNextAlbumLayoutType: (state) => {
+            state.albumLayoutType = state.albumLayoutType === LayoutType.Card ? LayoutType.Line : LayoutType.Card;
         }
     },
 });
@@ -136,7 +146,8 @@ export const {
     updateMenuBarPaddingOffset, 
     updateMenuBarHeight,
     updateShowVideoLink,
-    updateTheme
+    updateTheme,
+    updateToNextAlbumLayoutType
 } = slice.actions;
 
 export default slice.reducer;

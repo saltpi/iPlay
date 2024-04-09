@@ -6,6 +6,7 @@
 //
 
 #import "PlayerEventView.h"
+#import "PlayerMediaSelectView.h"
 
 @interface PlayerEventView () <UIGestureRecognizerDelegate>
 
@@ -21,6 +22,35 @@
     }
 
     return self;
+}
+
+- (BOOL)isSelectPresent {
+    return self.selectView.superview != nil;
+}
+
+- (void)showMediaSelectView:(NSArray<PlayerTrackModel *> *)items currentID:(NSString *)ID {
+    NSMutableArray<PlayerMediaSelectItemModel *> *datasource = [NSMutableArray new];
+    for (PlayerTrackModel *item in items) {
+        PlayerMediaSelectItemModel *model = [PlayerMediaSelectItemModel new];
+        model.item = item;
+        model.isSelected = [item.ID isEqual:ID];
+        [datasource addObject:model];
+    }
+    if (![self isSelectPresent]) {
+        [self addSubview:self.selectView];
+        @weakify(self);
+        [self.selectView remakeConstraints:^(MASConstraintMaker *make) {
+            @strongify(self);
+            make.center.equalTo(self);
+            make.width.equalTo(self).multipliedBy(0.65);
+            make.height.equalTo(self).multipliedBy(0.75);
+            make.height.lessThanOrEqualTo(600);
+            make.width.lessThanOrEqualTo(800);
+
+        }];
+    }
+    self.selectView.datasource = datasource;
+    [self.selectView reloadData];
 }
 
 
@@ -41,10 +71,18 @@
     [self addGestureRecognizer:panRecognizer];
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
+    tapRecognizer.cancelsTouchesInView = NO;
     [self addGestureRecognizer:tapRecognizer];
 }
 
 - (void)_handleTap:(UITapGestureRecognizer *)gesture {
+    if ([self isSelectPresent]) {
+        CGPoint point = [gesture locationInView:self.selectView];
+        if (!CGRectContainsPoint(self.selectView.bounds, point)) {
+            [self.selectView dismiss];
+        }
+        return;
+    }
     // ignore areas
     if (self.eventDelegate) {
         [self.eventDelegate playerGestureEvent:gesture location:CGPointZero];
@@ -61,7 +99,8 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     for (UIView *view in self.ignoreViews) {
         CGPoint pointInView = [self convertPoint:point toView:view];
-        if ([view pointInside:pointInView withEvent:event]) {
+        if ([view pointInside:pointInView withEvent:event] &&
+            view.superview.alpha != 0) {
             return view;
         }
     }
@@ -73,7 +112,8 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     for (UIView *view in self.ignoreViews) {
         CGPoint point = [touch locationInView:view];
-        if ([view pointInside:point withEvent:nil]) {
+        if ([view pointInside:point withEvent:nil] &&
+            view.superview.alpha != 0) {
             return NO;
         }
     }
@@ -116,6 +156,14 @@
         _numberValueView.hidden = YES;
     }
     return _numberValueView;
+}
+
+- (PlayerMediaSelectView *)selectView {
+    if (!_selectView) {
+        _selectView = [PlayerMediaSelectView new];
+        _selectView.userInteractionEnabled = YES;
+    }
+    return _selectView;
 }
 
 @end
