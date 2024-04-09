@@ -515,7 +515,6 @@ static dispatch_queue_t mpvEventRunloop = nil;
         }
     }
 
-    NSLog(@"seekable ranges: %@", seekables);
     self.seekableRanges = seekables;
     [self onPlaystateUpdate:PlayEventTypeOnSeekableRanges state:1];
 }
