@@ -25,9 +25,37 @@ static inline mpv_handle * get_attached_mpv(JNIEnv *env, jobject obj) {
     return reinterpret_cast<mpv_handle *>(env->GetLongField(obj, fid));
 }
 
+static inline jobjectArray get_cached_ranges(JNIEnv *env, jobject obj) {
+    jclass cls = env->GetObjectClass(obj);
+    jfieldID fid = env->GetFieldID(cls, "cachedRanges", "[Ltop/ourfor/lib/mpv/SeekableRange;");
+    return reinterpret_cast<jobjectArray>(env->GetObjectField(obj, fid));
+}
+
+static inline void set_cached_ranges_count(JNIEnv *env, jobject obj, int value) {
+    jclass cls = env->GetObjectClass(obj);
+    jfieldID fid = env->GetFieldID(cls, "cachedRangeCount", "I");
+    env->SetIntField(obj, fid, value);
+}
+
 static inline void set_attached_mpv(JNIEnv *env, jobject obj, mpv_handle *ctx) {
     jclass cls = env->GetObjectClass(obj);
     jfieldID fid = env->GetFieldID(cls, "holder", "J");
+    jclass eventClass = env->FindClass("top/ourfor/lib/mpv/MPV$Event");
+    if (eventClass != nullptr) {
+        jclass rangeCls = env->FindClass("top/ourfor/lib/mpv/SeekableRange");
+        auto cacheCount = 10;
+        auto cachedRanges = env->NewObjectArray(cacheCount, rangeCls, NULL);
+        jfieldID cachedRangesFid = env->GetFieldID(cls, "cachedRanges", "[Ltop/ourfor/lib/mpv/SeekableRange;");
+        jfieldID startFieldID = env->GetFieldID(rangeCls, "start", "D");
+        jfieldID endFieldID = env->GetFieldID(rangeCls, "end", "D");
+        for (int i = 0; i < cacheCount; i++) {
+            jobject seekable = env->NewObject(rangeCls, env->GetMethodID(cls, "<init>", "()V"));
+            env->SetDoubleField(seekable, startFieldID, 0.0);
+            env->SetDoubleField(seekable, endFieldID, 0.0);
+            env->SetObjectArrayElement(cachedRanges, i, seekable);
+        }
+        env->SetObjectField(obj, cachedRangesFid, cachedRanges);
+    }
     env->SetLongField(obj, fid, reinterpret_cast<jlong>(ctx));
 }
 
@@ -205,10 +233,12 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
     jfieldID propFieldID = env->GetFieldID(cls, "prop", "Ljava/lang/String;");
     jfieldID formatFieldID = env->GetFieldID(cls, "format", "I");
     jfieldID replyFieldID = env->GetFieldID(cls, "reply", "I");
+    jfieldID dataFieldID = env->GetFieldID(cls, "data", "J");
     if (typeFieldID == nullptr ||
         propFieldID == nullptr ||
         formatFieldID == nullptr ||
-        replyFieldID == nullptr) {
+        replyFieldID == nullptr ||
+        dataFieldID == nullptr) {
         return nullptr; // field not found
     }
 
@@ -223,6 +253,7 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
         mpv_event_property *data = static_cast<mpv_event_property *>(event->data);
         env->SetIntField(obj, formatFieldID, reinterpret_cast<int>(data->format));
         env->SetObjectField(obj, propFieldID, env->NewStringUTF(data->name));
+        env->SetLongField(obj, dataFieldID, reinterpret_cast<jlong>(data->data));
     }
     return obj;
 }
@@ -253,10 +284,7 @@ Java_top_ourfor_lib_mpv_MPV_getStringProperty(JNIEnv *env, jobject thiz, jstring
 }
 extern "C"
 JNIEXPORT jobjectArray JNICALL
-Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
-    mpv_handle *ctx = get_attached_mpv(env, thiz);
-    if (ctx == nullptr) return nullptr;
-
+Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz, jlong pointer) {
     jclass cls = env->FindClass("top/ourfor/lib/mpv/SeekableRange");
     if (cls == nullptr) {
         return nullptr; // class not found
@@ -268,8 +296,7 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
         return nullptr; // field not found
     }
 
-    mpv_node node;
-    mpv_get_property(ctx, "demuxer-cache-state", MPV_FORMAT_NODE, &node);
+    mpv_node node = *reinterpret_cast<mpv_node *>(pointer);
     for (int i = 0; i < node.u.list->num; i++) {
         if (strcmp(node.u.list->keys[i], "seekable-ranges") != 0) {
             continue;
@@ -277,12 +304,12 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
 
         if (node.u.list->values[i].format == MPV_FORMAT_NODE_ARRAY) {
             mpv_node_list seekable_ranges = *(node.u.list->values[i].u.list);
-            auto array = env->NewObjectArray(seekable_ranges.num, cls, NULL);
+            auto array = get_cached_ranges(env, thiz);
 
             for (int j = 0; j < seekable_ranges.num; j++) {
                 mpv_node range = seekable_ranges.values[j];
 
-                jobject seekable = env->NewObject(cls, env->GetMethodID(cls, "<init>", "()V"));
+                auto seekable = env->GetObjectArrayElement(array, j);
                 if (seekable == nullptr) {
                     return nullptr; // object not created
                 }
@@ -300,10 +327,9 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
 
                 env->SetObjectArrayElement(array, j, seekable);
             }
-
+            set_cached_ranges_count(env, thiz, seekable_ranges.num);
             return array;
         }
     }
-
     return nullptr;
 }

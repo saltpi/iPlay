@@ -6,9 +6,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "VideoPlayer.h"
 #import "PlayerNumberValueView.h"
-#import <MediaPlayer/MediaPlayer.h>
+#import "PlayerSlider.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,8 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIView *fullscreenButton;
 @property (nonatomic, strong) UIProgressView *progressBar;
 @property (nonatomic, strong) NSProgress *progress;
-@property (nonatomic, strong) UISlider *sliderBar;
-@property (nonatomic, strong) UIImageView *cachedRangeView;
+@property (nonatomic, strong) PlayerSlider *sliderBar;
 @property (nonatomic, strong) UILabel *durationLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;

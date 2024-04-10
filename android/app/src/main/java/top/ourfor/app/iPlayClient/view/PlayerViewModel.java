@@ -244,7 +244,7 @@ public class PlayerViewModel implements Player {
                         } else if (e.format == MPV_FORMAT_FLAG) {
                             value = mpv.getBoolProperty(e.prop);
                         } else if (e.format == MPV_FORMAT_NODE && e.prop.equals("demuxer-cache-state")) {
-                            value = mpv.seekableRanges();
+                            value = mpv.seekableRanges(e.data);
                         }
                         delegate.onPropertyChange(e.prop, value);
                     }

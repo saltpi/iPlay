@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-iPlayClient-iPlayClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-iPlayClient-iPlayClientTests.a */; };
+		881F2E362BC6493A00C6F54B /* PlayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 881F2E352BC6493A00C6F54B /* PlayerSlider.m */; };
 		8835135E2BC126E20012C230 /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 88B833BF2BBEA5040099D4CB /* MPVKit */; };
 		883513642BC40BB60012C230 /* PlayerMediaSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513632BC40BB60012C230 /* PlayerMediaSelectView.m */; };
 		883513672BC414860012C230 /* PlayerMediaSelectItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 883513662BC414860012C230 /* PlayerMediaSelectItemView.m */; };
@@ -67,6 +68,8 @@
 		5709B34CF0A7D63546082F79 /* Pods-iPlayClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient/Pods-iPlayClient.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-iPlayClient-iPlayClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-iPlayClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iPlayClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		881F2E342BC6493A00C6F54B /* PlayerSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSlider.h; path = Player/PlayerSlider.h; sourceTree = "<group>"; };
+		881F2E352BC6493A00C6F54B /* PlayerSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerSlider.m; path = Player/PlayerSlider.m; sourceTree = "<group>"; };
 		883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSystemVolumeView.h; path = Bean/PlayerSystemVolumeView.h; sourceTree = "<group>"; };
 		883513622BC40BB60012C230 /* PlayerMediaSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectView.h; path = Player/PlayerMediaSelectView.h; sourceTree = "<group>"; };
 		883513632BC40BB60012C230 /* PlayerMediaSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectView.m; path = Player/PlayerMediaSelectView.m; sourceTree = "<group>"; };
@@ -325,6 +328,8 @@
 				883513752BC562070012C230 /* PlayerSeekableModel.m */,
 				883513772BC569720012C230 /* PlayerSeekableImageView.h */,
 				883513782BC569720012C230 /* PlayerSeekableImageView.m */,
+				881F2E342BC6493A00C6F54B /* PlayerSlider.h */,
+				881F2E352BC6493A00C6F54B /* PlayerSlider.m */,
 			);
 			name = Player;
 			path = iPlayClient;
@@ -594,6 +599,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				883513732BC446230012C230 /* PlayerTrackModel.m in Sources */,
+				881F2E362BC6493A00C6F54B /* PlayerSlider.m in Sources */,
 				8856A4E02BBC191B00CC1136 /* UIView+FindViewController.m in Sources */,
 				8856A4E72BBC191B00CC1136 /* PlayerViewModel.m in Sources */,
 				8856A4EA2BBC191B00CC1136 /* RootViewController.m in Sources */,

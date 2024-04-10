@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
-import android.graphics.drawable.LayerDrawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.view.ViewGroup;
@@ -245,10 +244,8 @@ public class PlayerView extends ConstraintLayout
             }
             val ranges = (SeekableRange[])value;
             double maxValue = duration;
-            log.info("seekable ranges {}, {}", value, maxValue);
-            post(() -> {
-                controlView.cachedView.setSegmentPart(List.of(ranges), maxValue);
-            });
+            log.info("seekable range {}, max value {}", ranges, maxValue);
+            controlView.progressBar.setRanges(List.of(ranges), maxValue);
         }
     }
 

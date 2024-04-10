@@ -8,6 +8,8 @@ import java.util.List;
 public class MPV {
     // native mpv c pointer
     private long holder;
+    public SeekableRange[] cachedRanges;
+    public int cachedRangeCount;
 
     static {
         String[] libs = {"mpv", "player"};
@@ -39,7 +41,7 @@ public class MPV {
     public native int setDoubleProperty(String key, double value);
 
     public native int setStringProperty(String key, String value);
-    public native SeekableRange[] seekableRanges();
+    public native SeekableRange[] seekableRanges(long pointer);
 
     public native int observeProperty(long reply_userdata, String name, int format);
     public native Event waitEvent(double timeout);
@@ -51,6 +53,7 @@ public class MPV {
         public int format;
         // reply_userdata
         public int reply;
+        public long data;
     }
 
     public static int MPV_FORMAT_NONE             = 0;

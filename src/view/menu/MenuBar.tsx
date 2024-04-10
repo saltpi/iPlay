@@ -112,6 +112,7 @@ const kIconSize = {
 }
 
 const kInactiveOpacity = 0.25;
+const hitSlop = {top: 10, bottom: 10, left: 10, right: 10};
 
 export function MenuBar() {
     const active = useAppSelector(getActiveMenu);
@@ -162,6 +163,7 @@ export function MenuBar() {
             <Pressable
                 key={i}
                 style={style.menuItem}
+                hitSlop={hitSlop}
                 onLongPress={() => item?.onLongPress?.(dispatch)}
                 onPress={() => onActive(item.type)}>
                 <View>
