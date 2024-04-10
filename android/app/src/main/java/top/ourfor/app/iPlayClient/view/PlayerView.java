@@ -208,7 +208,7 @@ public class PlayerView extends ConstraintLayout
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onPropertyChange(String name, Object value) {
+    public void onPropertyChange(PlayerPropertyType name, Object value) {
         if (this.controlView != null) {
             this.controlView.post(() -> controlView.onPropertyChange(name, value));
         }
@@ -216,21 +216,21 @@ public class PlayerView extends ConstraintLayout
             return;
         }
 
-        if ("time-pos".equals(name) ||
-                "pause".equals(name) ||
-                "paused-for-cache".equals(name)) {
+        if (name == PlayerPropertyType.TimePos ||
+            name == PlayerPropertyType.PausedForCache||
+            name == PlayerPropertyType.Pause) {
             PlayEventType state = PlayEventType.PlayEventTypeOnProgress;
             HashMap<String, Object> data = new HashMap<>();
-            if ("time-pos".equals(name)) {
+            if (name == PlayerPropertyType.TimePos) {
                 state = PlayEventType.PlayEventTypeOnProgress;
                 position = (Double) value;
                 data.put("duration", duration);
                 data.put("position", position);
-            } else if ("pause".equals(name)) {
+            } else if (name == PlayerPropertyType.Pause) {
                 state = PlayEventType.PlayEventTypeOnPause;
                 data.put("duration", duration);
                 data.put("position", position);
-            } else if ("paused-for-cache".equals(name)) {
+            } else if (name == PlayerPropertyType.PausedForCache) {
                 state = PlayEventType.PlayEventTypeOnPauseForCache;
             }
 
@@ -238,9 +238,9 @@ public class PlayerView extends ConstraintLayout
             if (onPlayStateChange != null) {
                 onPlayStateChange.accept(data);
             }
-        } else if ("duration".equals(name)) {
+        } else if (name == PlayerPropertyType.Duration) {
             duration = (Double) value;
-        } else if ("demuxer-cache-state".equals(name)) {
+        } else if (name == PlayerPropertyType.DemuxerCacheState) {
             if (!(value instanceof SeekableRange[])) {
                 return;
             }

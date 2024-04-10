@@ -233,6 +233,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
         {
             leftToLeft = progressBar.getId();
             bottomToTop = progressBar.getId();
+            matchConstraintPercentWidth = 0.75f;
             bottomMargin = 10;
         }
     };
@@ -254,12 +255,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
                 log.debug("play");
                 boolean isPlaying = player != null && player.isPlaying();
                 int resId = isPlaying ? R.drawable.play : R.drawable.pause;
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateIcon(playButton, resId);
-                    }
-                });
+                post(() -> updateIcon(playButton, resId));
                 if (isPlaying) {
                     player.pause();
                 } else {
@@ -341,17 +337,17 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
     }
 
     @Override
-    public void onPropertyChange(String name, Object value) {
+    public void onPropertyChange(PlayerPropertyType name, Object value) {
         if (value == null) {
             return;
         }
-        if (name.equals("duration")) {
+        if (name == PlayerPropertyType.Duration) {
             double duration = (double) value;
             progressBar.setMax((int) duration);
             durationLabel.setText(Double.toString(duration));
             durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
             requestLayout();
-        } else if (name.equals("time-pos")) {
+        } else if (name == PlayerPropertyType.TimePos) {
             if (!shouldUpdateProgress) {
                 return;
             }
@@ -359,6 +355,11 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
             double time = (double) value;
             progressBar.setProgress((int) time);
             durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
+        } else if (name == PlayerPropertyType.EofReached) {
+            boolean isEof = (boolean)value;
+            if (isEof) {
+                post(() -> updateIcon(playButton, R.drawable.play));
+            }
         }
     }
 

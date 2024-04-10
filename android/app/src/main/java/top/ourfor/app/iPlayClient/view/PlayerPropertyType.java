@@ -9,5 +9,6 @@ public enum PlayerPropertyType {
     PausedForCache,
     Pause,
     TrackList,
-    DemuxerCacheState
+    DemuxerCacheState,
+    EofReached
 }

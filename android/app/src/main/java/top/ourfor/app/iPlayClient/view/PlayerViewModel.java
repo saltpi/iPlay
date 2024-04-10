@@ -2,12 +2,14 @@ package top.ourfor.app.iPlayClient.view;
 
 import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.DemuxerCacheState;
 import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.Duration;
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.EofReached;
 import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.Pause;
 import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.PausedForCache;
 import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.TimePos;
 import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.TrackList;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_PROPERTY_CHANGE;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_SHUTDOWN;
+import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_FLAG;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_NODE;
 import static top.ourfor.lib.mpv.TrackItem.AudioTrackName;
 import static top.ourfor.lib.mpv.TrackItem.SubtitleTrackName;
@@ -233,6 +235,7 @@ public class PlayerViewModel implements Player {
             mpv.observeProperty(Pause.ordinal(), "pause", MPV.MPV_FORMAT_FLAG);
             mpv.observeProperty(TrackList.ordinal(), "track-list", MPV.MPV_FORMAT_NONE);
             mpv.observeProperty(DemuxerCacheState.ordinal(), "demuxer-cache-state", MPV_FORMAT_NODE);
+            mpv.observeProperty(EofReached.ordinal(), "eof-reached", MPV_FORMAT_FLAG);
             eventLoop = new Thread(() -> {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);
@@ -258,7 +261,7 @@ public class PlayerViewModel implements Player {
 
                     Object value = null;
                     switch (reply) {
-                        case Pause, PausedForCache: {
+                        case Pause, PausedForCache, EofReached: {
                             value = mpv.getBoolProperty(e.prop);
                             break;
                         }
@@ -274,7 +277,7 @@ public class PlayerViewModel implements Player {
                             break;
                         }
                     }
-                    delegate.onPropertyChange(e.prop, value);
+                    delegate.onPropertyChange(reply, value);
                 }
             });
         }
