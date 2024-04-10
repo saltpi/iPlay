@@ -35,9 +35,9 @@ public class PlayerSlider extends androidx.appcompat.widget.AppCompatSeekBar {
             int width = getWidth();
             int height = getHeight();
             int offsetX = getPaddingLeft();
-            int offsetY = getPaddingTop() + 1;
+            int offsetY = getPaddingTop() + 2;
             int trackWidth = width - getPaddingLeft() - getPaddingRight();
-            int trackHeight = height - getPaddingTop() - getPaddingBottom() - 2;
+            int trackHeight = height - getPaddingTop() - getPaddingBottom() - 4;
             for (val range : ranges) {
                 paint.setColor(Color.GREEN);
                 cacheLine.set(
