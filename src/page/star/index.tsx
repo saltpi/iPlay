@@ -4,7 +4,7 @@ import { useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
 import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 import { MediaCard } from "@view/MediaCard";
-import { Spin } from "@view/Spin";
+import { Spin, SpinBox } from "@view/Spin";
 import { StatusBar } from "@view/StatusBar";
 import { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -82,7 +82,7 @@ export function Page(props: PropsWithNavigation<"default">) {
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={{flex: 1}}>
                 {loading ? 
-                <Spin color={theme.color} /> 
+                <SpinBox color={theme.color} /> 
                 : null}
                 <View>
                     {favoriteMovies.length > 0 ? 
