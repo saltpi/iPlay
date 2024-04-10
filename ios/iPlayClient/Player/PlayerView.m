@@ -255,8 +255,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
         }
         case PlayEventTypeOnSeekableRanges: {
             NSArray<PlayerSeekableModel *> *ranges = self.player.seekableRanges;
-            UIImage *image = [PlayerSeekableImageView seekableImage:ranges maxValue:self.player.duration];
-            self.controlView.cachedRangeView.image = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+            [self.controlView.sliderBar setSeekableRanges:ranges maxValue:self.player.duration];
             break;
         }
         default:
