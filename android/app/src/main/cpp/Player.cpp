@@ -43,7 +43,7 @@ static inline void set_attached_mpv(JNIEnv *env, jobject obj, mpv_handle *ctx) {
     jclass eventClass = env->FindClass("top/ourfor/lib/mpv/MPV$Event");
     if (eventClass != nullptr) {
         jclass rangeCls = env->FindClass("top/ourfor/lib/mpv/SeekableRange");
-        auto cacheCount = 5;
+        auto cacheCount = 10;
         auto cachedRanges = env->NewObjectArray(cacheCount, rangeCls, NULL);
         jfieldID cachedRangesFid = env->GetFieldID(cls, "cachedRanges", "[Ltop/ourfor/lib/mpv/SeekableRange;");
         jfieldID startFieldID = env->GetFieldID(rangeCls, "start", "D");
