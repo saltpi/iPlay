@@ -31,7 +31,7 @@
         make.left.equalTo(self).with.offset(6);
         make.top.equalTo(self).with.offset(6);
         make.bottom.equalTo(self).with.offset(-8);
-        make.size.equalTo(@24);
+        make.size.equalTo(@22);
     }];
     
     [self.sliderBar remakeConstraints:^(MASConstraintMaker *make) {
@@ -66,6 +66,17 @@
 }
 
 
+- (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value {
+    return CGRectMake(0, 0, 20, 20);
+}
+
+- (UIImage *)resizeImage:(UIImage *)image toSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
 
 #pragma mark - Getter
 - (UISlider *)sliderBar {
@@ -73,6 +84,8 @@
         UISlider *sliderBar = [[UISlider alloc] init];
         sliderBar.tintColor = UIColor.whiteColor;
         sliderBar.continuous = YES;
+        UIImage *thumbImage = [self resizeImage:[sliderBar thumbImageForState:UIControlStateNormal] toSize:CGSizeMake(10, 10)];
+        [sliderBar setThumbImage:thumbImage forState:UIControlStateNormal];
         _sliderBar = sliderBar;
     }
     return _sliderBar;

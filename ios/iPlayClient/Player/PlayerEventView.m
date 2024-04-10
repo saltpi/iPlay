@@ -28,6 +28,10 @@
     return self.selectView.superview != nil;
 }
 
+- (BOOL)isNumberValueViewPresent {
+    return self.numberValueView.hidden == NO;
+}
+
 - (void)showMediaSelectView:(NSArray<PlayerTrackModel *> *)items currentID:(NSString *)ID {
     NSMutableArray<PlayerMediaSelectItemModel *> *datasource = [NSMutableArray new];
     for (PlayerTrackModel *item in items) {
@@ -83,6 +87,12 @@
         }
         return;
     }
+    
+    if ([self isNumberValueViewPresent]) {
+        [self showNumberValueIndicator:NO];
+        return;
+    }
+    
     // ignore areas
     if (self.eventDelegate) {
         [self.eventDelegate playerGestureEvent:gesture location:CGPointZero];
@@ -147,12 +157,10 @@
         _numberValueView.maxValue = 100.f;
         _numberValueView.minValue = 0.f;
         _numberValueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
-        _numberValueView.layer.borderWidth = 1;
         _numberValueView.layer.cornerRadius = 7;
         _numberValueView.layer.masksToBounds = YES;
         _numberValueView.sliderBar.enabled = NO;
         _numberValueView.clipsToBounds = YES;
-        _numberValueView.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
         _numberValueView.hidden = YES;
     }
     return _numberValueView;

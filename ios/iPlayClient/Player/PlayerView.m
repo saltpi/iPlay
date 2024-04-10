@@ -128,6 +128,10 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
             }
         }
         case PlayerGestureTypeNone: {
+            if ([self.eventsView isNumberValueViewPresent]) {
+                [self.eventsView showVolumeIndicator:NO];
+                [self.eventsView showBrightnessIndicator:NO];
+            }
             break;
         }
         default:

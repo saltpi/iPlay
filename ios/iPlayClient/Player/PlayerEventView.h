@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<PlayerEventDelegate> eventDelegate;
 @property (nonatomic, strong) PlayerMediaSelectView *selectView;
 
+- (BOOL)isNumberValueViewPresent;
 - (void)showBrightnessIndicator:(BOOL)visible;
 - (void)showVolumeIndicator:(BOOL)visible;
 
