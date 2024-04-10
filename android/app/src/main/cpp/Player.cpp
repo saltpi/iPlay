@@ -296,7 +296,9 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz, jlong poin
         return nullptr; // field not found
     }
 
-    mpv_node node = *reinterpret_cast<mpv_node *>(pointer);
+    mpv_node *data = reinterpret_cast<mpv_node *>(pointer);
+    if (data == nullptr) return nullptr;
+    mpv_node node = *data;
     for (int i = 0; i < node.u.list->num; i++) {
         if (strcmp(node.u.list->keys[i], "seekable-ranges") != 0) {
             continue;

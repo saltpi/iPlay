@@ -1,22 +1,24 @@
 package top.ourfor.app.iPlayClient.view;
 
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.DemuxerCacheState;
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.Duration;
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.Pause;
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.PausedForCache;
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.TimePos;
+import static top.ourfor.app.iPlayClient.view.PlayerPropertyType.TrackList;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_PROPERTY_CHANGE;
 import static top.ourfor.lib.mpv.MPV.MPV_EVENT_SHUTDOWN;
-import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_DOUBLE;
-import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_FLAG;
 import static top.ourfor.lib.mpv.MPV.MPV_FORMAT_NODE;
 import static top.ourfor.lib.mpv.TrackItem.AudioTrackName;
 import static top.ourfor.lib.mpv.TrackItem.SubtitleTrackName;
 
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
-import top.ourfor.app.iPlayClient.view.Player;
-import top.ourfor.app.iPlayClient.view.PlayerEventListener;
+import lombok.val;
 import top.ourfor.lib.mpv.MPV;
 import top.ourfor.lib.mpv.TrackItem;
 
@@ -70,6 +72,7 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void setVideoOutput(String value) {
+        if (mpv == null) return;
         mpv.setStringProperty("vo", value);
     }
 
@@ -80,6 +83,7 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void detach() {
+        if (mpv == null) return;
         mpv.setStringProperty("vo", "null");
 //        mpv.setOptionString("force-window", "no");
         mpv.setDrawable(null);
@@ -87,11 +91,13 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void loadVideo(String url) {
+        if (mpv == null) return;
         mpv.command("loadfile", url);
     }
 
     @Override
     public void resize(String newSize) {
+        if (mpv == null) return;
         mpv.setStringProperty("android-surface-size", newSize);
     }
 
@@ -221,38 +227,54 @@ public class PlayerViewModel implements Player {
 
     public void watch() {
         if (eventLoop ==  null) {
-            mpv.observeProperty(0, "time-pos", MPV.MPV_FORMAT_DOUBLE);
-            mpv.observeProperty(0, "duration", MPV.MPV_FORMAT_DOUBLE);
-            mpv.observeProperty(0, "paused-for-cache", MPV.MPV_FORMAT_FLAG);
-            mpv.observeProperty(0, "pause", MPV.MPV_FORMAT_FLAG);
-            mpv.observeProperty(0, "track-list", MPV.MPV_FORMAT_NONE);
-            mpv.observeProperty(PlayerPropertyType.DemuxerCacheState.ordinal(), "demuxer-cache-state", MPV_FORMAT_NODE);
+            mpv.observeProperty(TimePos.ordinal(), "time-pos", MPV.MPV_FORMAT_DOUBLE);
+            mpv.observeProperty(Duration.ordinal(), "duration", MPV.MPV_FORMAT_DOUBLE);
+            mpv.observeProperty(PausedForCache.ordinal(), "paused-for-cache", MPV.MPV_FORMAT_FLAG);
+            mpv.observeProperty(Pause.ordinal(), "pause", MPV.MPV_FORMAT_FLAG);
+            mpv.observeProperty(TrackList.ordinal(), "track-list", MPV.MPV_FORMAT_NONE);
+            mpv.observeProperty(DemuxerCacheState.ordinal(), "demuxer-cache-state", MPV_FORMAT_NODE);
             eventLoop = new Thread(() -> {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);
                     if (e == null) {
                         log.info("event is null");
-                        continue;
-                    }
-                    if (e.type == MPV_EVENT_SHUTDOWN) {
-                        log.info("close mpv player");
-                        if (mpv != null) mpv.destroy();
-                        mpv = null;
                         break;
                     }
 
-                    if (e.type == MPV_EVENT_PROPERTY_CHANGE) {
-                        if (delegate == null) return;
-                        Object value = null;
-                        if (e.format == MPV_FORMAT_DOUBLE) {
-                            value = mpv.getDoubleProperty(e.prop);
-                        } else if (e.format == MPV_FORMAT_FLAG) {
-                            value = mpv.getBoolProperty(e.prop);
-                        } else if (e.format == MPV_FORMAT_NODE && e.prop.equals("demuxer-cache-state")) {
-                            value = mpv.seekableRanges(e.data);
+                    if (e.type == MPV_EVENT_SHUTDOWN) {
+                        log.info("destroy mpv player");
+                        if (mpv != null) {
+                            mpv.destroy();
+                            mpv = null;
                         }
-                        delegate.onPropertyChange(e.prop, value);
+                        break;
                     }
+
+                    val reply = PlayerPropertyType.values()[e.reply];
+                    if (e.type != MPV_EVENT_PROPERTY_CHANGE ||
+                        delegate == null) {
+                        continue;
+                    }
+
+                    Object value = null;
+                    switch (reply) {
+                        case Pause, PausedForCache: {
+                            value = mpv.getBoolProperty(e.prop);
+                            break;
+                        }
+                        case Duration, TimePos: {
+                            value = mpv.getDoubleProperty(e.prop);
+                            break;
+                        }
+                        case DemuxerCacheState: {
+                            value = mpv.seekableRanges(e.data);
+                            break;
+                        }
+                        case TrackList: {
+                            break;
+                        }
+                    }
+                    delegate.onPropertyChange(e.prop, value);
                 }
             });
         }

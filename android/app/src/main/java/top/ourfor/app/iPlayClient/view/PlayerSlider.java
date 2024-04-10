@@ -31,7 +31,7 @@ public class PlayerSlider extends androidx.appcompat.widget.AppCompatSeekBar {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
-        if (ranges != null) {
+        if (ranges != null && maxValue >= 0.001) {
             int width = getWidth();
             int height = getHeight();
             int offsetX = getPaddingLeft();
