@@ -329,10 +329,8 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
                 env->SetObjectArrayElement(array, j, seekable);
             }
             set_cached_ranges_count(env, thiz, seekable_ranges.num);
-            mpv_free_node_contents(&node);
             return array;
         }
     }
-    mpv_free_node_contents(&node);
     return nullptr;
 }
