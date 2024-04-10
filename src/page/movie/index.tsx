@@ -54,11 +54,11 @@ const style = StyleSheet.create({
     },
     playButton: {
         position: "absolute",
-        width: 72,
-        height: 72,
+        width: 56,
+        height: 56,
         aspectRatio: 1,
         overflow: "hidden",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
         borderRadius: 36,
         top: "50%",
         left: "50%",
@@ -69,8 +69,8 @@ const style = StyleSheet.create({
     play: {
         flexGrow: 0,
         flexShrink: 0,
-        width: 50,
-        height: 50,
+        width: 72,
+        height: 72,
         aspectRatio: 1,
         tintColor: "white",
         color: "white",
@@ -200,12 +200,12 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     }
     const logoUrl = emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Logo")
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
-    const iconSize = preferedSize(24, 36, windowWidth/10)
+    const iconSize = preferedSize(24, 56, windowWidth/9)
     const playButtonStyle = {
         ...style.playButton,
         width: iconSize,
         height: iconSize,
-        transform: [{translateX: -iconSize/2}, {translateY: -iconSize/2}]
+        transform: [{translateX: -iconSize/2}, {translateY: -iconSize/2 + pageStyle.paddingTop/2}]
     }
     return (
         <ScrollView style={{backgroundColor}}
@@ -227,7 +227,10 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 4/3}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
-                <PlayIcon width={playButtonStyle.width/2} height={playButtonStyle.height/2} style={style.play} />
+                <PlayIcon 
+                    width={playButtonStyle.width/2} 
+                    height={playButtonStyle.height/2} 
+                    style={style.play} />
             </TouchableOpacity> : null}
             {loading ? <Spin color={themeStyle.color} size="small" /> : null}
             </View>

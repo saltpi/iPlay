@@ -244,6 +244,7 @@ public class PlayerView extends ConstraintLayout
             }
             val ranges = (SeekableRange[])value;
             double maxValue = duration;
+            log.info("seekable range {}, max value {}", ranges, maxValue);
             controlView.progressBar.setRanges(List.of(ranges), maxValue);
         }
     }

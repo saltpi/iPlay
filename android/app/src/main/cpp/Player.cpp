@@ -233,10 +233,12 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
     jfieldID propFieldID = env->GetFieldID(cls, "prop", "Ljava/lang/String;");
     jfieldID formatFieldID = env->GetFieldID(cls, "format", "I");
     jfieldID replyFieldID = env->GetFieldID(cls, "reply", "I");
+    jfieldID dataFieldID = env->GetFieldID(cls, "data", "J");
     if (typeFieldID == nullptr ||
         propFieldID == nullptr ||
         formatFieldID == nullptr ||
-        replyFieldID == nullptr) {
+        replyFieldID == nullptr ||
+        dataFieldID == nullptr) {
         return nullptr; // field not found
     }
 
@@ -251,6 +253,7 @@ Java_top_ourfor_lib_mpv_MPV_waitEvent(JNIEnv *env, jobject thiz, jdouble timeout
         mpv_event_property *data = static_cast<mpv_event_property *>(event->data);
         env->SetIntField(obj, formatFieldID, reinterpret_cast<int>(data->format));
         env->SetObjectField(obj, propFieldID, env->NewStringUTF(data->name));
+        env->SetLongField(obj, dataFieldID, reinterpret_cast<jlong>(data->data));
     }
     return obj;
 }
@@ -281,10 +284,7 @@ Java_top_ourfor_lib_mpv_MPV_getStringProperty(JNIEnv *env, jobject thiz, jstring
 }
 extern "C"
 JNIEXPORT jobjectArray JNICALL
-Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
-    mpv_handle *ctx = get_attached_mpv(env, thiz);
-    if (ctx == nullptr) return nullptr;
-
+Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz, jlong pointer) {
     jclass cls = env->FindClass("top/ourfor/lib/mpv/SeekableRange");
     if (cls == nullptr) {
         return nullptr; // class not found
@@ -296,8 +296,7 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
         return nullptr; // field not found
     }
 
-    mpv_node node;
-    mpv_get_property(ctx, "demuxer-cache-state", MPV_FORMAT_NODE, &node);
+    mpv_node node = *reinterpret_cast<mpv_node *>(pointer);
     for (int i = 0; i < node.u.list->num; i++) {
         if (strcmp(node.u.list->keys[i], "seekable-ranges") != 0) {
             continue;
