@@ -143,6 +143,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     }, [])
 
     useEffect(() => {
+        setIsPlaying(false)
         setInfoLoading(true)
         emby?.getMedia?.(Number(movie.Id))
             .then(setDetail)

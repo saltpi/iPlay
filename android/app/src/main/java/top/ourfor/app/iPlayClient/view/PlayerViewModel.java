@@ -14,11 +14,13 @@ import android.view.SurfaceHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import top.ourfor.app.iPlayClient.view.Player;
 import top.ourfor.app.iPlayClient.view.PlayerEventListener;
 import top.ourfor.lib.mpv.MPV;
 import top.ourfor.lib.mpv.TrackItem;
 
+@Slf4j
 public class PlayerViewModel implements Player {
     public PlayerEventListener delegate;
     public String subtitleFontName;
@@ -94,7 +96,7 @@ public class PlayerViewModel implements Player {
     }
 
     public List<TrackItem> trackList(String trackType) {
-        Log.d(TAG, "obtain track list");
+        log.debug("obtain track list");
         Long subtitleCount = mpv.getLongProperty("track-list/count");
         ArrayList<TrackItem> trackItems = new ArrayList<>();
         for (long i = 0; i < subtitleCount; i++) {
@@ -103,7 +105,7 @@ public class PlayerViewModel implements Player {
             Long id = mpv.getLongProperty(String.format("track-list/%d/id", i));
             String lang = mpv.getStringProperty(String.format("track-list/%d/lang", i));
             String title = mpv.getStringProperty(String.format("track-list/%d/title", i));
-            Log.d(TAG, "id: " + id + "\ntype: " + type + "\nlang: " + lang + "\ntitle: " + title);
+            log.debug("id: " + id + "\ntype: " + type + "\nlang: " + lang + "\ntitle: " + title);
             TrackItem trackItem = new TrackItem();
             trackItem.id = Math.toIntExact(id);
             trackItem.type = type;
@@ -139,13 +141,13 @@ public class PlayerViewModel implements Player {
 
     @Override
     public void useSubtitle(int id) {
-        Log.d(TAG, "use subtitle " + id);
+        log.debug("use subtitle " + id);
         mpv.setOptionString("sid", String.valueOf(id));
     }
 
     @Override
     public void useAudio(int id) {
-        Log.d(TAG, "use audio " + id);
+        log.debug( "use audio " + id);
         mpv.setOptionString("aid", String.valueOf(id));
     }
 
@@ -154,7 +156,7 @@ public class PlayerViewModel implements Player {
         this.subtitleFontName = subtitleFontName;
         if (subtitleFontName == null) return;
         mpv.setOptionString("sub-font", subtitleFontName);
-        Log.d(TAG, "use sub font " + subtitleFontName);
+        log.debug( "use sub font " + subtitleFontName);
     }
 
     @Override
@@ -162,7 +164,7 @@ public class PlayerViewModel implements Player {
         this.subtitleFontDirectory = directory;
         if (subtitleFontDirectory == null) return;
         mpv.setOptionString("sub-fonts-dir", subtitleFontDirectory);
-        Log.d(TAG, "use sub font dir " + subtitleFontDirectory);
+        log.debug("use sub font dir " + subtitleFontDirectory);
     }
 
     @Override
@@ -173,16 +175,19 @@ public class PlayerViewModel implements Player {
 
     @Override
     public boolean isPlaying() {
+        if (mpv == null) return false;
         return !(mpv.getBoolProperty("pause"));
     }
 
     @Override
     public void resume() {
+        if (mpv == null) return;
         mpv.setBoolProperty("pause", false);
     }
 
     @Override
     public void pause() {
+        if (mpv == null) return;
         mpv.setBoolProperty("pause", true);
     }
 
@@ -226,11 +231,11 @@ public class PlayerViewModel implements Player {
                 while (true) {
                     MPV.Event e = mpv.waitEvent(-1);
                     if (e == null) {
-                        Log.d(TAG, "event is null, close mpv player");
-                        break;
+                        log.info("event is null");
+                        continue;
                     }
                     if (e.type == MPV_EVENT_SHUTDOWN) {
-                        Log.d(TAG, "close mpv player");
+                        log.info("close mpv player");
                         if (mpv != null) mpv.destroy();
                         mpv = null;
                         break;
@@ -253,6 +258,4 @@ public class PlayerViewModel implements Player {
         }
         eventLoop.start();
     }
-
-    static String TAG = "PlayerViewModel";
 }

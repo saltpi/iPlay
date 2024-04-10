@@ -72,6 +72,7 @@ public class PlayerView extends ConstraintLayout
     public void setUrl(String url) {
         this.url = url;
         if (url != null) {
+            log.info("play url {}", url);
             contentView.playFile(url);
         }
     }
@@ -79,6 +80,7 @@ public class PlayerView extends ConstraintLayout
     public void setTitle(String title) {
         this.title = title;
         if (title != null) {
+            log.info("video title {}", title);
             controlView.setVideoTitle(title);
         }
     }
@@ -244,7 +246,6 @@ public class PlayerView extends ConstraintLayout
             }
             val ranges = (SeekableRange[])value;
             double maxValue = duration;
-            log.info("seekable range {}, max value {}", ranges, maxValue);
             controlView.progressBar.setRanges(List.of(ranges), maxValue);
         }
     }
