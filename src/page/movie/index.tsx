@@ -62,18 +62,13 @@ const style = StyleSheet.create({
         borderRadius: 36,
         top: "50%",
         left: "50%",
-        transform: [{translateX: -36}, {translateY: -36}],
         alignItems: "center",
         justifyContent: "center",
     },
     play: {
         flexGrow: 0,
         flexShrink: 0,
-        width: 72,
-        height: 72,
         aspectRatio: 1,
-        tintColor: "white",
-        color: "white",
     },
     link: {
         textAlign: "center",
@@ -227,10 +222,7 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 4/3}} source={{ uri: poster}} />}
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
-                <PlayIcon 
-                    width={playButtonStyle.width/2} 
-                    height={playButtonStyle.height/2} 
-                    style={style.play} />
+                <PlayIcon style={style.play} />
             </TouchableOpacity> : null}
             {loading ? <Spin color={themeStyle.color} size="small" /> : null}
             </View>
