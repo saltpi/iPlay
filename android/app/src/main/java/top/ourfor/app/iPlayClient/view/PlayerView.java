@@ -209,9 +209,8 @@ public class PlayerView extends ConstraintLayout
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onPropertyChange(PlayerPropertyType name, Object value) {
-        if (this.controlView != null) {
-            this.controlView.post(() -> controlView.onPropertyChange(name, value));
-        }
+        post(() -> controlView.onPropertyChange(name, value));
+
         if (value == null) {
             return;
         }
@@ -230,7 +229,7 @@ public class PlayerView extends ConstraintLayout
                 state = PlayEventType.PlayEventTypeOnPause;
                 data.put("duration", duration);
                 data.put("position", position);
-            } else if (name == PlayerPropertyType.PausedForCache) {
+            } else {
                 state = PlayEventType.PlayEventTypeOnPauseForCache;
             }
 
@@ -246,7 +245,7 @@ public class PlayerView extends ConstraintLayout
             }
             val ranges = (SeekableRange[])value;
             double maxValue = duration;
-            controlView.progressBar.setRanges(List.of(ranges), maxValue);
+            post(() -> controlView.progressBar.setRanges(List.of(ranges), maxValue));
         }
     }
 

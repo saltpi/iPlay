@@ -346,7 +346,6 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
             progressBar.setMax((int) duration);
             durationLabel.setText(Double.toString(duration));
             durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
-            requestLayout();
         } else if (name == PlayerPropertyType.TimePos) {
             if (!shouldUpdateProgress) {
                 return;
@@ -358,7 +357,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
         } else if (name == PlayerPropertyType.EofReached) {
             boolean isEof = (boolean)value;
             if (isEof) {
-                post(() -> updateIcon(playButton, R.drawable.play));
+                updateIcon(playButton, R.drawable.play);
             }
         }
     }
