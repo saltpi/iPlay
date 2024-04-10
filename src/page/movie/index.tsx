@@ -16,7 +16,7 @@ import { getPlayUrl } from "@api/play";
 import { Video } from "@view/Video";
 import { preferedSize, windowWidth } from "@helper/device";
 import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
-import { printException } from "@helper/log";
+import { logger, printException } from "@helper/log";
 import { updatePlayerState } from "@store/playerSlice";
 import { PlayEventType } from "@view/mpv/Player";
 import { PlaybackStateType } from "@view/mpv/type";
@@ -136,11 +136,13 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             .then(setUrl)
             .catch(printException)
         return () => {
+            logger.info("reset url")
+            setUrl(undefined)
             dispatch(updatePlayerState({
                 status: "stopped",
             }))
         }
-    }, [])
+    }, [movie.Id])
 
     useEffect(() => {
         setIsPlaying(false)
