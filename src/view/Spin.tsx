@@ -13,7 +13,7 @@ const style = StyleSheet.create({
     },
     box: {
         backgroundColor: "transparent",
-        paddingTop: 10,
+        marginTop: 10,
         alignItems: "center",
         justifyContent: "center",
     }
@@ -29,7 +29,7 @@ export function Spin({style: custom, ...rest}: SpinProps) {
 
 export function SpinBox({style: custom, ...rest}: SpinProps) {
     return (
-        <View style={style.box}>
+        <View style={{...style.box, ...custom as any}}>
             <ActivityIndicator style={style.center}
                 size={"small"} 
                 color="#0f0f0f" {...rest} />
