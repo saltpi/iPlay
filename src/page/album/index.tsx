@@ -9,7 +9,6 @@ import {Spin} from '@view/Spin';
 import _ from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import { HeaderRightAction } from './HeaerRightAction';
 
 const style = StyleSheet.create({
     root: {
@@ -30,11 +29,6 @@ export function Page({ navigation, route}: PropsWithNavigation<'album'>) {
     const dispatch = useAppDispatch()
     const layoutType = useAppSelector(state => state.theme.albumLayoutType);
     const cached = data?.length ?? 0 > 0
-    useEffect(() => {
-        navigation.setOptions({
-            headerRight: HeaderRightAction,
-        });
-    }, []);
 
     useEffect(() => {
         setLoading(!cached);

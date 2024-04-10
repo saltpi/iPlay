@@ -3,11 +3,13 @@ import LayoutDrawerIcon from "@asset/layout_drawer.svg"
 import LayoutBurgerIcon from "@asset/layout_burger.svg"
 import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { LayoutType, selectThemeBasicStyle, updateTheme, updateToNextAlbumLayoutType } from "@store/themeSlice";
+import { LayoutType, selectThemeBasicStyle, updateToNextAlbumLayoutType } from "@store/themeSlice";
 import { Toast } from "@helper/toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
-import { SortType, updateAlbumSortType, updateToNextAlbumSortType } from "@store/embySlice";
+import { SortType, updateToNextAlbumSortType } from "@store/embySlice";
+
+const hitSlop = {top: 10, bottom: 10, left: 10, right: 10}
 
 export function HeaderRightAction() {
     const theme = useAppSelector(selectThemeBasicStyle);
@@ -53,18 +55,21 @@ export function HeaderRightAction() {
             }}>
             <OrderIcon
                 onPress={updateSortType}
+                hitSlop={hitSlop}
                 width={22}
                 style={{marginRight: 15, ...theme}}
             />
             {layoutType === LayoutType.Line ?
             <LayoutDrawerIcon
                 onPress={() => dispatch(updateToNextAlbumLayoutType())}
+                hitSlop={hitSlop}
                 width={22}
                 style={{marginRight: 10, ...theme}}
             />
             :
             <LayoutBurgerIcon
                 onPress={() => dispatch(updateToNextAlbumLayoutType())}
+                hitSlop={hitSlop}
                 width={22}
                 style={{marginRight: 10, ...theme}}
             />
