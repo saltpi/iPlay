@@ -301,9 +301,10 @@ Java_top_ourfor_lib_mpv_MPV_seekableRanges(JNIEnv *env, jobject thiz) {
                 env->SetObjectArrayElement(array, j, seekable);
             }
 
+            mpv_free_node_contents(&node);
             return array;
         }
     }
-
+    mpv_free_node_contents(&node);
     return nullptr;
 }
