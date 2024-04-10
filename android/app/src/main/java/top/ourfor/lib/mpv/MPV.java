@@ -8,6 +8,8 @@ import java.util.List;
 public class MPV {
     // native mpv c pointer
     private long holder;
+    public SeekableRange[] cachedRanges;
+    public int cachedRangeCount;
 
     static {
         String[] libs = {"mpv", "player"};
