@@ -6,8 +6,8 @@ import { ActorCard } from "@view/ActorCard";
 import { SeasonCardList } from "@view/SeasonCard";
 import { Tag } from "@view/Tag";
 import { ExternalPlayer } from "@view/player/ExternalPlayer";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { DimensionValue, ImageStyle, ScrollView, StyleProp, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from '@view/Image';
 import { Toast } from "@helper/toast";
 import { Spin, SpinBox } from "@view/Spin";
@@ -196,6 +196,13 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
     const logoUrl = emby?.imageUrl?.(movie.Id, movie.BackdropImageTags?.[0], "Logo")
     const isPlayable = movie.Type === "Movie" || movie.Type === "Episode" 
     const iconSize = preferedSize(24, 56, windowWidth/9)
+    const layout = useMemo(() => ({
+        cover: {
+            width: "100%" as DimensionValue, 
+            height: windowWidth * 9/16 + pageStyle.paddingTop
+        }
+    }), [pageStyle.paddingTop, windowWidth])
+
     const playButtonStyle = {
         ...style.playButton,
         width: iconSize,
@@ -219,7 +226,9 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             />
             </>
              : null}
-            {url && isPlaying ? null : <Image style={{width: "100%", aspectRatio: 4/3}} source={{ uri: poster}} />}
+            {url && isPlaying ? null : 
+            <Image style={layout.cover} source={{ uri: poster}} />
+            }
             {isPlayable && !isPlaying ?
             <TouchableOpacity style={playButtonStyle} onPress={playVideo} activeOpacity={1.0}>
                 <PlayIcon style={style.play} />
