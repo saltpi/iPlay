@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import top.ourfor.app.iPlayClient.R;
+import top.ourfor.app.iPlayClient.helper.IntervalCaller;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 @Setter
@@ -38,6 +39,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
     private String videoTitle;
     private AtomicInteger resId = new AtomicInteger(8000);
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private IntervalCaller updateProgressCaller = new IntervalCaller(1000, 0);
 
     public PlayerControlView(Context context) {
         super(context);
@@ -352,8 +354,10 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
             }
 
             double time = (double) value;
-            progressBar.setProgress((int) time);
-            durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
+            updateProgressCaller.invoke(() -> post(() -> {
+                progressBar.setProgress((int) time);
+                durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
+            }));
         } else if (name == PlayerPropertyType.EofReached) {
             boolean isEof = (boolean)value;
             if (isEof) {

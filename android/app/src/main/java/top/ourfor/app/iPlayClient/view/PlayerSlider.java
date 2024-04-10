@@ -15,7 +15,7 @@ import top.ourfor.lib.mpv.SeekableRange;
 @Slf4j
 public class PlayerSlider extends androidx.appcompat.widget.AppCompatSeekBar {
     private Paint paint;
-    private List<SeekableRange> ranges;
+    private SeekableRange[] ranges;
     private double maxValue;
     private RectF cacheLine;
     public PlayerSlider(Context context) {
@@ -54,7 +54,7 @@ public class PlayerSlider extends androidx.appcompat.widget.AppCompatSeekBar {
         super.onDraw(canvas);
     }
 
-    public void setRanges(List<SeekableRange> ranges, double maxValue) {
+    public void setRanges(SeekableRange[] ranges, double maxValue) {
         if (ranges == null || maxValue <= 0.001f) return;
         this.ranges = ranges;
         this.maxValue = maxValue;

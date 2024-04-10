@@ -35,6 +35,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import top.ourfor.app.iPlayClient.R;
+import top.ourfor.app.iPlayClient.helper.IntervalCaller;
 import top.ourfor.app.iPlayClient.module.FontModule;
 import top.ourfor.app.iPlayClient.view.Player.PlayEventType;
 import top.ourfor.lib.mpv.SeekableRange;
@@ -62,6 +63,7 @@ public class PlayerView extends ConstraintLayout
     private ThemedReactContext themedReactContext;
     @Setter
     private Consumer<HashMap<String, Object>> onPlayStateChange;
+    private IntervalCaller cachedProgressCaller = new IntervalCaller(500, 0);
     private String url;
     private String title;
 
@@ -245,7 +247,7 @@ public class PlayerView extends ConstraintLayout
             }
             val ranges = (SeekableRange[])value;
             double maxValue = duration;
-            post(() -> controlView.progressBar.setRanges(List.of(ranges), maxValue));
+            cachedProgressCaller.invoke(() -> post(() -> controlView.progressBar.setRanges(ranges, maxValue)));
         }
     }
 
