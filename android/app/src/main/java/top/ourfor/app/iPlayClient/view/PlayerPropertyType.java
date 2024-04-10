@@ -1,6 +1,14 @@
 package top.ourfor.app.iPlayClient.view;
 
+import top.ourfor.lib.mpv.MPV;
+
 public enum PlayerPropertyType {
     None,
-    DemuxerCacheState
+    TimePos,
+    Duration,
+    PausedForCache,
+    Pause,
+    TrackList,
+    DemuxerCacheState,
+    EofReached
 }

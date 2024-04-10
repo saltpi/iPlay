@@ -19,11 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import top.ourfor.lib.mpv.TrackItem;
 
+@Slf4j
 @Setter
 public class PlayerEventView extends ConstraintLayout implements GestureDetector.OnGestureListener, PlayerSelectDelegate<PlayerSelectModel<Object>> {
-    protected static final String TAG = "PlayerEventView";
     private GestureDetector detector;
     public List<View> ignoreAreas;
     private long lastSeekTime = 0;
@@ -65,7 +66,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
 
     @Override
     public boolean onSingleTapUp(@NonNull MotionEvent e) {
-        Log.d(TAG, "press");
+        log.debug("press");
         boolean inIgnoredArea = isInIgnoredArea(e);
         if (!inIgnoredArea) delegate.onEvent(PlayerGestureType.HideControl, 0);
         return !inIgnoredArea;
@@ -109,7 +110,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
 
     @Override
     public void onLongPress(@NonNull MotionEvent e) {
-        Log.d(TAG, "Long press");
+        log.debug("Long press");
 
     }
 
@@ -121,7 +122,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            Log.d(TAG, "action up");
+            log.debug("action up");
             numberValueView.hide();
         }
         return detector.onTouchEvent(event);
@@ -167,7 +168,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
             addView(selectView, layout);
             requestLayout();
         });
-        Log.d(TAG, "add select view");
+        log.debug("add select view");
     }
 
     public boolean isSelectViewPresent() {
@@ -179,7 +180,7 @@ public class PlayerEventView extends ConstraintLayout implements GestureDetector
             removeView(selectView);
             selectView = null;
             requestLayout();
-            Log.d(TAG, "remove select view");
+            log.debug("remove select view");
         }
     }
 

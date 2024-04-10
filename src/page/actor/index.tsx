@@ -1,4 +1,5 @@
 import { PropsWithNavigation } from "@global";
+import { windowHeight } from "@helper/device";
 import { printException } from "@helper/log";
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
@@ -75,36 +76,29 @@ export function Page({route: {params: {id, actor}}}: PropsWithNavigation<"actor"
     return (
         <View style={{...style.page, paddingTop: pageStyle.paddingTop}}>
             <StatusBar />
-            <ScrollView
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                style={{flex: 1, ...theme}}>
-                <View style={style.info}>
-                    <Image style={{...style.avator}} 
-                        source={{uri: actorData?.avatar}} />
-                    <Text style={{...style.overview, ...theme}}
-                        numberOfLines={13} 
-                        ellipsizeMode="tail">
-                        {actorData?.overview}
-                    </Text>
-                </View>
-                {loading ? <Spin /> : null}
-                {media?.length >= 0 ?
-                <Text style={{...style.worksSection, ...theme}}>相关作品</Text>
-                : null}
-                <View style={style.works}>
-                    {media?.length  > 0 ?
-                    <ListView items={media} 
-                        style={{width: '100%', flex: 1, padding: 10}}
-                        render={item => <MediaCard media={item} theme={theme} />}
-                        layoutForType={(item, dim) => {
-                            dim.width = rowItemWidth
-                            dim.height = 200
-                        }}
-                    />
-                    : null }
-                </View>
-            </ScrollView>
+            <View style={style.info}>
+                <Image style={{...style.avator}} 
+                    source={{uri: actorData?.avatar}} />
+                <Text style={{...style.overview, ...theme}}
+                    numberOfLines={13} 
+                    ellipsizeMode="tail">
+                    {actorData?.overview}
+                </Text>
+            </View>
+            {loading ? <Spin /> : null}
+            {media?.length >= 0 ?
+            <Text style={{...style.worksSection, ...theme}}>相关作品</Text>
+            : null}
+            {media?.length  > 0 ?
+            <ListView items={media}
+                style={{width: '100%', flex: 1, padding: 10}}
+                render={item => <MediaCard media={item} theme={theme} />}
+                layoutForType={(item, dim) => {
+                    dim.width = rowItemWidth
+                    dim.height = 200
+                }}
+            />
+            : null }
         </View>
     )
 }

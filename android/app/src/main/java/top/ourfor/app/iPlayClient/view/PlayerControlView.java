@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import top.ourfor.app.iPlayClient.R;
+import top.ourfor.app.iPlayClient.helper.IntervalCaller;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 @Setter
@@ -38,6 +39,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
     private String videoTitle;
     private AtomicInteger resId = new AtomicInteger(8000);
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private IntervalCaller updateProgressCaller = new IntervalCaller(1000, 0);
 
     public PlayerControlView(Context context) {
         super(context);
@@ -233,6 +235,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
         {
             leftToLeft = progressBar.getId();
             bottomToTop = progressBar.getId();
+            matchConstraintPercentWidth = 0.75f;
             bottomMargin = 10;
         }
     };
@@ -254,12 +257,7 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
                 log.debug("play");
                 boolean isPlaying = player != null && player.isPlaying();
                 int resId = isPlaying ? R.drawable.play : R.drawable.pause;
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateIcon(playButton, resId);
-                    }
-                });
+                post(() -> updateIcon(playButton, resId));
                 if (isPlaying) {
                     player.pause();
                 } else {
@@ -341,24 +339,30 @@ public class PlayerControlView extends ConstraintLayout implements PlayerEventLi
     }
 
     @Override
-    public void onPropertyChange(String name, Object value) {
+    public void onPropertyChange(PlayerPropertyType name, Object value) {
         if (value == null) {
             return;
         }
-        if (name.equals("duration")) {
+        if (name == PlayerPropertyType.Duration) {
             double duration = (double) value;
             progressBar.setMax((int) duration);
             durationLabel.setText(Double.toString(duration));
             durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
-            requestLayout();
-        } else if (name.equals("time-pos")) {
+        } else if (name == PlayerPropertyType.TimePos) {
             if (!shouldUpdateProgress) {
                 return;
             }
 
             double time = (double) value;
-            progressBar.setProgress((int) time);
-            durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
+            updateProgressCaller.invoke(() -> post(() -> {
+                progressBar.setProgress((int) time);
+                durationLabel.setText(formatTime(progressBar.getProgress(), progressBar.getMax()));
+            }));
+        } else if (name == PlayerPropertyType.EofReached) {
+            boolean isEof = (boolean)value;
+            if (isEof) {
+                updateIcon(playButton, R.drawable.play);
+            }
         }
     }
 

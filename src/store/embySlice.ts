@@ -242,7 +242,7 @@ export const slice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(loginToSiteAsync.pending, state => {
-            if (state.site) state.site.status = 'loading';
+
         })
         .addCase(loginToSiteAsync.fulfilled, (state, action) => {
             const site = action.payload

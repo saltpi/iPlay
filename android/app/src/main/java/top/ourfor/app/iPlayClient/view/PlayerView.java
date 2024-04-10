@@ -35,6 +35,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import top.ourfor.app.iPlayClient.R;
+import top.ourfor.app.iPlayClient.helper.IntervalCaller;
 import top.ourfor.app.iPlayClient.module.FontModule;
 import top.ourfor.app.iPlayClient.view.Player.PlayEventType;
 import top.ourfor.lib.mpv.SeekableRange;
@@ -62,6 +63,7 @@ public class PlayerView extends ConstraintLayout
     private ThemedReactContext themedReactContext;
     @Setter
     private Consumer<HashMap<String, Object>> onPlayStateChange;
+    private IntervalCaller cachedProgressCaller = new IntervalCaller(500, 0);
     private String url;
     private String title;
 
@@ -72,6 +74,7 @@ public class PlayerView extends ConstraintLayout
     public void setUrl(String url) {
         this.url = url;
         if (url != null) {
+            log.info("play url {}", url);
             contentView.playFile(url);
         }
     }
@@ -79,6 +82,7 @@ public class PlayerView extends ConstraintLayout
     public void setTitle(String title) {
         this.title = title;
         if (title != null) {
+            log.info("video title {}", title);
             controlView.setVideoTitle(title);
         }
     }
@@ -206,29 +210,28 @@ public class PlayerView extends ConstraintLayout
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onPropertyChange(String name, Object value) {
-        if (this.controlView != null) {
-            this.controlView.post(() -> controlView.onPropertyChange(name, value));
-        }
+    public void onPropertyChange(PlayerPropertyType name, Object value) {
+        post(() -> controlView.onPropertyChange(name, value));
+
         if (value == null) {
             return;
         }
 
-        if ("time-pos".equals(name) ||
-                "pause".equals(name) ||
-                "paused-for-cache".equals(name)) {
+        if (name == PlayerPropertyType.TimePos ||
+            name == PlayerPropertyType.PausedForCache||
+            name == PlayerPropertyType.Pause) {
             PlayEventType state = PlayEventType.PlayEventTypeOnProgress;
             HashMap<String, Object> data = new HashMap<>();
-            if ("time-pos".equals(name)) {
+            if (name == PlayerPropertyType.TimePos) {
                 state = PlayEventType.PlayEventTypeOnProgress;
                 position = (Double) value;
                 data.put("duration", duration);
                 data.put("position", position);
-            } else if ("pause".equals(name)) {
+            } else if (name == PlayerPropertyType.Pause) {
                 state = PlayEventType.PlayEventTypeOnPause;
                 data.put("duration", duration);
                 data.put("position", position);
-            } else if ("paused-for-cache".equals(name)) {
+            } else {
                 state = PlayEventType.PlayEventTypeOnPauseForCache;
             }
 
@@ -236,16 +239,15 @@ public class PlayerView extends ConstraintLayout
             if (onPlayStateChange != null) {
                 onPlayStateChange.accept(data);
             }
-        } else if ("duration".equals(name)) {
+        } else if (name == PlayerPropertyType.Duration) {
             duration = (Double) value;
-        } else if ("demuxer-cache-state".equals(name)) {
+        } else if (name == PlayerPropertyType.DemuxerCacheState) {
             if (!(value instanceof SeekableRange[])) {
                 return;
             }
             val ranges = (SeekableRange[])value;
             double maxValue = duration;
-            log.info("seekable range {}, max value {}", ranges, maxValue);
-            controlView.progressBar.setRanges(List.of(ranges), maxValue);
+            cachedProgressCaller.invoke(() -> post(() -> controlView.progressBar.setRanges(ranges, maxValue)));
         }
     }
 
