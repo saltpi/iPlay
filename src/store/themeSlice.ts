@@ -1,4 +1,5 @@
 import { ThemeBasicStyle } from '@global';
+import { isOS, OSType } from '@helper/device';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
 import _ from 'lodash';
@@ -109,6 +110,16 @@ export const selectScreenOptions = createSelector([
             backgroundColor: backgroundColor
         }, 
         headerTransparent: true,
+        headerTintColor,
+        contentStyle: {
+            backgroundColor,
+        },
+    }
+    if (isOS(OSType.Windows)) return {
+        // headerTitleAlign: headerTitleAlign,
+        headerStyle: {
+            backgroundColor: backgroundColor
+        }, 
         headerTintColor,
         contentStyle: {
             backgroundColor,

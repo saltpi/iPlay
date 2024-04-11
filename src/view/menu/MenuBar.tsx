@@ -2,7 +2,7 @@ import {TabNavigation} from '@global';
 import {useAppDispatch, useAppSelector} from '@hook/store';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getActiveMenu, switchToMenu, toggleSwitchSiteDialog} from '@store/menuSlice';
-import {Animated, Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Animated, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {OSType, isOS} from '@helper/device';
 import {useEffect, useMemo, useRef} from 'react';
 import {switchRoute, updateMenuBarHeight} from '@store/themeSlice';
@@ -167,7 +167,10 @@ export function MenuBar() {
                 onLongPress={() => item?.onLongPress?.(dispatch)}
                 onPress={() => onActive(item.type)}>
                 <View>
-                    {<item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />}
+                    {isOS(OSType.Windows) ?
+                    <Text>{item.name}</Text> :
+                    <item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />
+                    }
                 </View>
             </Pressable>
         ))
