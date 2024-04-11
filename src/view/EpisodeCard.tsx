@@ -70,7 +70,7 @@ export function EpisodeCard({style: extraStyle, theme, emby, episode, onPress}: 
     return (
         <TouchableOpacity activeOpacity={1.0} onPress={() => onPress?.(episode)}>
         <View style={{...style.basic, ...theme, ...extraStyle}}>
-            <Image style={{...style.cover, aspectRatio: episode.PrimaryImageAspectRatio}}
+            <Image style={{...style.cover, aspectRatio: 16/9}}
                 fallbackImages={[posterUrl ?? ""]}
                 source={{uri: thumbUrl}} />
             <View style={{...style.text, ...theme}}>
