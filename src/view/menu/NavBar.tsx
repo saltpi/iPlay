@@ -18,8 +18,9 @@ export function NavBar() {
     const layout = useMemo(() => ({
         nav: {
             ...style.nav,
-            height: pageStyle.paddingTop,
-            backgroundColor: pageStyle.backgroundColor,
+            width: "100%",
+            height: 100,
+            backgroundColor: "red",
         } as ViewStyle
     }), [pageStyle])
     return (
