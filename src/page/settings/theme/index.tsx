@@ -63,6 +63,9 @@ export function Page({navigation}: PropsWithNavigation<"theme">) {
     const [fontList, setFontList] = useState<{label: string, value: string}[]>([])
 
     useEffect(() => {
+        if (isOS(OSType.Windows)) {
+            return
+        }
         FontModule.fontFamilyListAsync()
             .then(fontNames => {
                 const items = fontNames.sort().map(f => ({label: f, value: f}))
