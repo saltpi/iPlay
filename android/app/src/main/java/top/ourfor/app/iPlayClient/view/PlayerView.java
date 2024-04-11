@@ -398,11 +398,8 @@ public class PlayerView extends ConstraintLayout
     }
 
     private Window getWindow() {
-        Context context = getContext();
-        if (context instanceof Activity) {
-            return ((Activity) context).getWindow();
-        }
-        return null;
+        Activity activity = themedReactContext.getCurrentActivity();
+        return activity != null ? activity.getWindow() : null;
     }
 
     @Override
