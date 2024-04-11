@@ -212,7 +212,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     NSDictionary *payload = nil;
     switch (event) {
         case PlayEventTypeDuration: {
-            [UIApplication sharedApplication].idleTimerDisabled = NO;
+            UIApplication.sharedApplication.idleTimerDisabled = YES;
             break;
         }
         case PlayEventTypeOnProgress: {
@@ -321,7 +321,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
 - (void)clean {
     [self.player stop];
     [self.player quit];
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    UIApplication.sharedApplication.idleTimerDisabled = NO;
 }
 
 - (void)invalidate {
