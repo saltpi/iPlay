@@ -43,6 +43,7 @@
 		88B833C42BBEBB2E0099D4CB /* IPLUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */; };
 		88B833C62BBEC1E00099D4CB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 88B833C52BBEC1E00099D4CB /* PrivacyInfo.xcprivacy */; };
 		88B833C92BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88B833C82BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf */; };
+		88C2A7652BC79A3600397782 /* IPLScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 88C2A7642BC79A3600397782 /* IPLScreen.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,75 +61,77 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* iPlayClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iPlayClientTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* iPlayClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPlayClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = iPlayClient/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = iPlayClient/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iPlayClient/main.m; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resource/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-iPlayClient-iPlayClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iPlayClient-iPlayClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-iPlayClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient.debug.xcconfig"; path = "Target Support Files/Pods-iPlayClient/Pods-iPlayClient.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-iPlayClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient/Pods-iPlayClient.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-iPlayClient-iPlayClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-iPlayClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iPlayClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		881F2E342BC6493A00C6F54B /* PlayerSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSlider.h; path = Player/PlayerSlider.h; sourceTree = "<group>"; };
-		881F2E352BC6493A00C6F54B /* PlayerSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerSlider.m; path = Player/PlayerSlider.m; sourceTree = "<group>"; };
-		883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSystemVolumeView.h; path = Bean/PlayerSystemVolumeView.h; sourceTree = "<group>"; };
-		883513622BC40BB60012C230 /* PlayerMediaSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectView.h; path = Player/PlayerMediaSelectView.h; sourceTree = "<group>"; };
-		883513632BC40BB60012C230 /* PlayerMediaSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectView.m; path = Player/PlayerMediaSelectView.m; sourceTree = "<group>"; };
-		883513652BC414860012C230 /* PlayerMediaSelectItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectItemView.h; path = Player/PlayerMediaSelectItemView.h; sourceTree = "<group>"; };
-		883513662BC414860012C230 /* PlayerMediaSelectItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectItemView.m; path = Player/PlayerMediaSelectItemView.m; sourceTree = "<group>"; };
+		881F2E342BC6493A00C6F54B /* PlayerSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerSlider.h; sourceTree = "<group>"; };
+		881F2E352BC6493A00C6F54B /* PlayerSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerSlider.m; sourceTree = "<group>"; };
+		883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerSystemVolumeView.h; sourceTree = "<group>"; };
+		883513622BC40BB60012C230 /* PlayerMediaSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerMediaSelectView.h; sourceTree = "<group>"; };
+		883513632BC40BB60012C230 /* PlayerMediaSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerMediaSelectView.m; sourceTree = "<group>"; };
+		883513652BC414860012C230 /* PlayerMediaSelectItemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerMediaSelectItemView.h; sourceTree = "<group>"; };
+		883513662BC414860012C230 /* PlayerMediaSelectItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerMediaSelectItemView.m; sourceTree = "<group>"; };
 		883513692BC422300012C230 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		8835136B2BC4262E0012C230 /* PreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewViewController.h; sourceTree = "<group>"; };
 		8835136C2BC4262E0012C230 /* PreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreviewViewController.m; sourceTree = "<group>"; };
-		8835136E2BC437D10012C230 /* PlayerMediaSelectItemModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMediaSelectItemModel.h; path = Player/PlayerMediaSelectItemModel.h; sourceTree = "<group>"; };
-		8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerMediaSelectItemModel.m; path = Player/PlayerMediaSelectItemModel.m; sourceTree = "<group>"; };
-		883513712BC446230012C230 /* PlayerTrackModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerTrackModel.h; path = Player/PlayerTrackModel.h; sourceTree = "<group>"; };
-		883513722BC446230012C230 /* PlayerTrackModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerTrackModel.m; path = Player/PlayerTrackModel.m; sourceTree = "<group>"; };
-		883513742BC562070012C230 /* PlayerSeekableModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSeekableModel.h; path = Player/PlayerSeekableModel.h; sourceTree = "<group>"; };
-		883513752BC562070012C230 /* PlayerSeekableModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerSeekableModel.m; path = Player/PlayerSeekableModel.m; sourceTree = "<group>"; };
-		883513772BC569720012C230 /* PlayerSeekableImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerSeekableImageView.h; path = Player/PlayerSeekableImageView.h; sourceTree = "<group>"; };
-		883513782BC569720012C230 /* PlayerSeekableImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerSeekableImageView.m; path = Player/PlayerSeekableImageView.m; sourceTree = "<group>"; };
+		8835136E2BC437D10012C230 /* PlayerMediaSelectItemModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerMediaSelectItemModel.h; sourceTree = "<group>"; };
+		8835136F2BC437D10012C230 /* PlayerMediaSelectItemModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerMediaSelectItemModel.m; sourceTree = "<group>"; };
+		883513712BC446230012C230 /* PlayerTrackModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerTrackModel.h; sourceTree = "<group>"; };
+		883513722BC446230012C230 /* PlayerTrackModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerTrackModel.m; sourceTree = "<group>"; };
+		883513742BC562070012C230 /* PlayerSeekableModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerSeekableModel.h; sourceTree = "<group>"; };
+		883513752BC562070012C230 /* PlayerSeekableModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerSeekableModel.m; sourceTree = "<group>"; };
+		883513772BC569720012C230 /* PlayerSeekableImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerSeekableImageView.h; sourceTree = "<group>"; };
+		883513782BC569720012C230 /* PlayerSeekableImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerSeekableImageView.m; sourceTree = "<group>"; };
 		8856A4B92BBC18D400CC1136 /* Router.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Router.h; sourceTree = "<group>"; };
 		8856A4BA2BBC18D400CC1136 /* BeanContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeanContainer.h; sourceTree = "<group>"; };
 		8856A4BB2BBC18D400CC1136 /* BeanContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeanContainer.m; sourceTree = "<group>"; };
 		8856A4BC2BBC18D400CC1136 /* BeanProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeanProxy.m; sourceTree = "<group>"; };
 		8856A4BD2BBC18D400CC1136 /* BeanProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeanProxy.h; sourceTree = "<group>"; };
-		8856A4C02BBC18E300CC1136 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = App/AppDelegate.h; sourceTree = "<group>"; };
-		8856A4C12BBC18E300CC1136 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = App/AppDelegate.mm; sourceTree = "<group>"; };
-		8856A4C22BBC18E300CC1136 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = App/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8856A4C32BBC18E300CC1136 /* RealAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RealAppDelegate.h; path = App/RealAppDelegate.h; sourceTree = "<group>"; };
-		8856A4C42BBC18E300CC1136 /* RealAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RealAppDelegate.m; path = App/RealAppDelegate.m; sourceTree = "<group>"; };
-		8856A4C52BBC18E300CC1136 /* iPlayClient-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "iPlayClient-Bridging-Header.h"; path = "App/iPlayClient-Bridging-Header.h"; sourceTree = "<group>"; };
-		8856A4C92BBC191A00CC1136 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = Player/RootViewController.h; sourceTree = "<group>"; };
-		8856A4CA2BBC191A00CC1136 /* UIView+FindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+FindViewController.m"; path = "Player/UIView+FindViewController.m"; sourceTree = "<group>"; };
-		8856A4CB2BBC191A00CC1136 /* PlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerManager.m; path = Player/PlayerManager.m; sourceTree = "<group>"; };
-		8856A4CC2BBC191A00CC1136 /* PlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerView.h; path = Player/PlayerView.h; sourceTree = "<group>"; };
-		8856A4CD2BBC191A00CC1136 /* PlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerControlView.m; path = Player/PlayerControlView.m; sourceTree = "<group>"; };
-		8856A4CE2BBC191A00CC1136 /* PlayerEventView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerEventView.h; path = Player/PlayerEventView.h; sourceTree = "<group>"; };
-		8856A4CF2BBC191A00CC1136 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewController.h; path = Player/PlayerViewController.h; sourceTree = "<group>"; };
-		8856A4D02BBC191A00CC1136 /* UIView+FindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+FindViewController.h"; path = "Player/UIView+FindViewController.h"; sourceTree = "<group>"; };
-		8856A4D12BBC191A00CC1136 /* PlayerSubtitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerSubtitleView.h; path = Player/PlayerSubtitleView.h; sourceTree = "<group>"; };
-		8856A4D22BBC191A00CC1136 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerView.m; path = Player/PlayerView.m; sourceTree = "<group>"; };
-		8856A4D32BBC191A00CC1136 /* PlayerViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewModel.h; path = Player/PlayerViewModel.h; sourceTree = "<group>"; };
-		8856A4D42BBC191A00CC1136 /* PlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerControlView.h; path = Player/PlayerControlView.h; sourceTree = "<group>"; };
+		8856A4C02BBC18E300CC1136 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		8856A4C12BBC18E300CC1136 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		8856A4C22BBC18E300CC1136 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8856A4C32BBC18E300CC1136 /* RealAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealAppDelegate.h; sourceTree = "<group>"; };
+		8856A4C42BBC18E300CC1136 /* RealAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealAppDelegate.m; sourceTree = "<group>"; };
+		8856A4C52BBC18E300CC1136 /* iPlayClient-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iPlayClient-Bridging-Header.h"; sourceTree = "<group>"; };
+		8856A4C92BBC191A00CC1136 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		8856A4CA2BBC191A00CC1136 /* UIView+FindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FindViewController.m"; sourceTree = "<group>"; };
+		8856A4CB2BBC191A00CC1136 /* PlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerManager.m; sourceTree = "<group>"; };
+		8856A4CC2BBC191A00CC1136 /* PlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerView.h; sourceTree = "<group>"; };
+		8856A4CD2BBC191A00CC1136 /* PlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerControlView.m; sourceTree = "<group>"; };
+		8856A4CE2BBC191A00CC1136 /* PlayerEventView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerEventView.h; sourceTree = "<group>"; };
+		8856A4CF2BBC191A00CC1136 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewController.h; sourceTree = "<group>"; };
+		8856A4D02BBC191A00CC1136 /* UIView+FindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FindViewController.h"; sourceTree = "<group>"; };
+		8856A4D12BBC191A00CC1136 /* PlayerSubtitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerSubtitleView.h; sourceTree = "<group>"; };
+		8856A4D22BBC191A00CC1136 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerView.m; sourceTree = "<group>"; };
+		8856A4D32BBC191A00CC1136 /* PlayerViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerViewModel.h; sourceTree = "<group>"; };
+		8856A4D42BBC191A00CC1136 /* PlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerControlView.h; sourceTree = "<group>"; };
 		8856A4D52BBC191A00CC1136 /* IPLFontModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPLFontModule.h; sourceTree = "<group>"; };
-		8856A4D62BBC191B00CC1136 /* PlayerEventView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerEventView.m; path = Player/PlayerEventView.m; sourceTree = "<group>"; };
-		8856A4D72BBC191B00CC1136 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewController.m; path = Player/PlayerViewController.m; sourceTree = "<group>"; };
-		8856A4D82BBC191B00CC1136 /* PlayerContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerContentView.m; path = Player/PlayerContentView.m; sourceTree = "<group>"; };
-		8856A4D92BBC191B00CC1136 /* PlayerViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewModel.m; path = Player/PlayerViewModel.m; sourceTree = "<group>"; };
+		8856A4D62BBC191B00CC1136 /* PlayerEventView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerEventView.m; sourceTree = "<group>"; };
+		8856A4D72BBC191B00CC1136 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewController.m; sourceTree = "<group>"; };
+		8856A4D82BBC191B00CC1136 /* PlayerContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerContentView.m; sourceTree = "<group>"; };
+		8856A4D92BBC191B00CC1136 /* PlayerViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerViewModel.m; sourceTree = "<group>"; };
 		8856A4DA2BBC191B00CC1136 /* IPLFontModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPLFontModule.m; sourceTree = "<group>"; };
-		8856A4DB2BBC191B00CC1136 /* PlayerContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerContentView.h; path = Player/PlayerContentView.h; sourceTree = "<group>"; };
-		8856A4DC2BBC191B00CC1136 /* VideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPlayer.h; path = Player/VideoPlayer.h; sourceTree = "<group>"; };
-		8856A4DD2BBC191B00CC1136 /* PlayerSubtitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerSubtitleView.m; path = Player/PlayerSubtitleView.m; sourceTree = "<group>"; };
-		8856A4DE2BBC191B00CC1136 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootViewController.m; path = Player/RootViewController.m; sourceTree = "<group>"; };
-		8856A4DF2BBC191B00CC1136 /* PlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerManager.h; path = Player/PlayerManager.h; sourceTree = "<group>"; };
-		8856A4EB2BBC1AE300CC1136 /* iPlayClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iPlayClient.entitlements; path = iPlayClient/iPlayClient.entitlements; sourceTree = "<group>"; };
-		8883B8AE2BBDA24A00688761 /* PlayerNumberValueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerNumberValueView.h; path = Player/PlayerNumberValueView.h; sourceTree = "<group>"; };
-		8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PlayerNumberValueView.m; path = Player/PlayerNumberValueView.m; sourceTree = "<group>"; };
+		8856A4DB2BBC191B00CC1136 /* PlayerContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerContentView.h; sourceTree = "<group>"; };
+		8856A4DC2BBC191B00CC1136 /* VideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayer.h; sourceTree = "<group>"; };
+		8856A4DD2BBC191B00CC1136 /* PlayerSubtitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerSubtitleView.m; sourceTree = "<group>"; };
+		8856A4DE2BBC191B00CC1136 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		8856A4DF2BBC191B00CC1136 /* PlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerManager.h; sourceTree = "<group>"; };
+		8856A4EB2BBC1AE300CC1136 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = App/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8883B8AE2BBDA24A00688761 /* PlayerNumberValueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerNumberValueView.h; sourceTree = "<group>"; };
+		8883B8AF2BBDA24A00688761 /* PlayerNumberValueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerNumberValueView.m; sourceTree = "<group>"; };
 		888CB5822BB13C08009E89E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
+		88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = prefix.pch; path = App/prefix.pch; sourceTree = "<group>"; };
 		88B833C22BBEBB2E0099D4CB /* IPLUIModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPLUIModule.h; sourceTree = "<group>"; };
 		88B833C32BBEBB2E0099D4CB /* IPLUIModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPLUIModule.m; sourceTree = "<group>"; };
 		88B833C52BBEC1E00099D4CB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		88B833C82BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LXGWWenKaiLite-Regular.ttf"; sourceTree = "<group>"; };
+		88C2A7632BC79A3600397782 /* IPLScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPLScreen.h; sourceTree = "<group>"; };
+		88C2A7642BC79A3600397782 /* IPLScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IPLScreen.m; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-iPlayClient-iPlayClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayClient-iPlayClientTests.release.xcconfig"; path = "Target Support Files/Pods-iPlayClient-iPlayClientTests/Pods-iPlayClient-iPlayClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -175,11 +178,11 @@
 		13B07FAE1A68108700A75B9A /* iPlayClient */ = {
 			isa = PBXGroup;
 			children = (
-				883513682BC421FE0012C230 /* Preview */,
-				88B833C72BBEC3F10099D4CB /* Resource */,
-				8856A4EB2BBC1AE300CC1136 /* iPlayClient.entitlements */,
 				8856A4B82BBC175200CC1136 /* App */,
 				8856A4B02BBC16C400CC1136 /* Bean */,
+				88C2A7622BC7980300397782 /* Helper */,
+				883513682BC421FE0012C230 /* Preview */,
+				88B833C72BBEC3F10099D4CB /* Resource */,
 				88B833C12BBEBB060099D4CB /* Module */,
 				88DC7F5E2BAB2E9600728201 /* Player */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -187,8 +190,9 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				88AD4B9D2BAAA7C00065E8D9 /* prefix.pch */,
 				88B833C52BBEC1E00099D4CB /* PrivacyInfo.xcprivacy */,
+				8856A4EB2BBC1AE300CC1136 /* LaunchScreen.storyboard */,
 			);
-			name = iPlayClient;
+			path = iPlayClient;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -253,8 +257,7 @@
 				8856A4B92BBC18D400CC1136 /* Router.h */,
 				883513612BC19BBD0012C230 /* PlayerSystemVolumeView.h */,
 			);
-			name = Bean;
-			path = iPlayClient;
+			path = Bean;
 			sourceTree = "<group>";
 		};
 		8856A4B82BBC175200CC1136 /* App */ = {
@@ -267,8 +270,7 @@
 				8856A4C32BBC18E300CC1136 /* RealAppDelegate.h */,
 				8856A4C42BBC18E300CC1136 /* RealAppDelegate.m */,
 			);
-			name = App;
-			path = iPlayClient;
+			path = App;
 			sourceTree = "<group>";
 		};
 		88B833C12BBEBB060099D4CB /* Module */ = {
@@ -288,6 +290,15 @@
 				88B833C82BBEC45C0099D4CB /* LXGWWenKaiLite-Regular.ttf */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		88C2A7622BC7980300397782 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				88C2A7632BC79A3600397782 /* IPLScreen.h */,
+				88C2A7642BC79A3600397782 /* IPLScreen.m */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		88DC7F5E2BAB2E9600728201 /* Player */ = {
@@ -331,8 +342,7 @@
 				881F2E342BC6493A00C6F54B /* PlayerSlider.h */,
 				881F2E352BC6493A00C6F54B /* PlayerSlider.m */,
 			);
-			name = Player;
-			path = iPlayClient;
+			path = Player;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -601,6 +611,7 @@
 				883513732BC446230012C230 /* PlayerTrackModel.m in Sources */,
 				881F2E362BC6493A00C6F54B /* PlayerSlider.m in Sources */,
 				8856A4E02BBC191B00CC1136 /* UIView+FindViewController.m in Sources */,
+				88C2A7652BC79A3600397782 /* IPLScreen.m in Sources */,
 				8856A4E72BBC191B00CC1136 /* PlayerViewModel.m in Sources */,
 				8856A4EA2BBC191B00CC1136 /* RootViewController.m in Sources */,
 				883513702BC437D10012C230 /* PlayerMediaSelectItemModel.m in Sources */,
@@ -710,7 +721,7 @@
 				DEVELOPMENT_TEAM = SNZWBGWPDW;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/prefix.pch";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/iPlayClient/App/prefix.pch";
 				INFOPLIST_FILE = iPlayClient/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -750,7 +761,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNZWBGWPDW;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/prefix.pch";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/iPlayClient/App/prefix.pch";
 				INFOPLIST_FILE = iPlayClient/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
