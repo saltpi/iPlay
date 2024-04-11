@@ -32,9 +32,10 @@ import {
     updateTheme,
 } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { useColorScheme } from 'react-native';
+import { Text, useColorScheme } from 'react-native';
 import { Dev } from '@helper/dev';
 import { HeaderRightAction } from './album/HeaerRightAction';
+import { OSType, isOS } from '@helper/device';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -52,9 +53,10 @@ const OptionWithTitle = (kv: any) => {
 
 const immersiveOptions = (options: any) => ({
     title: (options.route.params as any)?.title ?? '',
-    headerTransparent: true,
-    headerStyle: {backgroundColor: 'transparent'},
-    headerRight: options.route.name === "album" ? HeaderRightAction : null
+    // headerTransparent: true,
+    // headerStyle: {backgroundColor: 'transparent'},
+    headerRight: options.route.name === "album" ? HeaderRightAction : null,
+    headerLeft: isOS(OSType.Windows) ? () => <Text>GoBack</Text> : null
 });
 
 const HomeRouter = () => {

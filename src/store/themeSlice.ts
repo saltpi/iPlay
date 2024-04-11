@@ -118,7 +118,7 @@ export const selectScreenOptions = createSelector([
     if (isOS(OSType.Windows)) return {
         // headerTitleAlign: headerTitleAlign,
         headerStyle: {
-            backgroundColor: backgroundColor
+            backgroundColor
         }, 
         headerTintColor,
         contentStyle: {

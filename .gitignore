@@ -67,3 +67,4 @@ yarn-error.log
 
 # env
 .env.local
+msbuild.binlog
