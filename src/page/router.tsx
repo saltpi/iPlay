@@ -36,6 +36,7 @@ import { Text, useColorScheme } from 'react-native';
 import { Dev } from '@helper/dev';
 import { HeaderRightAction } from './album/HeaerRightAction';
 import { OSType, isOS } from '@helper/device';
+import { NavBar } from '@view/menu/NavBar';
 
 const HomeStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
@@ -283,6 +284,7 @@ export function Router() {
         <NavigationContainer
             theme={pageTheme}
             onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
+            {isOS(OSType.Windows) ? <NavBar /> : null}
             <Tab.Navigator
                 initialRouteName="home"
                 tabBar={() => null}
