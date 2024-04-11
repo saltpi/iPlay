@@ -24,7 +24,7 @@ const style = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         alignContent: "flex-start",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         paddingLeft: 10,
         paddingRight: 10,
     },
@@ -32,7 +32,7 @@ const style = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         alignContent: "flex-start",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         paddingLeft: 10,
         paddingRight: 10,
     },
@@ -92,7 +92,9 @@ export function Page(props: PropsWithNavigation<"default">) {
                     : null}
                     <View style={style.movieList}>
                     {favoriteMovies.map((movie, idx) => 
-                        <MediaCard key={idx} media={movie} theme={theme} />)}
+                        <MediaCard key={idx} 
+                            media={movie} 
+                            theme={theme} />)}
                     </View>
                     
                     {favoriteSeries.length > 0 ?
@@ -100,7 +102,9 @@ export function Page(props: PropsWithNavigation<"default">) {
                     : null}
                     <View style={style.movieList}>
                     {favoriteSeries.map((movie, idx) => 
-                        <MediaCard key={idx} media={movie} theme={theme} />)}
+                        <MediaCard key={idx} 
+                            media={movie} 
+                            theme={theme} />)}
                     </View>
 
                     {favoriteEpisodes.length > 0 ?
@@ -108,7 +112,9 @@ export function Page(props: PropsWithNavigation<"default">) {
                     : null}
                     <View style={style.episodeList}>
                     {favoriteEpisodes.map((episode, idx) => 
-                        <MediaCard key={idx} media={episode} theme={theme} />)}
+                        <MediaCard key={idx} 
+                            media={episode} 
+                            theme={theme} />)}
                     </View>
                 </View>
             </ScrollView>

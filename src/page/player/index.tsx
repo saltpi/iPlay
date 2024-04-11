@@ -6,6 +6,7 @@ import { Episode } from "@model/Episode";
 import { updatePlayerState } from '@store/playerSlice';
 import { selectThemeBasicStyle, selectThemedPageStyle } from '@store/themeSlice';
 import { EpisodeCard } from '@view/EpisodeCard';
+import { Image } from '@view/Image';
 import { Spin } from '@view/Spin';
 import { Video } from '@view/Video';
 import { PlayEventType } from '@view/mpv/Player';
@@ -154,9 +155,9 @@ export function Page({navigation, route}: PlayerPageProps) {
     return (
         <View style={layout.page}>
         <View style={layout.player}>
-            {url ? 
             <>
             <View style={{width: "100%", height: pageStyle.paddingTop}} />
+            {url ? 
             <Video
                 ref={videoRef}
                 source={{uri: url, title: episode.Name}}
@@ -164,8 +165,10 @@ export function Page({navigation, route}: PlayerPageProps) {
                 onPlaybackStateChanged={onPlaybackStateChanged}
                 style={style.player}
             />
+            :
+            <Image style={style.player} source={{uri: poster}} />
+            }
             </>
-             : null}
             {loading ? <Spin color={theme.color} /> : null}
             {isTablet && url ? <ExternalPlayer src={url} title={episode.Name} /> : null}
             {isTablet ? <Text style={layout.overview}>{episode.Overview}</Text> : null}

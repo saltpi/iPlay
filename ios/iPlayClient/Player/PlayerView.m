@@ -13,6 +13,7 @@
 #import "PlayerContentView.h"
 #import "IPLUIModule.h"
 #import "PlayerSeekableImageView.h"
+#import "IPLScreen.h"
 
 typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     PlayerGestureTypeNone,
@@ -212,7 +213,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
     NSDictionary *payload = nil;
     switch (event) {
         case PlayEventTypeDuration: {
-            [UIApplication sharedApplication].idleTimerDisabled = NO;
+            [IPLScreen keepScreenOn];
             break;
         }
         case PlayEventTypeOnProgress: {
@@ -321,7 +322,7 @@ typedef NS_ENUM(NSUInteger, PlayerGestureType) {
 - (void)clean {
     [self.player stop];
     [self.player quit];
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [IPLScreen keepScreenOff];
 }
 
 - (void)invalidate {

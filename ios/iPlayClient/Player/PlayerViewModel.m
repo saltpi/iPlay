@@ -538,6 +538,7 @@ static dispatch_queue_t mpvEventRunloop = nil;
                 [self onProgressUpdate:*(double *)prop->data];
                 break;
             }
+                
             case IPLPlayerPropertyTypeDuration: {
                 if (prop->format != MPV_FORMAT_DOUBLE) {
                     return;

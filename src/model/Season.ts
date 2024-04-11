@@ -13,6 +13,7 @@ export interface Season {
     IndexNumber: number
     IsFolder: boolean
     Name: string
+    Overview?: string
     PrimaryImageAspectRatio: number
     SeriesId: string
     SeriesName: string

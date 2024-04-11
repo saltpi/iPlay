@@ -163,7 +163,7 @@ export async function getItem(site: EmbySite, options: ItemOptions) {
         SortOrder: "Ascending",
         IncludeItemTypes: type,
         Recursive: true,
-        Fields: "BasicSyncInfo,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
+        Fields: "BasicSyncInfo,Overview,CanDelete,Container,PrimaryImageAspectRatio,Prefix",
         StartIndex: page * 50,
         EnableImageTypes: "Primary,Backdrop,Thumb",
         ImageTypeLimit: 1,
