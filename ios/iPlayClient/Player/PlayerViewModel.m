@@ -10,6 +10,12 @@
 
 typedef NS_ENUM(NSUInteger, IPLPlayerPropertyType) {
     IPLPlayerPropertyTypeNone,
+    IPLPlayerPropertyTypeTimePos,
+    IPLPlayerPropertyTypeDuration,
+    IPLPlayerPropertyTypeVideoParamsAspect,
+    IPLPlayerPropertyTypePausedForCache,
+    IPLPlayerPropertyTypePause,
+    IPLPlayerPropertyTypeEofReached,
     IPLPlayerPropertyTypeDemuxerCacheState,
 };
 
@@ -89,12 +95,12 @@ static dispatch_queue_t mpvEventRunloop = nil;
         mpv_initialize(mpv);
         self.mpv = mpv;
 
-        mpv_observe_property(self.mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
-        mpv_observe_property(self.mpv, 0, "duration", MPV_FORMAT_DOUBLE);
-        mpv_observe_property(self.mpv, 0, "video-params/aspect", MPV_FORMAT_DOUBLE);
-        mpv_observe_property(self.mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
-        mpv_observe_property(self.mpv, 0, "pause", MPV_FORMAT_FLAG);
-        mpv_observe_property(self.mpv, 0, "eof-reached", MPV_FORMAT_FLAG);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypeTimePos, "time-pos", MPV_FORMAT_DOUBLE);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypeDuration, "duration", MPV_FORMAT_DOUBLE);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypeVideoParamsAspect, "video-params/aspect", MPV_FORMAT_DOUBLE);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypePausedForCache, "paused-for-cache", MPV_FORMAT_FLAG);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypePause, "pause", MPV_FORMAT_FLAG);
+        mpv_observe_property(self.mpv, IPLPlayerPropertyTypeEofReached, "eof-reached", MPV_FORMAT_FLAG);
         mpv_observe_property(self.mpv, IPLPlayerPropertyTypeDemuxerCacheState, "demuxer-cache-state", MPV_FORMAT_NODE);
 //        mpv_set_wakeup_callback(self.mpv, on_mpv_wakeup, (__bridge void *)self);
         @weakify(self);
@@ -522,38 +528,55 @@ static dispatch_queue_t mpvEventRunloop = nil;
 - (void)handleEvent:(mpv_event *)event {
     if (event->event_id == MPV_EVENT_PROPERTY_CHANGE) {
         mpv_event_property *prop = event->data;
-
-        if (strcmp(prop->name, "time-pos") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
+        IPLPlayerPropertyType reply = event->reply_userdata;
+        
+        switch (reply) {
+            case IPLPlayerPropertyTypeTimePos: {
+                if (prop->format != MPV_FORMAT_DOUBLE) {
+                    return;
+                }
                 [self onProgressUpdate:*(double *)prop->data];
+                break;
             }
-        } else if (strcmp(prop->name, "duration") == 0) {
-            if (prop->format == MPV_FORMAT_DOUBLE) {
+            case IPLPlayerPropertyTypeDuration: {
+                if (prop->format != MPV_FORMAT_DOUBLE) {
+                    return;
+                }
                 [self onDurationUpdate:*(double *)prop->data];
+                break;
             }
-        } else if (strcmp(prop->name, "pause") == 0) {
-            if (prop->format == MPV_FORMAT_FLAG) {
+                
+            case IPLPlayerPropertyTypePause: {
+                if (prop->format != MPV_FORMAT_FLAG) {
+                    return;
+                }
                 int value = *(int *)prop->data;
                 self.isPlaying = value == 0;
                 [self onPlaystateUpdate:PlayEventTypeOnPause state:value];
+                break;
             }
-        } else if (strcmp(prop->name, "paused-for-cache") == 0) {
-            if (prop->format == MPV_FORMAT_FLAG) {
+                
+            case IPLPlayerPropertyTypePausedForCache: {
+                if (prop->format != MPV_FORMAT_FLAG) {
+                    return;
+                }
                 [self onPlaystateUpdate:PlayEventTypeOnPauseForCache state:*(int *)prop->data];
+                break;
             }
-        } else if (strcmp(prop->name, "eof-reached") == 0) {
-            if (prop->format == MPV_FORMAT_FLAG) {
+                
+            case IPLPlayerPropertyTypeEofReached: {
+                if (prop->format != MPV_FORMAT_FLAG) {
+                    return;
+                }
                 int value = *(int *)prop->data;
 
                 if (value == 1) {
                     self.isPlaying = NO;
                     [self onPlaystateUpdate:PlayEventTypeEnd state:value];
                 }
+                break;
             }
-        }
-
-        IPLPlayerPropertyType type = event->reply_userdata;
-        switch (type) {
+                
             case IPLPlayerPropertyTypeDemuxerCacheState: {
                 if (prop->format != MPV_FORMAT_NODE) {
                     return;
@@ -563,7 +586,7 @@ static dispatch_queue_t mpvEventRunloop = nil;
 
                 break;
             }
-
+                
             default:
                 break;
         }

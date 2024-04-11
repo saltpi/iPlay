@@ -45,14 +45,16 @@ export function Page(props: PropsWithNavigation<"default">) {
     const [loading, setLoading] = useState(false)
     const [favoriteMovies, setFavoriteMovies] = useState<Media[]>([])
     const [favoriteEpisodes, setFavoriteEpisodes] = useState<Media[]>([])
+    const [favoriteSeries, setFavoriteSeries] = useState<Media[]>([])
     const pageStyle = useAppSelector(selectThemedPageStyle)
     const fetchFavoriteItems = () => {
         Promise.all(
-            ["Movie", "Episode"].map((type: any) => emby?.getItem?.({type, Filters: "IsFavorite"}))
+            ["Movie", "Episode", "Series"].map((type: any) => emby?.getItem?.({type, Filters: "IsFavorite"}))
         ).then(result => {
             result.forEach((res, idx) => {
                 if (idx === 0) setFavoriteMovies(res?.Items ?? [])
                 else if (idx === 1) setFavoriteEpisodes(res?.Items ?? [])
+                else if (idx === 2) setFavoriteSeries(res?.Items ?? [])      
             })
         })
         .catch(printException)
@@ -92,6 +94,15 @@ export function Page(props: PropsWithNavigation<"default">) {
                     {favoriteMovies.map((movie, idx) => 
                         <MediaCard key={idx} media={movie} theme={theme} />)}
                     </View>
+                    
+                    {favoriteSeries.length > 0 ?
+                    <Text style={{...style.sectionTitle, ...theme}}>喜爱的电视</Text>
+                    : null}
+                    <View style={style.movieList}>
+                    {favoriteSeries.map((movie, idx) => 
+                        <MediaCard key={idx} media={movie} theme={theme} />)}
+                    </View>
+
                     {favoriteEpisodes.length > 0 ?
                     <Text style={{...style.sectionTitle, ...theme}}>喜爱的剧集</Text>
                     : null}
