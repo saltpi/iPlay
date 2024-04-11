@@ -1,9 +1,10 @@
+import { OSType, isOS } from "@helper/device";
 import { useAppSelector } from "@hook/store";
 import { ComponentProps } from "react";
 import { Platform, StatusBar as StatusBarOrigin, NativeModules } from "react-native";
 
 export const StatusBarHeight = 
-    Platform.OS === "android" ? (StatusBarOrigin.currentHeight ?? 0) : NativeModules.UIModule.statusBarHeight();
+    Platform.OS === "android" ? (StatusBarOrigin.currentHeight ?? 0) : (isOS(OSType.Windows) ? 0 :NativeModules.UIModule.statusBarHeight());
 
 export function StatusBar(props: ComponentProps<typeof StatusBarOrigin>) {
     const barStyle = useAppSelector(state => state.theme.barStyle);

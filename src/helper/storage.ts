@@ -1,7 +1,16 @@
 import { Storage } from 'redux-persist'
 import { MMKV } from "react-native-mmkv"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { OSType, isOS } from './device'
 
-const storage = new MMKV()
+
+
+const storage = isOS(OSType.Windows) ? {
+  set: (key: string, value: string) => AsyncStorage.setItem(key, value),
+  getString: (key: string) => AsyncStorage.getItem(key),
+  delete: (key: string) => AsyncStorage.removeItem(key),
+} : new MMKV()
+
 
 export const reduxStorage: Storage = {
   setItem: (key, value) => {
