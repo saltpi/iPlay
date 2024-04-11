@@ -167,10 +167,7 @@ export function MenuBar() {
                 onLongPress={() => item?.onLongPress?.(dispatch)}
                 onPress={() => onActive(item.type)}>
                 <View>
-                    {isOS(OSType.Windows) ?
-                    <Text>{item.name}</Text> :
                     <item.icon {...kIconSize} opacity={active===item.type ? 1.0 : kInactiveOpacity} />
-                    }
                 </View>
             </Pressable>
         ))

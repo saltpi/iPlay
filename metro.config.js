@@ -1,5 +1,8 @@
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
+const defaultConfig = getDefaultConfig(__dirname);
+const { assetExts, sourceExts } = defaultConfig.resolver;
+
 const fs = require('fs');
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
@@ -27,6 +30,8 @@ const config = {
       new RegExp(`${rnwPath}/target/.*`),
       /.*\.ProjectImports\.zip/,
     ]),
+    assetExts: assetExts.filter((ext) => ext !== "svg"),
+    sourceExts: [...sourceExts, "svg"]
   },
   transformer: {
     getTransformOptions: async () => ({
@@ -37,6 +42,7 @@ const config = {
     }),
     // This fixes the 'missing-asset-registry-path` error (see https://github.com/microsoft/react-native-windows/issues/11437)
     assetRegistryPath: 'react-native/Libraries/Image/AssetRegistry',
+    babelTransformerPath: require.resolve("react-native-svg-transformer")
   },
 };
 
