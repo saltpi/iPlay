@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Appearance, NativeModules, useColorScheme } from 'react-native';
 import { ColorScheme, updateTheme } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { printException } from '@helper/log';
+import { logger, printException } from '@helper/log';
 import { Device } from '@helper/device';
 import { PlayerMonitor } from '@view/PlayerMonitor';
 import { StatusBarHeight } from '@view/StatusBar';
@@ -23,6 +23,7 @@ function App() {
         try {
             await Device.init();
             console.log(`window insets: `, insets)
+            logger.info(`is desktop: ${Device.isDesktop}`)
             store.dispatch(restoreSiteAsync());
         } catch (e) {
             console.log(e);
@@ -40,6 +41,8 @@ function App() {
             theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';
             theme.statusBarHeight = StatusBarHeight;
             theme.pagePaddingTop = Device.isDesktop ? 0 : StatusBarHeight + 56;
+            logger.info(`is dark mode: ${theme.isDarkMode}`)
+            logger.info(`page padding top: ${theme.pagePaddingTop}`)
             if (insets) {
                 theme.safeInsets = insets;
             }

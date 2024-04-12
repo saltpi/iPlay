@@ -118,9 +118,9 @@ export const selectScreenOptions = createSelector([
     }
     if (Device.isDesktop) return {
         // headerTitleAlign,
-        headerMode: "screen",
+        headerShown: false,
         headerStyle: {
-            backgroundColor: "red"
+            backgroundColor: 'transparent',
         }, 
         headerTintColor,
         contentStyle: {
