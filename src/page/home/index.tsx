@@ -31,7 +31,6 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const site = useAppSelector(state => state.emby?.site)
     const emby = useAppSelector(state => state.emby?.emby)
     const dispatch = useAppDispatch()
-    const [etag, setEtag] = useState(Date.now().toString())
     const pageStyle = useAppSelector(selectThemedPageStyle)
     useEffect(() => {
         if (!site?.server || !site?.user) {
@@ -55,7 +54,6 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
     const [refreshing, setRefreshing] = useState(false)
     const onRefresh = () => {
         setRefreshing(true)
-        setEtag(Date.now().toString())
         dispatch(fetchEmbyAlbumAsync())
             .then(() => {
                 setRefreshing(false)

@@ -1,5 +1,5 @@
 import { ThemeBasicStyle } from '@global';
-import { isOS, OSType } from '@helper/device';
+import { Device, isOS, OSType } from '@helper/device';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
 import _ from 'lodash';
@@ -105,9 +105,9 @@ export const selectScreenOptions = createSelector([
     getHeaderTitleAlign
 ], (headerTintColor, backgroundColor, headerTitleAlign) => {
     const options = {
-        headerTitleAlign: headerTitleAlign,
+        headerTitleAlign,
         headerStyle: {
-            backgroundColor: backgroundColor
+            backgroundColor
         }, 
         headerTransparent: true,
         headerTintColor,
@@ -115,10 +115,11 @@ export const selectScreenOptions = createSelector([
             backgroundColor,
         },
     }
-    if (isOS(OSType.Windows)) return {
-        // headerTitleAlign: headerTitleAlign,
+    if (Device.isDesktop) return {
+        // headerTitleAlign,
+        headerMode: "screen",
         headerStyle: {
-            backgroundColor
+            backgroundColor: "red"
         }, 
         headerTintColor,
         contentStyle: {

@@ -34,7 +34,7 @@ import {
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Text, useColorScheme } from 'react-native';
 import { Dev } from '@helper/dev';
-import { HeaderRightAction } from './album/HeaerRightAction';
+import { HeaderRightAction } from '../album/HeaerRightAction';
 import { Device, OSType, isOS } from '@helper/device';
 import { NavBar } from '@view/menu/NavBar';
 
@@ -52,12 +52,13 @@ const OptionWithTitle = (kv: any) => {
     })
 }
 
-const immersiveOptions = (options: any) => (Device.isDesktop ? {} : {
+const immersiveOptions = (options: any) => (Device.isDesktop ? {
+    headerMode: 'float',
+} : {
     title: (options.route.params as any)?.title ?? '',
     headerTransparent: true,
     headerStyle: {backgroundColor: 'transparent'},
     headerRight: options.route.name === "album" ? HeaderRightAction : null,
-    headerLeft: isOS(OSType.Windows) ? () => <Text>GoBack</Text> : null
 });
 
 const HomeRouter = () => {
