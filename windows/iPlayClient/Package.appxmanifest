@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="a61efe51-3f6f-4f3b-9e6d-08571a65426b"
-    Publisher="CN=Darwin"
+    Name="24570ee9-a221-41cc-a6e6-156fa24e8386"
+    Publisher="CN=ourfor"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="a61efe51-3f6f-4f3b-9e6d-08571a65426b" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="24570ee9-a221-41cc-a6e6-156fa24e8386" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>iPlayClient</DisplayName>
-    <PublisherDisplayName>Darwin</PublisherDisplayName>
+    <PublisherDisplayName>ourfor</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
