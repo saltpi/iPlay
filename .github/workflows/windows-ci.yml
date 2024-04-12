@@ -4,7 +4,7 @@ on: [pull_request]
 jobs:
   run-windows-tests:
     name: Build & run tests
-    runs-on: windows-2019
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v2
@@ -18,7 +18,8 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
       with:
-        vs-version: '[17.0,18.0)'
+        # vs-version: '[17.0,18.0)'
+        msbuild-architecture: x64
 
     - name: Check node modules cache
       uses: actions/cache@v1
