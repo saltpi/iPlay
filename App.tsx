@@ -39,7 +39,7 @@ function App() {
             theme.backgroundColor = isDarkMode ? Colors.darker : Colors.lighter;
             theme.barStyle = isDarkMode ? 'light-content' : 'dark-content';
             theme.statusBarHeight = StatusBarHeight;
-            theme.pagePaddingTop = StatusBarHeight + 56;
+            theme.pagePaddingTop = Device.isDesktop ? 0 : StatusBarHeight + 56;
             if (insets) {
                 theme.safeInsets = insets;
             }

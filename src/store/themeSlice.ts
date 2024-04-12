@@ -1,4 +1,5 @@
 import { ThemeBasicStyle } from '@global';
+import { Dev } from '@helper/dev';
 import { Device, isOS, OSType } from '@helper/device';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@store';
@@ -54,7 +55,7 @@ const initialState: ThemeState = {
     showVideoLink: false,
     isDarkMode: false,
     headerTitleAlign: 'center',
-    pagePaddingTop: 56,
+    pagePaddingTop: Device.isDesktop ? 0 : 56,
 };
 
 export const slice = createSlice({

@@ -286,7 +286,7 @@ export function Router() {
             theme={pageTheme}
             onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
             <Tab.Navigator
-                initialRouteName="home"
+                initialRouteName={MenuType.Home}
                 tabBar={() => null}
                 screenOptions={{
                     headerShown: false,
@@ -298,7 +298,6 @@ export function Router() {
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
                 <Tab.Screen name={MenuType.Message} component={MessageRouter} />
             </Tab.Navigator>
-            {Device.isDesktop ? <NavBar /> : null}
             <MenuBar />
         </NavigationContainer>
     );
