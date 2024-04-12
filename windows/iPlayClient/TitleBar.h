@@ -3,18 +3,6 @@
 #include "pch.h"
 
 #include <codegen\NativeTitleBarSpec.g.h>
-#include <winrt/Windows.UI.Core.h>
-#include <winrt/Windows.UI.ViewManagement.h>
-#include <winrt/Windows.ApplicationModel.h>
-#include <winrt/Windows.ApplicationModel.Core.h>
-#include <winrt/Windows.UI.h>
-
-using namespace winrt;
-using namespace xaml;
-using namespace winrt::Windows::UI::ViewManagement;
-using namespace winrt::Windows::UI;
-using namespace winrt::Windows::ApplicationModel::Core;
-
 using namespace top::ourfor::app::iPlayClient;
 
 
@@ -22,6 +10,8 @@ using namespace top::ourfor::app::iPlayClient;
 
 namespace NativeModuleSample
 {
+    static double kTitleBarHeight;
+
     REACT_MODULE(TitleBar);
     struct TitleBar
     {
@@ -38,9 +28,7 @@ namespace NativeModuleSample
         REACT_METHOD(Add, L"add");
         double Add(double a, double b) noexcept
         {
-            auto view = CoreApplication::GetCurrentView();
-            auto appTitleBar = view.TitleBar();
-            double result = appTitleBar.Height();
+            double result = 11;
             AddEvent(result);
             return result;
         }

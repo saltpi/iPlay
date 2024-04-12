@@ -11,12 +11,14 @@
 #include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.ApplicationModel.Core.h>
 #include <winrt/Windows.UI.h>
+#include "TitleBar.h"
 
 using namespace winrt;
 using namespace xaml;
 using namespace winrt::Windows::UI::ViewManagement;
 using namespace winrt::Windows::UI;
 using namespace winrt::Windows::ApplicationModel::Core;
+using namespace top::ourfor::app::iPlayClient;
 
 namespace winrt::iPlayClient::implementation
 {
@@ -29,6 +31,8 @@ namespace winrt::iPlayClient::implementation
 
         auto view = CoreApplication::GetCurrentView();
         auto appTitleBar = view.TitleBar();
+        auto titleBarHeight = appTitleBar.Height();
+        NativeModuleSample::kTitleBarHeight = titleBarHeight;
         appTitleBar.ExtendViewIntoTitleBar(true);
 
         auto appView = ApplicationView::GetForCurrentView();
