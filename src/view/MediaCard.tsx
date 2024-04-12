@@ -53,10 +53,10 @@ export function MediaCard({media, theme}: {media: Media, theme?: ThemeBasicStyle
     const navigation: Navigation = useNavigation();
     const onPress = (media: Media) => {
         navigation.navigate('movie', {
-            title: media.Name,
+            // title: media.Name,
             type: media.Type,
             movie: media,
-        });
+        } as any);
     };
     
     const postStyle = {

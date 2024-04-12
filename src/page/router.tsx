@@ -53,11 +53,11 @@ const OptionWithTitle = (kv: any) => {
 }
 
 const immersiveOptions = (options: any) => ({
-    title: (options.route.params as any)?.title ?? '',
+    // title: (options.route.params as any)?.title ?? '',
     // headerTransparent: true,
     // headerStyle: {backgroundColor: 'transparent'},
-    headerRight: options.route.name === "album" ? HeaderRightAction : null,
-    headerLeft: isOS(OSType.Windows) ? () => <Text>GoBack</Text> : null
+    // headerRight: options.route.name === "album" ? HeaderRightAction : null,
+    // headerLeft: isOS(OSType.Windows) ? () => <Text>GoBack</Text> : null
 });
 
 const HomeRouter = () => {
