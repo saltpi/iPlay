@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native-svg/windows/RNSVG/RNSVG.vcxproj b/node_modules/react-native-svg/windows/RNSVG/RNSVG.vcxproj
+index 0fdeca0..1c0063d 100644
+--- a/node_modules/react-native-svg/windows/RNSVG/RNSVG.vcxproj
++++ b/node_modules/react-native-svg/windows/RNSVG/RNSVG.vcxproj
+@@ -122,6 +122,9 @@
+     <ClCompile>
+       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
++    <Link>
++      <AdditionalDependencies>dxguid.lib;WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
++    </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+     <ClInclude Include="BrushView.h" />

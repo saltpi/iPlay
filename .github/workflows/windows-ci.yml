@@ -47,4 +47,6 @@ jobs:
         $content = Get-Content $file
         $content = $content -replace '(<WindowsTargetPlatformVersion>).*(</WindowsTargetPlatformVersion>)', '${1}10.0.19041.0${2}'
         $content | Set-Content $file
+        git apply tools/patch/RNSVG.patch
+        
         npx react-native run-windows --arch x64 --release --no-packager --no-deploy --logging
