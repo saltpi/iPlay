@@ -48,5 +48,29 @@ jobs:
         $content = $content -replace '(<WindowsTargetPlatformVersion>).*(</WindowsTargetPlatformVersion>)', '${1}10.0.19041.0${2}'
         $content | Set-Content $file
         git apply tools/patch/RNSVG.patch
-        
+
         npx react-native run-windows --arch x64 --release --no-packager --no-deploy --logging
+        npx react-native run-windows --arch ARM64 --release --no-packager --no-deploy --logging
+
+    - name: Compress artifacts
+      shell: powershell
+      run: |
+        Compress-Archive -Path windows\x64\Release -DestinationPath iPlay.x64.zip    
+        Compress-Archive -Path windows\ARM64\Release -DestinationPath iPlay.ARM64.zip    
+      
+    - name: ⬆️ Upload Build Artifact
+      shell: powershell
+      env:
+        scheme: ${{ 'default' }}
+      run: |
+        $buildtime = Get-Date -Format "yyyyMMdd.HHmm"
+        pip install requests
+        Write-Host "Uploading build artifacts..."
+        Write-Host "Uploaded iPlay.x64.zip"
+        python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.x64.zip" `
+          --file "$PWD/iPlay.x64.zip" `
+          --token "${{ secrets.CLIENT_ID }}"
+        Write-Host "Uploaded iPlay.ARM64.zip"
+        python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ARM64.zip" `
+          --file "$PWD/iPlay.ARM64.zip" `
+          --token "${{ secrets.CLIENT_ID }}"
