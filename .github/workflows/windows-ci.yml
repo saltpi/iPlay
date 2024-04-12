@@ -34,11 +34,11 @@ jobs:
       if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn --pure-lockfile
     
-    - name: yarn build
-      if: steps.yarn-cache.outputs.cache-hit == 'true'
-      run: |
-        yarn build
-        yarn tsc
+    # - name: yarn build
+    #   if: steps.yarn-cache.outputs.cache-hit == 'true'
+    #   run: |
+    #     yarn build
+    #     yarn tsc
 
     - name: Build x64 release
       shell: powershell
@@ -48,5 +48,24 @@ jobs:
         $content = $content -replace '(<WindowsTargetPlatformVersion>).*(</WindowsTargetPlatformVersion>)', '${1}10.0.19041.0${2}'
         $content | Set-Content $file
         git apply tools/patch/RNSVG.patch
-        
+
         npx react-native run-windows --arch x64 --release --no-packager --no-deploy --logging
+        npx react-native run-windows --arch ARM64 --release --no-packager --no-deploy --logging
+
+    - name: Compress artifacts
+      shell: powershell
+      run: |
+        python ./tools/compress.py
+      
+    - name: ⬆️ Upload Build Artifact
+      shell: powershell
+      env:
+        scheme: ${{ 'default' }}
+      run: |
+        $buildtime = Get-Date -Format "yyyyMMdd.HHmm"
+        pip install requests
+        Write-Host "Uploading build artifacts..."
+        Write-Host "Uploaded iPlay.all.zip"
+        python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.all.zip" `
+          --file "$PWD/iPlay.all.zip" `
+          --token "${{ secrets.CLIENT_ID }}"
