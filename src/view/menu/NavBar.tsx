@@ -3,12 +3,16 @@ import { useNavigation } from "@react-navigation/native";
 import { selectThemedPageStyle } from "@store/themeSlice";
 import { useMemo } from "react";
 import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import GoBackIcon from "@asset/reset.svg"
 
 const style = StyleSheet.create({
     nav: {
+        backgroundColor: "transparent",
         position: "absolute",
-        top: 0,
-        left: 0,
+        right: 0,
+        top: "50%",
+        width: 36,
+        flexDirection: "column"
     }
 })
 
@@ -18,15 +22,13 @@ export function NavBar() {
     const layout = useMemo(() => ({
         nav: {
             ...style.nav,
-            width: "100%",
-            height: 100,
-            backgroundColor: "red",
         } as ViewStyle
     }), [pageStyle])
+
     return (
         <Pressable style={layout.nav}
-            onPress={() => navigation.goBack()}>
-            <Text style={{color: pageStyle.color}}>GoBack Button</Text>
+            onPress={() => navigation.canGoBack() && navigation.goBack()}>
+            <GoBackIcon width={36} />
         </Pressable>
     )
 }

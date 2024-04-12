@@ -35,7 +35,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Text, useColorScheme } from 'react-native';
 import { Dev } from '@helper/dev';
 import { HeaderRightAction } from './album/HeaerRightAction';
-import { OSType, isOS } from '@helper/device';
+import { Device, OSType, isOS } from '@helper/device';
 import { NavBar } from '@view/menu/NavBar';
 
 const HomeStack = createNativeStackNavigator();
@@ -52,12 +52,12 @@ const OptionWithTitle = (kv: any) => {
     })
 }
 
-const immersiveOptions = (options: any) => ({
-    // title: (options.route.params as any)?.title ?? '',
-    // headerTransparent: true,
-    // headerStyle: {backgroundColor: 'transparent'},
-    // headerRight: options.route.name === "album" ? HeaderRightAction : null,
-    // headerLeft: isOS(OSType.Windows) ? () => <Text>GoBack</Text> : null
+const immersiveOptions = (options: any) => (Device.isDesktop ? {} : {
+    title: (options.route.params as any)?.title ?? '',
+    headerTransparent: true,
+    headerStyle: {backgroundColor: 'transparent'},
+    headerRight: options.route.name === "album" ? HeaderRightAction : null,
+    headerLeft: isOS(OSType.Windows) ? () => <Text>GoBack</Text> : null
 });
 
 const HomeRouter = () => {
@@ -284,7 +284,6 @@ export function Router() {
         <NavigationContainer
             theme={pageTheme}
             onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
-            {isOS(OSType.Windows) ? <NavBar /> : null}
             <Tab.Navigator
                 initialRouteName="home"
                 tabBar={() => null}
@@ -298,6 +297,7 @@ export function Router() {
                 <Tab.Screen name={MenuType.Star} component={StarRouter} />
                 <Tab.Screen name={MenuType.Message} component={MessageRouter} />
             </Tab.Navigator>
+            {Device.isDesktop ? <NavBar /> : null}
             <MenuBar />
         </NavigationContainer>
     );

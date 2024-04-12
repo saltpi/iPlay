@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Navigation, ThemeBasicStyle} from '@global';
 import {Api} from '@api/emby';
 import {useAppSelector} from '@hook/store';
+import { Device } from '@helper/device';
 
 export const style = StyleSheet.create({
     mediaCard: {
@@ -53,7 +54,7 @@ export function MediaCard({media, theme}: {media: Media, theme?: ThemeBasicStyle
     const navigation: Navigation = useNavigation();
     const onPress = (media: Media) => {
         navigation.navigate('movie', {
-            // title: media.Name,
+            title: Device.isDesktop ? null : media.Name,
             type: media.Type,
             movie: media,
         } as any);
