@@ -34,11 +34,11 @@ jobs:
       if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn --pure-lockfile
     
-    - name: yarn build
-      if: steps.yarn-cache.outputs.cache-hit == 'true'
-      run: |
-        yarn build
-        yarn tsc
+    # - name: yarn build
+    #   if: steps.yarn-cache.outputs.cache-hit == 'true'
+    #   run: |
+    #     yarn build
+    #     yarn tsc
 
     - name: Build x64 release
       shell: powershell
