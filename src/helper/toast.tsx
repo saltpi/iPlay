@@ -80,7 +80,19 @@ const toastConfig: ToastConfig = {
     ),
 };
 
-const Toast = isOS(OSType.Windows) ? () => <></> : ToastOrigin;
+export function EmptyToast(props: any) {
+    return <></>
+};
+
+EmptyToast.show = (params: any) => {}
+EmptyToast.hide = () => {}
+
+export declare namespace EmptyToast {
+    var show: (params: any) => void;
+    var hide: (params?: void | undefined) => void;
+}
+
+const Toast = isOS(OSType.Windows) ? EmptyToast : ToastOrigin;
 
 export {
     Toast,
