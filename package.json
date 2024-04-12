@@ -62,5 +62,13 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "codegenConfig": {
+    "name": "iPlayClient",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "windows": {
+      "namespace": "top::ourfor::app::iPlayClient"
+    }
   }
 }

@@ -1,10 +1,11 @@
 import { Device, OSType, isOS } from "@helper/device";
 import { useAppSelector } from "@hook/store";
-import { ComponentProps, useMemo } from "react";
+import { ComponentProps, useEffect, useMemo, useState } from "react";
 import { Platform, StatusBar as StatusBarOrigin, NativeModules, Text, View, StyleSheet, ViewStyle, Pressable } from "react-native";
 import GoBackIcon from "@asset/reset.svg"
 import { useNavigation } from "@react-navigation/native";
 import { selectThemedPageStyle } from "@store/themeSlice";
+import NativeTitleBar from "@api/native/windows/NativeTitleBar";
 
 export const StatusBarHeight = 
     Platform.OS === "android" ? (StatusBarOrigin.currentHeight ?? 0) : (isOS(OSType.Windows) ? 0 :NativeModules.UIModule.statusBarHeight());
@@ -23,13 +24,17 @@ export function MobileStatusBar(props: ComponentProps<typeof StatusBarOrigin>) {
 
 const style = StyleSheet.create({
     nav: {
-        backgroundColor: "transparent",
+        backgroundColor: "dark",
     }
 })
 
 export function DesktopStatusBar(props: ComponentProps<typeof StatusBarOrigin>) {
     const navigation = useNavigation()
     const pageStyle = useAppSelector(selectThemedPageStyle)
+    const [titleBarHeight, setTitleBarHeight] = useState(0)
+    useEffect(() => {
+        NativeTitleBar?.add?.(1, 2, (value) => setTitleBarHeight(value))
+    }, [])
     const layout = useMemo(() => ({
         nav: {
             ...style.nav,
@@ -40,6 +45,7 @@ export function DesktopStatusBar(props: ComponentProps<typeof StatusBarOrigin>) 
         <Pressable style={layout.nav}
             onPress={() => navigation.canGoBack() && navigation.goBack()}>
             <GoBackIcon width={36} />
+            <Text>{titleBarHeight}</Text>
         </Pressable>
     )
 }

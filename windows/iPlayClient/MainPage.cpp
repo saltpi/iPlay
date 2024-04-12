@@ -38,5 +38,6 @@ namespace winrt::iPlayClient::implementation
         titleBar.BackgroundColor(Colors::Transparent());
         titleBar.ButtonBackgroundColor(Colors::Transparent());
         titleBar.ButtonForegroundColor(Colors::Transparent());
+
     }
 }

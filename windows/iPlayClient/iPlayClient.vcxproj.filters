@@ -12,6 +12,7 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="ReactPackageProvider.cpp" />
     <ClCompile Include="AutolinkedNativeModules.g.cpp" />
+    <ClCompile Include="TitleBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
