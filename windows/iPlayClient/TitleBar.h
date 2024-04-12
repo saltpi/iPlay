@@ -28,7 +28,7 @@ namespace NativeModuleSample
         REACT_METHOD(Add, L"add");
         double Add(double a, double b) noexcept
         {
-            double result = 11;
+            double result = kTitleBarHeight + a + b;
             AddEvent(result);
             return result;
         }
