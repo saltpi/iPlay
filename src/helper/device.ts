@@ -57,6 +57,13 @@ export const Device = {
     // safe area insets
     insets: { top: 0, right: 0, bottom: 0, left: 0 },
     isTablet: isTablet() || windowWidth > windowHeight,
+    isWindows: isOS(OSType.Windows),
+    isMacOS: isOS(OSType.macOS),
+    isWeb: isOS(OSType.Web),
+    isAndroid: isOS(OSType.Android),
+    isIOS: isOS(OSType.iOS),
+    isMobile: isOS(OSType.iOS) || isOS(OSType.Android),
+    isDesktop: isOS(OSType.Windows) || isOS(OSType.macOS),
 
     init: async () => {
         Device.did = await DeviceInfo.getUniqueId();
