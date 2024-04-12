@@ -55,9 +55,7 @@ jobs:
     - name: Compress artifacts
       shell: powershell
       run: |
-        Compress-Archive -Path windows\x64\Release -DestinationPath iPlay.x64.zip    
-        Compress-Archive -Path windows\ARM64\Release -DestinationPath iPlay.ARM64.zip    
-        Compress-Archive -Path windows -DestinationPath iPlay.all.zip    
+        python ./tools/compress.py
       
     - name: ⬆️ Upload Build Artifact
       shell: powershell
@@ -67,14 +65,6 @@ jobs:
         $buildtime = Get-Date -Format "yyyyMMdd.HHmm"
         pip install requests
         Write-Host "Uploading build artifacts..."
-        Write-Host "Uploaded iPlay.x64.zip"
-        python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.x64.zip" `
-          --file "$PWD/iPlay.x64.zip" `
-          --token "${{ secrets.CLIENT_ID }}"
-        Write-Host "Uploaded iPlay.ARM64.zip"
-        python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ARM64.zip" `
-          --file "$PWD/iPlay.ARM64.zip" `
-          --token "${{ secrets.CLIENT_ID }}"
         Write-Host "Uploaded iPlay.all.zip"
         python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.all.zip" `
           --file "$PWD/iPlay.all.zip" `
