@@ -43,8 +43,8 @@ jobs:
     - name: Build x64 release
       shell: powershell
       run: |
-      $file = "node_modules\react-native-svg\windows\RNSVG\RNSVG.vcxproj"
-      $content = Get-Content $file
-      $content = $content -replace '(<WindowsTargetPlatformVersion>).*(</WindowsTargetPlatformVersion>)', '${1}10.0.19041.0${2}'
-      $content | Set-Content $file
-      npx react-native run-windows --arch x64 --release --no-packager --no-deploy --logging
+        $file = "node_modules\react-native-svg\windows\RNSVG\RNSVG.vcxproj"
+        $content = Get-Content $file
+        $content = $content -replace '(<WindowsTargetPlatformVersion>).*(</WindowsTargetPlatformVersion>)', '${1}10.0.19041.0${2}'
+        $content | Set-Content $file
+        npx react-native run-windows --arch x64 --release --no-packager --no-deploy --logging
