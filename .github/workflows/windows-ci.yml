@@ -40,6 +40,12 @@ jobs:
         yarn build
         yarn tsc
 
+    - name: Install Windows dependencies
+      shell: powershell
+      run: |
+        Set-ExecutionPolicy Unrestricted -Scope Process -Force;
+        iex (New-Object System.Net.WebClient).DownloadString('https://aka.ms/rnw-vs2022-deps.ps1');
+
     - name: Build x64 release
       shell: powershell
       run: |
