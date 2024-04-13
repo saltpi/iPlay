@@ -36,7 +36,7 @@ namespace NativeModuleSample
         REACT_EVENT(AddEvent);
         std::function<void(double)> AddEvent;
 
-        REACT_METHOD(setTitle, L"setTitle")
+        REACT_METHOD(SetTitle, L"setTitle")
         void SetTitle(std::string title) noexcept {
 			auto appView = winrt::Windows::UI::ViewManagement::ApplicationView::GetForCurrentView();
 			appView.Title(winrt::to_hstring(title));
