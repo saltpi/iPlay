@@ -49,8 +49,8 @@ jobs:
         $content | Set-Content $file
         git apply tools/patch/RNSVG.patch
 
-        npx react-native run-windows --arch x64 --release --no-packager --no-deploy --logging
-        npx react-native run-windows --arch ARM64 --release --no-packager --no-deploy --logging
+        npx react-native run-windows --arch x64 --msbuildprops SignManifests=false --release --no-packager --no-deploy --logging
+        npx react-native run-windows --arch ARM64 --msbuildprops SignManifests=false --release --no-packager --no-deploy --logging
 
     - name: Compress artifacts
       shell: powershell
