@@ -4,6 +4,9 @@
 
 #include <codegen\NativeTitleBarSpec.g.h>
 using namespace top::ourfor::app::iPlayClient;
+#include <winrt/Windows.UI.ViewManagement.h>
+#include <winrt/Windows.ApplicationModel.h>
+#include <winrt/Windows.ApplicationModel.Core.h>
 
 
 #include "NativeModules.h"
