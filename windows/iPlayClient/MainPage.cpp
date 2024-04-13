@@ -22,18 +22,12 @@ using namespace top::ourfor::app::iPlayClient;
 
 namespace winrt::iPlayClient::implementation
 {
-    MainPage::MainPage()
-    {
-        InitializeComponent();
-        
-        auto app = Application::Current().as<App>();
-        ReactRootView().ReactNativeHost(app->Host());
-
+    void setupTitlebar() {
         auto view = CoreApplication::GetCurrentView();
         auto appTitleBar = view.TitleBar();
         auto titleBarHeight = appTitleBar.Height();
-        NativeModuleSample::kTitleBarHeight = titleBarHeight;
-        appTitleBar.ExtendViewIntoTitleBar(true);
+        NativeModuleSample::kTitleBarHeight = titleBarHeight == 0 ? 48 : titleBarHeight;
+        // appTitleBar.ExtendViewIntoTitleBar(true);
 
         auto appView = ApplicationView::GetForCurrentView();
         appView.Title(L"Hello World");
@@ -42,6 +36,14 @@ namespace winrt::iPlayClient::implementation
         titleBar.BackgroundColor(Colors::Transparent());
         titleBar.ButtonBackgroundColor(Colors::Transparent());
         titleBar.ButtonForegroundColor(Colors::Transparent());
-
     }
+
+    MainPage::MainPage()
+    {
+        InitializeComponent();
+        setupTitlebar();
+        auto app = Application::Current().as<App>();
+        ReactRootView().ReactNativeHost(app->Host());
+    }
+
 }
