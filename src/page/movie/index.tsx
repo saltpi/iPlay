@@ -246,7 +246,6 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
             <>
             <Like id={Number(movie.Id)}
                 width={style.icon.width}
-                emby={emby}
                 isFavorite={detail?.UserData?.IsFavorite ?? false}
              />
             <PlayCount
@@ -277,7 +276,9 @@ export function Page({route, navigation}: PropsWithNavigation<"movie">) {
                 演职人员
             </Text> 
             : null}
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView horizontal 
+                contentContainerStyle={{minWidth: "100%"}}
+                showsHorizontalScrollIndicator={false}>
             {detail?.People.map((actor, index) => 
                 <ActorCard key={index} 
                     theme={themeStyle} 
