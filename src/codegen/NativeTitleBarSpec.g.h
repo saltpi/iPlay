@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "NativeModules.h"
+#include <NativeModules.h>
 #include <tuple>
 
 namespace top::ourfor::app::iPlayClient {
@@ -31,6 +31,7 @@ struct TitleBarSpec : winrt::Microsoft::ReactNative::TurboModuleSpec {
   };
   static constexpr auto methods = std::tuple{
       Method<void(double, double, Callback<double>) noexcept>{0, L"add"},
+      Method<void(std::string) noexcept>{1, L"setTitle"},
   };
 
   template <class TModule>
@@ -49,6 +50,11 @@ struct TitleBarSpec : winrt::Microsoft::ReactNative::TurboModuleSpec {
           "add",
           "    REACT_METHOD(add) void add(double a, double b, std::function<void(double)> const & callback) noexcept { /* implementation */ }\n"
           "    REACT_METHOD(add) static void add(double a, double b, std::function<void(double)> const & callback) noexcept { /* implementation */ }\n");
+    REACT_SHOW_METHOD_SPEC_ERRORS(
+          1,
+          "setTitle",
+          "    REACT_METHOD(setTitle) void setTitle(std::string title) noexcept { /* implementation */ }\n"
+          "    REACT_METHOD(setTitle) static void setTitle(std::string title) noexcept { /* implementation */ }\n");
   }
 };
 
