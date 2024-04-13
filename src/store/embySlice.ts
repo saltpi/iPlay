@@ -31,6 +31,7 @@ interface EmbyState {
         latestMedias?: Media[][]
         actors?: Map<string, Actor>
         albumMedia?: Map<string, Media[]>
+        resume?: Media[]
     }
     sortType?: SortType
 }
@@ -131,6 +132,13 @@ export const fetchLatestMediaAsync = createAppAsyncThunk<(Media[]|undefined)[]|u
     return medias
 })
 
+export const fetchResumeMediaAsync = createAppAsyncThunk<Media[]|undefined, void>("emby/resume", async (_, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const medias = await emby?.getResume?.()
+    return medias
+})
+
 export interface AlbumQueryParams {
     id: string,
     options?: CollectionOptions
@@ -181,6 +189,18 @@ export const fetchPlaybackAsync = createAppAsyncThunk<PlaybackInfo|undefined, nu
         MaxStreamingBitrate: videoConfig.MaxStreamingBitrate
     })
     return data
+})
+
+export type MarkFavoriteParams = {
+    id: number,
+    favorite: boolean
+}
+
+export const markFavoriteAsync = createAppAsyncThunk<boolean, MarkFavoriteParams>("emby/favorite", async ({id, favorite}, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const data = await emby?.markFavorite?.(id, favorite);
+    return data?.IsFavorite ?? false
 })
 
 export const slice = createSlice({
@@ -303,6 +323,11 @@ export const slice = createSlice({
                 }
             }
         })
+        .addCase(fetchResumeMediaAsync.fulfilled, (state, action) => {
+            const medias = action.payload
+            if (!medias) return
+            state.source.resume = medias
+        })
     },
 });
 
@@ -313,8 +338,10 @@ export const {
     updateAlbumSortType,
     updateToNextAlbumSortType
 } = slice.actions;
-export const getActiveEmbySite = (state: RootState) => state.emby;
 
+export const getActiveEmbySite = (state: RootState) => state.emby;
+export const getImageUrl = (id: string | number, options: string) => 
+    (state: RootState) => state.emby.emby?.imageUrl?.(id, options)
 
 listenerMiddleware.startListening({
     actionCreator: loginToSiteAsync.fulfilled,

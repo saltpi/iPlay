@@ -84,7 +84,7 @@ export function Page(props: PropsWithNavigation<"default">) {
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={{flex: 1}}>
                 {loading ? 
-                <SpinBox color={theme.color} /> 
+                <SpinBox color={theme.color} style={{minHeight: 28}} /> 
                 : null}
                 <View>
                     {favoriteMovies.length > 0 ? 

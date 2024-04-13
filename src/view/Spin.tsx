@@ -14,6 +14,7 @@ const style = StyleSheet.create({
     box: {
         backgroundColor: "transparent",
         marginTop: 10,
+        minHeight: 36,
         alignItems: "center",
         justifyContent: "center",
     }
