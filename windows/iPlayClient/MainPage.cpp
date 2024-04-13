@@ -29,13 +29,16 @@ namespace winrt::iPlayClient::implementation
         NativeModuleSample::kTitleBarHeight = titleBarHeight == 0 ? 48 : titleBarHeight;
         // appTitleBar.ExtendViewIntoTitleBar(true);
 
+        auto navigation = SystemNavigationManager::GetForCurrentView();
+        navigation.AppViewBackButtonVisibility(AppViewBackButtonVisibility::Visible);
+
         auto appView = ApplicationView::GetForCurrentView();
         appView.Title(L"Hello World");
-        auto titleBar = appView.TitleBar();
-        titleBar.ForegroundColor(Colors::Transparent());
-        titleBar.BackgroundColor(Colors::Transparent());
-        titleBar.ButtonBackgroundColor(Colors::Transparent());
-        titleBar.ButtonForegroundColor(Colors::Transparent());
+        //auto titleBar = appView.TitleBar();
+        //titleBar.ForegroundColor(Colors::Transparent());
+        //titleBar.BackgroundColor(Colors::Transparent());
+        //titleBar.ButtonBackgroundColor(Colors::Transparent());
+        //titleBar.ButtonForegroundColor(Colors::Transparent());
     }
 
     MainPage::MainPage()
