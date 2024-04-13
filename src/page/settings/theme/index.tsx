@@ -1,15 +1,12 @@
-import { PropsWithNavigation } from "@global";
 import { OSType, isOS } from "@helper/device";
 import { FontModule } from "@helper/font";
-import { logger } from "@helper/log";
 import { useAppDispatch, useAppSelector } from "@hook/store";
 import { ColorScheme, selectThemeBasicStyle, updateMenuBarPaddingOffset, updateShowVideoLink, updateTheme } from "@store/themeSlice";
 import { SelectView } from "@view/SelectView";
 import { StatusBar } from "@view/StatusBar";
 import { Tag } from "@view/Tag";
-import { update } from "lodash";
 import { useEffect, useState } from "react";
-import { Button, NativeEventEmitter, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import { NativeEventEmitter, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 
 const style = StyleSheet.create({
     page: {
@@ -49,7 +46,7 @@ const style = StyleSheet.create({
     }
 });
 
-export function Page({navigation}: PropsWithNavigation<"theme">) {
+export function Page() {
     const dispatch = useAppDispatch();
     const menuBarPaddingOffset = useAppSelector((state) => state.theme.menuBarPaddingOffset);
     const showVideoLink = useAppSelector((state) => state.theme.showVideoLink);

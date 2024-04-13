@@ -60,7 +60,7 @@ const immersiveOptions = (options: any) => (Device.isDesktop ? {
     headerTransparent: true,
     headerStyle: {backgroundColor: 'transparent'},
     headerRight: options.route.name === "album" ? HeaderRightAction : null,
-});
+} as any);
 
 const HomeRouter = () => {
     const options = useAppSelector(selectScreenOptions);
@@ -176,7 +176,7 @@ const MessageRouter = () => {
     const options = useAppSelector(selectScreenOptions);
     return (
         <MessageStack.Navigator
-            initialRouteName={Dev.mode == "development" ? "test" : "message"}
+            initialRouteName={"message"}
             screenOptions={options}>
             <MessageStack.Screen
                 name="message"
@@ -289,7 +289,7 @@ export function Router() {
     return (
         <NavigationContainer
             theme={pageTheme}
-            onStateChange={s => dispatch(switchRoute(getActiveRouteName(s)))}>
+            onStateChange={s => dispatch(switchRoute(getActiveRouteName(s as NavigationState)))}>
             <Tab.Navigator
                 initialRouteName={MenuType.Home}
                 tabBar={() => null}
