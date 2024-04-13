@@ -53,6 +53,9 @@ export function ListView<T>({
             isHorizontal={isHorizontal}
             showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
             showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+            scrollViewProps={{
+                contentContainerStyle: {minWidth: "100%"}
+            }}
             dataProvider={dataProvider} 
             layoutProvider={layoutProvider}
             onEndReached={onEndReached}

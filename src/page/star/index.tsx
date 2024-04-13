@@ -24,7 +24,7 @@ const style = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         alignContent: "flex-start",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         paddingLeft: 10,
         paddingRight: 10,
     },

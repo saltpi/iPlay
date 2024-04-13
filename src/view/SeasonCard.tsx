@@ -1,4 +1,3 @@
-import { Api } from '@api/emby';
 import { Navigation, ThemeBasicStyle } from '@global';
 import { useAppSelector } from '@hook/store';
 import {Season} from '@model/Season';
@@ -80,7 +79,9 @@ export function SeasonCardList({seasons}: {seasons: Season[]}) {
     const navigation: Navigation = useNavigation()
     const theme = useAppSelector(selectThemeBasicStyle)
     return (
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal={true}
+            contentContainerStyle={{minWidth: "100%"}}
+            showsHorizontalScrollIndicator={false}>
             <View style={listStyle.root}>
                 {seasons.map(season => (
                     <SeasonCard key={season.Id} 
