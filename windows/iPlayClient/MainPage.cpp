@@ -43,11 +43,6 @@ namespace winrt::iPlayClient::implementation
         //titleBar.ButtonForegroundColor(Colors::Transparent());
     }
 
-    void updateTitile(hstring title) {
-		auto appView = ApplicationView::GetForCurrentView();
-		appView.Title(title);
-	}
-
     MainPage::MainPage()
     {
         InitializeComponent();

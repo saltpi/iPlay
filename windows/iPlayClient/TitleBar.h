@@ -7,7 +7,17 @@ using namespace top::ourfor::app::iPlayClient;
 #include <winrt/Windows.UI.ViewManagement.h>
 #include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.ApplicationModel.Core.h>
+#include <winrt/Windows.UI.Core.h>
+#include <winrt/Windows.System.h>
 
+using namespace winrt;
+using namespace Windows::UI::Core;
+using namespace Windows::System;
+
+
+using namespace winrt::Windows::UI::ViewManagement;
+//using namespace winrt::Windows::UI;
+//using namespace winrt::Windows::ApplicationModel::Core;
 
 #include "NativeModules.h"
 
@@ -41,8 +51,21 @@ namespace NativeModuleSample
 
         REACT_METHOD(SetTitle, L"setTitle")
         void SetTitle(std::string title) noexcept {
-			auto appView = winrt::Windows::UI::ViewManagement::ApplicationView::GetForCurrentView();
-			appView.Title(winrt::to_hstring(title));
+            RunOnUIThread([title](){
+                auto appView = ApplicationView::GetForCurrentView();
+                appView.Title(winrt::to_hstring(title));
+            });
+        }
+
+        void RunOnUIThread(std::function<void()> action) {
+            DispatcherQueue queue = DispatcherQueue::GetForCurrentThread();
+            if (queue) {
+                queue.TryEnqueue(
+                    DispatcherQueueHandler([action]() {
+                       action();
+                    })
+                );
+            }
         }
     };
 }
