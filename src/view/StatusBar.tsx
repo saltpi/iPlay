@@ -48,14 +48,7 @@ export function DesktopStatusBar(props: ComponentProps<typeof StatusBarOrigin>) 
         } as ViewStyle
     }), [pageStyle, titleBarHeight])
 
-    return (
-        <Pressable onPress={() => navigation.canGoBack() && navigation.goBack()}>
-        <View style={layout.nav}>
-            <GoBackIcon width={18} />
-            <Text style={{color: "red"}}>{titleBarHeight}</Text>
-        </View>
-        </Pressable>
-    )
+    return null
 }
 
 export const StatusBar = Device.isMobile ? MobileStatusBar : DesktopStatusBar;

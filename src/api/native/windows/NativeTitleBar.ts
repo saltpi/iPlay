@@ -7,6 +7,7 @@ export interface Spec extends TurboModule {
   };
 
   add(a: number, b: number, callback: (value: number) => void) : void;
+  setTitle(title: string) : void;
 }
 
 export default TurboModuleRegistry.get<Spec>(

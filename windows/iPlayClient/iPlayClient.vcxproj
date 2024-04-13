@@ -81,7 +81,7 @@
     <AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateThumbprint>B661389C6F4DC7BACB7328EB3A61BAF5C243CAEB</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>7FF00DEE7DAE97C40671807AC3D67BCAC3D3732E</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

@@ -31,15 +31,22 @@ namespace winrt::iPlayClient::implementation
 
         auto navigation = SystemNavigationManager::GetForCurrentView();
         navigation.AppViewBackButtonVisibility(AppViewBackButtonVisibility::Visible);
+        navigation.BackRequested([](auto const& sender, auto const& args) {
+		});
 
         auto appView = ApplicationView::GetForCurrentView();
-        appView.Title(L"Hello World");
+        appView.Title(L"Home");
         //auto titleBar = appView.TitleBar();
         //titleBar.ForegroundColor(Colors::Transparent());
         //titleBar.BackgroundColor(Colors::Transparent());
         //titleBar.ButtonBackgroundColor(Colors::Transparent());
         //titleBar.ButtonForegroundColor(Colors::Transparent());
     }
+
+    void updateTitile(hstring title) {
+		auto appView = ApplicationView::GetForCurrentView();
+		appView.Title(title);
+	}
 
     MainPage::MainPage()
     {

@@ -1,5 +1,5 @@
 import { PropsWithNavigation } from '@global';
-import { OSType, isIOS, isOS } from '@helper/device';
+import { OSType, isIOS, isOS, Device } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
 import { fetchEmbyAlbumAsync, patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
@@ -66,7 +66,8 @@ export function Page({navigation}: PropsWithNavigation<'home'>) {
             <StatusBar />
             <ScrollView
                 showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
+                showsVerticalScrollIndicator={Device.isDesktop}
+                nestedScrollEnabled={true}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={{flex: 1}}>
                 {site?.server && site?.user ? <SiteResource /> : <Button title="添加站点" onPress={goToLogin} />}
