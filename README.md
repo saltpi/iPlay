@@ -2,7 +2,7 @@
    <img src="doc/image/AppIcon.png" />
 </p>
 <h2 align="center">iPlay</h2>
-<p align="center">iPlay is a modern video player for Android and iOS</p>
+<p align="center">iPlay is a modern video player for Android、 iOS、Windows and macOS</p>
 <br />
 
 ---
@@ -14,7 +14,7 @@
 <table>
 <tr>
    <td><img src="./doc/image/20240321_225330.png" /></td>
-   <td><img src="./doc/image/20240321_225753.png" /></td>
+   <td><img src="./doc/image/20240413_183815.png" /></td>
 </tr>
 </table>
 
