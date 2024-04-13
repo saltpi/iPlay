@@ -315,7 +315,6 @@ public class PlayerView extends ConstraintLayout
         eventView.showSelectView(audios, currentAudioId);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     void copySubtitleFont(String configDir) throws IOException {
         val ins = getContext().getAssets().open("subfont.ttf", AssetManager.ACCESS_STREAMING);
         val outFile = new File(configDir + "/subfont.ttf");
@@ -323,7 +322,15 @@ public class PlayerView extends ConstraintLayout
         if (outFile.length() == ins.available()) {
             return;
         }
-        ins.transferTo(out);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ins.transferTo(out);
+        } else {
+            byte[] buffer = new byte[1024];
+            int length = -1;
+            while ((length = ins.read(buffer)) != -1) {
+                out.write(buffer, 0, length);
+            }
+        }
         ins.close();
         out.close();
     }
