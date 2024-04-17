@@ -1,6 +1,7 @@
 import { printException } from "@helper/log";
-import { useAppSelector } from "@hook/store";
+import { useAppDispatch, useAppSelector } from "@hook/store";
 import { Media } from "@model/Media";
+import { fetchRecommendationsAsync, searchMediaAsync } from "@store/embySlice";
 import { selectThemeBasicStyle, selectThemedPageStyle } from "@store/themeSlice";
 import { MediaCard } from "@view/MediaCard";
 import { Spin } from "@view/Spin";
@@ -46,34 +47,35 @@ export const colors = [
 ]
 
 export function Page() {
-    const emby = useAppSelector(state => state.emby.emby)
-    const [medias, setMedias] = useState<Media[]>([])
     const [loading, setLoading] = useState(false)
+    const recommendations = useAppSelector(state => state.emby.source.recommendations)
     const [result, setResult] = useState<Media[]>([])
     const [searchKeyword, setSearchKeyword] = useState("")
     const backgroundColor = useAppSelector(state => state.theme.backgroundColor);
     const theme = useAppSelector(selectThemeBasicStyle)
     const pageStyle = useAppSelector(selectThemedPageStyle)
+    const site = useAppSelector(state => state.emby.site)
+    const dispatch = useAppDispatch()
     useEffect(() => {
         setLoading(true)
-        emby?.searchRecommend?.()
-            .then((data) => {
-                setMedias(data.Items)
-            })
-            .catch(printException)
-            .finally(() => setLoading(false))
-    }, [])
+        dispatch(fetchRecommendationsAsync())
+        .catch(printException)
+        .finally(() => setLoading(false))
+    }, [site])
+
     useEffect(() => {
         const keyword = searchKeyword.trim()
         if (keyword.length === 0) {
             return
         }
-        emby?.getItemWithName?.(keyword)
-            .then((data) => {
-                setResult(data.Items)
+        dispatch(searchMediaAsync(keyword))
+            .then(res => {
+                if (typeof res.payload == "string") return
+                setResult(res.payload ?? [])
             })
             .catch(printException)
-    }, [searchKeyword, emby])
+    }, [searchKeyword, site])
+    
     return (
         <View style={{...style.page, ...pageStyle}}>
             <StatusBar />
@@ -87,7 +89,7 @@ export function Page() {
                     placeholderTextColor={theme.color}
                     placeholder="搜索" />
                 <View style={style.recommendations}>
-                    {medias.map((media, i) => 
+                    {recommendations?.map((media, i) => 
                         <Tag key={media.Id} onPress={() => setSearchKeyword(media.Name)} 
                             color={colors[i%colors.length] as any}>
                             {media.Name}

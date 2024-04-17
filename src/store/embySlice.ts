@@ -32,6 +32,7 @@ interface EmbyState {
         actors?: Map<string, Actor>
         albumMedia?: Map<string, Media[]>
         resume?: Media[]
+        recommendations?: Media[]
     }
     sortType?: SortType
 }
@@ -139,6 +140,13 @@ export const fetchResumeMediaAsync = createAppAsyncThunk<Media[]|undefined, void
     return medias
 })
 
+export const searchMediaAsync = createAppAsyncThunk<Media[]|undefined, string>("emby/search", async (keyword, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const data = await emby?.getItemWithName?.(keyword)
+    return data?.Items
+})
+
 export interface AlbumQueryParams {
     id: string,
     options?: CollectionOptions
@@ -201,6 +209,13 @@ export const markFavoriteAsync = createAppAsyncThunk<boolean, MarkFavoriteParams
     const emby = state.emby.emby
     const data = await emby?.markFavorite?.(id, favorite);
     return data?.IsFavorite ?? false
+})
+
+export const fetchRecommendationsAsync = createAppAsyncThunk<Media[]|undefined, void>("emby/recommendations", async (_, config) => {
+    const state = await config.getState()
+    const emby = state.emby.emby
+    const data = await emby?.searchRecommend?.()
+    return data?.Items
 })
 
 export const slice = createSlice({
@@ -327,6 +342,11 @@ export const slice = createSlice({
             const medias = action.payload
             if (!medias) return
             state.source.resume = medias
+        })
+        .addCase(fetchRecommendationsAsync.fulfilled, (state, action) => {
+            const medias = action.payload
+            if (!medias) return
+            state.source.recommendations = medias
         })
     },
 });
