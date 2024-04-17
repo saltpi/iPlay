@@ -10,13 +10,13 @@ const style = StyleSheet.create({
     page: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
     },
     logo: {
         width: 100,
         height: 100,
         marginBottom: 20,
-        marginTop: 20,
+        marginTop: "25%",
     },
     slogan: {
         fontSize: 20,
@@ -35,6 +35,9 @@ const style = StyleSheet.create({
         marginBottom: 20,
         fontSize: 16,
         color: "blue",
+    },
+    gift: {
+        paddingBottom: "5%"
     }
 });
 
@@ -60,6 +63,12 @@ export function Page(props: PropsWithNavigation<"default">) {
                 onPress={() => Linking.openURL(url)}>
                 <Text style={{...style.link, ...theme}}>{url}</Text>
             </TouchableOpacity>
+            <Text>
+                🥳 觉得好用就给个🌟吧
+            </Text>
+            <View style={style.gift}>
+
+            </View>
         </View>
     )
 }
