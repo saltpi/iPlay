@@ -14,6 +14,7 @@ import { Map } from '@model/Map';
 import { Actor } from '@model/Actor';
 import { logger } from '@helper/log';
 import { CollectionOptions } from '@api/view';
+import { DEFAULT_AVATOR_URL } from '@helper/image';
 
 export enum SortType {
     NameAsc,
@@ -362,6 +363,14 @@ export const {
 export const getActiveEmbySite = (state: RootState) => state.emby;
 export const getImageUrl = (id: string | number, options: string) => 
     (state: RootState) => state.emby.emby?.imageUrl?.(id, options)
+
+export const getAvatarUrl = (state: RootState) => {
+    const type = "Primary"
+    const site = state.emby.site
+    if (!site) return DEFAULT_AVATOR_URL
+    const { server: endpoint, user: {User: {Id: id}}} = site
+    return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Users/${id}/Images/${type}?height=152&quality=90`
+}
 
 listenerMiddleware.startListening({
     actionCreator: loginToSiteAsync.fulfilled,

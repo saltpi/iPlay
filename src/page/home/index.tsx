@@ -1,20 +1,17 @@
 import { PropsWithNavigation } from '@global';
-import { OSType, isIOS, isOS, Device } from '@helper/device';
+import { Device } from '@helper/device';
 import { printException } from '@helper/log';
 import { useAppDispatch, useAppSelector } from '@hook/store';
-import { fetchEmbyAlbumAsync, patchCurrentEmbySite, updateCurrentEmbySite } from '@store/embySlice';
+import { fetchEmbyAlbumAsync, patchCurrentEmbySite } from '@store/embySlice';
 import { selectThemedPageStyle } from '@store/themeSlice';
 import { SiteResource } from '@view/SiteResource';
 import { StatusBar } from '@view/StatusBar';
-import { set } from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {
     Button,
     RefreshControl,
-    SafeAreaView,
     ScrollView,
     StyleSheet,
-    Text,
     View,
 } from 'react-native';
 

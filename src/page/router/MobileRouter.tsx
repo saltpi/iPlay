@@ -32,11 +32,10 @@ import {
     updateTheme,
 } from '@store/themeSlice';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { Text, useColorScheme } from 'react-native';
-import { Dev } from '@helper/dev';
-import { HeaderRightAction } from '../album/HeaerRightAction';
-import { Device, OSType, isOS } from '@helper/device';
-import { NavBar } from '@view/menu/NavBar';
+import { useColorScheme } from 'react-native';
+import { HeaderRightAction } from '@page/album/HeaerRightAction';
+import { HeaderRightAction as HomeHeaderRightAction } from '@page/home/HeaerRightAction';
+import { Device } from '@helper/device';
 import NativeTitleBar from '@api/native/windows/NativeTitleBar';
 
 const HomeStack = createNativeStackNavigator();
@@ -74,7 +73,7 @@ const HomeRouter = () => {
             <HomeStack.Screen
                 name="home"
                 component={HomePage as any}
-                options={{title: '主页'}}
+                options={{title: '主页', headerRight: () => <HomeHeaderRightAction />}}
             />
             <HomeStack.Screen
                 name="album"

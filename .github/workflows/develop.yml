@@ -51,7 +51,7 @@ jobs:
       - name: 🧱 Install Dependencies
         run: |
           npm install
-          cd ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install
+          cd ios && pod install
 
       - name: 🧬 Build
         env:
