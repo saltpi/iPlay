@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listenerMiddleware } from './middleware/Listener';
 import { RootState } from '.';
 import { createAppAsyncThunk } from './type';
@@ -8,7 +8,7 @@ import { EmbyConfig } from '@helper/env';
 import { Emby } from '@api/emby';
 import { View, ViewDetail } from '@model/View';
 import { PlaybackInfo } from '@model/PlaybackInfo';
-import _, { Many } from 'lodash';
+import _, { get, Many } from 'lodash';
 import { Media } from '@model/Media';
 import { Map } from '@model/Map';
 import { Actor } from '@model/Actor';
@@ -364,13 +364,11 @@ export const getActiveEmbySite = (state: RootState) => state.emby;
 export const getImageUrl = (id: string | number, options: string) => 
     (state: RootState) => state.emby.emby?.imageUrl?.(id, options)
 
-export const getAvatarUrl = (state: RootState) => {
-    const type = "Primary"
-    const site = state.emby.site
-    if (!site) return DEFAULT_AVATOR_URL
-    const { server: endpoint, user: {User: {Id: id}}} = site
-    return `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Users/${id}/Images/${type}?height=152&quality=90`
-}
+export const getEndpoint = (state: RootState) => state.emby.site?.server
+export const getUserId = (state: RootState) => state.emby.site?.user?.User?.Id
+export const getAvatarUrl = createSelector([
+    getEndpoint, getUserId
+], (endpoint, id) => endpoint && id ? `${endpoint.protocol}://${endpoint.host}:${endpoint.port}${endpoint.path}emby/Users/${id}/Images/Primary?height=152&quality=90` : DEFAULT_AVATOR_URL)
 
 listenerMiddleware.startListening({
     actionCreator: loginToSiteAsync.fulfilled,

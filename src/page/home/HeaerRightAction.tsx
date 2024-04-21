@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "@hook/store";
-import { selectThemeBasicStyle } from "@store/themeSlice";
 import { useCallback } from "react";
 import { getAvatarUrl } from "@store/embySlice";
 import { Image } from "@view/Image";
@@ -13,7 +12,7 @@ const style = StyleSheet.create({
     root: {
         flexDirection: 'row',
         transform: [
-            {translateY: 3}
+            {translateY: 1}
         ]
     },
     avator: {

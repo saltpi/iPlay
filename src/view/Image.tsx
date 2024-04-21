@@ -1,6 +1,6 @@
 import FastImage from 'react-native-fast-image';
 import {Image as BaseImage} from 'react-native';
-import {ComponentProps, useState} from 'react';
+import {ComponentProps, useEffect, useMemo, useState} from 'react';
 import { OSType, isOS } from '@helper/device';
 
 export interface ImageProps extends ComponentProps<typeof FastImage> {
@@ -10,12 +10,18 @@ export interface ImageProps extends ComponentProps<typeof FastImage> {
 export function MobileImage(props: ImageProps) {
     const [imageTryCount, setImageTryCount] = useState(0);
     const {source: origin, fallbackImages, ...rest} = props;
-    const source =
+    const source = useMemo(()  => 
         typeof origin != 'number' &&
         imageTryCount > 0 &&
         imageTryCount <= (fallbackImages?.length || 0)
             ? {uri: fallbackImages?.[imageTryCount - 1]}
-            : origin;
+            : origin
+    , [origin, imageTryCount, fallbackImages]);
+
+    const uri = typeof origin != "number" ? origin?.uri : '';
+    useEffect(() => {
+        setImageTryCount(0);
+    },[uri])
 
     return (
         <FastImage
