@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/refresh"
+        android:title="@string/add_drive"
+        android:icon="@drawable/ic_fluent_arrow_clockwise_24_filled"
+        android:iconTint="@color/onBackground"
+        android:iconTintMode="src_in"
+        app:showAsAction="always"
+        />
+</menu>

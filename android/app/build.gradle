@@ -1,0 +1,119 @@
+plugins {
+    alias(libs.plugins.androidApplication)
+}
+
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    namespace 'top.ourfor.app.iplayx'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "top.ourfor.app.iplayx"
+        minSdk 24
+        targetSdk 34
+        versionCode project.hasProperty('versionCode') ? project.getProperty('versionCode').toInteger() : 1
+        versionName project.hasProperty('versionName') ? project.getProperty('versionName') : "1.0"
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        splits {
+            abi {
+                enable true
+                reset()
+                include 'x86_64', 'arm64-v8a', "armeabi-v7a"
+                universalApk false
+            }
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+
+        release {
+            storeFile file('release.keystore')
+            storePassword 'iPlay2024'
+            keyAlias 'key0'
+            keyPassword 'iPlay2024'
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+        buildConfig = true
+    }
+}
+
+dependencies {
+    // The version of react-native is set by the React Native Gradle Plugin
+    implementation(libs.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.glide)
+    implementation(libs.material)
+    implementation(libs.mmkv)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.lottie)
+    compileOnly(libs.projectlombok.lombok)
+    annotationProcessor(libs.projectlombok.lombok)
+
+    // json
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.databind)
+
+    // http
+    implementation(libs.okhttp)
+
+    // Logger
+    implementation(libs.slf4j.api)
+    implementation(libs.logback.android)
+
+    // SwipeRefreshLayout
+    implementation(libs.swiperefreshlayout)
+
+
+    implementation libs.flexbox
+
+    implementation libs.appupdate
+    implementation(libs.fluent.system.icons)
+
+    implementation libs.okhttp3.integration
+    annotationProcessor libs.compiler
+
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.ui)
+
+    implementation libs.hilt.android
+    annotationProcessor libs.hilt.android.compiler
+
+    implementation libs.androidx.room.runtime
+    annotationProcessor libs.androidx.room.compiler
+
+    debugImplementation("com.reqable.android:user-certificate-trust:1.0.0")
+}

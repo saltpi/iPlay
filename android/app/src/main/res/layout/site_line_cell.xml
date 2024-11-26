@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<top.ourfor.app.iplayx.view.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:paddingHorizontal="5dp"
+    android:paddingVertical="2.5dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/site_cell_state"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/site_region"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="🌍"
+            android:fontFamily="@font/twemoji_mozilla"
+            android:textAlignment="center"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+            />
+
+        <top.ourfor.app.iplayx.view.infra.TextView
+            android:id="@+id/site_remark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Test"
+            android:textAlignment="center"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/site_region" />
+
+        <top.ourfor.app.iplayx.view.infra.TextView
+            android:id="@+id/site_delay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="\?\?\?\?ms"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="18sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <top.ourfor.app.iplayx.view.infra.TextView
+            android:id="@+id/site_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="start"
+            android:text="https://example.com:8096"
+            android:textAlignment="viewStart"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/site_remark"
+            app:layout_constraintRight_toLeftOf="@id/site_delay"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <top.ourfor.app.iplayx.view.infra.TextView
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/error"
+        android:gravity="center"
+        android:paddingStart="35dp"
+        android:paddingRight="35dp"
+        android:text="@string/delete"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+</top.ourfor.app.iplayx.view.SwipeMenuLayout>

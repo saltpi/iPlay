@@ -1,0 +1,47 @@
+<resources>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="ToolbarCustomStyle" parent="ThemeOverlay.Material3.ActionBar">
+        <item name="colorControlNormal">@color/onBackground</item>
+    </style>
+
+    <style name="VideoLoading" parent="Widget.AppCompat.ProgressBar.Horizontal">
+    </style>
+
+    <style name="SeasonTabStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabBackground">@null</item>
+        <item name="tabIndicatorColor">@color/blue_5</item>
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabSelectedTextColor">@color/onBackground_highContrast</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/onBackground</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/dialog_bg</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="SiteBottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="bottomSheetStyle">@style/SiteBottomSheetStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="SiteBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/dialog_bg</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">2.5dp</item>
+        <item name="android:paddingRight">2.5dp</item>
+    </style>
+</resources>

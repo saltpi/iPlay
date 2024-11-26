@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="actor_card_width">75dp</dimen>
+    <dimen name="media_overview_text_size">13sp</dimen>
+    <dimen name="file_icon_width">32dp</dimen>
+    <dimen name="album_title_margin_top">10dp</dimen>
+</resources>

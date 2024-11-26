@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/cardview_dark_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/titleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="Title"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/music_poster"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/music_poster_border"
+        android:clipToOutline="true"
+        android:src="@drawable/hand_drawn_3"
+        android:scaleType="fitXY"
+        app:layout_constraintWidth_percent="0.75"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleLabel"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/slider"
+        >
+
+        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+            android:id="@+id/pip_enter"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginLeft="15dp"
+            app:cornerRadius="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:size="48dp"
+            app:src="@drawable/pip_enter"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+            android:id="@+id/playlist"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:cornerRadius="24dp"
+            app:size="48dp"
+            app:src="@drawable/menucard"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/pip_enter"
+            android:layout_marginBottom="15dp"
+            />
+
+
+
+        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+            android:id="@+id/voice"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="5dp"
+            app:cornerRadius="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/caption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:size="48dp"
+            app:src="@drawable/waveform" />
+
+        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+            android:id="@+id/caption"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginRight="15dp"
+            app:cornerRadius="24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:size="48dp"
+            app:src="@drawable/captions_bubble"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        android:id="@+id/play"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:cornerRadius="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.861"
+        app:size="96dp"
+        app:src="@drawable/pause" />
+
+    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        android:id="@+id/forward"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginLeft="20dp"
+        app:cornerRadius="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/play"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.844"
+        app:size="64dp"
+        app:src="@drawable/goforward_15" />
+
+    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        android:id="@+id/backward"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="20dp"
+        app:cornerRadius="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/play"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.844"
+        app:size="64dp"
+        app:src="@drawable/gobackward_15" />
+
+    <TextView
+        android:id="@+id/elapse_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/slider"
+        />
+
+    <TextView
+        android:id="@+id/duration_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/slider"
+        />
+
+    <top.ourfor.app.iplayx.view.video.PlayerSlider
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/play"
+        android:layout_marginBottom="15dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

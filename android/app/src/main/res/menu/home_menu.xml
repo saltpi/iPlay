@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/web_page"
+        android:title="@string/line_manage"
+        android:icon="@drawable/ic_fluent_earth_24_filled"
+        android:iconTint="@color/onBackground"
+        android:iconTintMode="src_in"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/switch_site"
+        android:title="@string/switch_site"
+        android:icon="@drawable/ic_fluent_mention_24_filled"
+        android:iconTint="@color/onBackground"
+        android:iconTintMode="src_in"
+        app:showAsAction="always"
+        />
+</menu>

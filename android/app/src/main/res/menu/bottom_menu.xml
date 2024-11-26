@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/searchPage"
+        android:icon="@drawable/search_icon"
+        android:title="@string/menu_search" />
+    <item
+        android:id="@+id/starPage"
+        android:icon="@drawable/star_icon"
+        android:title="@string/menu_star" />
+    <item
+        android:id="@+id/homePage"
+        android:icon="@drawable/home_icon"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/filePage"
+        android:icon="@drawable/doc_icon"
+        android:title="@string/menu_file" />
+    <item
+        android:id="@+id/settingPage"
+        android:icon="@drawable/setting_icon"
+        android:title="@string/menu_setting" />
+</menu>

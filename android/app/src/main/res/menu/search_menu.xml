@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/toggle_suggestion"
+        android:icon="@drawable/ic_fluent_slide_text_24_filled"
+        android:title="@string/menu_suggestion"
+        app:showAsAction="always" />
+</menu>

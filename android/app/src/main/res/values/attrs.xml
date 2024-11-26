@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PlayerControlItem">
+        <attr name="size" format="dimension" />
+        <attr name="src" format="reference" />
+        <attr name="cornerRadius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="SwipeMenuLayout">
+        <attr name="swipeEnable" format="boolean"/>
+        <attr name="ios" format="boolean"/>
+        <attr name="leftSwipe" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="TagViewStyle">
+        <attr name="tagText" format="string" />
+        <attr name="tagColor" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeBlurView">
+        <attr name="blur_radius" format="dimension" />
+        <attr name="blur_down_sample" format="float" />
+        <attr name="blur_overlay_color" format="color" />
+        <attr name="blur_corner_radius" format="dimension" />
+        <attr name="blur_corner_radius_top_left" format="dimension" />
+        <attr name="blur_corner_radius_top_right" format="dimension" />
+        <attr name="blur_corner_radius_bottom_left" format="dimension" />
+        <attr name="blur_corner_radius_bottom_right" format="dimension" />
+        <attr name="blur_border_width" format="dimension" />
+        <attr name="blur_border_color" format="color" />
+        <attr name="blur_mode">
+            <enum name="rectangle" value="0" />
+            <enum name="circle" value="1" />
+            <enum name="oval" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BlurView">
+        <attr name="blurOverlayColor" format="color"/>
+    </declare-styleable>
+</resources>

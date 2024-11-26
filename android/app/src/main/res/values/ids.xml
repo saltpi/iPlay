@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="page_search" type="id" />
+    <item name="page_home" type="id" />
+    <item name="page_star" type="id" />
+    <item name="page_message" type="id" />
+    <item name="page_setting" type="id" />
+    <item name="homePage" type="id" />
+    <item name="searchPage" type="id" />
+    <item name="starPage" type="id" />
+    <item name="messagePage" type="id" />
+    <item name="settingPage" type="id" />
+    <item name="sitePage" type="id" />
+    <item name="loginPage" type="id" />
+    <item name="cloudPage" type="id" />
+    <item name="themePage" type="id" />
+    <item name="aboutPage" type="id" />
+    <item name="videoPage" type="id" />
+    <item name="audioPage" type="id" />
+    <item name="playerPage" type="id" />
+    <item name="mediaPage" type="id" />
+    <item name="episodePage" type="id" />
+    <item name="albumPage" type="id" />
+    <item name="musicPage" type="id" />
+    <item name="cachePage" type="id" />
+    <item name="picturePage" type="id" />
+    <item name="musicPlayerPage" type="id" />
+    <item name="webPage" type="id" />
+</resources>

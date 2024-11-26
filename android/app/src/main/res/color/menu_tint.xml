@@ -1,0 +1,7 @@
+<!-- res/color/bottom_navigation_colors.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The color for the selected item -->
+    <item android:color="#FF000000" android:state_checked="true"/>
+    <!-- The color for the other items -->
+    <item android:color="#80000000"/>
+</selector>

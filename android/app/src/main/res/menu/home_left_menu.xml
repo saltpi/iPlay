@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/line_manage"
+        android:title="@string/line_manage"
+        android:icon="@drawable/ic_fluent_catch_up_24_filled"
+        android:iconTint="@color/onBackground"
+        android:iconTintMode="src_in"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/loading"
+        app:showAsAction="always"
+        app:actionProviderClass="top.ourfor.app.iplayx.view.menu.MenuLoading"
+        tools:ignore="MenuTitle" />
+</menu>

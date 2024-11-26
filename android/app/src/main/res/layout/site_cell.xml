@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<top.ourfor.app.iplayx.view.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:paddingHorizontal="5dp"
+    android:paddingVertical="2.5dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/site_cell_state"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/site_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/avatar_border_24"
+            android:clipToOutline="true"
+            android:src="@drawable/avatar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/site_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="username"
+            android:textAlignment="center"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="@id/site_image"
+            app:layout_constraintTop_toBottomOf="@id/site_image" />
+
+        <TextView
+            android:id="@+id/site_remark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Site Remark"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@id/site_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/site_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="start"
+            android:text="Site URL"
+            android:textAlignment="viewStart"
+            android:textColor="@color/onTertiaryContainer"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/site_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/site_remark" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/modify"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/blue_1"
+        android:gravity="center"
+        android:paddingStart="35dp"
+        android:paddingRight="35dp"
+        android:text="@string/modify"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/error"
+        android:gravity="center"
+        android:paddingStart="35dp"
+        android:paddingRight="35dp"
+        android:text="@string/delete"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+</top.ourfor.app.iplayx.view.SwipeMenuLayout>

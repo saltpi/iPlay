@@ -1,0 +1,6 @@
+[submodule "ios"]
+	path = ios
+	url = git@github.com:ourfor/iPlayX.ios
+[submodule "android"]
+	path = android
+	url = git@github.com:ourfor/iPlayX.android

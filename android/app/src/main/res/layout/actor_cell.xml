@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/actor_avatar"
+        android:layout_width="@dimen/actor_card_width"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="2:3"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/actor_avatar"
+        android:background="@drawable/actor_avatar_corner"
+        android:clipToOutline="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <top.ourfor.app.iplayx.view.infra.TextView
+        android:id="@+id/actor_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Actor Name ..................."
+        android:textSize="14sp"
+        android:textColor="@color/onTertiaryContainer"
+        app:layout_constraintTop_toBottomOf="@id/actor_avatar"
+        app:layout_constraintLeft_toLeftOf="@id/actor_avatar"
+        app:layout_constraintRight_toRightOf="@id/actor_avatar"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:gravity="center"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

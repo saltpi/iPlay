@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<top.ourfor.app.iplayx.view.LifecycleHolder
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <top.ourfor.app.iplayx.view.ListView
+            android:id="@+id/media_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/media_cell" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/scroll_top"
+        app:size="48dp"
+        app:cornerRadius="24dp"
+        app:src="@drawable/ic_fluent_arrow_up_24_filled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        />
+</top.ourfor.app.iplayx.view.LifecycleHolder>

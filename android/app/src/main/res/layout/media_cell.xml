@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/card_state"
+    android:paddingTop="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/coverImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/media_border"
+        android:scaleType="fitXY"
+        android:clipToOutline="true"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <top.ourfor.app.iplayx.view.infra.TextView
+        android:id="@+id/nameLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="@color/onBackground"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/coverImage"
+        app:layout_constraintLeft_toLeftOf="@id/coverImage"
+        app:layout_constraintRight_toRightOf="@id/coverImage" />
+
+    <top.ourfor.app.iplayx.view.infra.TextView
+        android:id="@+id/countLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/unplayed_count"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:minWidth="24dp"
+        android:maxLines="1"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        app:layout_constraintTop_toTopOf="@id/coverImage"
+        app:layout_constraintRight_toRightOf="@id/coverImage" />
+
+    <top.ourfor.app.iplayx.view.infra.TextView
+        android:id="@+id/airDateLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="@color/secondary"
+        android:textSize="11sp"
+        app:layout_constraintTop_toBottomOf="@id/nameLabel"
+        app:layout_constraintLeft_toLeftOf="@id/coverImage"
+        app:layout_constraintRight_toRightOf="@id/coverImage"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

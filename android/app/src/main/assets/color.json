@@ -1,0 +1,119 @@
+{
+  "scheme" : {
+    "blue" : {
+      "border" : "#91caff",
+      "color" : "#0958d9",
+      "background" : "#e6f4ff"
+    },
+    "red" : {
+      "border" : "#ffa39e",
+      "color" : "#cf1322",
+      "background" : "#fff1f0"
+    },
+    "orange" : {
+      "border" : "#ffd591",
+      "color" : "#d46b08",
+      "background" : "#fff7e6"
+    },
+    "volcano" : {
+      "border" : "#ffbb96",
+      "color" : "#d4380d",
+      "background" : "#fff2e8"
+    },
+    "purple" : {
+      "border" : "#d3adf7",
+      "color" : "#531dab",
+      "background" : "#f9f0ff"
+    },
+    "geekblue" : {
+      "border" : "#adc6ff",
+      "color" : "#1d39c4",
+      "background" : "#f0f5ff"
+    },
+    "green" : {
+      "border" : "#b7eb8f",
+      "color" : "#389e0d",
+      "background" : "#f6ffed"
+    },
+    "magenta" : {
+      "border" : "#ffadd2",
+      "color" : "#c41d7f",
+      "background" : "#fff0f6"
+    },
+    "pink" : {
+      "border" : "#ffadd2",
+      "color" : "#c41d7f",
+      "background" : "#fff0f6"
+    },
+    "cyan" : {
+      "border" : "#87e8de",
+      "color" : "#08979c",
+      "background" : "#e6fffb"
+    },
+    "yellow" : {
+      "border" : "#fffb8f",
+      "color" : "#d4b106",
+      "background" : "#feffe6"
+    },
+    "gold" : {
+      "border" : "#ffe58f",
+      "color" : "#d48806",
+      "background" : "#fffbe6"
+    },
+    "lime" : {
+      "border" : "#eaff8f",
+      "color" : "#7cb305",
+      "background" : "#fcffe6"
+    }
+  },
+  "gradient" : [
+    {
+      "start" : "0xFF8080",
+      "end" : "0xF8BDEB"
+    },
+    {
+      "start" : "0xDE8F5F",
+      "end" : "0x9A4444"
+    },
+    {
+      "start" : "0x98E4FF",
+      "end" : "0x687EFF"
+    },
+    {
+      "start" : "0x940B92",
+      "end" : "0xE95793"
+    },
+    {
+      "start" : "0x4D4C7D",
+      "end" : "0xF5F5F5"
+    },
+    {
+      "start" : "0xFF8080",
+      "end" : "0xF8BDEB"
+    },
+    {
+      "start" : "0xFF8080",
+      "end" : "0xF8BDEB"
+    },
+    {
+      "start" : "0xDE8F5F",
+      "end" : "0x9A4444"
+    },
+    {
+      "start" : "0x98E4FF",
+      "end" : "0x687EFF"
+    },
+    {
+      "start" : "0x940B92",
+      "end" : "0xE95793"
+    },
+    {
+      "start" : "0x4D4C7D",
+      "end" : "0xF5F5F5"
+    },
+    {
+      "start" : "0xFF8080",
+      "end" : "0xF8BDEB"
+    }
+  ]
+}

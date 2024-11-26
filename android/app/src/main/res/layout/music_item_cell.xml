@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_state"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/poster_image"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/hand_drawn_3"
+        android:background="@drawable/actor_avatar_corner"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:scaleType="fitXY"
+        android:clipToOutline="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/titleLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/poster_image"
+        app:layout_constraintTop_toTopOf="@id/poster_image"
+        app:layout_constraintRight_toRightOf="parent"
+        android:maxLines="1"
+        android:gravity="start"
+        android:text="@string/episode_title"
+        android:textColor="@color/primary"
+        android:ellipsize="end"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16dp"
+        />
+
+    <TextView
+        android:id="@+id/overviewLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/poster_image"
+        app:layout_constraintTop_toBottomOf="@id/titleLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="start"
+        android:maxLines="5"
+        android:ellipsize="end"
+        android:text="@string/episode_overview"
+        android:textColor="@color/secondary"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="13sp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

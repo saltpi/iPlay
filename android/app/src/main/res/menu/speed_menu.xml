@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/speed_2x"
+        android:title="2.0x"
+        android:icon="@drawable/ic_fluent_multiplier_2x_24_filled"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/speed_1_8x"
+        android:title="1.8x"
+        android:icon="@drawable/ic_fluent_multiplier_1_8x_24_filled"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/speed_1_5x"
+        android:title="1.5x"
+        android:icon="@drawable/ic_fluent_multiplier_1_5x_24_filled"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/speed_1_2x"
+        android:title="1.2x"
+        android:icon="@drawable/ic_fluent_multiplier_1_2x_24_filled"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/speed_1x"
+        android:title="1.0x"
+        android:icon="@drawable/ic_fluent_multiplier_1x_24_filled"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/speed_0_5x"
+        android:title="0.5x"
+        android:icon="@drawable/ic_fluent_multiplier_5x_24_filled"
+        app:showAsAction="always"
+        />
+</menu>

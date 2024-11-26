@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<top.ourfor.app.iplayx.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/webview"
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:id="@+id/scroll_top"
+        app:size="42dp"
+        app:cornerRadius="21dp"
+        app:src="@drawable/ic_fluent_arrow_up_24_filled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        />
+
+    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:id="@+id/backward"
+        app:size="42dp"
+        app:cornerRadius="21dp"
+        app:src="@drawable/ic_fluent_arrow_left_24_filled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="20dp"
+        />
+
+
+</top.ourfor.app.iplayx.view.LifecycleHolder>

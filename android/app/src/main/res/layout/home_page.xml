@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<top.ourfor.app.iplayx.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/home_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:alignItems="center"
+        app:justifyContent="center">
+        <top.ourfor.app.iplayx.view.infra.Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_site_button"
+            android:text="@string/setting_item_site"
+            android:enabled="true"
+            android:background="@drawable/button_normal"
+            />
+
+        <top.ourfor.app.iplayx.view.infra.Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sync_webdav_button"
+            android:text="@string/setting_item_cloud"
+            android:enabled="true"
+            android:background="@drawable/button_normal"
+            />
+    </com.google.android.flexbox.FlexboxLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <top.ourfor.app.iplayx.view.ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/album_list_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</top.ourfor.app.iplayx.view.LifecycleHolder>
