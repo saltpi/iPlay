@@ -48,33 +48,6 @@ jobs:
             distribution: 'zulu'
             cache: gradle
 
-      # - name: 🔨 Select Xcode version
-      #   run: |
-      #     # ls /Applications/
-      #     sudo xcode-select --switch /Applications/Xcode_15.4.app
-      #     export TOOLCHAINS=swift
-      #     swift --version
-      
-      # - name: 🕸️ Cache node modules
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
-            
-      # - name: 🕸️ Cache CocoaPods
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ios/Pods
-      #     key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-pods-
-
-      # - name: 🧱 Install Dependencies
-      #   run: |
-      #     cd ios && pod install
-
       - name: 🧬 Build
         env:
           scheme: ${{ 'default' }}
@@ -83,33 +56,6 @@ jobs:
           exec &> build.log
           rm -rf ios/iPlayClient.xcworkspace/xcshareddata/swiftpm/Package.resolved
           make all
-
-      - name: ⬆️ Upload Build Log if Build Fails
-        if: failure()
-        run: |
-          buildtime=$(date '+%Y%m%d.%H%M')
-          python -m pip install requests
-          echo "Uploaded build.log"
-          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/build.log" \
-            --file "$PWD/build.log" \
-            --token "${{ secrets.CLIENT_ID }}"
-
-      # - name: ✈️ Upload app to TestFlight
-      #   uses: apple-actions/upload-testflight-build@v1
-      #   with: 
-      #     app-path: build/iPlay.ipa
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-
-      # - name: ⬆️ Upload Build Artifact To GitHub
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #       name: artifact
-      #       path: |
-      #         build/*.apk
-      #         build/*.ipa
-      #         build/*.aab
 
       - name: 🎊 Release Notes
         run: |
@@ -128,25 +74,3 @@ jobs:
             build/*.apk
             build/*.ipa
             build/*.aab
-
-      - name: ⬆️ Upload Build Artifact
-        env:
-          scheme: ${{ 'default' }}
-        run: |
-          buildtime=$(date '+%Y%m%d.%H%M')
-          python -m pip install requests
-          echo "Uploading build artifacts..."
-          # echo "Uploaded iPlay.ipa"
-          # python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay.ipa" \
-          #   --file "$PWD/build/iPlay.ipa" \
-          #   --token "${{ secrets.CLIENT_ID }}"
-          echo "Uploaded iPlay.apk"
-          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay-x86_64.apk" \
-            --file "$PWD/build/iPlay-x86_64.apk" \
-            --token "${{ secrets.CLIENT_ID }}"
-          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay-arm64-v8a.apk" \
-            --file "$PWD/build/iPlay-arm64-v8a.apk" \
-            --token "${{ secrets.CLIENT_ID }}"
-          python ./tools/upload.py --url "https://drive.endemy.me/od_bot/build/iPlay/$buildtime/iPlay-armeabi-v7a.apk" \
-            --file "$PWD/build/iPlay-armeabi-v7a.apk" \
-            --token "${{ secrets.CLIENT_ID }}"
