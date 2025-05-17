@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.LifecycleHolder
+<top.ourfor.app.iplay.view.LifecycleHolder
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/media_scroll_view"
     android:layout_height="match_parent"
@@ -69,7 +69,7 @@
             />
     </com.google.android.flexbox.FlexboxLayout>
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/episode_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         android:textSize="16sp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/overviewLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
         android:layout_marginLeft="5dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/actor_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
         android:layout_marginLeft="5dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/similar_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -184,4 +184,4 @@
         android:layout_marginLeft="5dp"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
-</top.ourfor.app.iplayx.view.LifecycleHolder>
+</top.ourfor.app.iplay.view.LifecycleHolder>

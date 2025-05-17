@@ -15,7 +15,7 @@
         android:layout_marginStart="10dp"
         android:src="@drawable/ic_fluent_checkbox_unchecked_24_filled"
         />
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name_label"

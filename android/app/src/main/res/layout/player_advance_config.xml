@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.LifecycleHolder
+<top.ourfor.app.iplay.view.LifecycleHolder
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         app:justifyContent="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <top.ourfor.app.iplayx.view.infra.TextView
+        <top.ourfor.app.iplay.view.infra.TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sub_pos_label"
@@ -30,7 +30,7 @@
             android:layout_marginBottom="15dp"
             app:layout_flexGrow="1"
             />
-        <top.ourfor.app.iplayx.view.infra.EditText
+        <top.ourfor.app.iplay.view.infra.EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:inputType="number"
@@ -47,7 +47,7 @@
             app:justifyContent="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <top.ourfor.app.iplayx.view.infra.TextView
+            <top.ourfor.app.iplay.view.infra.TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/name_label"
@@ -64,7 +64,7 @@
                 android:layout_marginBottom="15dp"
                 app:layout_flexGrow="1"
                 />
-            <top.ourfor.app.iplayx.view.infra.EditText
+            <top.ourfor.app.iplay.view.infra.EditText
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -79,7 +79,7 @@
             app:justifyContent="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <top.ourfor.app.iplayx.view.infra.TextView
+            <top.ourfor.app.iplay.view.infra.TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/warning_label"
@@ -87,4 +87,4 @@
                 />
         </com.google.android.flexbox.FlexboxLayout>
     </com.google.android.flexbox.FlexboxLayout>
-</top.ourfor.app.iplayx.view.LifecycleHolder>
+</top.ourfor.app.iplay.view.LifecycleHolder>

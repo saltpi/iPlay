@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
+<top.ourfor.app.iplay.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <top.ourfor.app.iplayx.view.ListView
+    <top.ourfor.app.iplay.view.ListView
         android:id="@+id/episode_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,4 +14,4 @@
         tools:listitem="@layout/episode_cell"
         app:layout_constraintTop_toTopOf="parent"
         />
-</top.ourfor.app.iplayx.view.LifecycleHolder>
+</top.ourfor.app.iplay.view.LifecycleHolder>

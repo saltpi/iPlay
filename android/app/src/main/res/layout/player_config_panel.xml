@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
+<top.ourfor.app.iplay.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/video_label"
@@ -31,7 +31,7 @@
         android:background="@drawable/bg_spinner"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/audio_label"
@@ -59,7 +59,7 @@
         android:background="@drawable/bg_spinner"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/subtitle_label"
@@ -88,7 +88,7 @@
         />
 
 
-    <top.ourfor.app.iplayx.view.infra.Button
+    <top.ourfor.app.iplay.view.infra.Button
         android:id="@+id/play"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -120,4 +120,4 @@
         app:layout_constraintHeight_max="108dp"
         app:layout_constraintWidth_max="108dp"
         />
-</top.ourfor.app.iplayx.view.LifecycleHolder>
+</top.ourfor.app.iplay.view.LifecycleHolder>

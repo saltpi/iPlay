@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/titleLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:textSize="16dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/overviewLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -4,6 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/loading"
         app:showAsAction="always"
-        app:actionProviderClass="top.ourfor.app.iplayx.view.menu.MenuLoading"
+        app:actionProviderClass="top.ourfor.app.iplay.view.menu.MenuLoading"
         tools:ignore="MenuTitle" />
 </menu>

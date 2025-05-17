@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name_label"
@@ -21,7 +21,7 @@
         android:layout_marginBottom="15dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.EditText
+    <top.ourfor.app.iplay.view.infra.EditText
         android:id="@+id/text_area"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -51,7 +51,7 @@
         android:thumb="@drawable/selector_thumb"
         />
 
-    <top.ourfor.app.iplayx.view.infra.Button
+    <top.ourfor.app.iplay.view.infra.Button
         android:id="@+id/setting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
+<top.ourfor.app.iplay.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:alignItems="center"
         app:justifyContent="center">
-        <top.ourfor.app.iplayx.view.infra.Button
+        <top.ourfor.app.iplay.view.infra.Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_site_button"
@@ -20,7 +20,7 @@
             android:background="@drawable/button_normal"
             />
 
-        <top.ourfor.app.iplayx.view.infra.Button
+        <top.ourfor.app.iplay.view.infra.Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sync_webdav_button"
@@ -35,7 +35,7 @@
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <top.ourfor.app.iplayx.view.ListView
+        <top.ourfor.app.iplay.view.ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/album_list_view"
@@ -46,4 +46,4 @@
             />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</top.ourfor.app.iplayx.view.LifecycleHolder>
+</top.ourfor.app.iplay.view.LifecycleHolder>

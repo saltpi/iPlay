@@ -20,7 +20,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/actor_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

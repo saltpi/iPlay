@@ -15,7 +15,7 @@
         android:layout_marginTop="150dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_marginTop="30dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:layout_marginTop="10dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/app_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_marginTop="10dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/app_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         android:layout_marginTop="10dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.Button
+    <top.ourfor.app.iplay.view.infra.Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/check_update"
