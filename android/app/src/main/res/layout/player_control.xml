@@ -88,7 +88,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/advance_config"
@@ -101,7 +101,7 @@
             app:src="@drawable/ic_fluent_settings_24_filled"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/pip_enter"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toStartOf="@id/video"
             app:src="@drawable/ic_fluent_picture_in_picture_enter_24_filled"
             />
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/video"
@@ -125,7 +125,7 @@
             app:layout_constraintEnd_toStartOf="@id/voice"
             app:src="@drawable/ic_fluent_filmstrip_play_24_filled"
             />
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/voice"
@@ -137,7 +137,7 @@
             app:layout_constraintEnd_toStartOf="@id/caption"
             app:src="@drawable/ic_fluent_device_eq_24_filled"
             />
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/caption"
@@ -149,7 +149,7 @@
             app:layout_constraintEnd_toStartOf="@id/exit"
             app:src="@drawable/ic_fluent_closed_caption_24_filled"
             />
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/exit"
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" >
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/comment"
@@ -185,7 +185,7 @@
             app:src="@drawable/ic_fluent_comment_note_24_filled"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/speed"
@@ -199,7 +199,7 @@
             app:src="@drawable/ic_fluent_top_speed_24_filled"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/orientation"
@@ -213,7 +213,7 @@
             app:src="@drawable/ic_fluent_orientation_24_filled"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/playlist"
@@ -250,7 +250,7 @@
             app:layout_constraintEnd_toEndOf="@id/slider"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerSlider
+        <top.ourfor.app.iplay.view.video.PlayerSlider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/slider"
@@ -262,7 +262,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp" />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="5dp"
@@ -276,7 +276,7 @@
             app:layout_constraintLeft_toLeftOf="@id/slider"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/play"
@@ -290,7 +290,7 @@
             app:layout_constraintTop_toTopOf="@id/backward"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:id="@+id/forward"
             android:layout_width="48dp"
             android:layout_height="48dp"

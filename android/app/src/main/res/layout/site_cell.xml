@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<top.ourfor.app.iplay.view.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,7 +29,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <top.ourfor.app.iplayx.view.infra.TextView
+        <top.ourfor.app.iplay.view.infra.TextView
             android:id="@+id/site_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             app:layout_constraintLeft_toLeftOf="@id/site_image"
             app:layout_constraintTop_toBottomOf="@id/site_image" />
 
-        <top.ourfor.app.iplayx.view.infra.TextView
+        <top.ourfor.app.iplay.view.infra.TextView
             android:id="@+id/site_remark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <top.ourfor.app.iplayx.view.infra.TextView
+        <top.ourfor.app.iplay.view.infra.TextView
             android:id="@+id/site_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
             app:layout_constraintTop_toBottomOf="@id/site_remark" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/modify"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -91,7 +91,7 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/delete"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -103,4 +103,4 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="18sp" />
-</top.ourfor.app.iplayx.view.SwipeMenuLayout>
+</top.ourfor.app.iplay.view.SwipeMenuLayout>

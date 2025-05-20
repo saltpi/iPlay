@@ -14,7 +14,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHeight_max="400dp"
         />
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
     android:id="@+id/remark_label"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
@@ -27,7 +27,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp" />
-    <top.ourfor.app.iplayx.view.infra.EditText
+    <top.ourfor.app.iplay.view.infra.EditText
         android:id="@+id/remark_input"
         android:layout_width="0dp"
         android:layout_height="36dp"
@@ -49,7 +49,7 @@
         android:layout_marginRight="10dp"
         />
 
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/server_label"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -62,7 +62,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp" />
-    <top.ourfor.app.iplayx.view.infra.EditText
+    <top.ourfor.app.iplay.view.infra.EditText
         android:id="@+id/server_input"
         android:layout_width="0dp"
         android:layout_height="36dp"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<top.ourfor.app.iplayx.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
+<top.ourfor.app.iplay.view.LifecycleHolder xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/media_scroll_view"
     android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                     app:layout_flexShrink="0" />
             </com.google.android.flexbox.FlexboxLayout>
 
-            <top.ourfor.app.iplayx.view.infra.TextView
+            <top.ourfor.app.iplay.view.infra.TextView
                 android:id="@+id/episode_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/play_action" />
 
-            <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+            <top.ourfor.app.iplay.view.video.PlayerControlItemView
                 android:id="@+id/watch_button"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -88,7 +88,7 @@
                 app:size="64dp"
                 app:src="@drawable/ic_fluent_play_48_filled" />
 
-            <top.ourfor.app.iplayx.view.infra.TextView
+            <top.ourfor.app.iplay.view.infra.TextView
                 android:id="@+id/overviewLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                     app:tabMode="scrollable" />
             </androidx.viewpager.widget.ViewPager>
 
-            <top.ourfor.app.iplayx.view.infra.TextView
+            <top.ourfor.app.iplay.view.infra.TextView
                 android:id="@+id/actor_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actor_label" />
 
-            <top.ourfor.app.iplayx.view.infra.TextView
+            <top.ourfor.app.iplay.view.infra.TextView
                 android:id="@+id/similar_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+    <top.ourfor.app.iplay.view.video.PlayerControlItemView
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginHorizontal="20dp"
@@ -183,4 +183,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:size="36dp"
         app:src="@drawable/ic_fluent_settings_24_filled" />
-</top.ourfor.app.iplayx.view.LifecycleHolder>
+</top.ourfor.app.iplay.view.LifecycleHolder>

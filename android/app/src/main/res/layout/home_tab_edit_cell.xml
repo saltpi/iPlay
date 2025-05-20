@@ -30,7 +30,7 @@
         app:layout_constraintLeft_toRightOf="@id/indicator"
         />
     />
-    <top.ourfor.app.iplayx.view.infra.TextView
+    <top.ourfor.app.iplay.view.infra.TextView
         android:id="@+id/menu_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@id/slider"
         >
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:id="@+id/pip_enter"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -57,7 +57,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:id="@+id/playlist"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -74,7 +74,7 @@
 
 
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:id="@+id/voice"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -86,7 +86,7 @@
             app:size="48dp"
             app:src="@drawable/waveform" />
 
-        <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+        <top.ourfor.app.iplay.view.video.PlayerControlItemView
             android:id="@+id/caption"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -101,7 +101,7 @@
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+    <top.ourfor.app.iplay.view.video.PlayerControlItemView
         android:id="@+id/play"
         android:layout_width="96dp"
         android:layout_height="96dp"
@@ -117,7 +117,7 @@
         app:size="96dp"
         app:src="@drawable/pause" />
 
-    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+    <top.ourfor.app.iplay.view.video.PlayerControlItemView
         android:id="@+id/forward"
         android:layout_width="64dp"
         android:layout_height="64dp"
@@ -130,7 +130,7 @@
         app:size="64dp"
         app:src="@drawable/goforward_15" />
 
-    <top.ourfor.app.iplayx.view.video.PlayerControlItemView
+    <top.ourfor.app.iplay.view.video.PlayerControlItemView
         android:id="@+id/backward"
         android:layout_width="64dp"
         android:layout_height="64dp"
@@ -168,7 +168,7 @@
         app:layout_constraintTop_toBottomOf="@id/slider"
         />
 
-    <top.ourfor.app.iplayx.view.video.PlayerSlider
+    <top.ourfor.app.iplay.view.video.PlayerSlider
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <top.ourfor.app.iplayx.view.video.PlayerSelectView
+    <top.ourfor.app.iplay.view.video.PlayerSelectView
         android:layout_width="300dp"
         android:layout_height="300dp"
         app:layout_constraintTop_toTopOf="parent"

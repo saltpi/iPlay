@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <top.ourfor.app.iplayx.view.ListView
+    <top.ourfor.app.iplay.view.ListView
         android:id="@+id/site_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

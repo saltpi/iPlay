@@ -2,14 +2,12 @@ plugins {
     alias(libs.plugins.androidApplication)
 }
 
-apply plugin: 'dagger.hilt.android.plugin'
-
 android {
-    namespace 'top.ourfor.app.iplayx'
+    namespace 'top.ourfor.app.iplay'
     compileSdk 34
 
     defaultConfig {
-        applicationId "top.ourfor.app.iplayx"
+        applicationId "top.ourfor.app.iplay"
         minSdk 24
         targetSdk 34
         versionCode project.hasProperty('versionCode') ? project.getProperty('versionCode').toInteger() : 1
@@ -110,9 +108,6 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.dash)
     implementation(libs.androidx.media3.ui)
-
-    implementation libs.hilt.android
-    annotationProcessor libs.hilt.android.compiler
 
     implementation libs.androidx.room.runtime
     annotationProcessor libs.androidx.room.compiler
